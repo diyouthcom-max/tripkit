@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PackPoint · 完整引导流程（含清单）— Tiffany 蓝 × 马卡龙</title>
+<style>
+  /* ========================================================
+     PACKPOINT ONBOARDING FLOW · TIFFANY BLUE × MACARON
+     与 onboarding-redesign.html / activities-redesign.html
+     完全同一套设计系统：变量、圆角、组件、底栏保持一致。
+     流程：第 1 步 行程信息 → 第 2 步 选择活动 → 第 3 步 清单生成
+     ======================================================== */
+  :root {
+    --tiffany: #0ABAB5;
+    --tiffany-deep: #078C88;
+    --tiffany-light: #DFF6F5;
+    --macaron-pink: #F9C6CB;
+    --macaron-pink-deep: #E38C95;
+    --macaron-lemon: #FAEDB8;
+    --macaron-lemon-deep: #C9A227;
+    --macaron-lavender: #D9CCF2;
+    --macaron-lavender-deep: #7E63B8;
+    --macaron-peach: #FFD9C2;
+    --macaron-peach-deep: #D97E4A;
+    --cream: #FDFBF6;
+    --card: #FFFFFF;
+    --line: #EDF3F1;
+    --ink: #1F3B39;
+    --muted: #7C918E;
+    --shadow: 0 10px 26px rgba(10, 186, 181, 0.10), 0 2px 6px rgba(10, 186, 181, 0.06);
+    --shadow-float: 0 14px 32px rgba(7, 140, 136, 0.28);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--ink); min-height: 100vh;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; text-align: left; }
+  svg { display: block; }
+  .ico { width: 20px; height: 20px; flex: none; }
+  .ico.sm { width: 15px; height: 15px; }
+
+  .stage {
+    display: flex; gap: 44px; align-items: flex-start; justify-content: center;
+    padding: 32px 20px; min-height: 100vh;
+    background: linear-gradient(160deg, #EAF9F8 0%, var(--cream) 45%, #FDF3EC 100%);
+  }
+  .design-notes { width: 300px; flex: none; padding-top: 18px; }
+  .design-notes .badge {
+    font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--tiffany-deep); background: var(--tiffany-light);
+    padding: 5px 10px; border-radius: 99px; display: inline-block;
+  }
+  .design-notes h1 { font-size: 28px; font-weight: 850; letter-spacing: -.02em; margin: 14px 0 8px; }
+  .design-notes p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; }
+  .palette { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .palette span {
+    width: 44px; height: 44px; border-radius: 14px; box-shadow: var(--shadow);
+    display: grid; place-items: end center; font-size: 8px; font-weight: 800; color: rgba(255,255,255,.9);
+    padding-bottom: 4px;
+  }
+  .logic-list { font-size: 12px; line-height: 1.7; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+  .logic-list b { color: var(--ink); }
+
+  .device {
+    width: 396px; height: 852px; flex: none; position: relative; overflow: hidden;
+    background: var(--cream); border: 10px solid #12332F; border-radius: 50px;
+    box-shadow: 0 30px 70px rgba(7, 140, 136, .25), 0 4px 14px rgba(7, 140, 136, .12);
+    display: flex; flex-direction: column;
+  }
+  .status-bar {
+    height: 44px; flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px; font-size: 13px; font-weight: 700;
+  }
+  .brand-block { flex: none; padding: 4px 24px 0; }
+  .brand-row { display: flex; align-items: center; justify-content: space-between; }
+  .logo {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 16px; font-weight: 850; letter-spacing: -.01em; color: var(--tiffany-deep);
+  }
+  .logo .logo-dot {
+    width: 26px; height: 26px; border-radius: 9px; background: var(--tiffany);
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 4px 10px rgba(10,186,181,.35);
+  }
+  .step-pill {
+    font-size: 11px; font-weight: 800; color: var(--tiffany-deep);
+    background: var(--tiffany-light); padding: 5px 11px; border-radius: 99px;
+  }
+  .headline { margin-top: 14px; display: flex; align-items: flex-start; justify-content: space-between; }
+  .headline h2 { font-size: 26px; font-weight: 870; letter-spacing: -.03em; line-height: 1.2; }
+  .headline h2 em { font-style: normal; color: var(--tiffany); }
+  .headline .side-note { font-size: 11.5px; color: var(--muted); text-align: right; line-height: 1.5; margin-top: 4px; }
+  .headline .side-note b { color: var(--tiffany-deep); }
+  .headline p { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+
+  .progress { display: flex; gap: 6px; padding: 12px 24px 0; }
+  .progress i { flex: 1; height: 5px; border-radius: 99px; background: #E3EEEC; }
+  .progress i.on { background: var(--tiffany); }
+
+  .screen { flex: 1; overflow-y: auto; padding: 16px 20px 150px; scrollbar-width: none; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  .field-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 800; letter-spacing: .04em; margin: 18px 0 9px;
+  }
+  .field-label .num {
+    width: 19px; height: 19px; border-radius: 7px; display: grid; place-items: center;
+    font-size: 10px; font-weight: 850; color: #fff;
+  }
+  .field-label .hint { margin-left: auto; font-weight: 650; font-size: 10.5px; color: var(--muted); }
+
+  /* 目的地 */
+  .dest-card {
+    background: var(--card); border: 1.5px solid var(--tiffany); border-radius: 20px;
+    padding: 13px 16px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 11px;
+  }
+  .dest-card input {
+    border: 0; outline: 0; flex: 1; font-size: 18px; font-weight: 800; color: var(--ink);
+    background: transparent; letter-spacing: -.01em;
+  }
+  .dest-card input::placeholder { color: #B9C8C5; font-weight: 650; }
+  .dest-card .pin { color: var(--tiffany); }
+  .chips { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 9px; }
+  .chip {
+    font-size: 12px; font-weight: 750; padding: 7px 13px; border-radius: 99px;
+    background: var(--card); border: 1px solid var(--line); color: var(--muted); transition: .18s;
+  }
+  .chip.on { background: var(--tiffany); border-color: var(--tiffany); color: #fff; box-shadow: var(--shadow); }
+
+  /* 日期 */
+  .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .date-card {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 18px;
+    padding: 12px 14px; transition: .18s;
+  }
+  .date-card.active { border-color: var(--tiffany); box-shadow: var(--shadow); }
+  .date-card .d-label { font-size: 10.5px; font-weight: 800; color: var(--muted); letter-spacing: .06em; }
+  .date-card .d-main { display: flex; align-items: baseline; gap: 4px; margin-top: 5px; }
+  .date-card .d-main b { font-size: 26px; font-weight: 870; letter-spacing: -.03em; }
+  .date-card .d-main span { font-size: 12px; font-weight: 750; color: var(--muted); }
+  .date-card .d-week { font-size: 10.5px; color: var(--tiffany-deep); font-weight: 750; margin-top: 3px; }
+  .date-bridge {
+    display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--tiffany-light); color: var(--tiffany-deep); font-size: 13px; font-weight: 800;
+    margin: -6px auto; position: relative; z-index: 2; border: 3px solid var(--cream);
+  }
+
+  /* 天数 */
+  .days-card { background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 14px 16px; }
+  .days-top { display: flex; align-items: center; justify-content: space-between; }
+  .days-val { display: inline-flex; align-items: center; gap: 6px; }
+  .days-val b { font-size: 24px; font-weight: 870; color: var(--tiffany-deep); letter-spacing: -.02em; }
+  .days-val span { font-size: 12px; color: var(--muted); font-weight: 700; }
+  .days-moon {
+    width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center;
+    background: var(--macaron-lemon); color: var(--macaron-lemon-deep); font-size: 18px;
+  }
+  .slider { position: relative; height: 26px; margin-top: 12px; }
+  .slider .rail { position: absolute; top: 9px; left: 0; right: 0; height: 8px; border-radius: 99px; background: #EAF1EF; }
+  .slider .fill { position: absolute; top: 9px; left: 0; height: 8px; border-radius: 99px; background: linear-gradient(90deg, var(--tiffany-light), var(--tiffany)); transition: width .25s; }
+  .slider .knob {
+    position: absolute; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--tiffany); box-shadow: var(--shadow);
+    transform: translateX(-50%); transition: left .25s;
+  }
+  .slider-marks { display: flex; justify-content: space-between; font-size: 9.5px; color: #AFC0BD; font-weight: 700; margin-top: 7px; }
+
+  /* 旅行类型 */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .type-card {
+    position: relative; border-radius: 20px; padding: 16px 14px 13px;
+    border: 2px solid transparent; transition: .18s; overflow: hidden;
+  }
+  .type-card .t-ico {
+    width: 38px; height: 38px; border-radius: 13px; display: grid; place-items: center;
+    background: rgba(255,255,255,.75); margin-bottom: 9px;
+  }
+  .type-card .t-name { font-size: 14px; font-weight: 850; }
+  .type-card .t-sub { font-size: 10.5px; font-weight: 650; opacity: .72; margin-top: 2px; }
+  .type-card .tick {
+    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; display: grid; place-items: center; color: var(--tiffany-deep);
+    opacity: 0; transform: scale(.5); transition: .18s;
+  }
+  .type-card.on { border-color: rgba(31,59,57,.35); box-shadow: var(--shadow); transform: translateY(-2px); }
+  .type-card.on .tick { opacity: 1; transform: scale(1); }
+  .t-c1 { background: var(--tiffany-light); } .t-c1 .t-ico { color: var(--tiffany-deep); } .t-c1 .t-name { color: var(--tiffany-deep); }
+  .t-c2 { background: var(--macaron-pink); }  .t-c2 .t-ico { color: var(--macaron-pink-deep); } .t-c2 .t-name { color: var(--macaron-pink-deep); }
+  .t-c3 { background: var(--macaron-lavender); } .t-c3 .t-ico { color: var(--macaron-lavender-deep); } .t-c3 .t-name { color: var(--macaron-lavender-deep); }
+  .t-c4 { background: var(--macaron-peach); } .t-c4 .t-ico { color: var(--macaron-peach-deep); } .t-c4 .t-name { color: var(--macaron-peach-deep); }
+
+  /* 活动网格（第 2 步） */
+  .group-label {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 800; letter-spacing: .04em; margin: 16px 0 10px;
+  }
+  .group-label .dot { width: 10px; height: 10px; border-radius: 4px; }
+  .group-label .cnt {
+    margin-left: auto; font-size: 10px; font-weight: 800; color: var(--muted);
+    background: #fff; border: 1px solid var(--line); padding: 2px 8px; border-radius: 99px;
+  }
+  .act-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+  .act {
+    position: relative; background: var(--card); border: 1.5px solid var(--line);
+    border-radius: 18px; padding: 13px 6px 11px; transition: .16s;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+  }
+  .act .a-ico { color: var(--muted); transition: .16s; }
+  .act .a-name { font-size: 12px; font-weight: 800; color: var(--ink); }
+  .act .tick {
+    position: absolute; top: 7px; right: 7px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--tiffany); color: #fff; display: grid; place-items: center;
+    opacity: 0; transform: scale(.4); transition: .16s;
+  }
+  .act.on { border-color: var(--tiffany); box-shadow: var(--shadow); transform: translateY(-2px); background: #fff; }
+  .act.on .a-ico { color: var(--tiffany-deep); }
+  .act.on .tick { opacity: 1; transform: scale(1); }
+  .act .rec {
+    position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+    font-size: 8.5px; font-weight: 850; color: #fff; background: var(--macaron-peach-deep);
+    padding: 2px 8px; border-radius: 99px; letter-spacing: .04em; white-space: nowrap;
+    box-shadow: 0 3px 8px rgba(217,126,74,.35);
+  }
+  .add-act {
+    border: 2px dashed #C9DDD9; border-radius: 18px; padding: 14px 6px 11px;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    color: var(--muted); background: rgba(255,255,255,.5);
+  }
+  .add-act .plus-ring {
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid var(--tiffany); color: var(--tiffany-deep); font-size: 16px; font-weight: 800;
+  }
+  .add-act .a-name { font-size: 11.5px; font-weight: 750; }
+  .add-act .lock {
+    margin-top: -3px; font-size: 9px; font-weight: 800; color: var(--macaron-peach-deep);
+    background: var(--macaron-peach); padding: 2px 8px; border-radius: 99px;
+  }
+
+  /* 偏好开关 */
+  .pref-row { display: flex; gap: 9px; }
+  .pref {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 99px;
+    padding: 11px 14px; font-size: 12px; font-weight: 800; color: var(--muted); transition: .16s;
+  }
+  .pref .sw { flex: none; width: 30px; height: 18px; border-radius: 99px; background: #E3EEEC; position: relative; transition: .16s; }
+  .pref .sw::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+    border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.15); transition: .16s;
+  }
+  .pref.on { border-color: var(--tiffany); color: var(--tiffany-deep); background: var(--tiffany-light); box-shadow: var(--shadow); }
+  .pref.on .sw { background: var(--tiffany); }
+  .pref.on .sw::after { left: 14px; }
+
+  /* 第 3 步：清单生成 */
+  .summary-card {
+    background: linear-gradient(135deg, #fff, #F4F9F6); border: 1.5px solid #D8E9DF;
+    border-radius: 20px; padding: 16px; box-shadow: var(--shadow);
+  }
+  .big-num { font-size: 30px; font-weight: 850; letter-spacing: -.03em; margin-top: 2px; }
+  .big-num span { font-size: 15px; color: var(--muted); font-weight: 650; }
+  .bar { height: 7px; border-radius: 99px; background: #E3EDE7; margin: 12px 0 8px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 99px; background: var(--tiffany); transition: width .5s; }
+  .cube-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; font-size: 12.5px; border-top: 1px solid #F3EFE8;
+  }
+  .cube-row:first-of-type { border-top: 0; }
+  .cube-row .cr-ico {
+    width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; margin-right: 9px; flex: none;
+  }
+  .rain-card {
+    background: var(--macaron-lemon); border: 1.5px solid #EFDFA8; border-radius: 18px; padding: 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+
+  /* AI 提示条 */
+  .ai-tip {
+    margin-top: 18px; display: flex; gap: 10px; align-items: flex-start;
+    background: linear-gradient(120deg, #EAF9F8, #FDF3EC);
+    border: 1px solid #DCF0EE; border-radius: 16px; padding: 12px 14px;
+  }
+  .ai-tip .spark { color: var(--macaron-peach-deep); margin-top: 1px; }
+  .ai-tip p { font-size: 11.5px; line-height: 1.6; color: #4E6B67; }
+  .ai-tip b { color: var(--tiffany-deep); }
+
+  /* ===== 第 4 步：打包清单 ===== */
+  .trip-strip { display: flex; gap: 7px; overflow-x: auto; padding: 2px 0 4px; margin: 12px 0 4px; scrollbar-width: none; }
+  .trip-strip::-webkit-scrollbar { display: none; }
+  .trip-chip {
+    flex: none; font-size: 11px; font-weight: 800; padding: 7px 13px; border-radius: 99px;
+    background: #fff; border: 1.5px solid var(--line); color: var(--muted); transition: .16s;
+  }
+  .trip-chip.on { background: var(--tiffany); border-color: var(--tiffany); color: #fff; box-shadow: var(--shadow); }
+
+  .group-card {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 18px;
+    margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .group-head { display: flex; align-items: center; gap: 9px; padding: 12px 14px; width: 100%; }
+  .g-ico { width: 32px; height: 32px; border-radius: 11px; display: grid; place-items: center; font-size: 15px; flex: none; }
+  .group-head .g-name { font-size: 12.5px; font-weight: 850; display: block; }
+  .group-head .g-sub { font-size: 10px; color: var(--muted); margin-top: 1px; display: block; }
+  .group-head .g-cnt {
+    font-size: 10px; font-weight: 850; color: var(--tiffany-deep);
+    background: var(--tiffany-light); padding: 3px 8px; border-radius: 99px; margin-left: auto; flex: none;
+  }
+  .group-head .g-cnt.full { background: var(--tiffany); color: #fff; }
+  .group-head .caret { color: var(--muted); transition: .2s; flex: none; margin-left: 4px; }
+  .group-card.closed .caret { transform: rotate(-90deg); }
+  .group-card.closed .group-body { display: none; }
+  .group-body { padding: 0 14px 6px; }
+
+  .pack-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 0;
+    border-top: 1px solid #F4F7F5; cursor: pointer;
+  }
+  .pack-item:first-child { border-top: 0; }
+  .pack-check {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid #C7D6D2;
+    display: grid; place-items: center; flex: none; transition: .16s;
+  }
+  .pack-item.done .pack-check { background: var(--tiffany); border-color: var(--tiffany); }
+  .pack-item.done .p-name { text-decoration: line-through; opacity: .42; }
+  .p-name { font-size: 12.5px; font-weight: 750; display: block; }
+  .p-why { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .p-tag { font-size: 9px; font-weight: 850; padding: 3px 8px; border-radius: 99px; flex: none; }
+
+  /* ===== 第 5 步：准备出发 ===== */
+  .done-hero {
+    text-align: center; padding: 22px 16px 18px; border-radius: 20px;
+    background: linear-gradient(160deg, #fff 0%, var(--tiffany-light) 100%);
+    border: 1.5px solid #CDEBE9; box-shadow: var(--shadow);
+  }
+  .done-ring {
+    width: 66px; height: 66px; border-radius: 50%; background: var(--tiffany); color: #fff;
+    display: grid; place-items: center; margin: 0 auto 12px;
+    box-shadow: 0 12px 26px rgba(10,186,181,.38);
+  }
+  .mini-stats { display: flex; gap: 8px; margin-top: 14px; }
+  .mini-stat {
+    flex: 1; background: rgba(255,255,255,.78); border: 1px solid #D7EBE9; border-radius: 14px;
+    padding: 9px 6px; text-align: center;
+  }
+  .mini-stat b { font-size: 16px; font-weight: 870; color: var(--tiffany-deep); display: block; letter-spacing: -.02em; }
+  .mini-stat span { font-size: 9.5px; font-weight: 750; color: var(--muted); }
+  .leave-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid #F4F7F5; }
+  .leave-row:first-child { border-top: 0; }
+  .leave-num {
+    width: 22px; height: 22px; border-radius: 8px; display: grid; place-items: center;
+    font-size: 10px; font-weight: 850; color: #fff; flex: none;
+  }
+
+  /* 底栏 */
+  .dock {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 30;
+    padding: 14px 20px calc(18px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(253,251,246,0) 0%, var(--cream) 34%);
+  }
+  .dock-inner { display: flex; align-items: center; gap: 10px; }
+  .side-btn {
+    flex: none; width: 52px; height: 52px; border-radius: 18px;
+    background: #fff; border: 1.5px solid var(--line); display: grid; place-items: center;
+    color: var(--tiffany-deep); box-shadow: var(--shadow); transition: .18s;
+  }
+  .side-btn:active { transform: scale(.94); }
+  .cta-wrap { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .sel-count { font-size: 10.5px; font-weight: 800; color: var(--muted); text-align: center; }
+  .sel-count b { color: var(--tiffany-deep); }
+  .cta {
+    height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--tiffany), var(--tiffany-deep)); color: #fff;
+    font-size: 15px; font-weight: 850; letter-spacing: .02em;
+    box-shadow: var(--shadow-float); transition: .18s; width: 100%;
+  }
+  .cta:active { transform: scale(.97); }
+  .cta .badge-n {
+    background: rgba(255,255,255,.25); border-radius: 99px; padding: 1px 9px;
+    font-size: 12px; font-weight: 850;
+  }
+
+  .toast-box { position: absolute; left: 0; right: 0; bottom: 118px; z-index: 50; display: grid; justify-items: center; pointer-events: none; }
+  .toast {
+    background: #12332F; color: #fff; font-size: 12px; font-weight: 750;
+    padding: 10px 18px; border-radius: 99px; box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    animation: pop .25s ease both;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 820px) {
+    .stage { padding: 0; }
+    .design-notes { display: none; }
+    .device { width: 100%; height: 100dvh; border: 0; border-radius: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <aside class="design-notes">
+    <span class="badge">PackPoint · Unified Flow</span>
+    <h1>完整流程 · 统一版<span style="color:var(--tiffany)">.</span></h1>
+    <p>与 onboarding-redesign.html / activities-redesign.html 完全同一套 Tiffany × 马卡龙设计系统。现在一路做到底：行程信息 → 选活动 → 清单生成 → 逐件勾选 → 准备出发。</p>
+    <div class="palette">
+      <span style="background:#0ABAB5">#0ABAB5</span>
+      <span style="background:#F9C6CB">#F9C6CB</span>
+      <span style="background:#FAEDB8">#FAEDB8</span>
+      <span style="background:#D9CCF2">#D9CCF2</span>
+      <span style="background:#FFD9C2">#FFD9C2</span>
+      <span style="background:#FDFBF6; color:#7C918E">#FDFBF6</span>
+    </div>
+    <div class="logic-list">
+      <b>保持一致的关键：</b><br>
+      ① 同一套 CSS 变量（--tiffany / 四色马卡龙 / 奶油底）<br>
+      ② 同款品牌区 + 步骤胶囊 + 三分段进度条<br>
+      ③ 编号锚点配色规则沿用：1 蒂芙尼 / 2 樱花粉 / 3 香芋紫 / 4 蜜桃橙<br>
+      ④ 卡片统一 18–20px 圆角 + 浅青描边 + 同款投影<br>
+      ⑤ 底栏结构一致：语音方卡 + Tiffany 渐变 CTA + 计数徽章<br>
+      ⑥ 第 3 步清单生成态：大数字进度 + AI 分组统计 + 雨天提醒<br>
+      ⑦ 第 4 步打包清单：分组折叠卡片、勾选打勾划线、全部/未装/已装筛选、每件物品带"为什么带"<br>
+      ⑧ 第 5 步准备出发：完成徽章 + 收纳包/重量统计 + 出门前 3 件事 + 行程概要
+    </div>
+  </aside>
+
+  <div class="device">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg class="ico sm" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span style="font-size:11px">100%</span>
+      </div>
+    </div>
+
+    <div class="brand-block">
+      <div class="brand-row">
+        <span class="logo">
+          <span class="logo-dot">
+            <svg class="ico sm" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 7V5.5a3.5 3.5 0 0 1 7 0V7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+          PackPoint
+        </span>
+        <span class="step-pill" id="stepPill">第 1 步 / 共 3 步</span>
+      </div>
+      <div class="headline">
+        <div style="flex:1">
+          <h2 id="heroTitle">先聊聊这次<em>旅行</em>的样子</h2>
+          <p id="heroSub">4 个小问题，帮 AI 生成你的专属打包方案</p>
+        </div>
+        <div class="side-note" id="heroSide" style="display:none">巴黎 · 5天4晚 · 休闲度假<br><b>3–10°C · 40% 降雨</b></div>
+      </div>
+    </div>
+    <div class="progress"><i class="on" id="p1"></i><i id="p2"></i><i id="p3"></i></div>
+
+    <div class="screen" id="screen"></div>
+
+    <div class="dock">
+      <div class="dock-inner">
+        <button class="side-btn" data-act="mic">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="cta-wrap">
+          <div class="sel-count" id="selLine">填写完成后进入下一步</div>
+          <button class="cta" id="ctaBtn">
+            <span id="ctaTxt">选择活动</span>
+            <span class="badge-n" id="ctaBadge" style="display:none">0</span>
+            <svg class="ico sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <button class="side-btn" id="backBtn" style="color:var(--muted)">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="toast-box" id="toastBox"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const screen = $('#screen');
+
+  const state = {
+    step: 1, dest: '巴黎', days: 5, type: '休闲度假',
+    sel: { gA: new Set(['徒步旅行','摄影']), gB: new Set(['高级晚餐']) },
+    prefs: { rewear: true, laundry: false },
+    acts: {
+      gA: { name:'户外 & 运动', dot:'var(--tiffany)', numBg:'var(--tiffany)', items:[
+        ['游泳','M3 17c2.5 0 3.5-2 5.5-2S11 17 13 17s3.5-2 5.5-2 2.5 2 2.5 2M14 4.5c3 .5 5 2.5 5 5.5l-3 2M4.5 10.5C6 8 8.5 7 11 7.5c2 .4 3.5 1.8 4 3.5l-4.5 2.5'],
+        ['雪上运动','M12 3v18M4 7l16 10M20 7 4 17M12 3l-2.5 2M12 3l2.5 2M12 21l-2.5-2M12 21l2.5-2'],
+        ['徒步旅行','M5 16.5 8.5 9l3.5 6 3-4.5 3.5 6M6.5 6a1.6 1.6 0 1 0 .01 0',1],
+        ['露营','M12 21c-3.5 0-6-2.4-6-5.8 0-2.6 1.8-5.2 4-7.7.6 1.4 1.5 2.3 2.6 3 .3-2 .1-3.6-1-5.5 4 1.7 6.4 5.2 6.4 9.4 0 3.8-2.5 6.6-6 6.6z'],
+        ['健身房','M4 10h16v6H4zM7 10V7.5A2.5 2.5 0 0 1 9.5 5h5A2.5 2.5 0 0 1 17 7.5V10M2.5 13h1.5M20 13h1.5'],
+        ['摄影','M4 7.5h4L9.5 5h5L16 7.5h4v11H4zM12 13a4 4 0 1 0 .01 0'],
+        ['沙滩','M12 12a3.6 3.6 0 1 0 .01 0M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M18.4 5.6l-2 2M7.6 16.4l-2 2'],
+        ['骑自行车','M6 17a3 3 0 1 0 .01 0M18 17a3 3 0 1 0 .01 0M6 17 9 8h4l3 9M9 8 7.5 5H5.5'],
+        ['跑步','M8.5 3.5 6 20.5M15.5 3.5 18 20.5M6.2 17.5h12M5.5 8.5c2-1 5-1.5 6.5 0s4.5 1 6.5 0']
+      ]},
+      gB: { name:'城市 & 生活', dot:'var(--macaron-lavender-deep)', numBg:'var(--macaron-lavender-deep)', items:[
+        ['工作','M3 5h18v12H3zM9 21h6M12 17v4'],
+        ['高级晚餐','M4 17h16M5 17a7 7 0 0 1 14 0M12 10V7M10 7h4M3 20h18',1],
+        ['咖啡巡礼','M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4zM16 9h2a2.5 2.5 0 0 1 0 5h-2M7 4.5c0-1 .5-1 .5-2M11 4.5c0-1 .5-1 .5-2'],
+        ['购物','M6 8h12l1 13H5zM9 8V6a3 3 0 0 1 6 0v2'],
+        ['博物馆','M4 10h16M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18M12 3 3.5 8h17z']
+      ]}
+    }
+  };
+
+  /* 打包清单数据（第 4 步） */
+  state.pfilter = 'all';                       // all | todo | done
+  state.closed = new Set();                     // 折叠的分组
+  state.pack = [
+    { g:'衣物', ico:'🧥', bg:'var(--tiffany-light)', ink:'var(--tiffany-deep)',
+      sub:'Bagail L 压缩包 · 预计省 60% 体积',
+      items:[
+        { n:'美利奴打底衫 ×2', w:'3–10°C，薄层叠穿比厚外套更灵活', t:'核心', done:true },
+        { n:'防水硬壳外套', w:'Day 2 降雨概率 40%，兼防风', t:'天气', done:true },
+        { n:'抓绒中层', w:'早晚温差 7°C，博物馆室内外切换用', t:'保暖', done:false },
+        { n:'直筒牛仔裤 ×2', w:'耐走耐脏，配运动鞋与短靴都行', t:'核心', done:false },
+        { n:'舒适步行鞋', w:'日均 1.4 万步，石板路需缓冲底', t:'核心', done:false },
+        { n:'晚餐简约穿搭', w:'Bistrot Paul Bert 无着装要求，但别太随意', t:'备用', done:false }
+      ]},
+    { g:'数码', ico:'🔌', bg:'var(--macaron-lavender)', ink:'var(--macaron-lavender-deep)',
+      sub:'Bagail S 数码包 · 随身带上机',
+      items:[
+        { n:'Type-C/E 转换插头 ×2', w:'法国 230V / 50Hz，欧标双圆孔', t:'必需', done:true },
+        { n:'10,000mAh 充电宝', w:'必须随身，不可托运（航司规定）', t:'必需', done:false },
+        { n:'相机 + 备用电池', w:'低温掉电快，多带一块', t:'核心', done:false },
+        { n:'充电线束 + 收纳扣', w:'一拖三，免得到酒店翻包', t:'核心', done:false }
+      ]},
+    { g:'洗漱', ico:'🧴', bg:'var(--macaron-lemon)', ink:'var(--macaron-lemon-deep)',
+      sub:'湿干分离包 · 安检友好',
+      items:[
+        { n:'100ml 洗发沐浴分装', w:'随身液体每瓶 ≤100ml，总量 ≤1L', t:'必需', done:false },
+        { n:'保湿面霜 + 润唇膏', w:'干冷 + 室内暖气，容易起皮', t:'核心', done:false },
+        { n:'折叠牙刷套装', w:'酒店不常备，自带更稳', t:'备用', done:false }
+      ]},
+    { g:'证件 & 随身', ico:'📄', bg:'var(--macaron-peach)', ink:'var(--macaron-peach-deep)',
+      sub:'斜挎包 · 全程不离身',
+      items:[
+        { n:'护照 + 申根签页', w:'退税柜台与酒店入住都要出示', t:'必需', done:true },
+        { n:'折叠伞', w:'已按天气加入随身包', t:'天气', done:false },
+        { n:'行程单 + 保险 PDF', w:'离线可读，边检偶查', t:'必需', done:false }
+      ]}
+  ];
+
+  function toast(msg){
+    const t = document.createElement('div');
+    t.className = 'toast'; t.textContent = msg;
+    $('#toastBox').appendChild(t);
+    setTimeout(() => { t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),320); }, 2000);
+  }
+  function ico(d, w){ return '<svg class="ico'+(w||'')+'" viewBox="0 0 24 24"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+  const tick = '<span class="tick"><svg class="ico sm" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+  const totalSel = () => state.sel.gA.size + state.sel.gB.size;
+
+  /* ---------- Step 1 ---------- */
+  function step1(){
+    return `
+      <div class="field-label"><span class="num" style="background:var(--tiffany)">1</span>去哪儿？<span class="hint">支持多目的地</span></div>
+      <div class="dest-card">
+        <svg class="ico pin" viewBox="0 0 24 24"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <input id="destInput" placeholder="输入城市，如 巴黎" value="${state.dest}">
+        <button data-act="add-city" style="color:var(--tiffany-deep);font-size:12px;font-weight:800">＋添加</button>
+      </div>
+      <div class="chips">
+        ${['巴黎','阿姆斯特丹','东京','清迈'].map(c=>`<button class="chip ${state.dest===c?'on':''}" data-dest="${c}">${c}</button>`).join('')}
+      </div>
+
+      <div class="field-label"><span class="num" style="background:var(--macaron-pink-deep)">2</span>出行日期<span class="hint">11 月 · 共 5 天</span></div>
+      <div class="date-grid">
+        <button class="date-card active" data-act="pick-date" data-side="go">
+          <div class="d-label">出发 GO</div><div class="d-main"><b>14</b><span>11月</span></div><div class="d-week">星期六</div>
+        </button>
+        <button class="date-card" data-act="pick-date" data-side="back">
+          <div class="d-label">返程 BACK</div><div class="d-main"><b>18</b><span>11月</span></div><div class="d-week">星期三</div>
+        </button>
+      </div>
+      <div class="date-bridge">→</div>
+
+      <div class="field-label"><span class="num" style="background:var(--macaron-lavender-deep)">3</span>逗留几天？</div>
+      <div class="days-card">
+        <div class="days-top">
+          <div class="days-val"><b id="daysNum">${state.days}</b><span>天 ${state.days-1} 晚</span></div>
+          <div class="days-moon">🌙</div>
+        </div>
+        <div class="slider" id="slider">
+          <div class="rail"></div><div class="fill" id="slFill"></div><div class="knob" id="slKnob"></div>
+        </div>
+        <div class="slider-marks"><span>1天</span><span>5天</span><span>10天</span><span>15天</span></div>
+      </div>
+
+      <div class="field-label"><span class="num" style="background:var(--macaron-peach-deep)">4</span>这趟更像什么？<span class="hint">单选</span></div>
+      <div class="type-grid">
+        ${[['休闲度假','慢节奏 · 拍照 · 美食','t-c1','M12 21c-3.5 0-6-2.4-6-5.8 0-2.6 1.8-5.2 4-7.7.6 1.4 1.5 2.3 2.6 3 .3-2 .1-3.6-1-5.5 4 1.7 6.4 5.2 6.4 9.4 0 3.8-2.5 6.6-6 6.6z'],
+           ['商务出差','正装 · 会议 · 高效','t-c2','M4 10h16v6H4zM7 10V7.5A2.5 2.5 0 0 1 9.5 5h5A2.5 2.5 0 0 1 17 7.5V10M2.5 13h1.5M20 13h1.5'],
+           ['浪漫蜜月','仪式感 · 双人行程','t-c3','M12 20.5S4 15 4 9.6C4 6.9 6 5 8.4 5c1.5 0 2.9.8 3.6 2 .7-1.2 2.1-2 3.6-2C18 5 20 6.9 20 9.6c0 5.4-8 10.9-8 10.9z'],
+           ['亲子出行','安全 · 亲子设施','t-c4','M9 5a3 3 0 1 0 .01 0M16.5 7.2a2.3 2.3 0 1 0 .01 0M3.5 19c.5-3 2.6-4.8 5.5-4.8s5 1.8 5.5 4.8M15 14.6c2.4.2 4.2 1.6 4.7 4.4']]
+          .map(t=>`<button class="type-card ${t[2]} ${state.type===t[0]?'on':''}" data-type="${t[0]}">${tick}<div class="t-ico">${ico(t[3])}</div><div class="t-name">${t[0]}</div><div class="t-sub">${t[1]}</div></button>`).join('')}
+      </div>
+
+      <div class="ai-tip">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>AI 已留意到：</b>巴黎 11 月中旬约 3–10°C、降雨概率 40%。稍后会为你优先推荐<b>防水外套 + 保温穿搭</b>，以及室内备选活动。</p>
+      </div>`;
+  }
+
+  /* ---------- Step 2 ---------- */
+  function step2(){
+    let h='';
+    for(const g of ['gA','gB']){
+      const d=state.acts[g];
+      h+=`<div class="group-label"><span class="dot" style="background:${d.dot}"></span>${d.name}<span class="cnt" data-cnt="${g}">已选 ${state.sel[g].size}</span></div>
+      <div class="act-grid">`;
+      d.items.forEach(it=>{
+        const on=state.sel[g].has(it[0]);
+        h+=`<button class="act ${on?'on':''}" data-g="${g}" data-name="${it[0]}">
+          ${it[2]?'<span class="rec">✦ 推荐</span>':''}${tick}
+          <span class="a-ico">${ico(it[1])}</span><span class="a-name">${it[0]}</span>
+        </button>`;
+      });
+      if(g==='gB'){
+        h+=`<button class="add-act" data-act="add-custom"><span class="plus-ring">＋</span><span class="a-name">添加自定活动</span><span class="lock">PRO 会员解锁</span></button>`;
+      }
+      h+=`</div>`;
+    }
+    h+=`
+      <div class="field-label" style="margin-top:18px"><span class="num" style="background:var(--macaron-peach-deep)">5</span>打包偏好</div>
+      <div class="pref-row">
+        <button class="pref ${state.prefs.rewear?'on':''}" data-pref="rewear"><span class="sw"></span>重复穿着基本衣物</button>
+        <button class="pref ${state.prefs.laundry?'on':''}" data-pref="laundry"><span class="sw"></span>途中安排洗衣</button>
+      </div>
+      <div class="ai-tip">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>AI 根据第 1 步已预选 ${totalSel()} 项：</b>11 月巴黎多雨微冷，<b>徒步、摄影、高级晚餐</b>最符合「${state.type}」画像。点卡片可取消任意推荐。</p>
+      </div>`;
+    return h;
+  }
+
+  /* ---------- Step 3 ---------- */
+  function step3(){
+    const allItems = state.pack.flatMap(g=>g.items);
+    const total = allItems.length, done = allItems.filter(i=>i.done).length;
+    return `
+      <div class="field-label"><span class="num" style="background:var(--tiffany)">✓</span>清单已生成<span class="hint">基于 ${state.dest} · ${state.days} 天</span></div>
+      <div class="summary-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">${total} 件待打包</div>
+            <div class="big-num">${done} <span>/ ${total} 已装箱</span></div>
+          </div>
+          <span class="chip on" style="border:0;cursor:default">✦ AI 智能分组</span>
+        </div>
+        <div class="bar"><i style="width:${Math.round(done/total*100)}%"></i></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+          <span>${state.dest} 3–10°C · 40% 降雨</span>
+          <span style="color:var(--tiffany-deep);font-weight:750">🧳 压缩收纳可省 60% 空间</span>
+        </div>
+      </div>
+
+      <div class="field-label"><span class="num" style="background:var(--macaron-lavender-deep)">◈</span>AI 分组预览</div>
+      <div style="background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:6px 14px">
+        ${state.pack.map(g=>`<div class="cube-row">
+          <span style="display:flex;align-items:center"><span class="cr-ico" style="background:${g.bg};color:${g.ink};font-size:14px">${g.ico}</span>${g.g} · ${g.sub.split(' · ')[0]}</span>
+          <b style="font-size:12.5px;color:var(--tiffany-deep)">${g.items.length} 件</b>
+        </div>`).join('')}
+      </div>
+
+      <div style="height:14px"></div>
+      <div class="rain-card">
+        <div>
+          <b style="font-size:12.5px;color:var(--macaron-lemon-deep)">☔ 雨天提醒 · Day 2</b>
+          <div style="font-size:10.5px;color:#8A7A2E;margin-top:3px">降雨概率 40%，已把折叠伞列入随身包</div>
+        </div>
+        <span style="font-size:11px;font-weight:800;color:var(--macaron-lemon-deep);background:#fff;padding:6px 11px;border-radius:99px">查看 3 件</span>
+      </div>
+
+      <div class="ai-tip">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>下一步：</b>进入清单逐件勾选；每件物品都带「为什么带」的欧洲旅行提示（电压 230V、退税 €100.01、安检液体 100ml 规则）。</p>
+      </div>`;
+  }
+
+  /* ---------- Step 4：打包清单 ---------- */
+  function step4(){
+    const all = state.pack;
+    const items = all.flatMap(g=>g.items);
+    const total = items.length;
+    const done = items.filter(i=>i.done).length;
+    const pct = Math.round(done/total*100);
+    const left = total-done;
+
+    let h = `
+      <div class="field-label" style="margin-top:0"><span class="num" style="background:var(--tiffany)">✓</span>打包清单<span class="hint">${state.dest} · ${state.days} 天</span></div>
+      <div class="summary-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">已装箱</div>
+            <div class="big-num">${done} <span>/ ${total} 件</span></div>
+          </div>
+          <span class="chip on" style="border:0;cursor:default">${pct}%</span>
+        </div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)">
+          <span>${left?('还剩 '+left+' 件 · 约 '+Math.max(3,left*3)+' 分钟'):'全部搞定，可以出门了 🎉'}</span>
+          <button data-act="pack-all" style="color:var(--tiffany-deep);font-weight:800">${left?'全部标记已装':'重置'}</button>
+        </div>
+      </div>
+
+      <div class="trip-strip">
+        ${[['all','全部 '+total],['todo','未装 '+left],['done','已装 '+done]]
+          .map(f=>`<button class="trip-chip ${state.pfilter===f[0]?'on':''}" data-filter="${f[0]}">${f[1]}</button>`).join('')}
+      </div>`;
+
+    all.forEach((g, gi)=>{
+      let list = g.items.map((it, idx)=>({...it, idx}) );
+      if(state.pfilter==='todo') list = list.filter(i=>!i.done);
+      if(state.pfilter==='done') list = list.filter(i=>i.done);
+      if(!list.length) return;
+      const gDone = g.items.filter(i=>i.done).length;
+      const closed = state.closed.has(gi);
+      h += `
+        <div class="group-card ${closed?'closed':''}">
+          <button class="group-head" data-gh="${gi}">
+            <span class="g-ico" style="background:${g.bg};color:${g.ink}">${g.ico}</span>
+            <span style="flex:1;min-width:0">
+              <span class="g-name">${g.g}</span>
+              <span class="g-sub">${g.sub}</span>
+            </span>
+            <span class="g-cnt ${gDone===g.items.length?'full':''}">${gDone}/${g.items.length}</span>
+            <svg class="ico sm caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="group-body">
+            ${list.map(it=>{
+              const tagMap = {
+                '必需':['var(--tiffany-light)','var(--tiffany-deep)'],
+                '核心':['var(--macaron-lavender)','var(--macaron-lavender-deep)'],
+                '天气':['var(--macaron-lemon)','var(--macaron-lemon-deep)'],
+                '保暖':['var(--macaron-peach)','var(--macaron-peach-deep)'],
+                '备用':['#F0F3F2','#7C918E']
+              };
+              const t = tagMap[it.t] || tagMap['备用'];
+              return `<div class="pack-item ${it.done?'done':''}" data-pk="${gi}-${it.idx}">
+                <span class="pack-check">${it.done?'<svg class="ico sm" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</span>
+                <span style="flex:1;min-width:0">
+                  <span class="p-name">${it.n}</span>
+                  <span class="p-why">${it.w}</span>
+                </span>
+                <span class="p-tag" style="background:${t[0]};color:${t[1]}">${it.t}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    });
+
+    if(!done){
+      h += `<div class="ai-tip">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>建议顺序：</b>先装大件衣物进压缩包，再塞数码与洗漱，最后放证件和雨伞到斜挎包——这样开箱取物最少。</p>
+      </div>`;
+    } else {
+      h += `<div class="ai-tip" style="border-color:#C9E9E6">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>全部装箱完成。</b>合箱前记得把充电宝与雨伞留在随身包——托运会被拦，出门也可能用得上。</p>
+      </div>`;
+    }
+    return h;
+  }
+
+  /* ---------- Step 5：准备出发 ---------- */
+  function step5(){
+    const total = state.pack.flatMap(g=>g.items).length;
+    return `
+      <div class="done-hero">
+        <div class="done-ring">
+          <svg viewBox="0 0 24 24" style="width:30px;height:30px"><path d="m4.5 12.5 5 5 10-11" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="font-size:19px;font-weight:870;letter-spacing:-.02em">全部 ${total} 件已装箱</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:5px">4 个收纳包 · 预计 7.6 kg · 符合手提行李规格</div>
+        <div class="mini-stats">
+          <div class="mini-stat"><b>4</b><span>收纳包</span></div>
+          <div class="mini-stat"><b>7.6</b><span>公斤</span></div>
+          <div class="mini-stat"><b>${state.days}</b><span>天行程</span></div>
+        </div>
+      </div>
+
+      <div class="field-label"><span class="num" style="background:var(--macaron-peach-deep)">!</span>出门前最后 3 件事</div>
+      <div style="background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:6px 14px;box-shadow:var(--shadow)">
+        ${[['1','证件与登机牌放斜挎包最外层','值机柜台与退税柜台都要掏'],
+           ['2','充电宝 / 雨伞随身，不要托运','锂电池必须随身；雨天落地就能用'],
+           ['3','拍照留存行李箱外观','万一延误或错拿，索赔有据']]
+          .map((r,i)=>`<div class="leave-row">
+            <span class="leave-num" style="background:${['var(--tiffany)','var(--macaron-lavender-deep)','var(--macaron-peach-deep)'][i]}">${r[0]}</span>
+            <span style="flex:1;min-width:0">
+              <span class="p-name">${r[1]}</span>
+              <span class="p-why">${r[2]}</span>
+            </span>
+          </div>`).join('')}
+      </div>
+
+      <div class="field-label"><span class="num" style="background:var(--tiffany)">✈</span>行程概要</div>
+      <div style="background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:13px;font-weight:850">${state.dest} · ${state.days} 天 ${state.days-1} 晚</div>
+            <div style="font-size:10.5px;color:var(--muted);margin-top:3px">11 月 14 日出发 · 11 月 18 日返程</div>
+          </div>
+          <span class="chip on" style="border:0;cursor:default;font-size:10px">${state.type}</span>
+        </div>
+        <div style="height:1px;background:#F1F5F3;margin:11px 0"></div>
+        <div style="display:flex;gap:8px;font-size:10.5px;color:var(--muted);line-height:1.5">
+          <span style="flex:1">🌡 3–10°C<br>40% 降雨</span>
+          <span style="flex:1">🕐 日落 17:12<br>时差 +7h</span>
+          <span style="flex:1">💶 现金 €130.50<br>退税门槛 €100.01</span>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="rain-card" style="background:var(--tiffany-light);border-color:#C9E9E6">
+        <div>
+          <b style="font-size:12.5px;color:var(--tiffany-deep)">🧳 清单可随时回看</b>
+          <div style="font-size:10.5px;color:#3F6F6B;margin-top:3px">飞行途中离线可用，勾选状态本地保存</div>
+        </div>
+        <button data-act="share-list" style="font-size:11px;font-weight:800;color:var(--tiffany-deep);background:#fff;padding:6px 11px;border-radius:99px">分享</button>
+      </div>
+
+      <div class="ai-tip">
+        <svg class="ico sm spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <p><b>落地后：</b>首页会自动切到行程模式，提醒你购买 Navigo 交通卡、记录第一笔消费，并按天气微调当天活动。</p>
+      </div>`;
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    const totalItems = state.pack.flatMap(g=>g.items).length;
+    const doneItems = state.pack.flatMap(g=>g.items).filter(i=>i.done).length;
+
+    screen.innerHTML = state.step===1?step1()
+      : state.step===2?step2()
+      : state.step===3?step3()
+      : state.step===4?step4()
+      : step5();
+    screen.scrollTop = 0;
+
+    $('#p1').classList.toggle('on', state.step>=1);
+    $('#p2').classList.toggle('on', state.step>=2);
+    $('#p3').classList.toggle('on', state.step>=3);
+    $('#stepPill').textContent = state.step<=3
+      ? '第 '+state.step+' 步 / 共 3 步'
+      : (state.step===4 ? '打包中 · '+doneItems+'/'+totalItems : '准备出发');
+    $('#heroSide').style.display = state.step>1 ? '' : 'none';
+
+    if(state.step===1){ $('#heroTitle').innerHTML='先聊聊这次<em>旅行</em>的样子'; $('#heroSub').textContent='4 个小问题，帮 AI 生成你的专属打包方案'; }
+    if(state.step===2){ $('#heroTitle').innerHTML='这趟会做些<em>什么</em>？'; $('#heroSub').textContent='点选活动，AI 会据此生成打包清单'; }
+    if(state.step===3){ $('#heroTitle').innerHTML='你的清单<em>ready</em>了'; $('#heroSub').textContent='AI 已按收纳包分组，去逐件勾选吧'; }
+    if(state.step===4){ $('#heroTitle').innerHTML='开始<em>装包</em>吧'; $('#heroSub').textContent= doneItems===totalItems ? '全部装好了，检查一遍就可以出发' : '还剩 '+(totalItems-doneItems)+' 件，边装边勾'; }
+    if(state.step===5){ $('#heroTitle').innerHTML='准备<em>出发</em>'; $('#heroSub').textContent='清单已完成 · 行程已同步到首页'; }
+
+    $('#ctaTxt').textContent = state.step===1?'选择活动'
+      : state.step===2?'开始打包'
+      : state.step===3?'进入清单'
+      : state.step===4?(doneItems===totalItems?'完成打包':'还剩 '+(totalItems-doneItems)+' 件')
+      : '开始行程';
+
+    const badge=$('#ctaBadge'), line=$('#selLine');
+    if(state.step===2){ badge.style.display=''; badge.textContent=totalSel(); line.innerHTML='已选 <b>'+totalSel()+'</b> 项活动 · 建议选 3–6 项'; }
+    else if(state.step===1){ badge.style.display='none'; line.textContent='填写完成后进入下一步'; }
+    else if(state.step===3){ badge.style.display='none'; line.innerHTML='<b>'+totalItems+'</b> 件物品 · 4 个收纳分组 · 预计 40 分钟装完'; }
+    else if(state.step===4){ badge.style.display=''; badge.textContent=doneItems+'/'+totalItems; line.innerHTML='已装 <b>'+doneItems+'</b> / '+totalItems+' 件 · 勾选即保存'; }
+    else { badge.style.display='none'; line.innerHTML='<b>'+totalItems+'</b> 件已装箱 · 4 个收纳包 · 7.6 kg'; }
+    initSlider();
+  }
+
+  /* slider */
+  let dragging=false; const MIN=1, MAX=15;
+  function setDays(v){
+    v=Math.max(MIN,Math.min(MAX,Math.round(v)));
+    state.days=v;
+    const n=$('#daysNum'); if(!n)return;
+    n.textContent=v;
+    const pct=(v-MIN)/(MAX-MIN)*100;
+    $('#slFill').style.width=pct+'%'; $('#slKnob').style.left=pct+'%';
+  }
+  function fromEvent(e){
+    const sl=$('#slider'); if(!sl)return;
+    const r=sl.getBoundingClientRect();
+    setDays(MIN+((e.clientX-r.left)/r.width)*(MAX-MIN));
+  }
+  function initSlider(){
+    const sl=$('#slider'); if(!sl)return;
+    sl.addEventListener('pointerdown',e=>{dragging=true;fromEvent(e);});
+    window.addEventListener('pointermove',e=>{if(dragging)fromEvent(e);});
+    window.addEventListener('pointerup',()=>dragging=false);
+    setDays(state.days);
+  }
+
+  /* events */
+  screen.addEventListener('click',e=>{
+    const el=e.target.closest('[data-dest],[data-act],[data-type],[data-g],[data-pref]');
+    if(!el)return;
+    if(el.dataset.dest){
+      state.dest=el.dataset.dest;
+      screen.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.dest===state.dest));
+      const inp=$('#destInput'); if(inp)inp.value=state.dest;
+      toast('目的地已设为 '+state.dest); return;
+    }
+    if(el.dataset.type){
+      state.type=el.dataset.type;
+      screen.querySelectorAll('.type-card').forEach(c=>c.classList.toggle('on',c.dataset.type===state.type));
+      toast('旅行类型：'+state.type); return;
+    }
+    if(el.dataset.g){
+      const g=el.dataset.g, name=el.dataset.name;
+      if(state.sel[g].has(name)){state.sel[g].delete(name);el.classList.remove('on');toast('已移除：'+name);}
+      else{state.sel[g].add(name);el.classList.add('on');toast('已添加：'+name);}
+      const h=screen.querySelector('[data-cnt="'+g+'"]'); if(h)h.textContent='已选 '+state.sel[g].size;
+      const badge=$('#ctaBadge'); badge.textContent=totalSel();
+      $('#selLine').innerHTML='已选 <b>'+totalSel()+'</b> 项活动 · 建议选 3–6 项';
+      return;
+    }
+    if(el.dataset.pref){
+      state.prefs[el.dataset.pref]=!state.prefs[el.dataset.pref];
+      el.classList.toggle('on',state.prefs[el.dataset.pref]);
+      toast((state.prefs[el.dataset.pref]?'已开启：':'已关闭：')+el.textContent.trim()); return;
+    }
+    switch(el.dataset.act){
+      case 'add-city': toast('多目的地模式：可串联停留城市'); break;
+      case 'pick-date': toast('请选择'+(el.dataset.side==='go'?'出发':'返程')+'日期'); break;
+      case 'add-custom': toast('自定义活动为 PRO 会员功能，可先从推荐里选'); break;
+      case 'mic': toast('🎙️ 说出你的行程，我来填表'); break;
+      case 'pack-all': {
+        const items = state.pack.flatMap(g=>g.items);
+        const allDone = items.every(i=>i.done);
+        items.forEach(i=>i.done = !allDone);
+        state.closed.clear();
+        toast(allDone?'已重置清单':'✓ 全部标记为已装');
+        render(); break;
+      }
+      case 'share-list': toast('📤 清单链接已复制，可发给同行人'); break;
+    }
+  });
+
+  /* 清单交互：筛选 / 折叠 / 勾选 */
+  screen.addEventListener('click', e=>{
+    const f = e.target.closest('[data-filter]');
+    if(f){ state.pfilter = f.dataset.filter; render(); return; }
+
+    const gh = e.target.closest('[data-gh]');
+    if(gh){
+      const gi = Number(gh.dataset.gh);
+      state.closed.has(gi) ? state.closed.delete(gi) : state.closed.add(gi);
+      render(); return;
+    }
+
+    const pk = e.target.closest('[data-pk]');
+    if(pk){
+      const [gi, idx] = pk.dataset.pk.split('-').map(Number);
+      const item = state.pack[gi].items[idx];
+      item.done = !item.done;
+      const group = state.pack[gi];
+      const gDone = group.items.filter(i=>i.done).length;
+      if(item.done && gDone===group.items.length) toast('🎉 '+group.g+' 全部装好（'+gDone+'/'+group.items.length+'）');
+      else toast(item.done ? '已装：'+item.n : '已取出：'+item.n);
+      render(); return;
+    }
+  });
+
+  $('#ctaBtn').addEventListener('click',()=>{
+    const items = state.pack.flatMap(g=>g.items);
+    const left = items.filter(i=>!i.done).length;
+    if(state.step===4 && left>0){ toast('还有 '+left+' 件没勾，先装完再继续'); return; }
+    if(state.step<5){
+      state.step++; render();
+      toast({2:'第 2 步：选择活动', 3:'✦ 打包清单已生成', 4:'进入清单，逐件勾选', 5:'🎉 全部完成，准备出发'}[state.step]);
+    } else toast('✈️ 进入行程首页（原型演示结束）');
+  });
+  $('#backBtn').addEventListener('click',()=>{
+    if(state.step>1){ state.step--; render(); }
+    else { render(); toast('已在第 1 步'); }
+  });
+  $$('[data-act="mic"]').forEach(b=>b.addEventListener('click',()=>toast('🎙️ 说出你的行程，我来填表')));
+
+  // 支持 #s4 / #s5 直接跳到清单或出发页（方便预览）
+  const hashStep = (location.hash.match(/s(\d)/i) || [])[1];
+  if(hashStep) state.step = Math.min(5, Math.max(1, Number(hashStep)));
+
+  render();
+})();
+</script>
+</body>
+</html>

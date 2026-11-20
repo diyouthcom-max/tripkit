@@ -1,0 +1,2380 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Sparkles,
+  MapPin,
+  Plus,
+  Minus,
+  X,
+  Shirt,
+  Loader2,
+  ArrowRight,
+  ArrowLeft,
+  Users,
+  Calendar,
+  Check,
+  AlertTriangle,
+  Zap,
+  Eye,
+  Compass,
+  SlidersHorizontal,
+  ChevronUp,
+  ChevronDown,
+  Backpack,
+  Luggage,
+  Plane,
+  Footprints,
+  Camera,
+  Umbrella,
+  Waves,
+  Flame,
+  Mountain,
+  Snowflake,
+  Tent,
+  Bike,
+  Dumbbell,
+  Activity,
+  Landmark,
+  Coffee,
+  Ticket,
+  Utensils,
+  ShoppingBag,
+  Laptop,
+  Baby,
+  Smile,
+  Pill,
+  ShieldCheck,
+  Sun,
+  Mic,
+  User,
+  Home,
+  UsersRound,
+  Briefcase,
+  Heart,
+  Palmtree,
+  type LucideIcon,
+} from 'lucide-react';
+import { ACTIVITY_GROUPS, DEFAULT_TRIP_STATE } from '../data/presets';
+import {
+  redistributeCityDaysForTotal,
+  resolveCityDaysAllocation,
+} from '../utils/itineraryHelpers';
+import {
+  computeClothingNormalizationPlan,
+  formatWeightCompact,
+  type ClothingNormalizationPlan,
+} from '../utils/packingHelpers';
+import { useTranslation } from 'react-i18next';
+import {
+  loadAppPreferences,
+  normalizeAppLanguage,
+} from '../utils/preferencesHelpers';
+import { pickLang } from '../i18n/langHelper';
+import { getPackingScenarioLabel } from '../i18n/packs/packingWizardUiPack';
+import {
+  ACTIVITY_GROUP_TITLES,
+  ACTIVITY_NAME_MAP,
+  BUDGET_TIER_COPY_MAP,
+  getLocalizedCrewFallbacks,
+  getTripSetupWizardCopy,
+  translatePopularCity,
+} from '../i18n/packs/tripSetupWizardPack';
+import {
+  getStep1ManifestCopy,
+  inferTripSeasonKey,
+  type Step1VibeKey,
+} from '../i18n/packs/step1ManifestPack';
+import { PlaceAutocompleteInput } from './PlaceAutocompleteInput';
+import { AiVoiceInputButton } from './AiVoiceInputButton';
+import { InlineDatePickerPopover } from './InlineDatePickerPopover';
+import { AccentIconBadge } from '../utils/accentTheme';
+import {
+  buildPerStopWeatherForecasts,
+  inferDefaultScenariosFromSetup,
+} from '../utils/packingWizardHelpers';
+import type {
+  AppLanguage,
+  BudgetTier,
+  CrewMember,
+  PackingClothingGender,
+  PackingDensityLevel,
+  PackingGroup,
+  PackingScenarioId,
+  PackingWeatherOverride,
+  TripSetup,
+  TripStyle,
+} from '../types';
+
+export type WizardMode = 'onboarding' | 'create_new' | 'edit_current';
+type WizardStep = 1 | 2 | 3;
+
+interface TripSetupWizardProps {
+  mode: WizardMode;
+  initialSetup: TripSetup;
+  initialCrew: CrewMember[];
+  existingPacking?: PackingGroup[];
+  isGenerating: boolean;
+  errorMessage?: string | null;
+  onCancel?: () => void;
+  onNormalizePacking?: (
+    nextSetup: TripSetup,
+    normalizedPacking: PackingGroup[],
+    plan: ClothingNormalizationPlan,
+    isUndo?: boolean
+  ) => void;
+  onSaveEditCurrent?: (
+    nextSetup: TripSetup,
+    nextCrew: CrewMember[],
+    normalizedPacking?: PackingGroup[]
+  ) => void;
+  onOpenPackingWizard?: () => void;
+  onCreateNewWithAi: (
+    draftSetup: TripSetup,
+    draftCrew: CrewMember[],
+    naturalPrompt?: string
+  ) => Promise<void>;
+  onCreateNewQuickOffline: (
+    draftSetup: TripSetup,
+    draftCrew: CrewMember[],
+    customPacking?: PackingGroup[]
+  ) => void;
+  onRegenerateCurrentWithAi?: (
+    draftSetup: TripSetup,
+    draftCrew: CrewMember[],
+    naturalPrompt?: string
+  ) => Promise<void>;
+  onLoadDefaultDemo?: () => void;
+}
+
+const TRIP_STYLE_KEYS: Step1VibeKey[] = [
+  '休闲度假',
+  '长期数字游民',
+  '商务出差',
+  '浪漫蜜月',
+];
+
+const TRIP_STYLE_ICON_MAP: Record<TripStyle, LucideIcon> = {
+  休闲度假: Palmtree,
+  长期数字游民: Laptop,
+  商务出差: Briefcase,
+  浪漫蜜月: Heart,
+  亲子出行: Users,
+};
+
+const BUDGET_TIER_KEYS: BudgetTier[] = ['budget', 'comfort', 'luxury'];
+
+/**
+ * Only the 4 non-overlapping personal care constraints belong in Step 2's Special Care panel;
+ * luggage volume & cabin-only rules live exclusively in Step 3's visual Luggage Constraint cards
+ * so users never see duplicate luggage concepts across steps.
+ */
+const CARE_CONSTRAINT_SCENARIOS: PackingScenarioId[] = [
+  'baby',
+  'kids',
+  'medication',
+  'sensitive_skin',
+];
+
+const ACTIVITY_TO_SCENARIO: Partial<Record<string, PackingScenarioId>> = {
+  '海滨 / 海滩度假': 'beach',
+  '游泳 / 泳池': 'swimming',
+  '温泉 / SPA': 'onsen',
+  远足登山: 'hiking',
+  雪上运动: 'ski_snow',
+  露营野餐: 'camping',
+  健身房: 'fitness',
+  晨跑: 'fitness',
+  街头摄影: 'photography',
+  远程办公: 'remote_work',
+  '正式晚餐 / Bistro': 'formal_event',
+  '购物 & 退税': 'shopping_taxfree',
+  主题乐园: 'theme_park',
+};
+
+const ACTIVITY_ICON_MAP: Record<string, LucideIcon> = {
+  城市徒步: Footprints,
+  街头摄影: Camera,
+  '海滨 / 海滩度假': Umbrella,
+  '游泳 / 泳池': Waves,
+  '温泉 / SPA': Flame,
+  远足登山: Mountain,
+  雪上运动: Snowflake,
+  露营野餐: Tent,
+  骑行探索: Bike,
+  健身房: Dumbbell,
+  晨跑: Activity,
+  '博物馆 / 看展': Landmark,
+  '精品咖啡 / 市集': Coffee,
+  主题乐园: Ticket,
+  '正式晚餐 / Bistro': Utensils,
+  '购物 & 退税': ShoppingBag,
+  远程办公: Laptop,
+};
+
+const CARE_ICON_MAP: Partial<Record<PackingScenarioId, LucideIcon>> = {
+  baby: Baby,
+  kids: Smile,
+  medication: Pill,
+  sensitive_skin: ShieldCheck,
+};
+
+function computeReturnDate(departureDate: string, days: number): string {
+  const base = new Date(`${departureDate}T00:00:00`);
+  if (Number.isNaN(base.getTime())) return departureDate;
+  base.setDate(base.getDate() + Math.max(1, days) - 1);
+  const y = base.getFullYear();
+  const m = String(base.getMonth() + 1).padStart(2, '0');
+  const d = String(base.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function computeDaysBetween(departureDate: string, returnDate: string): number | null {
+  const start = new Date(`${departureDate}T00:00:00`);
+  const end = new Date(`${returnDate}T00:00:00`);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return null;
+  const diffDays = Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1;
+  return Math.max(2, Math.min(30, diffDays));
+}
+
+function formatShortStopDateSpan(
+  departureDate: string,
+  offsetDays: number,
+  stayDays: number,
+  lang: AppLanguage
+): string {
+  const base = new Date(`${departureDate}T00:00:00`);
+  if (Number.isNaN(base.getTime())) return '';
+  const start = new Date(base);
+  start.setDate(start.getDate() + Math.max(0, offsetDays));
+  const end = new Date(start);
+  end.setDate(end.getDate() + Math.max(1, stayDays) - 1);
+  try {
+    const fmt = new Intl.DateTimeFormat(lang, { month: 'short', day: 'numeric' });
+    return stayDays <= 1 ? fmt.format(start) : `${fmt.format(start)} – ${fmt.format(end)}`;
+  } catch {
+    const sm = start.getMonth() + 1;
+    const sd = start.getDate();
+    const em = end.getMonth() + 1;
+    const ed = end.getDate();
+    return stayDays <= 1 ? `${sm}/${sd}` : `${sm}/${sd} – ${em}/${ed}`;
+  }
+}
+
+function formatReadableDateRange(
+  startIso: string,
+  endIso: string,
+  lang: AppLanguage
+): { startText: string; endText: string } {
+  const start = new Date(`${startIso}T00:00:00`);
+  const end = new Date(`${endIso}T00:00:00`);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return { startText: startIso, endText: endIso };
+  }
+  const sameYear = start.getFullYear() === end.getFullYear();
+  try {
+    const startFmt = new Intl.DateTimeFormat(lang, {
+      month: 'short',
+      day: 'numeric',
+      ...(sameYear ? {} : { year: 'numeric' }),
+    });
+    const endFmt = new Intl.DateTimeFormat(lang, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    return { startText: startFmt.format(start), endText: endFmt.format(end) };
+  } catch {
+    return { startText: startIso, endText: endIso };
+  }
+}
+
+function resizeDraftCrew(
+  prev: CrewMember[],
+  count: number,
+  lang: AppLanguage = 'zh-CN'
+): CrewMember[] {
+  const fallbacks = getLocalizedCrewFallbacks(lang);
+  const safeCount = Math.max(1, Math.min(4, Math.round(count) || 1));
+  const out: CrewMember[] = [];
+  for (let i = 0; i < safeCount; i += 1) {
+    if (prev[i]) {
+      out.push(prev[i]);
+    } else {
+      const tpl = fallbacks[i] || fallbacks[1];
+      out.push({ ...tpl, id: `m${i + 1}` });
+    }
+  }
+  return out;
+}
+
+export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
+  mode,
+  initialSetup,
+  initialCrew,
+  existingPacking,
+  isGenerating,
+  errorMessage,
+  onCancel,
+  onSaveEditCurrent,
+  onCreateNewWithAi,
+  onCreateNewQuickOffline,
+  onRegenerateCurrentWithAi,
+  onOpenPackingWizard,
+}) => {
+  const { t, i18n } = useTranslation();
+  const activeLang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
+  const copy = getTripSetupWizardCopy(activeLang);
+  const step1Copy = getStep1ManifestCopy(activeLang);
+  const unitSystem = loadAppPreferences().unitSystem;
+
+  const isEditMode = mode === 'edit_current';
+  const [activeStep, setActiveStep] = useState<WizardStep>(1);
+  const [maxVisitedStep, setMaxVisitedStep] = useState<WizardStep>(() =>
+    isEditMode ? 3 : 1
+  );
+
+  const [setup, setSetup] = useState<TripSetup>(() => ({
+    ...initialSetup,
+    cityDays: resolveCityDaysAllocation(
+      initialSetup.cities,
+      initialSetup.days,
+      initialSetup.cityDays
+    ),
+    specialScenarios:
+      initialSetup.specialScenarios !== undefined
+        ? initialSetup.specialScenarios
+        : inferDefaultScenariosFromSetup(initialSetup, 23),
+    returnDate: computeReturnDate(initialSetup.departureDate, initialSetup.days),
+  }));
+  const [crew, setCrew] = useState<CrewMember[]>(() =>
+    resizeDraftCrew(initialCrew, initialSetup.travelers, activeLang)
+  );
+  const [cityInput, setCityInput] = useState('');
+  const [naturalPrompt, setNaturalPrompt] = useState('');
+  const [showAiQuickInput, setShowAiQuickInput] = useState(false);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const [confirmOverwriteAi, setConfirmOverwriteAi] = useState(false);
+
+  const workingPacking = useMemo<PackingGroup[]>(() => {
+    if (isEditMode && existingPacking && existingPacking.length > 0) {
+      return existingPacking;
+    }
+    return [];
+  }, [isEditMode, existingPacking]);
+  const baselineDays = initialSetup.days;
+  const [dismissedSignature, setDismissedSignature] = useState<string | null>(null);
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+
+  const wizardRootRef = useRef<HTMLDivElement>(null);
+
+  const updateSetup = (patch: Partial<TripSetup>) => {
+    const nextCities = patch.cities !== undefined ? patch.cities : setup.cities;
+    const minTripDays = Math.max(2, nextCities.length);
+
+    if (patch.days !== undefined) {
+      const clampedDays = Math.max(minTripDays, Math.min(30, Math.round(patch.days) || minTripDays));
+      patch = { ...patch, days: clampedDays };
+    }
+    setSetup((prev) => {
+      const next = { ...prev, ...patch };
+      if (patch.days !== undefined && patch.cityDays === undefined && next.cities.length > 0) {
+        const curAlloc = resolveCityDaysAllocation(next.cities, prev.days, prev.cityDays);
+        next.cityDays = redistributeCityDaysForTotal(curAlloc, next.days);
+      }
+      next.returnDate = computeReturnDate(next.departureDate, next.days);
+      if (patch.travelers !== undefined && patch.travelers !== prev.travelers) {
+        setCrew((cPrev) => resizeDraftCrew(cPrev, next.travelers, activeLang));
+      }
+      return next;
+    });
+  };
+
+  const handleSelectTripStyle = (styleKey: TripStyle) => {
+    const patch: Partial<TripSetup> = { tripStyle: styleKey };
+    const curScenarios = setup.specialScenarios || [];
+    const curActs = setup.activities || [];
+
+    if (styleKey === '亲子出行' && !curScenarios.includes('kids')) {
+      patch.specialScenarios = [...curScenarios, 'kids'];
+    } else if (styleKey === '长期数字游民') {
+      if (!curActs.includes('远程办公')) {
+        patch.activities = [...curActs, '远程办公'];
+      }
+      if (!curScenarios.includes('remote_work')) {
+        patch.specialScenarios = [...curScenarios, 'remote_work'];
+      }
+      patch.laundry = true;
+    }
+
+    updateSetup(patch);
+  };
+
+  const parseCityTokens = (raw: string): string[] =>
+    raw
+      .split(/\s*(?:→|->|、|,|，|\/)\s*/)
+      .map((c) => c.trim())
+      .filter(Boolean);
+
+  const resolvedCityDays = useMemo(
+    () => resolveCityDaysAllocation(setup.cities, setup.days, setup.cityDays),
+    [setup.cities, setup.days, setup.cityDays]
+  );
+
+  const addCity = (name: string) => {
+    const tokens = parseCityTokens(name);
+    if (tokens.length === 0) return;
+    setValidationError(null);
+    const merged = [...setup.cities];
+    const currentAlloc = resolveCityDaysAllocation(setup.cities, setup.days, setup.cityDays);
+    let addedCount = 0;
+
+    for (const token of tokens) {
+      if (!merged.includes(token)) {
+        merged.push(token);
+        addedCount += 1;
+      }
+    }
+    if (addedCount === 0) {
+      setCityInput('');
+      return;
+    }
+
+    let nextAlloc: number[];
+    let nextTotal: number;
+    if (setup.cities.length === 0) {
+      nextTotal = Math.max(Math.max(2, merged.length * 2), Math.min(30, setup.days));
+      nextAlloc = resolveCityDaysAllocation(merged, nextTotal);
+    } else {
+      nextAlloc = [...currentAlloc];
+      for (let i = 0; i < addedCount; i += 1) {
+        const curSum = nextAlloc.reduce((s, v) => s + v, 0);
+        const headroom = 30 - curSum;
+        if (headroom >= 1) {
+          nextAlloc.push(Math.min(3, headroom));
+        } else {
+          let maxIdx = 0;
+          for (let j = 1; j < nextAlloc.length; j += 1) {
+            if (nextAlloc[j] > nextAlloc[maxIdx]) maxIdx = j;
+          }
+          if (nextAlloc[maxIdx] > 1) {
+            nextAlloc[maxIdx] -= 1;
+          }
+          nextAlloc.push(1);
+        }
+      }
+      nextTotal = Math.max(
+        Math.max(2, merged.length),
+        Math.min(30, nextAlloc.reduce((s, v) => s + v, 0))
+      );
+    }
+
+    updateSetup({ cities: merged, cityDays: nextAlloc, days: nextTotal });
+    setCityInput('');
+  };
+
+  const removeCityAt = (removeIdx: number) => {
+    const nextCities = setup.cities.filter((_, i) => i !== removeIdx);
+    if (nextCities.length === 0) {
+      updateSetup({ cities: [], cityDays: [] });
+      return;
+    }
+    const nextAlloc = resolvedCityDays.filter((_, i) => i !== removeIdx);
+    const rawSum = nextAlloc.reduce((s, v) => s + v, 0);
+    const nextTotal = Math.max(Math.max(2, nextCities.length), Math.min(30, rawSum));
+    const finalAlloc =
+      nextCities.length === 1
+        ? [nextTotal]
+        : rawSum === nextTotal
+        ? nextAlloc
+        : redistributeCityDaysForTotal(nextAlloc, nextTotal);
+    updateSetup({ cities: nextCities, cityDays: finalAlloc, days: nextTotal });
+  };
+
+  const moveCity = (idx: number, delta: -1 | 1) => {
+    const targetIdx = idx + delta;
+    if (targetIdx < 0 || targetIdx >= setup.cities.length) return;
+    const nextCities = [...setup.cities];
+    const nextAlloc = [...resolvedCityDays];
+    [nextCities[idx], nextCities[targetIdx]] = [nextCities[targetIdx], nextCities[idx]];
+    [nextAlloc[idx], nextAlloc[targetIdx]] = [nextAlloc[targetIdx], nextAlloc[idx]];
+    updateSetup({ cities: nextCities, cityDays: nextAlloc });
+  };
+
+  const updateCityStayDays = (idx: number, desiredDays: number) => {
+    if (idx < 0 || idx >= setup.cities.length) return;
+    const otherSum = resolvedCityDays.reduce((s, v, i) => (i === idx ? s : s + v), 0);
+    const maxForThis = Math.max(1, 30 - otherSum);
+    const clamped = Math.max(1, Math.min(maxForThis, Math.round(desiredDays) || 1));
+    const nextAlloc = resolvedCityDays.map((v, i) => (i === idx ? clamped : v));
+    const nextTotal = Math.max(
+      Math.max(2, setup.cities.length),
+      Math.min(30, nextAlloc.reduce((s, v) => s + v, 0))
+    );
+    updateSetup({ cityDays: nextAlloc, days: nextTotal });
+  };
+
+  const handleEqualSplitCityDays = () => {
+    if (setup.cities.length < 2) return;
+    const evenAlloc = resolveCityDaysAllocation(setup.cities, setup.days);
+    updateSetup({ cityDays: evenAlloc });
+  };
+
+  const resolveSubmissionSetup = (allowNaturalPromptOnly = false): TripSetup | null => {
+    const pendingTokens = parseCityTokens(cityInput);
+    const effectiveCities = [...setup.cities];
+    let addedPending = 0;
+    for (const token of pendingTokens) {
+      if (!effectiveCities.includes(token)) {
+        effectiveCities.push(token);
+        addedPending += 1;
+      }
+    }
+    const effectiveDays = Math.max(
+      Math.max(2, effectiveCities.length),
+      Math.min(30, setup.days)
+    );
+    const effectiveCityDays =
+      addedPending > 0
+        ? resolveCityDaysAllocation(effectiveCities, effectiveDays)
+        : resolveCityDaysAllocation(effectiveCities, effectiveDays, setup.cityDays);
+
+    if (pendingTokens.length > 0) {
+      setCityInput('');
+      updateSetup({
+        cities: effectiveCities,
+        cityDays: effectiveCityDays,
+        days: effectiveDays,
+      });
+    }
+    if (effectiveCities.length === 0 && (!allowNaturalPromptOnly || !naturalPrompt.trim())) {
+      setValidationError(copy.validationNoCity);
+      return null;
+    }
+    setValidationError(null);
+    return {
+      ...setup,
+      cities: effectiveCities,
+      cityDays: effectiveCityDays,
+      days: effectiveDays,
+      returnDate: computeReturnDate(setup.departureDate, effectiveDays),
+    };
+  };
+
+  const scrollWizardToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToStep = (target: WizardStep) => {
+    if (!isEditMode && target > 1 && activeStep === 1) {
+      const effective = resolveSubmissionSetup(false);
+      if (!effective) return;
+    }
+    setValidationError(null);
+    setActiveStep(target);
+    setMaxVisitedStep((prev) => (target > prev ? target : prev));
+    scrollWizardToTop();
+  };
+
+  const toggleActivity = (act: string) => {
+    const exists = setup.activities.includes(act);
+    const nextActivities = exists
+      ? setup.activities.filter((a) => a !== act)
+      : [...setup.activities, act];
+    const linkedScenario = ACTIVITY_TO_SCENARIO[act];
+    const currentScenarios = setup.specialScenarios || [];
+    let nextScenarios = currentScenarios;
+    if (linkedScenario) {
+      if (!exists && !currentScenarios.includes(linkedScenario)) {
+        nextScenarios = [...currentScenarios, linkedScenario];
+      } else if (exists && currentScenarios.includes(linkedScenario)) {
+        const stillNeeded = nextActivities.some((a) => ACTIVITY_TO_SCENARIO[a] === linkedScenario);
+        if (!stillNeeded) {
+          nextScenarios = currentScenarios.filter((s) => s !== linkedScenario);
+        }
+      }
+    }
+    updateSetup({
+      activities: nextActivities,
+      specialScenarios: nextScenarios,
+    });
+  };
+
+  const toggleWeatherOverride = (target: PackingWeatherOverride) => {
+    const current = setup.weatherOverrides || [];
+    const exists = current.includes(target);
+    if (exists) {
+      updateSetup({ weatherOverrides: current.filter((x) => x !== target) });
+      return;
+    }
+    const cleaned =
+      target === 'colder'
+        ? current.filter((x) => x !== 'warmer')
+        : target === 'warmer'
+        ? current.filter((x) => x !== 'colder')
+        : current;
+    updateSetup({ weatherOverrides: [...cleaned, target] });
+  };
+
+  const toggleCareConstraint = (id: PackingScenarioId) => {
+    const current = setup.specialScenarios || [];
+    const exists = current.includes(id);
+    const nextScenarios = exists ? current.filter((x) => x !== id) : [...current, id];
+    updateSetup({ specialScenarios: nextScenarios });
+  };
+
+  const handleSelectLuggageMode = (modeId: PackingDensityLevel) => {
+    const current = setup.specialScenarios || [];
+    const withoutCabin = current.filter((s) => s !== 'cabin_only');
+    const nextScenarios: PackingScenarioId[] =
+      modeId === 'fully_loaded' ? withoutCabin : [...withoutCabin, 'cabin_only'];
+    updateSetup({
+      packingDensity: modeId,
+      specialScenarios: nextScenarios,
+    });
+  };
+
+  const activeCareConstraints = useMemo(
+    () =>
+      CARE_CONSTRAINT_SCENARIOS.filter((id) =>
+        (setup.specialScenarios || []).includes(id)
+      ),
+    [setup.specialScenarios]
+  );
+
+  const wizardStopForecasts = useMemo(
+    () =>
+      buildPerStopWeatherForecasts(
+        setup.cities.length > 0 ? setup.cities : parseCityTokens(cityInput),
+        setup.departureDate,
+        setup.days,
+        setup.weatherOverrides || [],
+        activeLang,
+        setup.cities.length > 0 ? resolvedCityDays : undefined
+      ),
+    [
+      setup.cities,
+      cityInput,
+      setup.departureDate,
+      setup.days,
+      setup.weatherOverrides,
+      activeLang,
+      resolvedCityDays,
+    ]
+  );
+
+  const normalizationPlan = useMemo(
+    () =>
+      isEditMode && workingPacking.length > 0
+        ? computeClothingNormalizationPlan(workingPacking, baselineDays, setup, activeLang)
+        : computeClothingNormalizationPlan(DEFAULT_TRIP_STATE.packing, setup.days, setup, activeLang),
+    [
+      isEditMode,
+      workingPacking,
+      baselineDays,
+      setup.days,
+      setup.laundry,
+      setup.laundryIntervalDays,
+      setup.rewear,
+      activeLang,
+    ]
+  );
+
+  const capsuleCycleDays = normalizationPlan.effectiveCycleDays;
+
+  const currentClothingSignature = `${setup.days}_${setup.laundry ? 1 : 0}_${setup.laundryIntervalDays}_${setup.rewear ? 1 : 0}`;
+  const isDaysChanged = isEditMode && setup.days !== baselineDays;
+  const isCycleSettingChanged =
+    isEditMode &&
+    (setup.laundry !== initialSetup.laundry ||
+      setup.laundryIntervalDays !== initialSetup.laundryIntervalDays ||
+      setup.rewear !== initialSetup.rewear);
+  const hasAnyClothingDiff =
+    isEditMode &&
+    workingPacking.length > 0 &&
+    (isDaysChanged || isCycleSettingChanged) &&
+    normalizationPlan.changedItems.length > 0;
+  const shouldPromptNormalization =
+    hasAnyClothingDiff && currentClothingSignature !== dismissedSignature;
+  const isDismissedWithPendingDiff =
+    hasAnyClothingDiff && currentClothingSignature === dismissedSignature;
+
+  const formatSignedWeight = (grams: number): string => {
+    if (grams === 0) return unitSystem === 'imperial' ? '0 oz' : '0g';
+    return grams > 0
+      ? `+${formatWeightCompact(grams, unitSystem)}`
+      : `-${formatWeightCompact(Math.abs(grams), unitSystem)}`;
+  };
+
+  useEffect(() => {
+    if (!previewModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setPreviewModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [previewModalOpen]);
+
+  const stepTabs: Array<{ id: WizardStep; label: string; icon: typeof MapPin }> = [
+    { id: 1, label: copy.step1Short, icon: MapPin },
+    { id: 2, label: copy.step2Short, icon: Compass },
+    { id: 3, label: copy.step3Short, icon: SlidersHorizontal },
+  ];
+
+  const activeLuggageMode: PackingDensityLevel = setup.packingDensity || 'moderate';
+  const estimatedLaundryOutfitSets = useMemo(() => {
+    const laundryCycle = Math.min(setup.days, Math.max(3, setup.laundryIntervalDays || 4) + 1);
+    const boost = activeLuggageMode === 'fully_loaded' ? 1 : activeLuggageMode === 'light' ? -1 : 0;
+    return Math.max(2, Math.min(6, Math.ceil(laundryCycle * 0.75) + boost));
+  }, [setup.days, setup.laundryIntervalDays, activeLuggageMode]);
+
+  const readableDateRange = useMemo(
+    () => formatReadableDateRange(setup.departureDate, setup.returnDate, activeLang),
+    [setup.departureDate, setup.returnDate, activeLang]
+  );
+
+  const climateSeasonLabel = useMemo(() => {
+    const seasonKey = inferTripSeasonKey(setup.departureDate, setup.cities);
+    return step1Copy.climateSeasons[seasonKey];
+  }, [setup.departureDate, setup.cities, step1Copy]);
+
+  return (
+    <div ref={wizardRootRef} className="space-y-5 sm:space-y-6">
+      {/* Borderless Editorial Top Navigation (← Back  |  1 of 3  |  ×) */}
+      <nav aria-label={copy.stepProgressLabel(activeStep)} className="space-y-5">
+        <div className="flex items-center justify-between gap-3">
+          {/* Left: Back control */}
+          <div className="flex items-center min-w-[76px] shrink-0">
+            {activeStep > 1 ? (
+              <button
+                type="button"
+                disabled={isGenerating}
+                onClick={() => goToStep((activeStep - 1) as WizardStep)}
+                aria-label={step1Copy.backBtn}
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full px-2 -ml-2 text-[13px] font-semibold text-[#3B5753] hover:bg-[#EAF2F0] hover:text-[#076E6A] disabled:opacity-45 transition-colors whitespace-nowrap cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4 shrink-0" />
+                <span>{step1Copy.backBtn}</span>
+              </button>
+            ) : onCancel ? (
+              <button
+                type="button"
+                disabled={isGenerating}
+                onClick={onCancel}
+                aria-label={step1Copy.backBtn}
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full px-2 -ml-2 text-[13px] font-semibold text-[#3B5753] hover:bg-[#EAF2F0] hover:text-[#076E6A] disabled:opacity-45 transition-colors whitespace-nowrap cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4 shrink-0" />
+                <span>{step1Copy.backBtn}</span>
+              </button>
+            ) : (
+              <span aria-hidden="true" className="w-4" />
+            )}
+          </div>
+
+          {/* Center: Clean Editorial Step Counter (1 of 3) + Quiet Interactive Progress Hairline */}
+          <div className="flex flex-col items-center gap-1.5 min-w-0">
+            <span className="font-num tabular-nums text-xs font-semibold tracking-wide text-[#4F6B68]">
+              {step1Copy.stepOfTotal(activeStep, 3)}
+            </span>
+            <div
+              role="tablist"
+              aria-label={copy.stepProgressLabel(activeStep)}
+              className="flex items-center gap-1.5"
+            >
+              {stepTabs.map((tabItem) => {
+                const isActive = activeStep === tabItem.id;
+                const isCompleted = tabItem.id < activeStep;
+                const isLocked =
+                  !isEditMode && tabItem.id > maxVisitedStep && tabItem.id > activeStep;
+                const canJump = isEditMode || !isLocked || tabItem.id === activeStep + 1;
+                return (
+                  <button
+                    key={tabItem.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={tabItem.label}
+                    title={tabItem.label}
+                    disabled={!canJump}
+                    onClick={() => {
+                      if (canJump) goToStep(tabItem.id);
+                    }}
+                    className={`h-1 rounded-full transition-all focus:outline-none ${
+                      isActive
+                        ? 'w-7 bg-[#078C88]'
+                        : isCompleted
+                        ? 'w-4 bg-[#80CCC7] hover:bg-[#078C88]'
+                        : 'w-4 bg-[#D7E3E0]'
+                    } ${canJump ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right: Close action */}
+          <div className="flex items-center justify-end min-w-[76px] shrink-0">
+            {onCancel ? (
+              <button
+                type="button"
+                disabled={isGenerating}
+                onClick={onCancel}
+                aria-label={t('wizard.backToWorkspace')}
+                title={t('wizard.backToWorkspace')}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#4C6864] hover:bg-[#EAF2F0] hover:text-[#152B29] disabled:opacity-45 transition-colors shrink-0 cursor-pointer"
+              >
+                <X className="h-4.5 w-4.5" />
+              </button>
+            ) : (
+              <span aria-hidden="true" className="w-4" />
+            )}
+          </div>
+        </div>
+
+        {/* Open Editorial Serif Headline Directly on Canvas (Zero Card Wrapper) */}
+        <div className="space-y-1.5">
+          <h1 className="font-editorial text-[28px] sm:text-[34px] font-bold tracking-[-0.02em] text-[#132927] leading-[1.15] text-balance">
+            {activeStep === 1 ? step1Copy.title : copy.pageTitles[activeStep]}
+          </h1>
+          <p className="text-sm sm:text-[15px] text-[#5B7370] leading-relaxed">
+            {activeStep === 1 ? step1Copy.subtitle : copy.headerStepSubtitles[activeStep]}
+          </p>
+
+          {/* Subtle Optional Voice / AI Quick-Fill Trigger (Step 1 Non-Edit Only) */}
+          {!isEditMode && activeStep === 1 && (
+            <div className="pt-1.5 space-y-2.5">
+              <button
+                type="button"
+                onClick={() => setShowAiQuickInput((prev) => !prev)}
+                className="inline-flex items-center gap-1.5 py-1 text-xs font-semibold text-[#078C88] hover:text-[#056965] transition-colors cursor-pointer"
+              >
+                <Mic className="h-3.5 w-3.5 shrink-0" />
+                <span className="underline decoration-[#078C88]/35 underline-offset-4">
+                  {showAiQuickInput ? copy.headerAiHideBtn : copy.headerAiShortcutBtn}
+                </span>
+              </button>
+
+              {showAiQuickInput && (
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl border border-[#CBE6E3] bg-white p-1.5 focus-within:border-[#078C88] transition-colors">
+                    <div className="flex-1 flex items-center gap-2 px-2 min-w-0">
+                      <Sparkles className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                      <input
+                        type="text"
+                        value={naturalPrompt}
+                        onChange={(e) => {
+                          setNaturalPrompt(e.target.value);
+                          if (validationError) setValidationError(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+                          if (e.key === 'Enter' && naturalPrompt.trim() && !isGenerating) {
+                            const effective = resolveSubmissionSetup(true);
+                            if (effective) {
+                              void onCreateNewWithAi(effective, crew, naturalPrompt);
+                            }
+                          }
+                        }}
+                        placeholder={copy.optionAPlaceholder}
+                        className="flex-1 min-w-0 bg-transparent py-1.5 text-xs sm:text-sm text-[#152B29] placeholder:text-[#8CA39F] focus:outline-none"
+                      />
+                      {naturalPrompt && (
+                        <button
+                          type="button"
+                          onClick={() => setNaturalPrompt('')}
+                          title={copy.clearTextLabel}
+                          aria-label={copy.clearTextLabel}
+                          className="flex h-7 w-7 items-center justify-center rounded-full text-[#7C9390] hover:bg-[#EAF3F1] hover:text-[#152B29] shrink-0 cursor-pointer"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                      <AiVoiceInputButton
+                        compact
+                        contextHint="trip_setup"
+                        disabled={isGenerating}
+                        label={copy.voiceInputLabel}
+                        onInterimTranscript={(live) => {
+                          setVoiceError(null);
+                          setValidationError(null);
+                          setNaturalPrompt(live);
+                        }}
+                        onTranscript={(text) => {
+                          setVoiceError(null);
+                          setValidationError(null);
+                          setNaturalPrompt((prev) => {
+                            const trimmedPrev = prev.trim();
+                            if (!trimmedPrev || trimmedPrev === text.trim()) return text.trim();
+                            return `${trimmedPrev}，${text.trim()}`;
+                          });
+                        }}
+                        onError={(msg) => setVoiceError(msg || null)}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isGenerating || !naturalPrompt.trim()}
+                      onClick={() => {
+                        const effective = resolveSubmissionSetup(true);
+                        if (effective) {
+                          void onCreateNewWithAi(effective, crew, naturalPrompt);
+                        }
+                      }}
+                      className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-45 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    >
+                      {isGenerating ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Sparkles className="h-3.5 w-3.5" />
+                      )}
+                      <span>{copy.aiQuickBuildShortBtn}</span>
+                    </button>
+                  </div>
+
+                  {voiceError && (
+                    <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF7F4] px-3.5 py-2 text-xs text-[#9E4731] flex items-center justify-between gap-2">
+                      <span>{voiceError}</span>
+                      <button
+                        type="button"
+                        onClick={() => setVoiceError(null)}
+                        className="text-[#9E4731] hover:underline shrink-0 cursor-pointer"
+                      >
+                        {copy.dismissBtn}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Main Step Body Container — Paired with parent 120px+safe-area clearance so last card is never clipped */}
+      <div className="space-y-6 pb-6">
+      {/* STEP 1: Open Editorial Departure Manifest (Destination · Dates · Who's Packing · Trip Vibe) */}
+      {activeStep === 1 && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+          {/* Left Column: Destination Manifest + Unified Climate Date Row */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* SECTION 1: Destination — Single-line minimal stops + inline borderless "+ Add a stop" */}
+            <section className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2 px-0.5">
+                <h2 className="text-xs font-semibold tracking-wide text-[#5B7370]">
+                  {step1Copy.sectionDestination}
+                </h2>
+                {setup.cities.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => updateSetup({ cities: [], cityDays: [] })}
+                    className="text-xs font-medium text-[#8C5042] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    {copy.clearAllBtn}
+                  </button>
+                )}
+              </div>
+
+              <div className="rounded-2xl border border-[#E2ECE9] bg-white divide-y divide-[#EFF4F2]">
+                {/* Single Stop: Minimal clean single line */}
+                {setup.cities.length === 1 && (() => {
+                  const displayCity = translatePopularCity(setup.cities[0], activeLang);
+                  return (
+                    <div className="min-h-[54px] px-4 py-2.5 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <MapPin className="h-4 w-4 text-[#078C88] shrink-0" />
+                        <span className="text-[15px] font-semibold text-[#132927] truncate">
+                          {displayCity}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeCityAt(0)}
+                        title={copy.removeCityLabel(displayCity)}
+                        aria-label={copy.removeCityLabel(displayCity)}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#7C9390] hover:bg-[#F3F8F7] hover:text-[#9E4731] transition-colors shrink-0 cursor-pointer"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  );
+                })()}
+
+                {/* Multi-Stop Clean Manifest Rows (Only When >= 2 Cities Added) */}
+                {setup.cities.length >= 2 && (() => {
+                  let runningOffset = 0;
+                  return (
+                    <>
+                      {setup.cities.map((city, idx) => {
+                        const displayCity = translatePopularCity(city, activeLang);
+                        const stayDays = resolvedCityDays[idx] ?? 1;
+                        const otherSum = resolvedCityDays.reduce(
+                          (acc, v, i) => (i === idx ? acc : acc + v),
+                          0
+                        );
+                        const maxForStop = Math.max(1, 30 - otherSum);
+                        const dateSpan = formatShortStopDateSpan(
+                          setup.departureDate,
+                          runningOffset,
+                          stayDays,
+                          activeLang
+                        );
+                        runningOffset += stayDays;
+                        const isLast = idx === setup.cities.length - 1;
+
+                        return (
+                          <div
+                            key={`${city}_${idx}`}
+                            className="px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                          >
+                            <div className="flex items-center justify-between gap-2 min-w-0 flex-1">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#EAF7F5] font-num text-[11px] font-bold text-[#078C88] shrink-0">
+                                  {idx + 1}
+                                </span>
+                                <div className="min-w-0">
+                                  <div className="text-[15px] font-semibold text-[#132927] truncate">
+                                    {displayCity}
+                                  </div>
+                                  {dateSpan && (
+                                    <div className="text-xs text-[#6B8480] font-num tabular-nums">
+                                      {dateSpan}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Mobile reorder & delete */}
+                              <div className="flex sm:hidden items-center gap-0.5 shrink-0 -mr-1">
+                                <button
+                                  type="button"
+                                  disabled={idx === 0}
+                                  onClick={() => moveCity(idx, -1)}
+                                  aria-label={copy.moveCityUpAria(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                >
+                                  <ChevronUp className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={isLast}
+                                  onClick={() => moveCity(idx, 1)}
+                                  aria-label={copy.moveCityDownAria(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => removeCityAt(idx)}
+                                  aria-label={copy.removeCityLabel(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#7C9390] hover:text-[#9E4731] cursor-pointer"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-end gap-1.5 shrink-0">
+                              <div className="inline-flex items-center rounded-lg bg-[#F5F9F8] p-0.5">
+                                <button
+                                  type="button"
+                                  disabled={stayDays <= 1}
+                                  onClick={() => updateCityStayDays(idx, stayDays - 1)}
+                                  aria-label={copy.decDayLabel}
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-[#152B29] hover:text-[#078C88] disabled:opacity-35 cursor-pointer"
+                                >
+                                  <Minus className="h-3.5 w-3.5" />
+                                </button>
+                                <div className="inline-flex items-center justify-center px-1.5">
+                                  <input
+                                    type="number"
+                                    inputMode="numeric"
+                                    min={1}
+                                    max={maxForStop}
+                                    value={stayDays}
+                                    aria-label={copy.stayDaysInputAria(displayCity)}
+                                    onChange={(e) => {
+                                      const parsed = parseInt(e.target.value, 10);
+                                      if (!Number.isNaN(parsed)) {
+                                        updateCityStayDays(idx, parsed);
+                                      }
+                                    }}
+                                    className="w-6 bg-transparent text-center font-num tabular-nums text-xs font-bold text-[#078C88] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  />
+                                  <span className="text-[11px] font-medium text-[#5B7370] select-none pr-0.5">
+                                    {copy.dayUnitShort(stayDays).replace(/^\d+\s*/, '')}
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  disabled={stayDays >= maxForStop}
+                                  onClick={() => updateCityStayDays(idx, stayDays + 1)}
+                                  aria-label={copy.incDayLabel}
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-[#152B29] hover:text-[#078C88] disabled:opacity-35 cursor-pointer"
+                                >
+                                  <Plus className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+
+                              <div className="hidden sm:flex items-center gap-0.5">
+                                <button
+                                  type="button"
+                                  disabled={idx === 0}
+                                  onClick={() => moveCity(idx, -1)}
+                                  aria-label={copy.moveCityUpAria(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                >
+                                  <ChevronUp className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={isLast}
+                                  onClick={() => moveCity(idx, 1)}
+                                  aria-label={copy.moveCityDownAria(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => removeCityAt(idx)}
+                                  aria-label={copy.removeCityLabel(displayCity)}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#7C9390] hover:text-[#9E4731] cursor-pointer"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <div className="px-4 py-2.5 flex items-center justify-between gap-2 text-xs bg-[#FAFDFC]">
+                        <span
+                          className={`font-medium tabular-nums ${
+                            setup.days >= 30 ? 'text-[#9E4731]' : 'text-[#5B7370]'
+                          }`}
+                        >
+                          {setup.days >= 30
+                            ? copy.perCityMaxCapHint
+                            : copy.perCityTotalSynced(setup.days, setup.cities.length)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleEqualSplitCityDays}
+                          className="font-semibold text-[#078C88] hover:underline whitespace-nowrap cursor-pointer"
+                        >
+                          {copy.equalSplitBtn}
+                        </button>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* Inline Borderless "+ Add a stop" Row (No Box-Inside-Box Nesting) */}
+                <div className="px-4 py-1 flex items-center gap-2">
+                  <PlaceAutocompleteInput
+                    value={cityInput}
+                    onChange={(val) => {
+                      setCityInput(val);
+                      if (validationError) setValidationError(null);
+                    }}
+                    includedPrimaryTypes={['(cities)']}
+                    onKeyDown={(e) => {
+                      if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addCity(cityInput);
+                      }
+                    }}
+                    onSelectPlace={(place) => {
+                      addCity(place.name);
+                    }}
+                    wrapperClassName="flex-1 min-w-0"
+                    leftIcon={
+                      <Plus className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-[#078C88] pointer-events-none" />
+                    }
+                    placeholder={
+                      setup.cities.length > 0
+                        ? step1Copy.addStopPlaceholder
+                        : step1Copy.firstStopPlaceholder
+                    }
+                    className="w-full min-h-[46px] bg-transparent pl-7 pr-2 py-2.5 text-sm font-medium text-[#132927] placeholder:text-[#7E9692] focus:outline-none"
+                  />
+                  {cityInput.trim() && (
+                    <button
+                      type="button"
+                      onClick={() => addCity(cityInput)}
+                      className="inline-flex min-h-[34px] items-center rounded-xl bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+                    >
+                      {step1Copy.addActionShort}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION 2: Dates & Duration — Unified Single-Surface Date Row with Live Season */}
+            <section className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2 px-0.5">
+                <h2 className="text-xs font-semibold tracking-wide text-[#5B7370]">
+                  {step1Copy.sectionDates}
+                </h2>
+                {setup.cities.length >= 2 && (
+                  <span className="text-[11px] font-medium text-[#6C8480]">
+                    {copy.returnAutoSyncedHint}
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="button"
+                aria-expanded={datePickerOpen}
+                onClick={() => setDatePickerOpen((prev) => !prev)}
+                className={`w-full rounded-2xl border bg-white px-4 py-3.5 flex items-center justify-between gap-3 text-left transition-all cursor-pointer ${
+                  datePickerOpen
+                    ? 'border-[#078C88] ring-2 ring-[#078C88]/15'
+                    : 'border-[#E2ECE9] hover:border-[#B4D8D3]'
+                }`}
+              >
+                <div className="flex items-start gap-3 min-w-0">
+                  <Calendar className="h-4.5 w-4.5 text-[#078C88] mt-0.5 shrink-0" />
+                  <div className="min-w-0 space-y-0.5">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-num tabular-nums text-[15px] font-bold text-[#132927]">
+                      <span>{readableDateRange.startText}</span>
+                      <ArrowRight className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                      <span>{readableDateRange.endText}</span>
+                    </div>
+                    <div className="text-xs font-medium text-[#5B7370] font-num tabular-nums">
+                      {t('wizard.daysNights', {
+                        days: setup.days,
+                        nights: Math.max(1, setup.days - 1),
+                      })}{' '}
+                      <span className="font-sans text-[#6B8581]">({climateSeasonLabel})</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ChevronDown
+                  className={`h-4 w-4 text-[#7A9490] shrink-0 transition-transform duration-150 ${
+                    datePickerOpen ? 'rotate-180 text-[#078C88]' : ''
+                  }`}
+                />
+              </button>
+
+              {datePickerOpen && (
+                <InlineDatePickerPopover
+                  departureDate={setup.departureDate}
+                  returnDate={setup.returnDate}
+                  singleStartOnly={setup.cities.length >= 2}
+                  lang={activeLang}
+                  pickStartLabel={copy.pickDeparturePrompt}
+                  pickEndLabel={copy.pickReturnPrompt}
+                  onSelectRange={(startIso, endIso) => {
+                    const nextDays = computeDaysBetween(startIso, endIso) ?? setup.days;
+                    updateSetup({ departureDate: startIso, days: nextDays });
+                    setDatePickerOpen(false);
+                  }}
+                  onSelectStartOnly={(startIso) => {
+                    updateSetup({ departureDate: startIso });
+                    setDatePickerOpen(false);
+                  }}
+                  onClose={() => setDatePickerOpen(false)}
+                />
+              )}
+            </section>
+          </div>
+
+          {/* Right Column (Flows Cleanly Below on Mobile): Who's Packing + 2x2 Trip Vibe */}
+          <div className="lg:col-span-5 space-y-6">
+            {/* SECTION 3: Who's Packing? — 4 Equal-Width Tactile Light Capsules in One Row */}
+            <section className="space-y-2.5">
+              <h2 className="px-0.5 text-xs font-semibold tracking-wide text-[#5B7370]">
+                {step1Copy.sectionWho}
+              </h2>
+
+              <div
+                className="grid grid-cols-4 gap-1.5 sm:gap-2"
+                role="radiogroup"
+                aria-label={step1Copy.sectionWho}
+              >
+                {([
+                  { count: 1, Icon: User },
+                  { count: 2, Icon: Users },
+                  { count: 3, Icon: Home },
+                  { count: 4, Icon: UsersRound },
+                ] as const).map(({ count, Icon }, idx) => {
+                  const active = setup.travelers === count;
+                  return (
+                    <button
+                      key={count}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => updateSetup({ travelers: count })}
+                      className={`min-h-[44px] inline-flex items-center justify-center gap-1 rounded-xl border px-1 sm:px-2.5 py-2 text-[11px] sm:text-xs leading-none transition-all cursor-pointer active:scale-[0.98] whitespace-nowrap ${
+                        active
+                          ? 'border-[#078C88] bg-[#E8F7F5] font-bold text-[#065F5B]'
+                          : 'border-[#E2ECE9] bg-white font-medium text-[#35524F] hover:border-[#B6DAD5] hover:bg-[#F6FBFA]'
+                      }`}
+                    >
+                      <Icon
+                        className={`h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 ${
+                          active ? 'text-[#078C88]' : 'text-[#6A8581]'
+                        }`}
+                      />
+                      <span>{step1Copy.whoPresets[idx]}</span>
+                      {active && (
+                        <Check
+                          className="hidden sm:inline-block h-3 w-3 text-[#078C88] shrink-0"
+                          strokeWidth={2.75}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* SECTION 4: Trip Vibe — Crisp 2x2 Balanced Mini-Cards with Micro-Icons */}
+            <section className="space-y-2.5">
+              <h2 className="px-0.5 text-xs font-semibold tracking-wide text-[#5B7370]">
+                {step1Copy.sectionVibe}
+              </h2>
+
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                {TRIP_STYLE_KEYS.map((styleKey) => {
+                  const active = setup.tripStyle === styleKey;
+                  const StyleIcon = TRIP_STYLE_ICON_MAP[styleKey];
+                  return (
+                    <button
+                      key={styleKey}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => handleSelectTripStyle(styleKey)}
+                      className={`relative min-h-[56px] flex items-center gap-2 sm:gap-2.5 rounded-2xl border px-2.5 sm:px-3.5 py-2.5 sm:py-3 text-left transition-all cursor-pointer active:scale-[0.98] ${
+                        active
+                          ? 'border-[#078C88] bg-[#EAF7F5] text-[#065F5B]'
+                          : 'border-[#E2ECE9] bg-white text-[#152B29] hover:border-[#B6DAD5] hover:bg-[#F9FCFB]'
+                      }`}
+                    >
+                      <span
+                        className={`inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg sm:rounded-xl shrink-0 transition-colors ${
+                          active
+                            ? 'bg-[#078C88] text-white'
+                            : 'bg-[#F2F7F6] text-[#4C6B67]'
+                        }`}
+                      >
+                        <StyleIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      </span>
+                      <span
+                        className={`flex-1 min-w-0 text-[12.5px] sm:text-sm font-bold leading-tight ${
+                          active ? 'pr-4 sm:pr-0 text-[#065F5B]' : 'text-[#152B29]'
+                        }`}
+                      >
+                        {step1Copy.vibeLabels[styleKey]}
+                      </span>
+                      {active && (
+                        <Check
+                          className="absolute top-2 right-2 sm:static h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#078C88] shrink-0"
+                          strokeWidth={2.75}
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 2: Flowing Icon Pills + Airy Care Needs (Zero Grid Orphans, Zero Wireframe Nesting) */}
+      {activeStep === 2 && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* Left: Experiences & Activities — Smooth Uniform Flex-Wrap Tag Cloud */}
+          <div className="lg:col-span-7">
+            <section className="rounded-3xl bg-white p-4 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)]">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <AccentIconBadge accent="teal" icon={Compass} size="sm" />
+                  <h3 className="text-base font-extrabold text-[#152B29] leading-snug">
+                    {copy.sec4Title}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="text-xs text-[#078C88] font-semibold tabular-nums whitespace-nowrap">
+                    {copy.selectedCount(setup.activities.length)}
+                  </span>
+                  {setup.activities.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const activityScenarioSet = new Set(Object.values(ACTIVITY_TO_SCENARIO));
+                        updateSetup({
+                          activities: [],
+                          specialScenarios: (setup.specialScenarios || []).filter(
+                            (s) => !activityScenarioSet.has(s)
+                          ),
+                        });
+                      }}
+                      className="rounded-full px-2.5 py-1 text-xs font-semibold text-[#8C5042] hover:bg-[#FDF4F2] transition-colors whitespace-nowrap cursor-pointer"
+                    >
+                      {copy.clearBtn}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-4 sm:mt-5 space-y-5">
+                {ACTIVITY_GROUPS.map((grp, grpIdx) => {
+                  const groupSelectedCount = grp.items.filter((i) =>
+                    setup.activities.includes(i.name)
+                  ).length;
+                  return (
+                    <div
+                      key={grp.id}
+                      className={grpIdx > 0 ? 'pt-4 sm:pt-5 border-t border-[#EFF5F3]' : ''}
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-2.5">
+                        <p className="text-xs font-bold text-[#496461] tracking-tight">
+                          {ACTIVITY_GROUP_TITLES[grp.id]
+                            ? pickLang(activeLang, ACTIVITY_GROUP_TITLES[grp.id])
+                            : grp.title}
+                        </p>
+                        {groupSelectedCount > 0 && (
+                          <span className="text-[11px] font-semibold text-[#078C88] tabular-nums">
+                            {copy.selectedCount(groupSelectedCount)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-2.5 w-full">
+                        {grp.items.map((item, itemIdx) => {
+                          const active = setup.activities.includes(item.name);
+                          const label = ACTIVITY_NAME_MAP[item.name]?.[activeLang] || item.name;
+                          const IconComponent = ACTIVITY_ICON_MAP[item.name] || Compass;
+                          const isLastOdd =
+                            grp.items.length % 2 === 1 && itemIdx === grp.items.length - 1;
+                          return (
+                            <button
+                              key={item.name}
+                              type="button"
+                              aria-pressed={active}
+                              onClick={() => toggleActivity(item.name)}
+                              className={`flex w-full min-h-[42px] items-center gap-2 rounded-2xl border px-3.5 py-2 text-xs sm:text-[13px] leading-snug transition-all duration-150 cursor-pointer active:scale-[0.98] ${
+                                isLastOdd
+                                  ? 'col-span-2 justify-center text-center'
+                                  : 'justify-start text-left'
+                              } ${
+                                active
+                                  ? 'border-[#0ABAB5]/80 bg-[#E3F6F4] font-semibold text-[#06625E] shadow-[0_2px_8px_-3px_rgba(7,140,136,0.22)]'
+                                  : 'border-transparent bg-[#F2F7F6] font-medium text-[#2C4744] hover:bg-[#E7F3F1] hover:text-[#152B29]'
+                              }`}
+                            >
+                              <IconComponent
+                                className={`h-4 w-4 shrink-0 ${
+                                  active ? 'text-[#078C88]' : 'text-[#5E7C78]'
+                                }`}
+                                strokeWidth={active ? 2.2 : 1.9}
+                              />
+                              <span className="min-w-0 leading-snug">{label}</span>
+                              {active && (
+                                <Check
+                                  className={`h-3.5 w-3.5 text-[#078C88] shrink-0 ${
+                                    isLastOdd ? '' : 'ml-auto'
+                                  }`}
+                                  strokeWidth={2.6}
+                                />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+
+          {/* Right: Special Care Needs + Extra Notes */}
+          <div className="lg:col-span-5">
+            <section className="rounded-3xl bg-white p-4 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)] space-y-5">
+              <div>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-base font-extrabold text-[#152B29] leading-snug">
+                      {copy.careConstraintsTitle}
+                    </h3>
+                    {activeCareConstraints.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updateSetup({
+                            specialScenarios: (setup.specialScenarios || []).filter(
+                              (s) => !CARE_CONSTRAINT_SCENARIOS.includes(s)
+                            ),
+                          })
+                        }
+                        className="rounded-full px-2.5 py-1 text-xs font-semibold text-[#8C5042] hover:bg-[#FDF4F2] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        {copy.clearScenariosBtn}
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#5B7370] leading-relaxed">
+                    {copy.careConstraintsSub}
+                  </p>
+                </div>
+
+                <div className="mt-3.5 grid grid-cols-2 gap-2.5 w-full">
+                  {CARE_CONSTRAINT_SCENARIOS.map((id, careIdx) => {
+                    const active = (setup.specialScenarios || []).includes(id);
+                    const label = getPackingScenarioLabel(id, activeLang);
+                    const CareIcon = CARE_ICON_MAP[id] || ShieldCheck;
+                    const isFamilyAutoLinked =
+                      id === 'kids' && active && setup.tripStyle === '亲子出行';
+                    const isLastOdd =
+                      CARE_CONSTRAINT_SCENARIOS.length % 2 === 1 &&
+                      careIdx === CARE_CONSTRAINT_SCENARIOS.length - 1;
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => toggleCareConstraint(id)}
+                        className={`flex w-full min-h-[46px] items-center gap-2 rounded-2xl border px-3 py-2 text-xs sm:text-[13px] transition-all duration-150 cursor-pointer active:scale-[0.98] ${
+                          isLastOdd
+                            ? 'col-span-2 justify-center text-center'
+                            : 'justify-start text-left'
+                        } ${
+                          active
+                            ? 'border-[#0ABAB5]/80 bg-[#E3F6F4] font-semibold text-[#06625E] shadow-[0_2px_8px_-3px_rgba(7,140,136,0.22)]'
+                            : 'border-transparent bg-[#F2F7F6] font-medium text-[#2C4744] hover:bg-[#E7F3F1] hover:text-[#152B29]'
+                        }`}
+                      >
+                        <CareIcon
+                          className={`h-4 w-4 shrink-0 ${
+                            active ? 'text-[#078C88]' : 'text-[#5E7C78]'
+                          }`}
+                          strokeWidth={active ? 2.2 : 1.85}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="leading-snug">{label}</div>
+                          {isFamilyAutoLinked && (
+                            <div className="mt-0.5 text-[11px] font-normal text-[#078C88] leading-snug">
+                              {copy.autoLinkedFamilyHint}
+                            </div>
+                          )}
+                        </div>
+                        {active && (
+                          <Check
+                            className="h-3.5 w-3.5 text-[#078C88] shrink-0 ml-auto"
+                            strokeWidth={2.5}
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-[#EFF5F3] space-y-2">
+                <label className="block text-xs font-bold text-[#152B29]">
+                  {copy.customNoteLabel}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={setup.packingCustomNote || ''}
+                    onChange={(e) => updateSetup({ packingCustomNote: e.target.value })}
+                    placeholder={copy.customNotePlaceholder}
+                    className="flex-1 min-w-0 min-h-[44px] rounded-2xl border border-transparent bg-[#F2F7F6] px-3.5 py-2 text-xs text-[#152B29] placeholder:text-[#8CA39F] focus:border-[#078C88]/60 focus:bg-white focus:outline-none transition-colors"
+                  />
+                  <AiVoiceInputButton
+                    compact
+                    iconOnly
+                    contextHint="trip_setup"
+                    disabled={isGenerating}
+                    onTranscript={(text) => {
+                      setVoiceError(null);
+                      const prev = (setup.packingCustomNote || '').trim();
+                      updateSetup({
+                        packingCustomNote: prev ? `${prev}；${text.trim()}` : text.trim(),
+                      });
+                    }}
+                    onError={(msg) => setVoiceError(msg || null)}
+                  />
+                </div>
+                {voiceError && (
+                  <p className="text-xs text-[#9E4731]">{voiceError}</p>
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
+      )}
+
+      {/* STEP 3: Climate Feel, Wardrobe Style, Budget + Visual Luggage Constraints & Tactile Laundry Toggle */}
+      {activeStep === 3 && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* Left: Climate Forecast Micro-Adjustment + Wardrobe Style + Budget Tier */}
+          <div className="lg:col-span-6">
+            <section className="rounded-3xl bg-white p-5 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)] space-y-5">
+              <div>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2.5 min-w-0">
+                    <AccentIconBadge accent="ocean" icon={Shirt} size="sm" className="mt-0.5" />
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-bold text-[#152B29] text-balance">
+                        {copy.sec5Title}
+                      </h3>
+                      <p className="mt-0.5 text-xs text-[#5B7370]">
+                        {copy.weatherSectionSub}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Per-Stop Weather Preview + Colder / Warmer / Wetter */}
+                <div className="mt-4 rounded-xl bg-[#F5F8F7] p-4 space-y-3">
+                  <div className="space-y-1.5">
+                    {wizardStopForecasts.map((st, idx) => (
+                      <div
+                        key={`${st.city}_${idx}`}
+                        className="flex flex-wrap items-baseline justify-between gap-2 text-xs"
+                      >
+                        <span className="font-bold text-[#152B29]">{st.city}</span>
+                        <span className="text-[#5B7370] tabular-nums">{st.summaryText}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-2.5 border-t border-[#E3ECEA] space-y-2">
+                    <span className="block text-[11px] font-bold text-[#5B7370]">
+                      {copy.expectDifferentShort}
+                    </span>
+                    <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#E7F0EE] p-1">
+                      {(
+                        [
+                          { id: 'colder' as const, Icon: Snowflake, iconColor: 'text-[#2B7A9E]' },
+                          { id: 'warmer' as const, Icon: Sun, iconColor: 'text-[#C87D28]' },
+                          { id: 'wetter' as const, Icon: Umbrella, iconColor: 'text-[#397A8A]' },
+                        ] as const
+                      ).map(({ id: optId, Icon, iconColor }) => {
+                        const active = (setup.weatherOverrides || []).includes(optId);
+                        return (
+                          <button
+                            key={optId}
+                            type="button"
+                            aria-pressed={active}
+                            onClick={() => toggleWeatherOverride(optId)}
+                            className={`inline-flex min-h-[38px] items-center justify-center gap-1 rounded-lg px-1.5 sm:px-2.5 py-1.5 text-[11.5px] sm:text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-[0.98] ${
+                              active
+                                ? 'bg-[#078C88] text-white shadow-xs'
+                                : 'bg-white/80 text-[#3B5552] hover:bg-white hover:text-[#152B29]'
+                            }`}
+                          >
+                            <Icon
+                              className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-white' : iconColor}`}
+                              strokeWidth={2}
+                            />
+                            <span>{copy.weatherOverrides[optId]}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wardrobe & Care Profile */}
+              <div className="pt-4 border-t border-[#EDF3F1]">
+                <label className="block text-xs font-bold text-[#152B29] mb-2">
+                  {copy.clothingStyleFieldLabel}
+                </label>
+                <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#EEF3F2] p-1">
+                  {(['male', 'female', 'other'] as PackingClothingGender[]).map((gId) => {
+                    const active = (setup.clothingStyle || 'other') === gId;
+                    return (
+                      <button
+                        key={gId}
+                        type="button"
+                        onClick={() => updateSetup({ clothingStyle: gId })}
+                        className={`min-h-[38px] rounded-lg py-1.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                          active
+                            ? 'bg-[#078C88] text-white shadow-2xs'
+                            : 'text-[#4F6865] hover:text-[#152B29]'
+                        }`}
+                      >
+                        {copy.clothingStyles[gId]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Budget Tier & Optional Target Cap */}
+              <div className="pt-4 border-t border-[#EDF3F1] space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="text-xs font-bold text-[#152B29]">{copy.budgetTierHeading}</h4>
+                  <label className="inline-flex items-center gap-1.5 text-xs text-[#5B7370]">
+                    <span>{copy.targetTotalUsdLabel}</span>
+                    <input
+                      type="number"
+                      min={0}
+                      step={100}
+                      value={setup.targetTotalBudgetUsd || ''}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        updateSetup({ targetTotalBudgetUsd: val > 0 ? val : undefined });
+                      }}
+                      placeholder={copy.autoPlaceholder}
+                      className="w-24 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1.5 font-num text-xs font-bold text-[#152B29] tabular-nums focus:bg-white focus:border-[#0ABAB5] focus:outline-none"
+                    />
+                  </label>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {BUDGET_TIER_KEYS.map((tierId) => {
+                    const active = (setup.budgetTier || 'comfort') === tierId;
+                    const tierCopy = BUDGET_TIER_COPY_MAP[tierId][activeLang];
+                    return (
+                      <button
+                        key={tierId}
+                        type="button"
+                        onClick={() => updateSetup({ budgetTier: tierId })}
+                        className={`rounded-xl border p-2.5 text-left transition-colors cursor-pointer ${
+                          active
+                            ? 'border-[#078C88] bg-[#EFF9F8]'
+                            : 'border-[#E4ECEA] bg-[#F8FAF9] hover:border-[#BBDAD7]'
+                        }`}
+                      >
+                        <div className="text-xs font-bold text-[#152B29] leading-snug">
+                          {tierCopy.label}
+                        </div>
+                        <div className="mt-0.5 text-[11px] text-[#5B7370] leading-snug">
+                          {tierCopy.desc}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Right: Visual Luggage Physical Constraints (3 Cards) + Tactile Mid-Trip Laundry Switch */}
+          <div className="lg:col-span-6 space-y-5">
+            <section className="rounded-3xl bg-white p-5 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)] space-y-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2.5">
+                  <AccentIconBadge accent="teal" icon={Luggage} size="sm" />
+                  <h3 className="text-sm font-bold text-[#152B29]">{copy.packingStrategyTitle}</h3>
+                </div>
+                <p className="text-xs text-[#5B7370] leading-relaxed">
+                  {copy.luggageConstraintSub}
+                </p>
+              </div>
+
+              {/* 3 Visual Luggage Constraint Cards (Replaces Body Size + Abstract Density + Cabin-Only Duplicate) */}
+              <div className="space-y-2.5" role="radiogroup" aria-label={copy.packingDensityFieldLabel}>
+                {(
+                  [
+                    { id: 'light' as PackingDensityLevel, Icon: Backpack },
+                    { id: 'moderate' as PackingDensityLevel, Icon: Luggage },
+                    { id: 'fully_loaded' as PackingDensityLevel, Icon: Plane },
+                  ] as const
+                ).map(({ id, Icon }) => {
+                  const active = activeLuggageMode === id;
+                  const card = copy.luggageCards[id];
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => handleSelectLuggageMode(id)}
+                      className={`w-full flex items-start gap-3.5 rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
+                        active
+                          ? 'border-[#078C88] bg-[#EFF9F8] shadow-[0_2px_10px_-4px_rgba(7,140,136,0.25)]'
+                          : 'border-[#E4ECEA] bg-[#F8FAF9] hover:border-[#BBDAD7] hover:bg-white'
+                      }`}
+                    >
+                      <div
+                        className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors ${
+                          active
+                            ? 'bg-[#078C88] text-white'
+                            : 'bg-white border border-[#DCE8E5] text-[#4F6865]'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                            <span
+                              className={`text-sm font-bold leading-snug ${
+                                active ? 'text-[#076E6A]' : 'text-[#152B29]'
+                              }`}
+                            >
+                              {card.title}
+                            </span>
+                            <span className="text-[11px] font-medium text-[#647B78]">
+                              {card.badge}
+                            </span>
+                          </div>
+                          {active && (
+                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#078C88] text-white shrink-0">
+                              <Check className="h-3 w-3 stroke-[3]" />
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-xs text-[#5B7370] leading-snug">
+                          {card.desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Tactile Mid-Trip Laundry Toggle Switch with Live Positive Feedback */}
+              <div className="pt-4 border-t border-[#EDF3F1] space-y-3">
+                <div
+                  className={`rounded-2xl border p-3.5 transition-colors ${
+                    setup.laundry
+                      ? 'border-[#BEE5E2] bg-[#F3FAF9]'
+                      : 'border-[#E4ECEA] bg-[#F8FAF9]'
+                  }`}
+                >
+                  <div className="flex items-start sm:items-center justify-between gap-3">
+                    <div className="min-w-0 space-y-1">
+                      <div className="text-sm font-bold text-[#152B29] leading-snug">
+                        {copy.laundryTitle}
+                      </div>
+                      <div
+                        className={`text-xs font-semibold leading-snug tabular-nums ${
+                          setup.laundry ? 'text-[#076E6A]' : 'text-[#5B7370]'
+                        }`}
+                      >
+                        {setup.laundry
+                          ? copy.laundryLiveOnFeedback(estimatedLaundryOutfitSets)
+                          : copy.laundryLiveOffFeedback(capsuleCycleDays)}
+                      </div>
+                    </div>
+
+                    {/* Skeuomorphic Tactile Toggle Switch */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={setup.laundry}
+                      aria-label={copy.laundryToggleAria}
+                      onClick={() => updateSetup({ laundry: !setup.laundry })}
+                      className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#078C88] focus-visible:ring-offset-2 cursor-pointer ${
+                        setup.laundry
+                          ? 'bg-[#078C88] shadow-inner'
+                          : 'bg-[#CBD8D5] shadow-inner'
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-[0_1px_3px_rgba(15,35,33,0.28)] transition-transform duration-200 ${
+                          setup.laundry ? 'translate-x-5' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Edit-Mode Non-Intrusive Clothing Diff Preview (Never pops up mid-flow; settles on Save) */}
+                {isEditMode && shouldPromptNormalization && (
+                  <div
+                    role="region"
+                    aria-label={copy.normPromptAria}
+                    aria-live="polite"
+                    className="rounded-xl border border-[#BEE5E2] bg-[#F3FAF9] p-3.5 space-y-2"
+                  >
+                    <p className="text-xs font-bold text-[#152B29]">
+                      {isDaysChanged
+                        ? copy.normPromptDaysChanged(baselineDays, setup.days)
+                        : copy.normPromptCycleChanged(setup.days)}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[#4F6865] font-num tabular-nums">
+                      <span>
+                        {copy.normPromptScaledCount(normalizationPlan.changedItems.length)}
+                      </span>
+                      <span aria-hidden="true">·</span>
+                      <span>
+                        {copy.normPromptDeltaLabel}
+                        {normalizationPlan.totalDeltaPieces > 0
+                          ? `+${normalizationPlan.totalDeltaPieces}`
+                          : normalizationPlan.totalDeltaPieces}
+                        {copy.pcsUnit}
+                      </span>
+                      <span aria-hidden="true">·</span>
+                      <span>
+                        {copy.normPromptEstWeight}
+                        {formatSignedWeight(normalizationPlan.totalDeltaWeightGrams)}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-end gap-2 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setDismissedSignature(currentClothingSignature)}
+                        className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs font-semibold text-[#4F6865] hover:text-[#152B29] cursor-pointer"
+                      >
+                        {copy.keepExistingBtn}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPreviewModalOpen(true)}
+                        className="inline-flex items-center gap-1 rounded-lg border border-[#BEE5E2] bg-white px-3 py-1.5 text-xs font-bold text-[#078C88] hover:bg-[#EFF9F8] cursor-pointer"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        {copy.viewDetailsBtn}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {isEditMode && isDismissedWithPendingDiff && (
+                  <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#E4ECEA] bg-[#F8FAF9] px-3.5 py-2 text-xs text-[#5B7370]">
+                    <span>
+                      {copy.keptOriginalCounts(normalizationPlan.changedItems.length, setup.days)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDismissedSignature(null);
+                        setPreviewModalOpen(true);
+                      }}
+                      className="font-semibold text-[#078C88] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                    >
+                      {copy.reapplyPreviewBtn}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Edit Mode Extra Packing / Regenerate Actions */}
+              {isEditMode && (onOpenPackingWizard || onRegenerateCurrentWithAi) && (
+                <div className="pt-4 border-t border-[#EDF3F1] space-y-2.5">
+                  {onOpenPackingWizard && (
+                    <button
+                      type="button"
+                      onClick={onOpenPackingWizard}
+                      className="w-full min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 text-xs font-semibold text-[#152B29] hover:border-[#078C88] hover:text-[#076E6A] transition-colors cursor-pointer"
+                    >
+                      <Shirt className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                      <span className="truncate">{copy.openPackingWizardBtn}</span>
+                    </button>
+                  )}
+
+                  {onRegenerateCurrentWithAi && (
+                    <div className="pt-1">
+                      {!confirmOverwriteAi ? (
+                        <button
+                          type="button"
+                          onClick={() => setConfirmOverwriteAi(true)}
+                          className="w-full text-center text-xs font-semibold text-[#7A6452] hover:text-[#B95239] py-1.5 cursor-pointer"
+                        >
+                          {copy.regenAiPromptLink}
+                        </button>
+                      ) : (
+                        <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF7F4] p-3 space-y-2.5">
+                          <div className="flex items-start gap-2 text-xs text-[#9E4731]">
+                            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                            <span>{copy.regenAiWarning}</span>
+                          </div>
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setConfirmOverwriteAi(false)}
+                              className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs font-semibold text-[#5B7370] whitespace-nowrap cursor-pointer"
+                            >
+                              {t('common.cancel')}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isGenerating}
+                              onClick={() => {
+                                const effective = resolveSubmissionSetup(false);
+                                if (effective) {
+                                  void onRegenerateCurrentWithAi(effective, crew);
+                                }
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-[#C85A3F] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#AE4A31] disabled:opacity-50 whitespace-nowrap cursor-pointer"
+                            >
+                              {isGenerating && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                              {copy.confirmOverwriteBtn}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
+      )}
+
+      {/* Inline Validation / Generation Error */}
+      {(validationError || errorMessage) && (
+        <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF4F2] p-3.5 text-xs text-[#9E4731] flex items-start gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-[#C85A3F]" />
+          <div className="space-y-1 min-w-0">
+            <p className="font-semibold">{validationError || errorMessage}</p>
+            {errorMessage && !validationError && !isEditMode && (
+              <p className="text-[#8C5042]">{copy.offlineFallbackHint}</p>
+            )}
+          </div>
+        </div>
+      )}
+      </div>
+
+      {/* Pure Full-Width Bottom Action CTA Anchored Flush to Viewport Bottom */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9]/96 to-transparent pt-4 pb-[max(0.875rem,env(safe-area-inset-bottom))]">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 space-y-2">
+          {/* Edit-mode silent settle-on-save summary strip (Shown on Step 3 right before Save) */}
+          {isEditMode && activeStep === 3 && shouldPromptNormalization && (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#CBE6E3] bg-[#EEF9F7] px-3.5 py-2 text-xs text-[#076E6A]">
+              <div className="flex items-center gap-1.5 min-w-0 font-num tabular-nums">
+                <Shirt className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                <span className="font-semibold truncate">
+                  {copy.normFooterPendingBanner(
+                    normalizationPlan.changedItems.length,
+                    normalizationPlan.totalDeltaPieces > 0
+                      ? `+${normalizationPlan.totalDeltaPieces}`
+                      : String(normalizationPlan.totalDeltaPieces),
+                    formatSignedWeight(normalizationPlan.totalDeltaWeightGrams)
+                  )}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewModalOpen(true)}
+                className="inline-flex items-center gap-1 font-bold text-[#078C88] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <Eye className="h-3.5 w-3.5" />
+                <span>{copy.viewDetailsBtn}</span>
+              </button>
+            </div>
+          )}
+
+          {activeStep === 1 && (
+            <button
+              type="button"
+              disabled={isGenerating}
+              onClick={() => goToStep(2)}
+              className="w-full min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] disabled:opacity-50 transition-all whitespace-nowrap cursor-pointer active:scale-[0.99]"
+            >
+              <span>{step1Copy.nextWhatToPackBtn}</span>
+              <ArrowRight className="h-4.5 w-4.5 shrink-0" />
+            </button>
+          )}
+
+          {activeStep === 2 && (
+            <button
+              type="button"
+              disabled={isGenerating}
+              onClick={() => goToStep(3)}
+              className="w-full min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] disabled:opacity-50 transition-all whitespace-nowrap cursor-pointer active:scale-[0.99]"
+            >
+              <span>{copy.nextStepTo3Btn}</span>
+              <ArrowRight className="h-4.5 w-4.5 shrink-0" />
+            </button>
+          )}
+
+          {activeStep === 3 && (
+            isEditMode ? (
+              <div className="flex items-center gap-2">
+                {shouldPromptNormalization ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const effective = resolveSubmissionSetup(false);
+                        if (effective) {
+                          onSaveEditCurrent?.(effective, crew, undefined);
+                        }
+                      }}
+                      className="min-h-[50px] inline-flex items-center justify-center rounded-2xl border border-[#DCE8E5] bg-white px-4 text-xs sm:text-sm font-semibold text-[#5B7370] hover:border-[#078C88] hover:text-[#152B29] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    >
+                      {copy.saveRouteOnlyBtn}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const effective = resolveSubmissionSetup(false);
+                        if (effective) {
+                          onSaveEditCurrent?.(effective, crew, normalizationPlan.updatedGroups);
+                        }
+                      }}
+                      className="flex-1 min-h-[50px] inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
+                    >
+                      <Check className="h-4.5 w-4.5 shrink-0" />
+                      <span>{copy.saveAndScaleBtn(normalizationPlan.changedItems.length)}</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const effective = resolveSubmissionSetup(false);
+                      if (effective) {
+                        onSaveEditCurrent?.(effective, crew, undefined);
+                      }
+                    }}
+                    className="w-full min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
+                  >
+                    <Check className="h-4.5 w-4.5 shrink-0" />
+                    <span>{copy.saveChangesBtn}</span>
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={isGenerating}
+                  onClick={() => {
+                    const effective = resolveSubmissionSetup(false);
+                    if (effective) {
+                      onCreateNewQuickOffline(effective, crew, undefined);
+                    }
+                  }}
+                  className="min-h-[50px] inline-flex items-center justify-center gap-1.5 rounded-2xl border border-[#DCE8E5] bg-white px-4 text-xs sm:text-sm font-semibold text-[#4F6865] hover:border-[#078C88] hover:text-[#078C88] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  <Zap className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                  <span className="sm:hidden">{copy.offlineShortBtn}</span>
+                  <span className="hidden sm:inline">{copy.startOfflineBtn}</span>
+                </button>
+                <button
+                  type="button"
+                  disabled={isGenerating}
+                  onClick={() => {
+                    const effective = resolveSubmissionSetup(true);
+                    if (effective) {
+                      void onCreateNewWithAi(effective, crew, naturalPrompt || undefined);
+                    }
+                  }}
+                  className="flex-1 min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] disabled:opacity-50 transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="h-4.5 w-4.5 animate-spin shrink-0" />
+                      <span>{copy.generatingTripBtn}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 shrink-0" />
+                      <span>{copy.generateTripWithAiBtn}</span>
+                      <ArrowRight className="h-4.5 w-4.5 shrink-0" />
+                    </>
+                  )}
+                </button>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* On-Demand Clothing Diff Preview Modal (Edit Mode Only, User-Triggered) */}
+      {isEditMode && previewModalOpen && normalizationPlan.changedItems.length > 0 && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F2422]/45 backdrop-blur-[2px] p-4"
+          onClick={() => setPreviewModalOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clothing-norm-modal-title"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg rounded-2xl border border-[#CBE6E3] bg-white shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-3 border-b border-[#E8F1EF] bg-[#F5FBF9] px-5 py-4">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#078C88]/12 text-[#078C88]">
+                  <Shirt className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3
+                      id="clothing-norm-modal-title"
+                      className="text-base font-extrabold text-[#152B29]"
+                    >
+                      {copy.normPreviewModalTitle}
+                    </h3>
+                    {baselineDays !== setup.days && (
+                      <span className="font-num text-xs font-bold text-[#076E6A]">
+                        {copy.normModalDaysBadge(baselineDays, setup.days)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-xs text-[#5B7370]">
+                    {copy.normModalSub(
+                      normalizationPlan.laundryEnabled,
+                      normalizationPlan.laundryIntervalDays,
+                      normalizationPlan.effectiveCycleDays,
+                      normalizationPlan.rewearEnabled
+                    )}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewModalOpen(false)}
+                aria-label={copy.closePreviewAria}
+                className="rounded-lg p-1.5 text-[#647B78] hover:bg-[#E6F2F0] hover:text-[#152B29] transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* KPI Summary Strip */}
+            <div className="grid grid-cols-3 gap-2.5 px-5 pt-4">
+              <div className="rounded-xl border border-[#E4ECEA] bg-[#F8FAF9] px-3 py-2.5">
+                <div className="text-[11px] font-medium text-[#647B78]">{copy.kpiAdjusted}</div>
+                <div className="mt-0.5 font-num tabular-nums text-sm font-extrabold text-[#152B29]">
+                  {copy.kpiAdjustedValue(normalizationPlan.changedItems.length)}
+                </div>
+              </div>
+              <div className="rounded-xl border border-[#E4ECEA] bg-[#F8FAF9] px-3 py-2.5">
+                <div className="text-[11px] font-medium text-[#647B78]">
+                  {copy.kpiPieceDelta}
+                </div>
+                <div
+                  className={`mt-0.5 font-num tabular-nums text-sm font-extrabold ${
+                    normalizationPlan.totalDeltaPieces > 0
+                      ? 'text-[#076E6A]'
+                      : 'text-[#4F6865]'
+                  }`}
+                >
+                  {normalizationPlan.totalDeltaPieces > 0
+                    ? `+${normalizationPlan.totalDeltaPieces}`
+                    : normalizationPlan.totalDeltaPieces}
+                  {copy.pcsUnit}
+                </div>
+              </div>
+              <div className="rounded-xl border border-[#E4ECEA] bg-[#F8FAF9] px-3 py-2.5">
+                <div className="text-[11px] font-medium text-[#647B78]">
+                  {copy.kpiEstWeight}
+                </div>
+                <div className="mt-0.5 font-num tabular-nums text-sm font-extrabold text-[#152B29]">
+                  {formatSignedWeight(normalizationPlan.totalDeltaWeightGrams)}
+                </div>
+              </div>
+            </div>
+
+            {/* Adjusted Clothing Item List */}
+            <div className="px-5 py-4">
+              <div className="mb-2 flex items-center justify-between text-xs">
+                <span className="font-bold text-[#152B29]">{copy.breakdownHeading}</span>
+                <span className="text-[11px] text-[#647B78]">{copy.breakdownRightNote}</span>
+              </div>
+
+              <div className="max-h-64 overflow-y-auto rounded-xl border border-[#DCE8E5] bg-white divide-y divide-[#EDF4F2]">
+                {normalizationPlan.changedItems.map((diff) => {
+                  const isIncrease = diff.deltaQuantity > 0;
+                  return (
+                    <div
+                      key={`${diff.groupId}_${diff.itemId}`}
+                      className="flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs hover:bg-[#F9FCFB] transition-colors"
+                    >
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="font-bold text-[#152B29] truncate">
+                            {diff.itemName}
+                          </span>
+                          {diff.alreadyPacked && (
+                            <span
+                              className={`text-[11px] font-semibold ${
+                                isIncrease ? 'text-[#B96A39]' : 'text-[#076E6A]'
+                              }`}
+                            >
+                              ·{' '}
+                              {isIncrease
+                                ? copy.packedAddTag(diff.deltaQuantity)
+                                : copy.packedTrimTag(Math.abs(diff.deltaQuantity))}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[11px] text-[#647B78]">
+                          <span className="truncate">{diff.groupTitle}</span>
+                          <span aria-hidden="true">·</span>
+                          <span className="whitespace-nowrap">{diff.scaleRuleLabel}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 shrink-0 font-num tabular-nums">
+                        <div className="inline-flex items-center gap-1.5 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1">
+                          <span className="text-[#7A908D] line-through">
+                            ×{diff.prevQuantity}
+                          </span>
+                          <span className="text-[#9AB0AD]">→</span>
+                          <span
+                            className={`font-extrabold ${
+                              isIncrease ? 'text-[#076E6A]' : 'text-[#3B5552]'
+                            }`}
+                          >
+                            ×{diff.nextQuantity}
+                          </span>
+                        </div>
+                        <div className="min-w-[3.75rem] text-right">
+                          <div
+                            className={`font-bold ${
+                              isIncrease ? 'text-[#078C88]' : 'text-[#5B7370]'
+                            }`}
+                          >
+                            {isIncrease ? `+${diff.deltaQuantity}` : diff.deltaQuantity}
+                            {copy.pcsUnit}
+                          </div>
+                          <div className="text-[10px] text-[#7A908D]">
+                            {formatSignedWeight(diff.deltaWeightGrams)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-[#E8F1EF] bg-[#FAFDFC] px-5 py-3.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setDismissedSignature(currentClothingSignature);
+                  setPreviewModalOpen(false);
+                }}
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2 text-xs font-semibold text-[#4F6865] hover:border-[#0ABAB5] hover:text-[#152B29] transition-colors whitespace-nowrap cursor-pointer"
+              >
+                {copy.keepExistingBtn}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const effective = resolveSubmissionSetup(false);
+                  setPreviewModalOpen(false);
+                  if (effective) {
+                    onSaveEditCurrent?.(effective, crew, normalizationPlan.updatedGroups);
+                  }
+                }}
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#078C88] px-4 py-2 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap cursor-pointer"
+              >
+                <Check className="h-3.5 w-3.5" />
+                {copy.saveAndScaleBtn(normalizationPlan.changedItems.length)}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
