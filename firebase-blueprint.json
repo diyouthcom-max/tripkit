@@ -1,0 +1,560 @@
+{
+  "entities": {
+    "TripRoom": {
+      "title": "TripRoom",
+      "description": "Shared collaborative travel planning room synchronized in real time across companions.",
+      "type": "object",
+      "properties": {
+        "roomId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6,
+          "pattern": "^[A-Z2-9]{6}$",
+          "description": "6-character uppercase invite code acting directly as the exact document ID."
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Immutable Firebase Auth UID of the room creator."
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Display nickname of the room creator."
+        },
+        "routeTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable multi-city route summary."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "archived"],
+          "description": "Lifecycle state; once archived, mutations are locked."
+        },
+        "revision": {
+          "type": "integer",
+          "description": "Monotonically increasing state revision counter."
+        },
+        "lastUpdatedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the collaborator who committed the latest state update."
+        },
+        "lastUpdatedByName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Nickname of the collaborator who committed the latest state update."
+        },
+        "tripPayload": {
+          "type": "object",
+          "description": "Structured native Map representation of TripState (setup, intel, packing, budget, expenses, timeline, wishlist, crew, meetup)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp when the room was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the latest update, enforcing write rate-limit cooldown."
+        }
+      },
+      "required": [
+        "roomId",
+        "ownerId",
+        "ownerName",
+        "routeTitle",
+        "status",
+        "revision",
+        "lastUpdatedBy",
+        "lastUpdatedByName",
+        "tripPayload",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RoomMember": {
+      "title": "RoomMember",
+      "description": "Authorized collaborator record under a TripRoom, mapping a verified user UID to a claimed companion seat without storing PII.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the collaborator."
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6,
+          "pattern": "^[A-Z2-9]{6}$",
+          "description": "Parent 6-character room ID."
+        },
+        "seatId": {
+          "type": "string",
+          "enum": ["m1", "m2", "m3", "m4"],
+          "description": "Claimed crew seat identifier inside TripState.crew."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Non-PII traveler nickname displayed in the trip."
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Travel role description (e.g., 摄影探店, 行程主理)."
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp when the member joined."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when seat assignment was last updated."
+        }
+      },
+      "required": [
+        "uid",
+        "roomId",
+        "seatId",
+        "displayName",
+        "role",
+        "joinedAt",
+        "updatedAt"
+      ]
+    },
+    "UserRateLimit": {
+      "title": "UserRateLimit",
+      "description": "Per-user room creation quota and server-timestamp cooldown tracker to prevent malicious room spamming.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "roomCount": {
+          "type": "integer",
+          "description": "Total rooms created by this user (capped at 20)."
+        },
+        "lastRoomCreatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the user's most recent room creation (10s minimum interval)."
+        }
+      },
+      "required": ["uid", "roomCount", "lastRoomCreatedAt"]
+    },
+    "JoinedRoomRef": {
+      "title": "JoinedRoomRef",
+      "description": "Lightweight per-user bookmark of rooms created or joined, queried strictly with limit(5).",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID of this bookmark."
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6,
+          "pattern": "^[A-Z2-9]{6}$",
+          "description": "6-character room invite code."
+        },
+        "routeTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Cached route title for quick display."
+        },
+        "seatId": {
+          "type": "string",
+          "enum": ["m1", "m2", "m3", "m4"],
+          "description": "Claimed seat ID in that room."
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp when bookmarked."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last accessed or updated."
+        }
+      },
+      "required": ["uid", "roomId", "routeTitle", "seatId", "joinedAt", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Trusted administrator lookup document (never client-writable).",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the administrator."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when admin privilege was provisioned."
+        }
+      },
+      "required": ["uid", "createdAt"]
+    },
+    "RedeemCode": {
+      "title": "RedeemCode",
+      "description": "Single-use 1-year or lifetime Trip Kit Pro authorization code issued by the admin for WhatsApp/Facebook community members.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 14,
+          "maxLength": 14,
+          "pattern": "^TK(1Y|LT)-[A-Z2-9]{4}-[A-Z2-9]{4}$",
+          "description": "14-character formatted activation code matching document ID."
+        },
+        "planType": {
+          "type": "string",
+          "enum": ["annual", "lifetime"],
+          "description": "Membership tier unlocked by this code."
+        },
+        "durationDays": {
+          "type": "integer",
+          "description": "Number of Pro days granted (365 for annual, 36500 for lifetime)."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["unused", "redeemed"],
+          "description": "Terminal single-use lifecycle status."
+        },
+        "note": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 80,
+          "description": "Optional non-PII admin memo (e.g., WhatsApp 粉丝渠道)."
+        },
+        "createdBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Immutable UID of the issuing admin."
+        },
+        "redeemedBy": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]*$",
+          "description": "Empty string when unused; bound to redeemer UID upon activation."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp when generated."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of generation or redemption."
+        }
+      },
+      "required": [
+        "code",
+        "planType",
+        "durationDays",
+        "status",
+        "note",
+        "createdBy",
+        "redeemedBy",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserEntitlement": {
+      "title": "UserEntitlement",
+      "description": "Per-user Pro membership entitlement atomically bound to a redeemed single-use code.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner UID of this Pro entitlement."
+        },
+        "planType": {
+          "type": "string",
+          "enum": ["annual", "lifetime"],
+          "description": "Unlocked membership plan."
+        },
+        "redeemedCode": {
+          "type": "string",
+          "minLength": 14,
+          "maxLength": 14,
+          "pattern": "^TK(1Y|LT)-[A-Z2-9]{4}-[A-Z2-9]{4}$",
+          "description": "Exact redeem code burned in the same atomic batch."
+        },
+        "durationDays": {
+          "type": "integer",
+          "description": "Granted duration in days (365 or 36500)."
+        },
+        "activatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the code was redeemed."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of latest entitlement activation."
+        }
+      },
+      "required": [
+        "uid",
+        "planType",
+        "redeemedCode",
+        "durationDays",
+        "activatedAt",
+        "updatedAt"
+      ]
+    },
+    "PhotobookOrder": {
+      "title": "PhotobookOrder",
+      "description": "Non-PII print-on-demand travel photobook order specification and production status.",
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "minLength": 14,
+          "maxLength": 14,
+          "pattern": "^PB-[0-9]{6}-[A-Z2-9]{4}$",
+          "description": "14-character formatted print order ID matching document ID."
+        },
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Immutable Firebase Auth UID of the ordering traveler."
+        },
+        "bookTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Printed book cover title."
+        },
+        "tripTitlesSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Summary of compiled trip routes."
+        },
+        "templateId": {
+          "type": "string",
+          "enum": ["kinfolk", "editorial", "scrapbook"],
+          "description": "Selected magazine layout theme."
+        },
+        "formatSpec": {
+          "type": "string",
+          "enum": ["square_210", "portrait_a5"],
+          "description": "Trim size specification."
+        },
+        "bindingSpec": {
+          "type": "string",
+          "enum": ["hardcover_matte", "softcover_textured"],
+          "description": "Cover and paper stock binding specification."
+        },
+        "pageCount": {
+          "type": "integer",
+          "description": "Total printable pages (multiple of 4, 20 to 120)."
+        },
+        "photoCount": {
+          "type": "integer",
+          "description": "Number of curated photos included in the book."
+        },
+        "copies": {
+          "type": "integer",
+          "description": "Print quantity ordered (1 to 20)."
+        },
+        "currencyCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 4,
+          "pattern": "^[A-Z]{3,4}$",
+          "description": "ISO currency code of order pricing."
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "Total order price in currencyCode."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending_payment", "paid_queued", "printing", "shipped", "cancelled"],
+          "description": "Order fulfillment status."
+        },
+        "trackingNumber": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 64,
+          "description": "Courier tracking code populated by admin upon shipment."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp when order was placed."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of latest status update."
+        }
+      },
+      "required": [
+        "orderId",
+        "uid",
+        "bookTitle",
+        "tripTitlesSummary",
+        "templateId",
+        "formatSpec",
+        "bindingSpec",
+        "pageCount",
+        "photoCount",
+        "copies",
+        "currencyCode",
+        "totalPrice",
+        "status",
+        "trackingNumber",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PhotobookOrderShipping": {
+      "title": "PhotobookOrderShipping",
+      "description": "Isolated PII recipient shipping address under a PhotobookOrder (strictly owner/admin single-doc access, list disabled).",
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "minLength": 14,
+          "maxLength": 14,
+          "pattern": "^PB-[0-9]{6}-[A-Z2-9]{4}$",
+          "description": "Parent 14-character print order ID."
+        },
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Immutable Firebase Auth UID of the ordering traveler."
+        },
+        "recipientName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Recipient full name for courier delivery."
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 32,
+          "description": "Recipient contact phone number."
+        },
+        "shippingAddress": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 240,
+          "description": "Full street delivery address."
+        },
+        "customerNote": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 160,
+          "description": "Optional gift message or print instruction."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Immutable server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of latest update."
+        }
+      },
+      "required": [
+        "orderId",
+        "uid",
+        "recipientName",
+        "phone",
+        "shippingAddress",
+        "customerNote",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/TripRoom" },
+      "description": "Primary collaborative trip state documents keyed by 6-char invite code (single-doc get/onSnapshot only; collection list disabled)."
+    },
+    "/rooms/{roomId}/members/{memberUid}": {
+      "schema": { "$ref": "#/entities/RoomMember" },
+      "description": "Per-room collaborator authorization records enabling Master Gate write checks and instant membership revocation."
+    },
+    "/rateLimits/{userId}": {
+      "schema": { "$ref": "#/entities/UserRateLimit" },
+      "description": "Atomic per-user room creation rate-limit ledger enforcing 10s cooldown and max 20 created rooms."
+    },
+    "/users/{userId}/joinedRooms/{roomId}": {
+      "schema": { "$ref": "#/entities/JoinedRoomRef" },
+      "description": "Private per-user index of recently joined rooms, queried with limit(5)."
+    },
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Read-only admin registry document (writes locked; bootstrapped with verified owner email)."
+    },
+    "/redeemCodes/{codeId}": {
+      "schema": { "$ref": "#/entities/RedeemCode" },
+      "description": "Single-use 1-year and lifetime Pro authorization codes issued by admin and atomically burned upon redemption."
+    },
+    "/users/{userId}/entitlements/{entitlementId}": {
+      "schema": { "$ref": "#/entities/UserEntitlement" },
+      "description": "Per-user Pro membership record ('pro') atomically verified against a newly redeemed code."
+    },
+    "/photobookOrders/{orderId}": {
+      "schema": { "$ref": "#/entities/PhotobookOrder" },
+      "description": "Non-PII print-on-demand photobook orders restricted to owner and verified admin."
+    },
+    "/photobookOrders/{orderId}/shipping/{shippingId}": {
+      "schema": { "$ref": "#/entities/PhotobookOrderShipping" },
+      "description": "Split-collection PII recipient shipping address ('recipient') restricted strictly to order owner and verified admin with list disabled."
+    }
+  }
+}

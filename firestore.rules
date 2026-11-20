@@ -1,0 +1,818 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 4.1: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // Global Hardened Primitives
+    // =========================================================================
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdminEmail() {
+      return isVerifiedUser() && request.auth.token.email == 'diyouth.com@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdminEmail()
+        || (isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidOptionalId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]*$');
+    }
+
+    function isValidRoomId(roomId) {
+      return roomId is string && roomId.size() == 6 && roomId.matches('^[A-Z2-9]{6}$');
+    }
+
+    function isValidSeatId(seatId) {
+      return seatId is string && seatId.size() == 2 && (
+        seatId == 'm1' || seatId == 'm2' || seatId == 'm3' || seatId == 'm4'
+      );
+    }
+
+    function isValidRedeemCodeId(codeId) {
+      return codeId is string
+        && codeId.size() == 14
+        && codeId.matches('^TK(1Y|LT)-[A-Z2-9]{4}-[A-Z2-9]{4}$');
+    }
+
+    function isValidEntitlementId(entitlementId) {
+      return entitlementId is string && entitlementId.size() == 3 && entitlementId == 'pro';
+    }
+
+    function isValidPhotobookOrderId(orderId) {
+      return orderId is string
+        && orderId.size() == 14
+        && orderId.matches('^PB-[0-9]{6}-[A-Z2-9]{4}$');
+    }
+
+    function isValidShippingId(shippingId) {
+      return shippingId is string && shippingId.size() == 9 && shippingId == 'recipient';
+    }
+
+    // =========================================================================
+    // Entity Validation Blueprints (Synchronized with firebase-blueprint.json)
+    // =========================================================================
+    function isValidTripPayload(payload) {
+      return payload is map
+        && payload.keys().size() >= 9
+        && payload.keys().size() <= 35
+        && payload.keys().hasAll([
+          'setup',
+          'intel',
+          'packing',
+          'budget',
+          'expenses',
+          'timeline',
+          'wishlist',
+          'crew',
+          'meetup'
+        ])
+        && payload.crew is list && payload.crew.size() >= 1 && payload.crew.size() <= 4
+        && payload.packing is list && payload.packing.size() <= 25
+        && payload.expenses is list && payload.expenses.size() <= 300
+        && payload.timeline is list && payload.timeline.size() <= 200
+        && payload.wishlist is list && payload.wishlist.size() <= 100;
+    }
+
+    function isValidTripRoom(data) {
+      return data.keys().hasAll([
+          'roomId',
+          'ownerId',
+          'ownerName',
+          'routeTitle',
+          'status',
+          'revision',
+          'lastUpdatedBy',
+          'lastUpdatedByName',
+          'tripPayload',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'roomId',
+          'ownerId',
+          'ownerName',
+          'routeTitle',
+          'status',
+          'revision',
+          'lastUpdatedBy',
+          'lastUpdatedByName',
+          'tripPayload',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidRoomId(data.roomId)
+        && isValidId(data.ownerId)
+        && data.ownerName is string && data.ownerName.size() >= 1 && data.ownerName.size() <= 40
+        && data.routeTitle is string && data.routeTitle.size() >= 1 && data.routeTitle.size() <= 120
+        && data.status is string && data.status.size() <= 16 && (data.status == 'active' || data.status == 'archived')
+        && data.revision is int && data.revision >= 1 && data.revision <= 1000000
+        && isValidId(data.lastUpdatedBy)
+        && data.lastUpdatedBy == request.auth.uid
+        && data.lastUpdatedByName is string && data.lastUpdatedByName.size() >= 1 && data.lastUpdatedByName.size() <= 40
+        && isValidTripPayload(data.tripPayload)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidRoomMember(data) {
+      return data.keys().hasAll([
+          'uid',
+          'roomId',
+          'seatId',
+          'displayName',
+          'role',
+          'joinedAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'roomId',
+          'seatId',
+          'displayName',
+          'role',
+          'joinedAt',
+          'updatedAt'
+        ])
+        && isValidId(data.uid)
+        && isValidRoomId(data.roomId)
+        && isValidSeatId(data.seatId)
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 40
+        && data.role is string && data.role.size() >= 1 && data.role.size() <= 60
+        && data.joinedAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserRateLimit(data) {
+      return data.keys().hasAll(['uid', 'roomCount', 'lastRoomCreatedAt'])
+        && data.keys().hasOnly(['uid', 'roomCount', 'lastRoomCreatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.roomCount is int && data.roomCount >= 1 && data.roomCount <= 20
+        && data.lastRoomCreatedAt is timestamp;
+    }
+
+    function isValidJoinedRoomRef(data) {
+      return data.keys().hasAll(['uid', 'roomId', 'routeTitle', 'seatId', 'joinedAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'roomId', 'routeTitle', 'seatId', 'joinedAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && isValidRoomId(data.roomId)
+        && data.routeTitle is string && data.routeTitle.size() >= 1 && data.routeTitle.size() <= 120
+        && isValidSeatId(data.seatId)
+        && data.joinedAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidRedeemCode(data) {
+      return data.keys().hasAll([
+          'code',
+          'planType',
+          'durationDays',
+          'status',
+          'note',
+          'createdBy',
+          'redeemedBy',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'code',
+          'planType',
+          'durationDays',
+          'status',
+          'note',
+          'createdBy',
+          'redeemedBy',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidRedeemCodeId(data.code)
+        && data.planType is string && data.planType.size() <= 16 && (
+          (data.planType == 'annual' && data.durationDays == 365)
+          || (data.planType == 'lifetime' && data.durationDays == 36500)
+        )
+        && data.durationDays is int
+        && data.status is string && data.status.size() <= 16 && (
+          data.status == 'unused' || data.status == 'redeemed'
+        )
+        && data.note is string && data.note.size() <= 80
+        && isValidId(data.createdBy)
+        && isValidOptionalId(data.redeemedBy)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserEntitlement(data) {
+      return data.keys().hasAll([
+          'uid',
+          'planType',
+          'redeemedCode',
+          'durationDays',
+          'activatedAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'planType',
+          'redeemedCode',
+          'durationDays',
+          'activatedAt',
+          'updatedAt'
+        ])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.planType is string && data.planType.size() <= 16 && (
+          (data.planType == 'annual' && data.durationDays == 365)
+          || (data.planType == 'lifetime' && data.durationDays == 36500)
+        )
+        && isValidRedeemCodeId(data.redeemedCode)
+        && data.durationDays is int
+        && data.activatedAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidPhotobookOrder(data) {
+      return data.keys().hasAll([
+          'orderId',
+          'uid',
+          'bookTitle',
+          'tripTitlesSummary',
+          'templateId',
+          'formatSpec',
+          'bindingSpec',
+          'pageCount',
+          'photoCount',
+          'copies',
+          'currencyCode',
+          'totalPrice',
+          'status',
+          'trackingNumber',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'orderId',
+          'uid',
+          'bookTitle',
+          'tripTitlesSummary',
+          'templateId',
+          'formatSpec',
+          'bindingSpec',
+          'pageCount',
+          'photoCount',
+          'copies',
+          'currencyCode',
+          'totalPrice',
+          'status',
+          'trackingNumber',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidPhotobookOrderId(data.orderId)
+        && isValidId(data.uid)
+        && data.bookTitle is string && data.bookTitle.size() >= 1 && data.bookTitle.size() <= 80
+        && data.tripTitlesSummary is string && data.tripTitlesSummary.size() >= 1 && data.tripTitlesSummary.size() <= 160
+        && data.templateId is string && data.templateId.size() <= 16 && (
+          data.templateId == 'kinfolk' || data.templateId == 'editorial' || data.templateId == 'scrapbook'
+        )
+        && data.formatSpec is string && data.formatSpec.size() <= 16 && (
+          data.formatSpec == 'square_210' || data.formatSpec == 'portrait_a5'
+        )
+        && data.bindingSpec is string && data.bindingSpec.size() <= 24 && (
+          data.bindingSpec == 'hardcover_matte' || data.bindingSpec == 'softcover_textured'
+        )
+        && data.pageCount is int && data.pageCount >= 20 && data.pageCount <= 120
+        && data.photoCount is int && data.photoCount >= 1 && data.photoCount <= 120
+        && data.copies is int && data.copies >= 1 && data.copies <= 20
+        && data.currencyCode is string && data.currencyCode.size() >= 3 && data.currencyCode.size() <= 4 && data.currencyCode.matches('^[A-Z]{3,4}$')
+        && (data.totalPrice is int || data.totalPrice is float) && data.totalPrice > 0 && data.totalPrice <= 100000
+        && data.status is string && data.status.size() <= 20 && (
+          data.status == 'pending_payment'
+          || data.status == 'paid_queued'
+          || data.status == 'printing'
+          || data.status == 'shipped'
+          || data.status == 'cancelled'
+        )
+        && data.trackingNumber is string && data.trackingNumber.size() <= 64
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidPhotobookOrderShipping(data) {
+      return data.keys().hasAll([
+          'orderId',
+          'uid',
+          'recipientName',
+          'phone',
+          'shippingAddress',
+          'customerNote',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'orderId',
+          'uid',
+          'recipientName',
+          'phone',
+          'shippingAddress',
+          'customerNote',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidPhotobookOrderId(data.orderId)
+        && isValidId(data.uid)
+        && data.recipientName is string && data.recipientName.size() >= 1 && data.recipientName.size() <= 60
+        && data.phone is string && data.phone.size() >= 5 && data.phone.size() <= 32
+        && data.shippingAddress is string && data.shippingAddress.size() >= 5 && data.shippingAddress.size() <= 240
+        && data.customerNote is string && data.customerNote.size() <= 160
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidRecordOwner(userId) {
+      return isValidId(userId) && request.auth.uid == userId && existing().uid == request.auth.uid;
+    }
+
+    // =========================================================================
+    // 0. Trusted Admin Registry (/admins/{adminUid}) — Strictly Non-Self-Writable
+    // =========================================================================
+    match /admins/{adminUid} {
+      allow get: if isVerifiedUser() && isValidId(adminUid) && request.auth.uid == adminUid;
+      allow list: if false;
+      allow create, update, delete: if false;
+    }
+
+    // =========================================================================
+    // 1. Per-User Room Creation Rate-Limit Ledger (/rateLimits/{userId})
+    // =========================================================================
+    match /rateLimits/{userId} {
+      allow get: if isVerifiedUser() && isValidId(userId) && request.auth.uid == userId;
+      allow list: if false;
+
+      allow create: if isVerifiedUser()
+        && isValidId(userId)
+        && request.auth.uid == userId
+        && isValidUserRateLimit(incoming())
+        && incoming().roomCount == 1
+        && incoming().lastRoomCreatedAt == request.time;
+
+      allow update: if isVerifiedUser()
+        && isValidRecordOwner(userId)
+        && isValidUserRateLimit(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['roomCount', 'lastRoomCreatedAt'])
+        && incoming().uid == existing().uid
+        && incoming().roomCount == existing().roomCount + 1
+        && incoming().lastRoomCreatedAt == request.time
+        && request.time >= existing().lastRoomCreatedAt + duration.value(10, 's');
+
+      allow delete: if false;
+    }
+
+    // =========================================================================
+    // 2. Collaborative Trip Rooms (/rooms/{roomId})
+    // =========================================================================
+    match /rooms/{roomId} {
+      allow get: if isVerifiedUser() && isValidRoomId(roomId);
+      allow list: if false;
+
+      allow create: if isVerifiedUser()
+        && isValidRoomId(roomId)
+        && isValidTripRoom(incoming())
+        && incoming().roomId == roomId
+        && incoming().ownerId == request.auth.uid
+        && incoming().status == 'active'
+        && incoming().revision == 1
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && existsAfter(/databases/$(database)/documents/rooms/$(roomId)/members/$(request.auth.uid))
+        && getAfter(/databases/$(database)/documents/rateLimits/$(request.auth.uid)).data.lastRoomCreatedAt == request.time;
+
+      allow update: if isVerifiedUser()
+        && isValidRoomId(roomId)
+        && isValidTripRoom(incoming())
+        && existing().status == 'active'
+        && incoming().roomId == existing().roomId
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && request.time >= existing().updatedAt + duration.value(1, 's')
+        && (
+          existing().ownerId == request.auth.uid
+          || exists(/databases/$(database)/documents/rooms/$(roomId)/members/$(request.auth.uid))
+        )
+        && (
+          // Action A: Collaborator or Owner syncs TripState payload
+          (
+            incoming().status == 'active'
+            && incoming().ownerName == existing().ownerName
+            && incoming().revision == existing().revision + 1
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'routeTitle',
+              'revision',
+              'lastUpdatedBy',
+              'lastUpdatedByName',
+              'tripPayload',
+              'updatedAt'
+            ])
+          )
+          ||
+          // Action B: Room Owner archives room (Terminal State Lock)
+          (
+            existing().ownerId == request.auth.uid
+            && incoming().status == 'archived'
+            && incoming().revision == existing().revision + 1
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'status',
+              'revision',
+              'lastUpdatedBy',
+              'lastUpdatedByName',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isVerifiedUser()
+        && isValidRoomId(roomId)
+        && existing().ownerId == request.auth.uid;
+
+      // =======================================================================
+      // 3. Room Collaborator Seats (/rooms/{roomId}/members/{memberUid})
+      // =======================================================================
+      match /members/{memberUid} {
+        allow get: if isVerifiedUser()
+          && isValidRoomId(roomId)
+          && isValidId(memberUid)
+          && (
+            request.auth.uid == memberUid
+            || get(/databases/$(database)/documents/rooms/$(roomId)).data.ownerId == request.auth.uid
+            || exists(/databases/$(database)/documents/rooms/$(roomId)/members/$(request.auth.uid))
+          );
+
+        allow list: if false;
+
+        allow create: if isVerifiedUser()
+          && isValidRoomId(roomId)
+          && isValidId(memberUid)
+          && request.auth.uid == memberUid
+          && isValidRoomMember(incoming())
+          && incoming().uid == request.auth.uid
+          && incoming().roomId == roomId
+          && incoming().joinedAt == request.time
+          && incoming().updatedAt == request.time
+          && existsAfter(/databases/$(database)/documents/rooms/$(roomId))
+          && getAfter(/databases/$(database)/documents/rooms/$(roomId)).data.status == 'active';
+
+        allow update: if isVerifiedUser()
+          && isValidRoomId(roomId)
+          && isValidId(memberUid)
+          && request.auth.uid == memberUid
+          && isValidRoomMember(incoming())
+          && incoming().uid == existing().uid
+          && incoming().roomId == existing().roomId
+          && incoming().joinedAt == existing().joinedAt
+          && incoming().updatedAt == request.time
+          && request.time >= existing().updatedAt + duration.value(2, 's')
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'seatId',
+            'displayName',
+            'role',
+            'updatedAt'
+          ])
+          && get(/databases/$(database)/documents/rooms/$(roomId)).data.status == 'active';
+
+        allow delete: if isVerifiedUser()
+          && isValidRoomId(roomId)
+          && isValidId(memberUid)
+          && (
+            request.auth.uid == memberUid
+            || get(/databases/$(database)/documents/rooms/$(roomId)).data.ownerId == request.auth.uid
+          );
+      }
+    }
+
+    // =========================================================================
+    // 4. Private Per-User Joined Room Bookmarks (/users/{userId}/joinedRooms/{roomId})
+    // =========================================================================
+    match /users/{userId}/joinedRooms/{roomId} {
+      allow get: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidRoomId(roomId)
+        && request.auth.uid == userId;
+
+      allow list: if isVerifiedUser()
+        && request.auth.uid == userId
+        && resource.data.uid == request.auth.uid
+        && request.query.limit != null
+        && request.query.limit <= 10;
+
+      allow create: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidRoomId(roomId)
+        && request.auth.uid == userId
+        && isValidJoinedRoomRef(incoming())
+        && incoming().roomId == roomId
+        && incoming().joinedAt == request.time
+        && incoming().updatedAt == request.time
+        && existsAfter(/databases/$(database)/documents/rooms/$(roomId));
+
+      allow update: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidRoomId(roomId)
+        && request.auth.uid == userId
+        && isValidJoinedRoomRef(incoming())
+        && incoming().uid == existing().uid
+        && incoming().roomId == existing().roomId
+        && incoming().joinedAt == existing().joinedAt
+        && incoming().updatedAt == request.time
+        && request.time >= existing().updatedAt + duration.value(1, 's')
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'routeTitle',
+          'seatId',
+          'updatedAt'
+        ]);
+
+      allow delete: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidRoomId(roomId)
+        && request.auth.uid == userId;
+    }
+
+    // =========================================================================
+    // 5. Single-Use Pro Redeem Codes (/redeemCodes/{codeId})
+    //    - Issued exclusively by Admin; exact single-doc lookup for redemption
+    //    - Terminal lock once status == 'redeemed' (unless Admin override)
+    // =========================================================================
+    match /redeemCodes/{codeId} {
+      allow get: if isVerifiedUser() && isValidRedeemCodeId(codeId);
+
+      // Zero get()/exists() in list: strictly restricted to bootstrapped verified admin querying own codes
+      allow list: if isBootstrappedAdminEmail()
+        && resource.data.createdBy == request.auth.uid
+        && request.query.limit != null
+        && request.query.limit <= 50;
+
+      allow create: if isVerifiedUser()
+        && isValidRedeemCodeId(codeId)
+        && isValidRedeemCode(incoming())
+        && incoming().code == codeId
+        && incoming().status == 'unused'
+        && incoming().createdBy == request.auth.uid
+        && incoming().redeemedBy == ''
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && isAdmin();
+
+      allow update: if isVerifiedUser()
+        && isValidRedeemCodeId(codeId)
+        && isValidRedeemCode(incoming())
+        && incoming().code == existing().code
+        && incoming().planType == existing().planType
+        && incoming().durationDays == existing().durationDays
+        && incoming().createdBy == existing().createdBy
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action A: One-time redemption by verified user (Terminal transition unused -> redeemed)
+          (
+            existing().status == 'unused'
+            && incoming().status == 'redeemed'
+            && incoming().note == existing().note
+            && incoming().redeemedBy == request.auth.uid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'status',
+              'redeemedBy',
+              'updatedAt'
+            ])
+            && getAfter(/databases/$(database)/documents/users/$(request.auth.uid)/entitlements/pro).data.redeemedCode == codeId
+          )
+          ||
+          // Action B: Admin management escape hatch (e.g., reset or update memo)
+          (
+            isAdmin()
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'status',
+              'redeemedBy',
+              'note',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isVerifiedUser()
+        && isValidRedeemCodeId(codeId)
+        && isAdmin();
+    }
+
+    // =========================================================================
+    // 6. Per-User Pro Membership Entitlements (/users/{userId}/entitlements/{entitlementId})
+    //    - Atomically verified against a newly burned /redeemCodes/{codeId}
+    // =========================================================================
+    match /users/{userId}/entitlements/{entitlementId} {
+      allow get: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidEntitlementId(entitlementId)
+        && (request.auth.uid == userId || isAdmin());
+
+      allow list: if false;
+
+      allow create: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidEntitlementId(entitlementId)
+        && request.auth.uid == userId
+        && isValidUserEntitlement(incoming())
+        && incoming().activatedAt == request.time
+        && incoming().updatedAt == request.time
+        && (
+          isAdmin()
+          || (
+            getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.status == 'redeemed'
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.redeemedBy == request.auth.uid
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.updatedAt == request.time
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.planType == incoming().planType
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.durationDays == incoming().durationDays
+          )
+        );
+
+      allow update: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidEntitlementId(entitlementId)
+        && request.auth.uid == userId
+        && isValidUserEntitlement(incoming())
+        && incoming().uid == existing().uid
+        && incoming().activatedAt == request.time
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'planType',
+          'redeemedCode',
+          'durationDays',
+          'activatedAt',
+          'updatedAt'
+        ])
+        && (
+          isAdmin()
+          || (
+            getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.status == 'redeemed'
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.redeemedBy == request.auth.uid
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.updatedAt == request.time
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.planType == incoming().planType
+            && getAfter(/databases/$(database)/documents/redeemCodes/$(incoming().redeemedCode)).data.durationDays == incoming().durationDays
+          )
+        );
+
+      allow delete: if isVerifiedUser()
+        && isValidId(userId)
+        && isValidEntitlementId(entitlementId)
+        && isAdmin();
+    }
+
+    // =========================================================================
+    // 7. Print-on-Demand Photobook Orders (/photobookOrders/{orderId})
+    //    - Non-PII order specs; shipping PII isolated in /shipping/recipient
+    // =========================================================================
+    match /photobookOrders/{orderId} {
+      allow get: if isVerifiedUser()
+        && isValidPhotobookOrderId(orderId)
+        && (existing().uid == request.auth.uid || isAdmin());
+
+      // Zero get()/exists() in list: strictly restricted to owner's own orders or bootstrapped verified admin
+      allow list: if isVerifiedUser()
+        && request.query.limit != null
+        && (
+          (resource.data.uid == request.auth.uid && request.query.limit <= 20)
+          || (isBootstrappedAdminEmail() && request.query.limit <= 50)
+        );
+
+      allow create: if isVerifiedUser()
+        && isValidPhotobookOrderId(orderId)
+        && isValidPhotobookOrder(incoming())
+        && incoming().orderId == orderId
+        && incoming().uid == request.auth.uid
+        && incoming().status == 'pending_payment'
+        && incoming().trackingNumber == ''
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && existsAfter(/databases/$(database)/documents/photobookOrders/$(orderId)/shipping/recipient);
+
+      allow update: if isVerifiedUser()
+        && isValidPhotobookOrderId(orderId)
+        && isValidPhotobookOrder(incoming())
+        && incoming().orderId == existing().orderId
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action A: Owner cancels unpaid order (Terminal State Lock once cancelled/shipped)
+          (
+            existing().uid == request.auth.uid
+            && existing().status == 'pending_payment'
+            && incoming().status == 'cancelled'
+            && incoming().trackingNumber == existing().trackingNumber
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+          ||
+          // Action B: Verified Admin advances fulfillment status & courier tracking
+          (
+            isAdmin()
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'status',
+              'trackingNumber',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isVerifiedUser()
+        && isValidPhotobookOrderId(orderId)
+        && isAdmin();
+
+      // =======================================================================
+      // 8. Isolated Recipient Shipping PII (/photobookOrders/{orderId}/shipping/{shippingId})
+      // =======================================================================
+      match /shipping/{shippingId} {
+        allow get: if isVerifiedUser()
+          && isValidPhotobookOrderId(orderId)
+          && isValidShippingId(shippingId)
+          && (
+            get(/databases/$(database)/documents/photobookOrders/$(orderId)).data.uid == request.auth.uid
+            || isAdmin()
+          );
+
+        allow list: if false;
+
+        allow create: if isVerifiedUser()
+          && isValidPhotobookOrderId(orderId)
+          && isValidShippingId(shippingId)
+          && isValidPhotobookOrderShipping(incoming())
+          && incoming().orderId == orderId
+          && incoming().uid == request.auth.uid
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && existsAfter(/databases/$(database)/documents/photobookOrders/$(orderId))
+          && getAfter(/databases/$(database)/documents/photobookOrders/$(orderId)).data.uid == request.auth.uid;
+
+        allow update: if isVerifiedUser()
+          && isValidPhotobookOrderId(orderId)
+          && isValidShippingId(shippingId)
+          && isValidPhotobookOrderShipping(incoming())
+          && incoming().orderId == existing().orderId
+          && incoming().uid == existing().uid
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && (
+            (
+              existing().uid == request.auth.uid
+              && get(/databases/$(database)/documents/photobookOrders/$(orderId)).data.status == 'pending_payment'
+              && incoming().diff(existing()).affectedKeys().hasOnly([
+                'recipientName',
+                'phone',
+                'shippingAddress',
+                'customerNote',
+                'updatedAt'
+              ])
+            )
+            ||
+            (
+              isAdmin()
+              && incoming().diff(existing()).affectedKeys().hasOnly([
+                'recipientName',
+                'phone',
+                'shippingAddress',
+                'customerNote',
+                'updatedAt'
+              ])
+            )
+          );
+
+        allow delete: if isVerifiedUser()
+          && isValidPhotobookOrderId(orderId)
+          && isValidShippingId(shippingId)
+          && isAdmin();
+      }
+    }
+  }
+}

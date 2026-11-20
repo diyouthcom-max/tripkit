@@ -1,0 +1,63 @@
+---
+description: Trip Kit full-stack architecture, UI/i18n guardrails, Firebase security boundaries, and 3-track expansion rules (Web Independent Site, Admin Dashboard, Capacitor iOS/Android App)
+alwaysApply: true
+---
+
+# Trip Kit — Engineering Rules & Continuity Guide
+
+## 1. Tech Stack & Runtime Architecture
+- **Frontend**: React 19 + TypeScript + Vite 8 + Tailwind CSS v4 (`@import "tailwindcss";` in `src/index.css`).
+- **Backend**: Express (`server.ts`) running on port `3000` (dev mounts Vite middleware via `npm run dev`; production serves `dist/` and `/api/*`).
+- **Database & Auth**: Firebase Authentication + Cloud Firestore (`firebase-applet-config.json`, `firestore.rules`, `firebase-blueprint.json`).
+- **AI Gateway**: All Gemini calls live server-side in `server.ts` under `/api/ai/*` (17 endpoints). **Never** expose `GEMINI_API_KEY` in client bundles or add client-side API key input fields.
+- **Production Note for `server.ts`**: Make the Gemini model configurable via `process.env.GEMINI_MODEL` when deploying outside the prototype runtime, and use `process.env.PORT || 3000` for cloud hosts (Cloud Run / Railway / Fly.io).
+
+## 2. UI / UX & Mobile Guardrails (Non-Negotiable)
+- **Zero Forced Ellipsis on Descriptions**: Never put `truncate` on subtitles, helper notes, or card descriptions. Use natural wrapping (`leading-snug`) and concise copy so narrow 375px viewports never show clipped `...`.
+- **Flat Surface Discipline**: Avoid 2-layer nested boxes (e.g., grey container wrapping bordered white cards). Prefer flat white sections separated by hairline dividers (`divide-y divide-[#EEF4F2]`) with single-layer tactile cards.
+- **Safe-Area Bottom Clearance**:
+  - Main workspace scroll containers must preserve bottom dock clearance (`pb-[calc(112px+env(safe-area-inset-bottom))]` or `pb-[calc(120px+env(safe-area-inset-bottom))]` in wizard mode).
+  - Every full-screen modal / bottom-sheet scroll container must include at least `pb-[max(2rem,env(safe-area-inset-bottom))]`.
+- **No Native Browser Dialogs**: Never use `window.alert`, `window.confirm`, or `window.prompt`. Use custom in-app modals or toasts.
+- **Color Palette & Typography**: Maintain the editorial teal-and-warm-ivory palette (`#093B35` primary deep teal, `#078C88` accent teal, `#152B29` ink, `#5B7370` muted text, `#E2ECE9` hairline borders) and `tabular-nums` for dates, weights, budgets, and FX figures.
+
+## 3. Internationalization (8 Languages Always in Sync)
+Supported locales: `zh-CN`, `en-US`, `en-GB`, `es-MX`, `fr-FR`, `de-DE`, `pt-BR`, `ja-JP`.
+- Never hardcode user-facing copy in components.
+- All new strings must be added across all 8 locales in `src/i18n/packs/*` (matching existing pack conventions) and tested for compact length on 375px screens.
+- Preserve short weather override tokens (`Warmer` / `Lighter` / `Rain+` and localized equivalents) and consistent travel terminology (`en-US` Carry-On vs `en-GB` Cabin Bag, etc.).
+
+## 4. Firebase & Security Redlines
+Existing Firestore collections (already protected by strict `firestore.rules`):
+- `/admins/{adminUid}` — trusted admin registry (strictly non-self-writable).
+- `/rateLimits/{userId}` — room creation throttle ledger.
+- `/rooms/{roomId}` + `/members/{memberUid}` — real-time collaborative trip rooms.
+- `/users/{userId}/joinedRooms/{roomId}` — user room bookmarks.
+- `/redeemCodes/{codeId}` — single-use Pro codes (`TK1Y-XXXX-XXXX` / `TKLT-XXXX-XXXX`).
+- `/users/{userId}/entitlements/pro` — Pro membership entitlements.
+- `/photobookOrders/{orderId}` + `/shipping/recipient` — POD photobook orders with isolated recipient PII.
+
+**Rules when modifying data or adding Admin/Payment features**:
+1. Never relax `firestore.rules` default-deny or remove field whitelists (`hasOnly`) and timestamp checks.
+2. Any new collection must be added to both `firebase-blueprint.json` and `firestore.rules` with explicit ownership/admin validation.
+3. Payment webhooks (Stripe / LemonSqueezy / Creem) and sensitive admin mutations must run server-side in Express using **Firebase Admin SDK**, verifying webhook signatures or Firebase ID Token admin claims before writing to Firestore.
+
+## 5. Three-Track Expansion Blueprint (Single Codebase)
+Do **not** split into separate repositories; keep Web, Admin, and Mobile sharing one core codebase:
+1. **Web Independent Site**:
+   - Add a marketing Landing Page + Pricing page at `/` (SEO meta, OpenGraph, sitemap) and route the interactive workspace to `/app` (or keep seamless entry for returning users).
+   - Connect payment checkout + Express webhook to grant `/users/{uid}/entitlements/pro` and update `/photobookOrders/{orderId}` from `pending_payment` to `paid_queued`.
+   - Add production domain(s) to Firebase Authentication → Authorized Domains.
+2. **Admin Dashboard (`/admin`)**:
+   - Lazy-load `/admin` via `React.lazy` so regular travelers never download admin bundles.
+   - Gate access on both client UI and Express `/api/admin/*` routes using verified Firebase ID Tokens checked against `/admins/{uid}` or Custom Claims (`admin: true`).
+   - Core modules: KPI overview, Pro redeem code batch manager, Photobook print fulfillment & tracking numbers (`printing` → `shipped`), and remote feature/announcement config.
+3. **Native iOS & Android App (Capacitor)**:
+   - Follow `CURSOR_NATIVE_GUIDE.md` at the repo root.
+   - Reuse the pre-wired `src/services/nativePhotoBridge.ts` (`TripPhotoScanner` plugin) and `VITE_API_BASE_URL` in `.env.production`.
+   - For App Store & Google Play compliance, digital Pro subscriptions inside the native app must use platform IAP (recommended: RevenueCat) rather than external Stripe checkout links.
+
+## 6. Verification Checklist (Run After Every Task)
+1. `npm run lint` (`tsc --noEmit`) must pass with 0 errors.
+2. `npm run build` (`vite build`) must succeed cleanly.
+3. If `firestore.rules` was changed, run Firestore rules tests before deploying rules.
