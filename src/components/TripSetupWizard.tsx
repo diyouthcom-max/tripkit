@@ -1463,7 +1463,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                               type="button"
                               aria-pressed={active}
                               onClick={() => toggleActivity(item.name)}
-                              className={`tk-pill tk-pressable w-full cursor-pointer ${
+                              className={`tk-pill tk-pill--wrap tk-pressable w-full cursor-pointer ${
                                 isLastOdd ? 'tk-span2 justify-center' : ''
                               } ${active ? 'tk-sel' : ''}`}
                             >

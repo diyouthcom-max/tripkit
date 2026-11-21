@@ -189,6 +189,22 @@
 }
 .tk-pill.tk-sel .tk-glyph { stroke: var(--tk-forest); }
 
+/* STEP2 活动胶囊 · 长语种两行自然换行（不改文案/结构） */
+.tk-pill--wrap {
+  height: auto;
+  min-height: var(--tk-h-pill);
+  padding-top: var(--tk-base);
+  padding-bottom: var(--tk-base);
+}
+.tk-pill--wrap > span {
+  min-width: 0;
+  font: 550 15px/1.3 var(--tk-font-sans); /* 同 §4 .tk-t-option */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
 /* STEP3 Climate bias · 3 列窄栏：缩 pad/gap/glyph + §4 micro 11px，避免 ellipsis（不改文案） */
 .tk-pill--compact {
   padding: 0 var(--tk-base);
