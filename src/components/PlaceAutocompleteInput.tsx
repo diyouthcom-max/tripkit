@@ -532,7 +532,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
                       {mainLabel}
                     </span>
                     {subLabel && (
-                      <span className="block text-[11px] text-[#647B78] truncate">
+                      <span className="block text-[11px] text-[#647B78] leading-snug">
                         {subLabel}
                       </span>
                     )}

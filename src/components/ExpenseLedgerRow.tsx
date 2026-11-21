@@ -649,7 +649,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               </div>
 
               {expense.note && (
-                <p className="mt-0.5 text-xs text-[#7B928E]">
+                <p className="mt-0.5 text-xs text-[#7B928E] break-words">
                   {translateDemoExpenseNote(expense.note, activeLang)}
                 </p>
               )}

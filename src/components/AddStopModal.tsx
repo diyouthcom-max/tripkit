@@ -2307,7 +2307,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                         <p className="text-xs font-bold text-[#152B29] truncate">
                           {copy.useCustomDirect(searchInput.trim(), addTargetDay)}
                         </p>
-                        <p className="text-[11px] text-[#647B78] truncate">
+                        <p className="text-[11px] text-[#647B78] leading-snug">
                           {copy.useCustomMeta(targetPrimaryCity, nextSmartTime)}
                         </p>
                       </div>

@@ -1539,7 +1539,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                           {copy.changeBtn}
                         </button>
                       </div>
-                      <div className="text-[11px] text-[#647B78] truncate">
+                      <div className="text-[11px] text-[#647B78] leading-snug">
                         {currentDayStay.address}
                       </div>
                     </div>

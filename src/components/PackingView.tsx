@@ -1448,7 +1448,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         <h3 className="text-sm sm:text-[15px] font-bold text-[#152B29] truncate">
                           {translateGroupTitleLabel(grp.id, grp.title, activeLang)}
                         </h3>
-                        <p className="text-[11px] text-[#647B78] truncate">
+                        <p className="text-[11px] text-[#647B78] leading-snug">
                           {translateGroupCubeLabel(grp.cubeLabel, activeLang)}
                         </p>
                       </div>
@@ -1824,7 +1824,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                   })()}
 
                                   {isShared && (
-                                    <p className="mt-0.5 text-[11px] text-[#647B78] truncate">
+                                    <p className="mt-0.5 text-[11px] text-[#647B78] leading-snug">
                                       {item.done
                                         ? t('packingExtra.sharedDone', {
                                             name: translateMemberName(
@@ -1918,7 +1918,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                           <h3 className="text-sm sm:text-[15px] font-bold text-[#152B29] truncate">
                             {copy.alwaysPackLibTitle}
                           </h3>
-                          <p className="text-[11px] text-[#647B78] truncate">
+                          <p className="text-[11px] text-[#647B78] leading-snug">
                             {copy.alwaysPackLibDesc}
                           </p>
                         </div>

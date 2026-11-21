@@ -2281,7 +2281,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                 ? copy.multiDayHeading(activeMultiDays.map((d) => `D${d}`).join(' / '))
                 : `Day ${dayNumber} · ${displayCityLabel}`}
             </h3>
-            <span className="tabular-nums text-xs text-[#5B7370] truncate">
+            <span className="tabular-nums text-xs text-[#5B7370] leading-snug">
               {stops.length > 0
                 ? copy.stopsInline(stops.length)
                 : copy.cityMapInline}
