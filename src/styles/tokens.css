@@ -189,6 +189,18 @@
 }
 .tk-pill.tk-sel .tk-glyph { stroke: var(--tk-forest); }
 
+/* STEP3 Climate bias · 3 列窄栏：缩 pad/gap/glyph + §4 micro 11px，避免 ellipsis（不改文案） */
+.tk-pill--compact {
+  padding: 0 var(--tk-base);
+  gap: var(--tk-base);
+}
+.tk-pill--compact .tk-glyph {
+  width: var(--tk-g-17); height: var(--tk-g-17);
+}
+.tk-pill--compact > span {
+  font: 600 11px/1 var(--tk-font-sans); /* 同 §4 .tk-t-micro */
+}
+
 /* 3 INPUT BAR */
 .tk-input {
   height: var(--tk-h-input); border-radius: var(--tk-r-btn);
@@ -325,8 +337,8 @@ button.tk-voice:active { background: var(--tk-cognac-deep); }
   background: var(--tk-paper); padding: 0 var(--tk-m-page) 20px;
   min-height: 100%; display: flex; flex-direction: column; gap: var(--tk-gap-card);
 }
-/* 暖纸底：只在 wizard 处于 step 1 时由根容器挂 .tk-wizard-surface，
-   :has() 让 App.tsx 的 <main> 整块铺底，无需改动 App.tsx，也不影响 step 2/3。 */
+/* 暖纸底：wizard 处于 step 1–3 时由根容器挂 .tk-wizard-surface，
+   :has() 让 App.tsx 的 <main> 整块铺底，无需改动 App.tsx。 */
 main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 .tk-wizard-surface { color: var(--tk-ink); }
 .tk-scope > .tk-field, .tk-scope > .tk-sec-group { margin-top: 4px; }

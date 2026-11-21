@@ -86,7 +86,6 @@ import {
 import { PlaceAutocompleteInput } from './PlaceAutocompleteInput';
 import { AiVoiceInputButton } from './AiVoiceInputButton';
 import { InlineDatePickerPopover } from './InlineDatePickerPopover';
-import { AccentIconBadge } from '../utils/accentTheme';
 import {
   buildPerStopWeatherForecasts,
   inferDefaultScenariosFromSetup,
@@ -740,7 +739,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
     return step1Copy.climateSeasons[seasonKey];
   }, [setup.departureDate, setup.cities, step1Copy]);
 
-  const isWarmPaperStep = activeStep === 1 || activeStep === 2;
+  const isWarmPaperStep = activeStep === 1 || activeStep === 2 || activeStep === 3;
 
   return (
     <div ref={wizardRootRef} className={`space-y-5 sm:space-y-6${isWarmPaperStep ? ' tk-scope tk-wizard-surface' : ''}`}>
@@ -1606,16 +1605,18 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Left: Climate Forecast Micro-Adjustment + Wardrobe Style + Budget Tier */}
           <div className="lg:col-span-6">
-            <section className="rounded-3xl bg-white p-5 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)] space-y-5">
+            <section className="tk-card">
               <div>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-start gap-2.5 min-w-0">
-                    <AccentIconBadge accent="ocean" icon={Shirt} size="sm" className="mt-0.5" />
+                    <span className="tk-plate mt-0.5 shrink-0">
+                      <Shirt className="tk-glyph" strokeWidth={1.5} />
+                    </span>
                     <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-[#152B29] text-balance">
+                      <h3 className="tk-t-section text-balance">
                         {copy.sec5Title}
                       </h3>
-                      <p className="mt-0.5 text-xs text-[#5B7370]">
+                      <p className="mt-0.5 tk-t-cap">
                         {copy.weatherSectionSub}
                       </p>
                     </div>
@@ -1623,31 +1624,32 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 </div>
 
                 {/* Per-Stop Weather Preview + Colder / Warmer / Wetter */}
-                <div className="mt-4 rounded-xl bg-[#F5F8F7] p-4 space-y-3">
+                <div className="mt-4 tk-deboss tk-r-btn p-4 space-y-3">
                   <div className="space-y-1.5">
                     {wizardStopForecasts.map((st, idx) => (
                       <div
                         key={`${st.city}_${idx}`}
-                        className="flex flex-wrap items-baseline justify-between gap-2 text-xs"
+                        className="flex flex-wrap items-baseline justify-between gap-2"
                       >
-                        <span className="font-bold text-[#152B29]">{st.city}</span>
-                        <span className="text-[#5B7370] tabular-nums">{st.summaryText}</span>
+                        <span className="tk-t-group">{st.city}</span>
+                        <span className="tk-t-cap">{st.summaryText}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2.5 border-t border-[#E3ECEA] space-y-2">
-                    <span className="block text-[11px] font-bold text-[#5B7370]">
+                  <hr className="tk-card__rule" />
+                  <div className="space-y-2">
+                    <span className="block tk-t-micro tk-text-ink2">
                       {copy.expectDifferentShort}
                     </span>
-                    <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#E7F0EE] p-1">
+                    <div className="grid grid-cols-3 gap-2 w-full">
                       {(
                         [
-                          { id: 'colder' as const, Icon: Snowflake, iconColor: 'text-[#2B7A9E]' },
-                          { id: 'warmer' as const, Icon: Sun, iconColor: 'text-[#C87D28]' },
-                          { id: 'wetter' as const, Icon: Umbrella, iconColor: 'text-[#397A8A]' },
+                          { id: 'colder' as const, Icon: Snowflake, wet: false },
+                          { id: 'warmer' as const, Icon: Sun, wet: false },
+                          { id: 'wetter' as const, Icon: Umbrella, wet: true },
                         ] as const
-                      ).map(({ id: optId, Icon, iconColor }) => {
+                      ).map(({ id: optId, Icon, wet }) => {
                         const active = (setup.weatherOverrides || []).includes(optId);
                         return (
                           <button
@@ -1655,15 +1657,13 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                             type="button"
                             aria-pressed={active}
                             onClick={() => toggleWeatherOverride(optId)}
-                            className={`inline-flex min-h-[38px] items-center justify-center gap-1 rounded-lg px-1.5 sm:px-2.5 py-1.5 text-[11.5px] sm:text-xs font-semibold transition-all whitespace-nowrap cursor-pointer active:scale-[0.98] ${
-                              active
-                                ? 'bg-[#078C88] text-white shadow-xs'
-                                : 'bg-white/80 text-[#3B5552] hover:bg-white hover:text-[#152B29]'
+                            className={`tk-pill tk-pill--compact tk-pressable w-full justify-center cursor-pointer ${
+                              active ? 'tk-sel' : ''
                             }`}
                           >
                             <Icon
-                              className={`h-3.5 w-3.5 shrink-0 ${active ? 'text-white' : iconColor}`}
-                              strokeWidth={2}
+                              className={`tk-glyph shrink-0 ${wet ? 'tk-glyph--w' : ''}`}
+                              strokeWidth={1.5}
                             />
                             <span>{copy.weatherOverrides[optId]}</span>
                           </button>
@@ -1675,23 +1675,21 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               </div>
 
               {/* Wardrobe & Care Profile */}
-              <div className="pt-4 border-t border-[#EDF3F1]">
-                <label className="block text-xs font-bold text-[#152B29] mb-2">
+              <div className="pt-1">
+                <hr className="tk-card__rule" />
+                <label className="tk-field">
                   {copy.clothingStyleFieldLabel}
                 </label>
-                <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#EEF3F2] p-1">
+                <div className="tk-seg" role="group" aria-label={copy.clothingStyleFieldLabel}>
                   {(['male', 'female', 'other'] as PackingClothingGender[]).map((gId) => {
                     const active = (setup.clothingStyle || 'other') === gId;
                     return (
                       <button
                         key={gId}
                         type="button"
+                        aria-pressed={active}
                         onClick={() => updateSetup({ clothingStyle: gId })}
-                        className={`min-h-[38px] rounded-lg py-1.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                          active
-                            ? 'bg-[#078C88] text-white shadow-2xs'
-                            : 'text-[#4F6865] hover:text-[#152B29]'
-                        }`}
+                        className="tk-seg__item cursor-pointer"
                       >
                         {copy.clothingStyles[gId]}
                       </button>
@@ -1701,10 +1699,11 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               </div>
 
               {/* Budget Tier & Optional Target Cap */}
-              <div className="pt-4 border-t border-[#EDF3F1] space-y-3">
+              <div className="space-y-3">
+                <hr className="tk-card__rule" />
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h4 className="text-xs font-bold text-[#152B29]">{copy.budgetTierHeading}</h4>
-                  <label className="inline-flex items-center gap-1.5 text-xs text-[#5B7370]">
+                  <h4 className="tk-t-group">{copy.budgetTierHeading}</h4>
+                  <label className="inline-flex items-center gap-1.5 tk-t-cap">
                     <span>{copy.targetTotalUsdLabel}</span>
                     <input
                       type="number"
@@ -1716,7 +1715,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         updateSetup({ targetTotalBudgetUsd: val > 0 ? val : undefined });
                       }}
                       placeholder={copy.autoPlaceholder}
-                      className="w-24 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1.5 font-num text-xs font-bold text-[#152B29] tabular-nums focus:bg-white focus:border-[#0ABAB5] focus:outline-none"
+                      className="w-24 tk-r-btn tk-border-hair tk-bg-paper px-2.5 py-1.5 tk-num tk-text-ink focus:outline-none"
                     />
                   </label>
                 </div>
@@ -1729,16 +1728,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         key={tierId}
                         type="button"
                         onClick={() => updateSetup({ budgetTier: tierId })}
-                        className={`rounded-xl border p-2.5 text-left transition-colors cursor-pointer ${
-                          active
-                            ? 'border-[#078C88] bg-[#EFF9F8]'
-                            : 'border-[#E4ECEA] bg-[#F8FAF9] hover:border-[#BBDAD7]'
+                        className={`tk-r-btn p-2.5 text-left tk-pressable cursor-pointer ${
+                          active ? 'tk-sel' : 'tk-border-hair tk-bg-paper'
                         }`}
                       >
-                        <div className="text-xs font-bold text-[#152B29] leading-snug">
+                        <div className="tk-t-group leading-snug">
                           {tierCopy.label}
                         </div>
-                        <div className="mt-0.5 text-[11px] text-[#5B7370] leading-snug">
+                        <div className="mt-0.5 tk-t-cap leading-snug">
                           {tierCopy.desc}
                         </div>
                       </button>
@@ -1751,19 +1748,21 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
           {/* Right: Visual Luggage Physical Constraints (3 Cards) + Tactile Mid-Trip Laundry Switch */}
           <div className="lg:col-span-6 space-y-5">
-            <section className="rounded-3xl bg-white p-5 sm:p-6 shadow-[0_2px_18px_-6px_rgba(15,35,33,0.08)] space-y-4">
+            <section className="tk-card">
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
-                  <AccentIconBadge accent="teal" icon={Luggage} size="sm" />
-                  <h3 className="text-sm font-bold text-[#152B29]">{copy.packingStrategyTitle}</h3>
+                  <span className="tk-plate shrink-0">
+                    <Luggage className="tk-glyph" strokeWidth={1.5} />
+                  </span>
+                  <h3 className="tk-t-section">{copy.packingStrategyTitle}</h3>
                 </div>
-                <p className="text-xs text-[#5B7370] leading-relaxed">
+                <p className="tk-t-cap leading-relaxed">
                   {copy.luggageConstraintSub}
                 </p>
               </div>
 
               {/* 3 Visual Luggage Constraint Cards (Replaces Body Size + Abstract Density + Cabin-Only Duplicate) */}
-              <div className="space-y-2.5" role="radiogroup" aria-label={copy.packingDensityFieldLabel}>
+              <div className="tk-stack" role="radiogroup" aria-label={copy.packingDensityFieldLabel}>
                 {(
                   [
                     { id: 'light' as PackingDensityLevel, Icon: Backpack },
@@ -1780,42 +1779,34 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       role="radio"
                       aria-checked={active}
                       onClick={() => handleSelectLuggageMode(id)}
-                      className={`w-full flex items-start gap-3.5 rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
-                        active
-                          ? 'border-[#078C88] bg-[#EFF9F8] shadow-[0_2px_10px_-4px_rgba(7,140,136,0.25)]'
-                          : 'border-[#E4ECEA] bg-[#F8FAF9] hover:border-[#BBDAD7] hover:bg-white'
+                      className={`w-full flex items-start gap-3 tk-r-card p-3.5 text-left tk-pressable cursor-pointer ${
+                        active ? 'tk-sel' : 'tk-border-hair tk-bg-paper'
                       }`}
                     >
-                      <div
-                        className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                          active
-                            ? 'bg-[#078C88] text-white'
-                            : 'bg-white border border-[#DCE8E5] text-[#4F6865]'
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" />
-                      </div>
+                      <span className={`mt-0.5 shrink-0 ${active ? 'tk-plate tk-plate--on' : 'tk-plate'}`}>
+                        <Icon className="tk-glyph" strokeWidth={1.5} />
+                      </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                            <span
-                              className={`text-sm font-bold leading-snug ${
-                                active ? 'text-[#076E6A]' : 'text-[#152B29]'
-                              }`}
-                            >
+                            <span className="tk-t-option leading-snug">
                               {card.title}
                             </span>
-                            <span className="text-[11px] font-medium text-[#647B78]">
+                            <span className="tk-t-cap">
                               {card.badge}
                             </span>
                           </div>
                           {active && (
-                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#078C88] text-white shrink-0">
-                              <Check className="h-3 w-3 stroke-[3]" />
+                            <span
+                              className={`tk-badge shrink-0 ${
+                                id === 'moderate' ? 'tk-badge--cognac' : ''
+                              }`}
+                            >
+                              <Check className="tk-glyph" strokeWidth={1.5} />
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs text-[#5B7370] leading-snug">
+                        <p className="mt-1 tk-t-cap leading-snug">
                           {card.desc}
                         </p>
                       </div>
@@ -1825,22 +1816,17 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               </div>
 
               {/* Tactile Mid-Trip Laundry Toggle Switch with Live Positive Feedback */}
-              <div className="pt-4 border-t border-[#EDF3F1] space-y-3">
-                <div
-                  className={`rounded-2xl border p-3.5 transition-colors ${
-                    setup.laundry
-                      ? 'border-[#BEE5E2] bg-[#F3FAF9]'
-                      : 'border-[#E4ECEA] bg-[#F8FAF9]'
-                  }`}
-                >
+              <div className="space-y-3">
+                <hr className="tk-card__rule" />
+                <div className="tk-r-card tk-border-hair tk-bg-paper p-3.5">
                   <div className="flex items-start sm:items-center justify-between gap-3">
                     <div className="min-w-0 space-y-1">
-                      <div className="text-sm font-bold text-[#152B29] leading-snug">
+                      <div className="tk-t-option leading-snug">
                         {copy.laundryTitle}
                       </div>
                       <div
-                        className={`text-xs font-semibold leading-snug tabular-nums ${
-                          setup.laundry ? 'text-[#076E6A]' : 'text-[#5B7370]'
+                        className={`tk-t-cap leading-snug ${
+                          setup.laundry ? 'tk-text-forest' : ''
                         }`}
                       >
                         {setup.laundry
@@ -1849,26 +1835,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       </div>
                     </div>
 
-                    {/* Skeuomorphic Tactile Toggle Switch */}
                     <button
                       type="button"
                       role="switch"
                       aria-checked={setup.laundry}
                       aria-label={copy.laundryToggleAria}
                       onClick={() => updateSetup({ laundry: !setup.laundry })}
-                      className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#078C88] focus-visible:ring-offset-2 cursor-pointer ${
-                        setup.laundry
-                          ? 'bg-[#078C88] shadow-inner'
-                          : 'bg-[#CBD8D5] shadow-inner'
-                      }`}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-[0_1px_3px_rgba(15,35,33,0.28)] transition-transform duration-200 ${
-                          setup.laundry ? 'translate-x-5' : 'translate-x-0'
-                        }`}
-                      />
-                    </button>
+                      className="tk-toggle cursor-pointer"
+                    />
                   </div>
                 </div>
 
@@ -1878,14 +1852,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                     role="region"
                     aria-label={copy.normPromptAria}
                     aria-live="polite"
-                    className="rounded-xl border border-[#BEE5E2] bg-[#F3FAF9] p-3.5 space-y-2"
+                    className="tk-r-ctl tk-border-hair tk-bg-paper p-3.5 space-y-2"
                   >
-                    <p className="text-xs font-bold text-[#152B29]">
+                    <p className="tk-t-group">
                       {isDaysChanged
                         ? copy.normPromptDaysChanged(baselineDays, setup.days)
                         : copy.normPromptCycleChanged(setup.days)}
                     </p>
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[#4F6865] font-num tabular-nums">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 tk-t-cap">
                       <span>
                         {copy.normPromptScaledCount(normalizationPlan.changedItems.length)}
                       </span>
@@ -1907,16 +1881,16 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       <button
                         type="button"
                         onClick={() => setDismissedSignature(currentClothingSignature)}
-                        className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs font-semibold text-[#4F6865] hover:text-[#152B29] cursor-pointer"
+                        className="inline-flex items-center justify-center tk-r-ctl tk-border-hair tk-bg-card px-3 py-1.5 tk-t-btn-sec cursor-pointer"
                       >
                         {copy.keepExistingBtn}
                       </button>
                       <button
                         type="button"
                         onClick={() => setPreviewModalOpen(true)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-[#BEE5E2] bg-white px-3 py-1.5 text-xs font-bold text-[#078C88] hover:bg-[#EFF9F8] cursor-pointer"
+                        className="inline-flex items-center gap-1 tk-btn-ghost cursor-pointer"
                       >
-                        <Eye className="h-3.5 w-3.5" />
+                        <Eye className="tk-glyph" strokeWidth={1.5} />
                         {copy.viewDetailsBtn}
                       </button>
                     </div>
@@ -1924,7 +1898,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 )}
 
                 {isEditMode && isDismissedWithPendingDiff && (
-                  <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#E4ECEA] bg-[#F8FAF9] px-3.5 py-2 text-xs text-[#5B7370]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 tk-r-ctl tk-border-hair tk-bg-paper px-3.5 py-2 tk-t-cap">
                     <span>
                       {copy.keptOriginalCounts(normalizationPlan.changedItems.length, setup.days)}
                     </span>
@@ -1934,7 +1908,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         setDismissedSignature(null);
                         setPreviewModalOpen(true);
                       }}
-                      className="font-semibold text-[#078C88] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                      className="tk-btn-ghost hover:underline whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {copy.reapplyPreviewBtn}
                     </button>
@@ -1944,14 +1918,15 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
               {/* Edit Mode Extra Packing / Regenerate Actions */}
               {isEditMode && (onOpenPackingWizard || onRegenerateCurrentWithAi) && (
-                <div className="pt-4 border-t border-[#EDF3F1] space-y-2.5">
+                <div className="space-y-2.5">
+                  <hr className="tk-card__rule" />
                   {onOpenPackingWizard && (
                     <button
                       type="button"
                       onClick={onOpenPackingWizard}
-                      className="w-full min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 text-xs font-semibold text-[#152B29] hover:border-[#078C88] hover:text-[#076E6A] transition-colors cursor-pointer"
+                      className="w-full tk-btn-secondary cursor-pointer"
                     >
-                      <Shirt className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                      <Shirt className="tk-glyph" strokeWidth={1.5} />
                       <span className="truncate">{copy.openPackingWizardBtn}</span>
                     </button>
                   )}
@@ -1962,21 +1937,21 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         <button
                           type="button"
                           onClick={() => setConfirmOverwriteAi(true)}
-                          className="w-full text-center text-xs font-semibold text-[#7A6452] hover:text-[#B95239] py-1.5 cursor-pointer"
+                          className="w-full text-center tk-btn-ghost py-1.5 cursor-pointer"
                         >
                           {copy.regenAiPromptLink}
                         </button>
                       ) : (
-                        <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF7F4] p-3 space-y-2.5">
-                          <div className="flex items-start gap-2 text-xs text-[#9E4731]">
-                            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                        <div className="tk-note flex-col items-stretch">
+                          <div className="flex items-start gap-2">
+                            <AlertTriangle className="tk-glyph shrink-0 mt-0.5" strokeWidth={1.5} />
                             <span>{copy.regenAiWarning}</span>
                           </div>
                           <div className="flex items-center justify-end gap-2">
                             <button
                               type="button"
                               onClick={() => setConfirmOverwriteAi(false)}
-                              className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs font-semibold text-[#5B7370] whitespace-nowrap cursor-pointer"
+                              className="inline-flex items-center justify-center tk-r-ctl tk-border-hair tk-bg-card px-3 py-1.5 tk-t-btn-sec cursor-pointer"
                             >
                               {t('common.cancel')}
                             </button>
@@ -1989,7 +1964,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   void onRegenerateCurrentWithAi(effective, crew);
                                 }
                               }}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-[#C85A3F] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#AE4A31] disabled:opacity-50 whitespace-nowrap cursor-pointer"
+                              className="inline-flex items-center justify-center gap-1.5 tk-r-ctl tk-bg-forest tk-text-card px-3 py-1.5 tk-t-btn cursor-pointer disabled:opacity-50"
                             >
                               {isGenerating && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                               {copy.confirmOverwriteBtn}
@@ -2008,15 +1983,29 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
       {/* Inline Validation / Generation Error */}
       {(validationError || errorMessage) && (
-        <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF4F2] p-3.5 text-xs text-[#9E4731] flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-[#C85A3F]" />
-          <div className="space-y-1 min-w-0">
-            <p className="font-semibold">{validationError || errorMessage}</p>
-            {errorMessage && !validationError && !isEditMode && (
-              <p className="text-[#8C5042]">{copy.offlineFallbackHint}</p>
-            )}
+        isWarmPaperStep ? (
+          <div className="tk-note items-start">
+            <div className="flex items-start gap-2 min-w-0">
+              <AlertTriangle className="tk-glyph shrink-0 mt-0.5" strokeWidth={1.5} />
+              <div className="space-y-1 min-w-0">
+                <p className="tk-t-group">{validationError || errorMessage}</p>
+                {errorMessage && !validationError && !isEditMode && (
+                  <p className="tk-t-cap">{copy.offlineFallbackHint}</p>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="rounded-xl border border-[#F0D5C8] bg-[#FDF4F2] p-3.5 text-xs text-[#9E4731] flex items-start gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-[#C85A3F]" />
+            <div className="space-y-1 min-w-0">
+              <p className="font-semibold">{validationError || errorMessage}</p>
+              {errorMessage && !validationError && !isEditMode && (
+                <p className="text-[#8C5042]">{copy.offlineFallbackHint}</p>
+              )}
+            </div>
+          </div>
+        )
       )}
       </div>
 
@@ -2029,10 +2018,10 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 space-y-2">
           {/* Edit-mode silent settle-on-save summary strip (Shown on Step 3 right before Save) */}
           {isEditMode && activeStep === 3 && shouldPromptNormalization && (
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#CBE6E3] bg-[#EEF9F7] px-3.5 py-2 text-xs text-[#076E6A]">
-              <div className="flex items-center gap-1.5 min-w-0 font-num tabular-nums">
-                <Shirt className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
-                <span className="font-semibold truncate">
+            <div className="flex flex-wrap items-center justify-between gap-2 tk-r-ctl tk-border-hair tk-bg-card px-3.5 py-2">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Shirt className="tk-glyph shrink-0" strokeWidth={1.5} />
+                <span className="tk-t-group truncate">
                   {copy.normFooterPendingBanner(
                     normalizationPlan.changedItems.length,
                     normalizationPlan.totalDeltaPieces > 0
@@ -2045,9 +2034,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               <button
                 type="button"
                 onClick={() => setPreviewModalOpen(true)}
-                className="inline-flex items-center gap-1 font-bold text-[#078C88] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-1 tk-btn-ghost hover:underline whitespace-nowrap shrink-0 cursor-pointer"
               >
-                <Eye className="h-3.5 w-3.5" />
+                <Eye className="tk-glyph" strokeWidth={1.5} />
                 <span>{copy.viewDetailsBtn}</span>
               </button>
             </div>
@@ -2090,23 +2079,25 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                           onSaveEditCurrent?.(effective, crew, undefined);
                         }
                       }}
-                      className="min-h-[50px] inline-flex items-center justify-center rounded-2xl border border-[#DCE8E5] bg-white px-4 text-xs sm:text-sm font-semibold text-[#5B7370] hover:border-[#078C88] hover:text-[#152B29] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      className="tk-btn-secondary shrink-0 whitespace-nowrap cursor-pointer"
                     >
                       {copy.saveRouteOnlyBtn}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const effective = resolveSubmissionSetup(false);
-                        if (effective) {
-                          onSaveEditCurrent?.(effective, crew, normalizationPlan.updatedGroups);
-                        }
-                      }}
-                      className="flex-1 min-h-[50px] inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
-                    >
-                      <Check className="h-4.5 w-4.5 shrink-0" />
-                      <span>{copy.saveAndScaleBtn(normalizationPlan.changedItems.length)}</span>
-                    </button>
+                    <div className="flex-1 min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const effective = resolveSubmissionSetup(false);
+                          if (effective) {
+                            onSaveEditCurrent?.(effective, crew, normalizationPlan.updatedGroups);
+                          }
+                        }}
+                        className="tk-btn-primary tk-pressable whitespace-nowrap cursor-pointer"
+                      >
+                        <Check className="h-4.5 w-4.5 shrink-0" strokeWidth={1.5} />
+                        <span>{copy.saveAndScaleBtn(normalizationPlan.changedItems.length)}</span>
+                      </button>
+                    </div>
                   </>
                 ) : (
                   <button
@@ -2117,9 +2108,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         onSaveEditCurrent?.(effective, crew, undefined);
                       }
                     }}
-                    className="w-full min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
+                    className="tk-btn-primary tk-pressable whitespace-nowrap cursor-pointer"
                   >
-                    <Check className="h-4.5 w-4.5 shrink-0" />
+                    <Check className="h-4.5 w-4.5 shrink-0" strokeWidth={1.5} />
                     <span>{copy.saveChangesBtn}</span>
                   </button>
                 )}
@@ -2135,36 +2126,38 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       onCreateNewQuickOffline(effective, crew, undefined);
                     }
                   }}
-                  className="min-h-[50px] inline-flex items-center justify-center gap-1.5 rounded-2xl border border-[#DCE8E5] bg-white px-4 text-xs sm:text-sm font-semibold text-[#4F6865] hover:border-[#078C88] hover:text-[#078C88] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="tk-btn-secondary shrink-0 whitespace-nowrap disabled:opacity-50 cursor-pointer"
                 >
-                  <Zap className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                  <Zap className="tk-glyph tk-glyph--z shrink-0" strokeWidth={1.5} />
                   <span className="sm:hidden">{copy.offlineShortBtn}</span>
                   <span className="hidden sm:inline">{copy.startOfflineBtn}</span>
                 </button>
-                <button
-                  type="button"
-                  disabled={isGenerating}
-                  onClick={() => {
-                    const effective = resolveSubmissionSetup(true);
-                    if (effective) {
-                      void onCreateNewWithAi(effective, crew, naturalPrompt || undefined);
-                    }
-                  }}
-                  className="flex-1 min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] disabled:opacity-50 transition-colors whitespace-nowrap cursor-pointer active:scale-[0.99]"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="h-4.5 w-4.5 animate-spin shrink-0" />
-                      <span>{copy.generatingTripBtn}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4 shrink-0" />
-                      <span>{copy.generateTripWithAiBtn}</span>
-                      <ArrowRight className="h-4.5 w-4.5 shrink-0" />
-                    </>
-                  )}
-                </button>
+                <div className="flex-1 min-w-0">
+                  <button
+                    type="button"
+                    disabled={isGenerating}
+                    onClick={() => {
+                      const effective = resolveSubmissionSetup(true);
+                      if (effective) {
+                        void onCreateNewWithAi(effective, crew, naturalPrompt || undefined);
+                      }
+                    }}
+                    className="tk-btn-primary tk-pressable whitespace-nowrap disabled:opacity-50 cursor-pointer"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="h-4.5 w-4.5 animate-spin shrink-0" />
+                        <span>{copy.generatingTripBtn}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                        <span>{copy.generateTripWithAiBtn}</span>
+                        <ArrowRight className="h-4.5 w-4.5 shrink-0" strokeWidth={1.5} />
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             )
           )}
