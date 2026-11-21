@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { resolveApiUrl } from '../services/apiUrl';
 import {
   getBrowserSpeechRecognitionConstructor,
   resolveSpeechRecognitionLang,
@@ -203,7 +204,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
         setStatus('transcribing');
         try {
           const audioBase64 = await blobToBase64(audioBlob);
-          const res = await fetch('/api/ai/transcribe-audio', {
+          const res = await fetch(resolveApiUrl('/api/ai/transcribe-audio'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

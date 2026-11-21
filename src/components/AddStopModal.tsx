@@ -47,6 +47,7 @@ import {
   extractPlaceDetails,
   type SelectedGooglePlace,
 } from './PlaceAutocompleteInput';
+import { resolveApiUrl } from '../services/apiUrl';
 import { AiVoiceInputButton } from './AiVoiceInputButton';
 import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getAddStopModalCopy } from '../i18n/packs/addStopModalPack';
@@ -1267,7 +1268,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
           title: n.title,
           district: n.district,
         }));
-        const res = await fetch('/api/ai/extract-stops', {
+        const res = await fetch(resolveApiUrl('/api/ai/extract-stops'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1562,7 +1563,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
         title: n.title,
         district: n.district,
       }));
-      const res = await fetch('/api/ai/extract-stops', {
+      const res = await fetch(resolveApiUrl('/api/ai/extract-stops'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1652,7 +1653,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
         district: n.district,
       }));
 
-      const res = await fetch('/api/ai/extract-stops', {
+      const res = await fetch(resolveApiUrl('/api/ai/extract-stops'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

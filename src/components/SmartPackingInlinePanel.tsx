@@ -48,6 +48,7 @@ import {
   normalizeAppLanguage,
 } from '../utils/preferencesHelpers';
 import { getSmartPackingPanelCopy } from '../i18n/packs/packingModalsPack';
+import { resolveApiUrl } from '../services/apiUrl';
 import {
   AccentIconBadge,
   HERO_ACCENT_PALETTE,
@@ -215,7 +216,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
     setIsAllocating(true);
     setAllocError('');
     try {
-      const res = await fetch('/api/ai/smart-pack-cubes', {
+      const res = await fetch(resolveApiUrl('/api/ai/smart-pack-cubes'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

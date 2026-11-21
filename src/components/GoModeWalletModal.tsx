@@ -48,6 +48,7 @@ import { buildGoogleMapsSearchUrl } from '../utils/googleMapsHelpers';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
 import { getWalletCategoryMeta } from '../i18n/packs/walletCategoryPack';
 import { getWalletModalPack } from '../i18n/packs/walletModalPack';
+import { resolveApiUrl } from '../services/apiUrl';
 import {
   dataUrlToBlobUrl,
   deleteOfflinePassImage,
@@ -477,7 +478,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
       if (typeof navigator === 'undefined' || navigator.onLine !== false) {
         setAiEnrichingPassId(passId);
         try {
-          const res = await fetch('/api/ai/parse-travel-pass', {
+          const res = await fetch(resolveApiUrl('/api/ai/parse-travel-pass'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -703,7 +704,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
     setIsAiParsingText(true);
     setAiParseError(null);
     try {
-      const res = await fetch('/api/ai/parse-travel-pass', {
+      const res = await fetch(resolveApiUrl('/api/ai/parse-travel-pass'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

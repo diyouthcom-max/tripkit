@@ -63,6 +63,7 @@ import {
   readPassDocumentFile,
   saveOfflinePassImage,
 } from '../utils/offlinePassVault';
+import { resolveApiUrl } from '../services/apiUrl';
 import { AiVoiceInputButton } from './AiVoiceInputButton';
 import type { QuickExpenseLogPayload } from './TimelineNodeCard';
 import { getPlaceDetailCopy } from '../i18n/packs/placeDetailPack';
@@ -439,7 +440,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
       // Best-effort AI confirmation extraction (gracefully degrades offline)
       try {
-        const res = await fetch('/api/ai/parse-travel-pass', {
+        const res = await fetch(resolveApiUrl('/api/ai/parse-travel-pass'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

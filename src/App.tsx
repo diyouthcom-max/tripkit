@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, formatCloudSyncError } from './firebase';
+import { resolveApiUrl } from './services/apiUrl';
 import {
   isValidRoomCode,
   isValidSeatId,
@@ -3419,7 +3420,7 @@ export default function App() {
     setTripWizardError(null);
     setIsGeneratingTrip(true);
     try {
-      const res = await fetch('/api/ai/plan-trip', {
+      const res = await fetch(resolveApiUrl('/api/ai/plan-trip'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -3493,7 +3494,7 @@ export default function App() {
     setTripWizardError(null);
     setIsGeneratingTrip(true);
     try {
-      const res = await fetch('/api/ai/plan-trip', {
+      const res = await fetch(resolveApiUrl('/api/ai/plan-trip'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -3599,7 +3600,7 @@ export default function App() {
         nextSetup.cityDays
       );
 
-      const res = await fetch('/api/ai/generate-packing-list', {
+      const res = await fetch(resolveApiUrl('/api/ai/generate-packing-list'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -4550,7 +4551,7 @@ export default function App() {
       }))
     );
 
-    const res = await fetch('/api/ai/classify-pack-item', {
+    const res = await fetch(resolveApiUrl('/api/ai/classify-pack-item'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -5232,7 +5233,7 @@ export default function App() {
       openProPaywallWithReason(appCopy.paywallAiParseTasks);
       throw new Error('PRO_PAYWALL_GATED');
     }
-    const res = await fetch('/api/ai/parse-trip-tasks', {
+    const res = await fetch(resolveApiUrl('/api/ai/parse-trip-tasks'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -5399,7 +5400,7 @@ export default function App() {
       (n) => `${n.title}${n.isOutdoor ? '(Outdoor)' : ''}`
     );
 
-    const res = await fetch('/api/ai/audit-missing-items', {
+    const res = await fetch(resolveApiUrl('/api/ai/audit-missing-items'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -5640,7 +5641,7 @@ export default function App() {
       return null;
     }
     try {
-      const res = await fetch('/api/ai/parse-expense', {
+      const res = await fetch(resolveApiUrl('/api/ai/parse-expense'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -5910,7 +5911,7 @@ export default function App() {
       })),
     };
 
-    const res = await fetch('/api/ai/assistant-dispatch', {
+    const res = await fetch(resolveApiUrl('/api/ai/assistant-dispatch'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -6846,7 +6847,7 @@ export default function App() {
     );
 
     try {
-      const res = await fetch('/api/ai/optimize-itinerary', {
+      const res = await fetch(resolveApiUrl('/api/ai/optimize-itinerary'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -6989,7 +6990,7 @@ export default function App() {
     }
 
     try {
-      const res = await fetch('/api/ai/plan-full-itinerary', {
+      const res = await fetch(resolveApiUrl('/api/ai/plan-full-itinerary'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -7203,7 +7204,7 @@ export default function App() {
       }));
 
       try {
-        const res = await fetch('/api/ai/smart-reorder-itinerary', {
+        const res = await fetch(resolveApiUrl('/api/ai/smart-reorder-itinerary'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -7443,7 +7444,7 @@ export default function App() {
       trip.setup.cities[0] ||
       'Paris';
     try {
-      const res = await fetch('/api/ai/local-card', {
+      const res = await fetch(resolveApiUrl('/api/ai/local-card'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
