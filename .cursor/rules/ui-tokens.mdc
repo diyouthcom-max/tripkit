@@ -1,0 +1,107 @@
+---
+description: WARM PAPER & FOREST INK v3 — 唯一权威 UI 取值表（3-step wizard）。与任何位图/长图冲突时，一律以本文件为准；所有取值已在 src/styles/tokens.css 落地，组件只准引用语义 class。
+alwaysApply: true
+---
+
+# WARM PAPER & FOREST INK · Design Tokens v3 — 唯一权威取值
+
+**法律地位**：本文件 + `src/styles/tokens.css` 是唯一权威取值来源。`docs/design/` 里的规范总图、图 A、三张 V3 长图只是「判例/观感参考」。**图上任何 rgba / px 数字与本文件冲突，以本文件为准，并把冲突点报给用户，不许自己选一个。**
+已发现并在此定死的两处图/文冲突（见 §7），不得再按旧图执行。
+
+**作用域铁律**：本项目是 Tailwind CSS v4 + 既有全站设计（青绿 `#078C88` / Plus Jakarta Sans / Fraunces / JetBrains Mono）。v3 目前**只允许作用于 3-step wizard**，不得改动 `src/index.css` 的 `--font-sans` / `--font-editorial` / `--font-mono`，不得改 `body` 底色，不得覆盖任何非 `--tk-*` 变量。所有新变量一律 `--tk-` 前缀，所有新类一律 `tk-` 前缀。
+
+---
+
+## 1. COLOR · 色板共 14 个权威值
+
+12 个原子色 + 2 条线色 = **14**（对齐规范图 A 的「14 值」；tokens.css §1 注释里的「12」只指原子色，二者不矛盾）。
+
+| 变量 | 值 | 用途 |
+|---|---|---|
+| `--tk-paper` | `#F9F8F5` | 页面底 + 所有内嵌条底，同一值 |
+| `--tk-card` | `#FFFFFF` | 卡片 / 胶囊 / 输入条底 |
+| `--tk-ink` | `#14231D` | 主文字，暖墨黑，**不是纯黑** |
+| `--tk-ink-2` | `#6E7A72` | 次文字 + 默认图标 |
+| `--tk-forest` | `#13382C` | 承重色：主标题 / 选中 / 分段 / 主按钮 / 进度 |
+| `--tk-forest-tint` | `rgba(19,56,44,.07)` | 选中底色 |
+| `--tk-forest-plate` | `rgba(19,56,44,.05)` | 图标底板 |
+| `--tk-forest-done` | `rgba(19,56,44,.25)` | 进度已完成段 |
+| `--tk-idle` | `rgba(20,40,35,.10)` | 进度未到达段 / toggle 关闭轨道 |
+| `--tk-cognac` | `#C07848` | 点睛，**仅 §5 的 7 个许可位** |
+| `--tk-cognac-deep` | `#A8613D` | 干邑 hover / pressed |
+| `--tk-press` | `#0E2C23` | 主按钮 pressed |
+| `--tk-rule-c` | `rgba(20,40,35,.07)` | 卡内游丝分隔线（线色 1） |
+| `--tk-hair-c` | `rgba(20,40,35,.06)` | 卡片与控件描边（线色 2） |
+
+`--tk-hair-2-c: rgba(20,40,35,.10)` 是 secondary 按钮专用**衍生值**，不计入 14，不得挪作他用。
+线型只有 4 种：`--tk-rule` / `--tk-hair` / `--tk-hair-2` 各 `1px solid` + `--tk-hair-strong: 1.5px solid var(--tk-forest)`。
+
+## 2. ELEVATION · 只有 4 种，不得发明第 5 种
+`--tk-sh-card` / `--tk-sh-dock` / `--tk-sh-deboss`（`inset`，压进纸里，不是凸起）/ `--tk-sh-btn`；`--tk-sh-press` 是按下底色，不算阴影。
+**禁止** `0 4px 0` 挤出边、`inset 0 1px 0 rgba(255,255,255,...)` 顶部高光、渐变、外发光。
+
+## 3. RADIUS / SPACE / SIZE · 8pt 栅格（规范总图 §03 实测值）
+- Radius：`--tk-r-plate 10` / `--tk-r-knob 11` / `--tk-r-ctl 14` / `--tk-r-btn 16` / `--tk-r-card 20` / `--tk-r-dock 22` / `--tk-r-badge 50%`
+- Space：`--tk-base 8` / `--tk-m-page 20` / `--tk-p-card 20` / `--tk-gap-card 16` / `--tk-gap-grid 12` / `--tk-tap 48`
+- Height：`--tk-h-pill 48` / `--tk-h-input 56` / `--tk-h-btn 54` / `--tk-h-date 72` / `--tk-h-track 44`
+- Diameter：`--tk-d-plate 34` / `--tk-d-badge 20` / `--tk-d-voice 40` / `--tk-w-toggle 44` / `--tk-ht-toggle 26` / `--tk-d-knob 22`
+- Glyph：`--tk-g-18 18` / `--tk-g-20 20` / `--tk-g-17 17`
+
+## 4. TYPE · 字阶 10 级 + 衬线数字（优先级最高）
+字体栈**必须带 CJK 回退**——本项目默认 `zh-CN` 且有 8 语言 i18n，Playfair Display 没有 CJK 字形：
+- `--tk-font-serif: "Playfair Display", "Fraunces", "Songti SC", "Noto Serif SC", "STSong", Georgia, serif`
+- `--tk-font-sans: "Inter", "Plus Jakarta Sans", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif`
+- 字体由 `index.html` 的 Google Fonts `<link>` 引入（Playfair Display 600/700 + Inter 400/500/600/700 + `display=swap`），与既有 Fraunces / Plus Jakarta Sans / JetBrains Mono **并存，不删**。
+
+**数字规则**：以下值一律 `.tk-num` 衬线（含 `lining-nums`），**禁止 `font-mono` / `font-num` / `tabular-nums` 等宽**：
+`Dec 4` / `Dec 10, 2026` / `7 Days` / `6 Nights` / `1 of 3` / `2 of 3` / `3 of 3` / `3 selected` / `2 selected` / `1 selected` / `3–14°C` / `1 of 7 days` / `3-star` / `4-star` / `5-star` / `20"` / `24–28"` / `~40%` / `4–5 outfit` / `4 outfits` / `Auto`。
+温度连接号用 **en dash `–`**，不是 `-` 也不是 `~`。
+字阶：`.tk-t-display` 700 30/1.15 serif / `.tk-t-sub` 400 15/1.55 / `.tk-t-section` 650 17 / `.tk-t-group` 600 14 / `.tk-t-field` 600 13 (mb10) / `.tk-t-option` 550 15 / `.tk-t-cap` 400 13 / `.tk-t-btn` 650 16 / `.tk-t-btn-sec` 600 15 / `.tk-t-micro` 600 11 (.08em)。不得跳级。
+
+## 5. 干邑 7 个许可位（越界即违规）
+| # | 位置 | 组成 class | `--tk-cognac` 落点 |
+|---|---|---|---|
+| 1 | 语音文字链 mic | `.tk-link-voice`（文字用 `--tk-forest`）+ `.tk-glyph--m` | 图标 stroke |
+| 2 | Clear / Clear all 纯文字 | `.tk-btn-ghost` | 文字 color；**不给底不给框** |
+| 3 | 语音圆盘 | `.tk-voice` | 圆盘 background |
+| 4 | 天气云雨图标 | `.tk-glyph--w` | stroke |
+| 5 | Offline 闪电图标 | `.tk-glyph--z` | stroke |
+| 6 | 开启态 toggle 轨道 | `.tk-toggle[aria-checked="true"]` | background |
+| 7 | Standard Carry-On 选中徽章 | `.tk-badge--cognac` | background |
+
+**计数口径**：7 个许可位 = **7 个 class 引用** `--tk-cognac`（`.tk-btn-ghost` / `.tk-voice` / `.tk-glyph--w` / `.tk-glyph--z` / `.tk-glyph--m` / `.tk-toggle[aria-checked="true"]` / `.tk-badge--cognac`）。第 1 位另配 1 个**不含干邑**的 `.tk-link-voice`（文字 `--tk-forest` + 下划线），二者共同构成该位置。旧表把 `.tk-link-voice` 误列为干邑引用、又漏列 `.tk-glyph--m`——错一个、漏一个，总数凑巧仍是 7，但成员错了，以本表为准。
+
+## 6. STATE LADDER · 全系统唯一选中公式
+`DEFAULT → PRESSED → SELECTED`，`.tk-sel` 是**唯一**入口，pill / vibe card / radio row 共用：
+`background: var(--tk-forest-tint)` + `border: var(--tk-hair-strong)` + `color: var(--tk-forest)` + glyph stroke `--tk-forest` + `.tk-plate--on` 底板升实心。
+**禁止浅薄荷实心**。唯一例外：`.tk-seg__item[aria-pressed="true"]` 允许实心 `--tk-forest`（分段控件，规范总图 §02 SELECTED 列即为此）。
+按下态统一 `.tk-pressable:active`（`--tk-sh-press` + `translateY(1px)`），`.tk-sel.tk-pressable:active` 用 `rgba(19,56,44,.11)`。
+
+## 7. 已裁决的图/文冲突（不得再按旧图执行）
+1. **「干邑只在 7 个 class」** → 裁决为「7 个许可位 / 7 个干邑引用 class + 1 个不含干邑的配套文字链 class」，见 §5。旧表列的 `.tk-link-voice` 不含干邑，漏列 `.tk-glyph--m`，数量凑巧对了但成员错了。
+2. **「14 个 token」vs tokens.css 注释「12 个原子色值」** → 裁决为「12 原子 + 2 线色 = 14」，`--tk-hair-2-c` 为衍生值不计入。
+3. 归档的 `component-spec-measured.jpg` 实测为 **1920×1440**，不是转述里的 2048×1536；比例同为 4:3，尺寸标注以本文件 §3 数值表为准，不以图上像素为准。
+
+## 8. 控件配方 · 12 条（尺寸一律取 §3，不许写 arbitrary value）
+`tk-card`(R20,pad20,sh-card) / `tk-pill`(h48,R14,pad 0 14,gap10,glyph18) / `tk-input`(h56,R16,pad 0 16) / `tk-deboss`+`tk-datebar`(h72,R16,inset deboss,pad16) / `tk-sec` / `tk-field` / `tk-btn-primary`(h54,R16) / `tk-btn-secondary`(h54,R16,hair-2) / `tk-btn-ghost` / `tk-link-voice` / `tk-voice`(Ø40) / `tk-toggle`(44×26,knobØ22) + `tk-plate`(34×34,R10) / `tk-badge`(Ø20) / `tk-rail`(seg h4,gap6) / `tk-seg`(track h44) / `tk-dock`(sticky,R22 top)。
+- 图标：`lucide-react strokeWidth={1.5}`，颜色只有 `--tk-ink-2` / `--tk-forest` / 许可位 `--tk-cognac` / 深底 `--tk-card`。
+- `.tk-card + .tk-card, .stack { display:flex; ... }` 是旧稿笔误（会把相邻第二张卡片自己变成 flex 容器），隔离版已改为独立的 `.tk-stack` 容器类，**不得恢复旧写法**。
+- `.tk-dock` 是 `sticky`；现有 CTA 是 `fixed bottom-0` + `main` 的 `pb-[calc(120px+safe-area)]`。切换时必须同步改底部留白，否则复发遮挡。
+
+## 9. 禁令与自查
+**禁止**：`bg-[#...]` / `text-[#...]` / 行内 `style` 里的色值、阴影、圆角、字号；`font-mono`；`backdrop-filter`；`0 4px 0`；`inset 0 1px 0 rgba(255,255,255`；`#eee #ccc #999 #000 #F3F6FC #E3E8F0 #DCDDE1 #2EBFA5`。
+全局搜以上字符串，命中数必须为 0（v3 作用域内）。需要新值 = 先改 `tokens.css` + 本文件并说明理由，否则停下来问。
+
+**结构红线**（用户明确要求）：结构、字段、文案、选项数量一律不动。不许把顶栏改回 Tab，不许加副文案，不许新增 hero 插画卡，不许加 Care & Luggage Constraints。既有 `project-conventions.mdc` 的「Zero Forced Ellipsis on Descriptions」「Flat Surface Discipline」「每次任务后 lint + build」「8 语言 i18n 同步」继续生效。
+
+**每步改完必须输出 6 项自查表**：①页面底 `--tk-paper` ②卡片 `--tk-card` + `--tk-hair` ③有无残留灰框或实心灰方块 ④所有数字是否衬线 ⑤干邑是否只在 §5 许可位 ⑥选中态是否符合 §6 STATE LADDER。
+**节奏**：先只改第 1 步，改完停下等验收 → `git commit` → 再做第 2/3 步 → 最后做全局审查。
+
+## 10. STEP 1 落地映射（本次新增，理由与冲突裁决）
+`index.html` / `main.tsx` 已接线；`.tk-scope` 定为**纯作用域标记**（只给字体/文字色），布局壳另设 `.tk-page`——因为 step1 根容器本身是 `grid-cols-1 lg:grid-cols-12`，若沿用上游 `.tk-scope { display:flex }` 会直接破版。暖纸底用 `main:has(.tk-wizard-surface)`，只在 step1 生效，不改 `App.tsx`、不影响 step 2/3。
+
+**新冲突裁决（按「以规则文件为准」原则）**：用户 prompt 写 `VIBE CARD(pad16 R18 plate34)`，但 §3 Radius 表只有 `10/11/14/16/20/22/50%`，**没有 18px**。裁决：VIBE 圆角取 `--tk-r-card: 20px`，pad 取 `--tk-gap-card: 16px`，plate 取 `--tk-d-plate: 34px`。不新增 18px 变量，也不写 arbitrary value。
+
+**新增的是「配方类 / 原子别名」，不是新取值**：`tk-bg-* / tk-text-* / tk-border-hair / tk-r-* / tk-sh-*` 只是 `var()` 别名；`tk-dest-card / tk-datebar-btn / tk-opt-pill / tk-vibe / tk-step1-label / tk-step1-dock / tk-wizard-surface` 是 §8 既有配方在现有 DOM 结构上的应用组合。全部只用 §1–§4 变量，`--tk-cognac` 引用数保持 **7** 不变。
+
+**结构适配说明**：现有中文稿 DOM 与 V3 英文长图不是同一套组件（目的地是 divide 行列表、日期是单个展开按钮、顶栏是圆点进度而非三段 rail）。在「结构/字段/文案/选项数量一律不动」前提下，尺寸只落可对应部分：`tk-opt-pill` h48 R14 / `tk-datebar-btn` h72 R16 deboss / `tk-dest-card` R20 hair sh-card / `tk-input-row` h56 / `tk-btn-primary` h54 R16。顶栏圆点保留结构，仅换 `--tk-forest / --tk-forest-done / --tk-idle` 三色。选中态一律由 `aria-checked` / `aria-pressed` 属性选择器驱动，杜绝「浅薄荷实心」复发。

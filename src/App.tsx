@@ -7957,7 +7957,7 @@ export default function App() {
                     className="group inline-flex items-center gap-2 rounded-xl -ml-1.5 px-1.5 py-0.5 text-left hover:bg-white/12 transition-colors cursor-pointer max-w-full"
                     title={t('header.switchTripTitle')}
                   >
-                    <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate">
+                    <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate shrink-0">
                       {cleanDestinationTitle}
                     </h1>
                     <span

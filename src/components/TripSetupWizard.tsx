@@ -741,7 +741,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
   }, [setup.departureDate, setup.cities, step1Copy]);
 
   return (
-    <div ref={wizardRootRef} className="space-y-5 sm:space-y-6">
+    <div ref={wizardRootRef} className={`space-y-5 sm:space-y-6${activeStep === 1 ? ' tk-scope tk-wizard-surface' : ''}`}>
       {/* Borderless Editorial Top Navigation (← Back  |  1 of 3  |  ×) */}
       <nav aria-label={copy.stepProgressLabel(activeStep)} className="space-y-5">
         <div className="flex items-center justify-between gap-3">
@@ -776,7 +776,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
           {/* Center: Clean Editorial Step Counter (1 of 3) + Quiet Interactive Progress Hairline */}
           <div className="flex flex-col items-center gap-1.5 min-w-0">
-            <span className="font-num tabular-nums text-xs font-semibold tracking-wide text-[#4F6B68]">
+            <span className={activeStep === 1 ? 'tk-num tk-num--cap' : 'font-num tabular-nums text-xs font-semibold tracking-wide text-[#4F6B68]'}>
               {step1Copy.stepOfTotal(activeStep, 3)}
             </span>
             <div
@@ -803,7 +803,13 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       if (canJump) goToStep(tabItem.id);
                     }}
                     className={`h-1 rounded-full transition-all focus:outline-none ${
-                      isActive
+                      activeStep === 1
+                        ? isActive
+                          ? 'w-7 tk-bg-forest'
+                          : isCompleted
+                          ? 'w-4 tk-bg-done'
+                          : 'w-4 tk-bg-idle'
+                        : isActive
                         ? 'w-7 bg-[#078C88]'
                         : isCompleted
                         ? 'w-4 bg-[#80CCC7] hover:bg-[#078C88]'
@@ -836,10 +842,10 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
         {/* Open Editorial Serif Headline Directly on Canvas (Zero Card Wrapper) */}
         <div className="space-y-1.5">
-          <h1 className="font-editorial text-[28px] sm:text-[34px] font-bold tracking-[-0.02em] text-[#132927] leading-[1.15] text-balance">
+          <h1 className={activeStep === 1 ? 'tk-t-display text-balance' : 'font-editorial text-[28px] sm:text-[34px] font-bold tracking-[-0.02em] text-[#132927] leading-[1.15] text-balance'}>
             {activeStep === 1 ? step1Copy.title : copy.pageTitles[activeStep]}
           </h1>
-          <p className="text-sm sm:text-[15px] text-[#5B7370] leading-relaxed">
+          <p className={activeStep === 1 ? 'tk-t-sub' : 'text-sm sm:text-[15px] text-[#5B7370] leading-relaxed'}>
             {activeStep === 1 ? step1Copy.subtitle : copy.headerStepSubtitles[activeStep]}
           </p>
 
@@ -849,10 +855,10 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               <button
                 type="button"
                 onClick={() => setShowAiQuickInput((prev) => !prev)}
-                className="inline-flex items-center gap-1.5 py-1 text-xs font-semibold text-[#078C88] hover:text-[#056965] transition-colors cursor-pointer"
+                className={activeStep === 1 ? 'tk-link-voice cursor-pointer' : 'inline-flex items-center gap-1.5 py-1 text-xs font-semibold text-[#078C88] hover:text-[#056965] transition-colors cursor-pointer'}
               >
-                <Mic className="h-3.5 w-3.5 shrink-0" />
-                <span className="underline decoration-[#078C88]/35 underline-offset-4">
+                <Mic className={activeStep === 1 ? 'h-3.5 w-3.5 shrink-0 tk-glyph--m' : 'h-3.5 w-3.5 shrink-0'} />
+                <span className={activeStep === 1 ? '' : 'underline decoration-[#078C88]/35 underline-offset-4'}>
                   {showAiQuickInput ? copy.headerAiHideBtn : copy.headerAiShortcutBtn}
                 </span>
               </button>
@@ -963,29 +969,29 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
             {/* SECTION 1: Destination — Single-line minimal stops + inline borderless "+ Add a stop" */}
             <section className="space-y-2.5">
               <div className="flex items-center justify-between gap-2 px-0.5">
-                <h2 className="text-xs font-semibold tracking-wide text-[#5B7370]">
+                <h2 className="tk-step1-label">
                   {step1Copy.sectionDestination}
                 </h2>
                 {setup.cities.length > 1 && (
                   <button
                     type="button"
                     onClick={() => updateSetup({ cities: [], cityDays: [] })}
-                    className="text-xs font-medium text-[#8C5042] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="tk-btn-ghost hover:underline whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copy.clearAllBtn}
                   </button>
                 )}
               </div>
 
-              <div className="rounded-2xl border border-[#E2ECE9] bg-white divide-y divide-[#EFF4F2]">
+              <div className="tk-dest-card">
                 {/* Single Stop: Minimal clean single line */}
                 {setup.cities.length === 1 && (() => {
                   const displayCity = translatePopularCity(setup.cities[0], activeLang);
                   return (
                     <div className="min-h-[54px] px-4 py-2.5 flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <MapPin className="h-4 w-4 text-[#078C88] shrink-0" />
-                        <span className="text-[15px] font-semibold text-[#132927] truncate">
+                        <MapPin className="h-4 w-4 tk-glyph--on shrink-0" />
+                        <span className="tk-t-option truncate">
                           {displayCity}
                         </span>
                       </div>
@@ -994,7 +1000,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         onClick={() => removeCityAt(0)}
                         title={copy.removeCityLabel(displayCity)}
                         aria-label={copy.removeCityLabel(displayCity)}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#7C9390] hover:bg-[#F3F8F7] hover:text-[#9E4731] transition-colors shrink-0 cursor-pointer"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors shrink-0 cursor-pointer"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -1031,15 +1037,15 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                           >
                             <div className="flex items-center justify-between gap-2 min-w-0 flex-1">
                               <div className="flex items-center gap-2.5 min-w-0">
-                                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#EAF7F5] font-num text-[11px] font-bold text-[#078C88] shrink-0">
+                                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full tk-bg-card tk-num tk-text-forest shrink-0">
                                   {idx + 1}
                                 </span>
                                 <div className="min-w-0">
-                                  <div className="text-[15px] font-semibold text-[#132927] truncate">
+                                  <div className="tk-t-option truncate">
                                     {displayCity}
                                   </div>
                                   {dateSpan && (
-                                    <div className="text-xs text-[#6B8480] font-num tabular-nums">
+                                    <div className="tk-num tk-text-ink2">
                                       {dateSpan}
                                     </div>
                                   )}
@@ -1053,7 +1059,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   disabled={idx === 0}
                                   onClick={() => moveCity(idx, -1)}
                                   aria-label={copy.moveCityUpAria(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg disabled:opacity-25 cursor-pointer"
                                 >
                                   <ChevronUp className="h-4 w-4" />
                                 </button>
@@ -1062,7 +1068,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   disabled={isLast}
                                   onClick={() => moveCity(idx, 1)}
                                   aria-label={copy.moveCityDownAria(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg disabled:opacity-25 cursor-pointer"
                                 >
                                   <ChevronDown className="h-4 w-4" />
                                 </button>
@@ -1070,7 +1076,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   type="button"
                                   onClick={() => removeCityAt(idx)}
                                   aria-label={copy.removeCityLabel(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#7C9390] hover:text-[#9E4731] cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer"
                                 >
                                   <X className="h-3.5 w-3.5" />
                                 </button>
@@ -1078,13 +1084,13 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                             </div>
 
                             <div className="flex items-center justify-end gap-1.5 shrink-0">
-                              <div className="inline-flex items-center rounded-lg bg-[#F5F9F8] p-0.5">
+                              <div className="inline-flex items-center rounded-lg p-0.5">
                                 <button
                                   type="button"
                                   disabled={stayDays <= 1}
                                   onClick={() => updateCityStayDays(idx, stayDays - 1)}
                                   aria-label={copy.decDayLabel}
-                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-[#152B29] hover:text-[#078C88] disabled:opacity-35 cursor-pointer"
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white disabled:opacity-35 cursor-pointer"
                                 >
                                   <Minus className="h-3.5 w-3.5" />
                                 </button>
@@ -1102,9 +1108,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                         updateCityStayDays(idx, parsed);
                                       }
                                     }}
-                                    className="w-6 bg-transparent text-center font-num tabular-nums text-xs font-bold text-[#078C88] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="w-6 bg-transparent text-center tk-num tk-text-forest focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                   />
-                                  <span className="text-[11px] font-medium text-[#5B7370] select-none pr-0.5">
+                                  <span className="tk-text-ink2 select-none pr-0.5">
                                     {copy.dayUnitShort(stayDays).replace(/^\d+\s*/, '')}
                                   </span>
                                 </div>
@@ -1113,7 +1119,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   disabled={stayDays >= maxForStop}
                                   onClick={() => updateCityStayDays(idx, stayDays + 1)}
                                   aria-label={copy.incDayLabel}
-                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-[#152B29] hover:text-[#078C88] disabled:opacity-35 cursor-pointer"
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white disabled:opacity-35 cursor-pointer"
                                 >
                                   <Plus className="h-3.5 w-3.5" />
                                 </button>
@@ -1125,7 +1131,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   disabled={idx === 0}
                                   onClick={() => moveCity(idx, -1)}
                                   aria-label={copy.moveCityUpAria(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg disabled:opacity-25 cursor-pointer"
                                 >
                                   <ChevronUp className="h-4 w-4" />
                                 </button>
@@ -1134,7 +1140,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   disabled={isLast}
                                   onClick={() => moveCity(idx, 1)}
                                   aria-label={copy.moveCityDownAria(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#6B8480] hover:bg-[#F2F7F6] disabled:opacity-25 cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg disabled:opacity-25 cursor-pointer"
                                 >
                                   <ChevronDown className="h-4 w-4" />
                                 </button>
@@ -1142,7 +1148,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   type="button"
                                   onClick={() => removeCityAt(idx)}
                                   aria-label={copy.removeCityLabel(displayCity)}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#7C9390] hover:text-[#9E4731] cursor-pointer"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer"
                                 >
                                   <X className="h-3.5 w-3.5" />
                                 </button>
@@ -1151,11 +1157,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                           </div>
                         );
                       })}
-                      <div className="px-4 py-2.5 flex items-center justify-between gap-2 text-xs bg-[#FAFDFC]">
+                      <div className="px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
                         <span
-                          className={`font-medium tabular-nums ${
-                            setup.days >= 30 ? 'text-[#9E4731]' : 'text-[#5B7370]'
-                          }`}
+                          className={`tk-num ${setup.days >= 30 ? 'tk-text-forest' : 'tk-text-ink2'}`}
                         >
                           {setup.days >= 30
                             ? copy.perCityMaxCapHint
@@ -1164,7 +1168,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                         <button
                           type="button"
                           onClick={handleEqualSplitCityDays}
-                          className="font-semibold text-[#078C88] hover:underline whitespace-nowrap cursor-pointer"
+                          className="font-semibold hover:underline whitespace-nowrap cursor-pointer"
                         >
                           {copy.equalSplitBtn}
                         </button>
@@ -1174,7 +1178,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 })()}
 
                 {/* Inline Borderless "+ Add a stop" Row (No Box-Inside-Box Nesting) */}
-                <div className="px-4 py-1 flex items-center gap-2">
+                <div className="px-4 py-1 flex items-center gap-2 tk-input-row">
                   <PlaceAutocompleteInput
                     value={cityInput}
                     onChange={(val) => {
@@ -1194,20 +1198,20 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                     }}
                     wrapperClassName="flex-1 min-w-0"
                     leftIcon={
-                      <Plus className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-[#078C88] pointer-events-none" />
+                      <Plus className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 tk-glyph--on pointer-events-none" />
                     }
                     placeholder={
                       setup.cities.length > 0
                         ? step1Copy.addStopPlaceholder
                         : step1Copy.firstStopPlaceholder
                     }
-                    className="w-full min-h-[46px] bg-transparent pl-7 pr-2 py-2.5 text-sm font-medium text-[#132927] placeholder:text-[#7E9692] focus:outline-none"
+                    className="w-full min-h-[46px] bg-transparent pl-7 pr-2 py-2.5 text-sm font-medium tk-text-ink focus:outline-none"
                   />
                   {cityInput.trim() && (
                     <button
                       type="button"
                       onClick={() => addCity(cityInput)}
-                      className="inline-flex min-h-[34px] items-center rounded-xl bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+                      className="inline-flex min-h-[34px] items-center tk-r-ctl tk-bg-forest px-3 text-xs font-bold text-white whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {step1Copy.addActionShort}
                     </button>
@@ -1219,11 +1223,11 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
             {/* SECTION 2: Dates & Duration — Unified Single-Surface Date Row with Live Season */}
             <section className="space-y-2.5">
               <div className="flex items-center justify-between gap-2 px-0.5">
-                <h2 className="text-xs font-semibold tracking-wide text-[#5B7370]">
+                <h2 className="text-xs font-semibold tracking-wide">
                   {step1Copy.sectionDates}
                 </h2>
                 {setup.cities.length >= 2 && (
-                  <span className="text-[11px] font-medium text-[#6C8480]">
+                  <span className="tk-t-cap">
                     {copy.returnAutoSyncedHint}
                   </span>
                 )}
@@ -1233,33 +1237,29 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 type="button"
                 aria-expanded={datePickerOpen}
                 onClick={() => setDatePickerOpen((prev) => !prev)}
-                className={`w-full rounded-2xl border bg-white px-4 py-3.5 flex items-center justify-between gap-3 text-left transition-all cursor-pointer ${
-                  datePickerOpen
-                    ? 'border-[#078C88] ring-2 ring-[#078C88]/15'
-                    : 'border-[#E2ECE9] hover:border-[#B4D8D3]'
-                }`}
+                className="w-full tk-datebar-btn tk-deboss px-4 py-3.5 flex items-center justify-between gap-3 text-left cursor-pointer"
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <Calendar className="h-4.5 w-4.5 text-[#078C88] mt-0.5 shrink-0" />
+                  <Calendar className="h-4.5 w-4.5 tk-glyph--on mt-0.5 shrink-0" />
                   <div className="min-w-0 space-y-0.5">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-num tabular-nums text-[15px] font-bold text-[#132927]">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 tk-num tk-datebar__val">
                       <span>{readableDateRange.startText}</span>
-                      <ArrowRight className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                      <ArrowRight className="h-3.5 w-3.5 tk-glyph--on shrink-0" />
                       <span>{readableDateRange.endText}</span>
                     </div>
-                    <div className="text-xs font-medium text-[#5B7370] font-num tabular-nums">
+                    <div className="tk-num tk-datebar__sub">
                       {t('wizard.daysNights', {
                         days: setup.days,
                         nights: Math.max(1, setup.days - 1),
-                      })}{' '}
-                      <span className="font-sans text-[#6B8581]">({climateSeasonLabel})</span>
+                      })}{''}
+                      <span className="tk-t-cap">({climateSeasonLabel})</span>
                     </div>
                   </div>
                 </div>
 
                 <ChevronDown
-                  className={`h-4 w-4 text-[#7A9490] shrink-0 transition-transform duration-150 ${
-                    datePickerOpen ? 'rotate-180 text-[#078C88]' : ''
+                  className={`h-4 w-4 tk-text-ink2 shrink-0 transition-transform duration-150 ${
+                    datePickerOpen ? 'rotate-180 tk-text-forest' : ''
                   }`}
                 />
               </button>
@@ -1291,7 +1291,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
           <div className="lg:col-span-5 space-y-6">
             {/* SECTION 3: Who's Packing? — 4 Equal-Width Tactile Light Capsules in One Row */}
             <section className="space-y-2.5">
-              <h2 className="px-0.5 text-xs font-semibold tracking-wide text-[#5B7370]">
+              <h2 className="px-0.5 tk-step1-label">
                 {step1Copy.sectionWho}
               </h2>
 
@@ -1314,21 +1314,17 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       role="radio"
                       aria-checked={active}
                       onClick={() => updateSetup({ travelers: count })}
-                      className={`min-h-[44px] inline-flex items-center justify-center gap-1 rounded-xl border px-1 sm:px-2.5 py-2 text-[11px] sm:text-xs leading-none transition-all cursor-pointer active:scale-[0.98] whitespace-nowrap ${
-                        active
-                          ? 'border-[#078C88] bg-[#E8F7F5] font-bold text-[#065F5B]'
-                          : 'border-[#E2ECE9] bg-white font-medium text-[#35524F] hover:border-[#B6DAD5] hover:bg-[#F6FBFA]'
+                      className={`tk-opt-pill tk-pressable inline-flex items-center justify-center gap-1 px-1 sm:px-2.5 py-2 text-[11px] sm:text-xs leading-none cursor-pointer whitespace-nowrap ${
+                        active ? 'tk-sel' : ''
                       }`}
                     >
                       <Icon
-                        className={`h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 ${
-                          active ? 'text-[#078C88]' : 'text-[#6A8581]'
-                        }`}
+                        className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0"
                       />
                       <span>{step1Copy.whoPresets[idx]}</span>
                       {active && (
                         <Check
-                          className="hidden sm:inline-block h-3 w-3 text-[#078C88] shrink-0"
+                          className="hidden sm:inline-block h-3 w-3 shrink-0"
                           strokeWidth={2.75}
                         />
                       )}
@@ -1340,7 +1336,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
             {/* SECTION 4: Trip Vibe — Crisp 2x2 Balanced Mini-Cards with Micro-Icons */}
             <section className="space-y-2.5">
-              <h2 className="px-0.5 text-xs font-semibold tracking-wide text-[#5B7370]">
+              <h2 className="px-0.5 tk-step1-label">
                 {step1Copy.sectionVibe}
               </h2>
 
@@ -1354,31 +1350,23 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       type="button"
                       aria-pressed={active}
                       onClick={() => handleSelectTripStyle(styleKey)}
-                      className={`relative min-h-[56px] flex items-center gap-2 sm:gap-2.5 rounded-2xl border px-2.5 sm:px-3.5 py-2.5 sm:py-3 text-left transition-all cursor-pointer active:scale-[0.98] ${
-                        active
-                          ? 'border-[#078C88] bg-[#EAF7F5] text-[#065F5B]'
-                          : 'border-[#E2ECE9] bg-white text-[#152B29] hover:border-[#B6DAD5] hover:bg-[#F9FCFB]'
+                      className={`relative tk-vibe tk-pressable flex items-center gap-2 sm:gap-2.5 text-left cursor-pointer ${
+                        active ? 'tk-sel' : ''
                       }`}
                     >
                       <span
-                        className={`inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg sm:rounded-xl shrink-0 transition-colors ${
-                          active
-                            ? 'bg-[#078C88] text-white'
-                            : 'bg-[#F2F7F6] text-[#4C6B67]'
-                        }`}
+                        className="tk-vibe__plate inline-flex items-center justify-center shrink-0"
                       >
                         <StyleIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </span>
                       <span
-                        className={`flex-1 min-w-0 text-[12.5px] sm:text-sm font-bold leading-tight ${
-                          active ? 'pr-4 sm:pr-0 text-[#065F5B]' : 'text-[#152B29]'
-                        }`}
+                        className="flex-1 min-w-0 text-[12.5px] sm:text-sm font-bold leading-tight"
                       >
                         {step1Copy.vibeLabels[styleKey]}
                       </span>
                       {active && (
                         <Check
-                          className="absolute top-2 right-2 sm:static h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#078C88] shrink-0"
+                          className="absolute top-2 right-2 sm:static h-3.5 w-3.5 sm:h-4 sm:w-4 tk-glyph--on shrink-0"
                           strokeWidth={2.75}
                         />
                       )}
@@ -2037,7 +2025,11 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
       </div>
 
       {/* Pure Full-Width Bottom Action CTA Anchored Flush to Viewport Bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9]/96 to-transparent pt-4 pb-[max(0.875rem,env(safe-area-inset-bottom))]">
+      <div className={`fixed bottom-0 left-0 right-0 z-30 pt-4 pb-[max(0.875rem,env(safe-area-inset-bottom))] ${
+        activeStep === 1
+          ? 'tk-step1-dock'
+          : 'bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9]/96 to-transparent'
+      }`}>
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 space-y-2">
           {/* Edit-mode silent settle-on-save summary strip (Shown on Step 3 right before Save) */}
           {isEditMode && activeStep === 3 && shouldPromptNormalization && (
@@ -2070,7 +2062,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               type="button"
               disabled={isGenerating}
               onClick={() => goToStep(2)}
-              className="w-full min-h-[50px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#078C88] px-5 text-[15px] font-bold text-white hover:bg-[#067572] shadow-[0_10px_24px_-10px_rgba(7,140,136,0.55)] disabled:opacity-50 transition-all whitespace-nowrap cursor-pointer active:scale-[0.99]"
+              className="tk-btn-primary tk-pressable disabled:opacity-50 whitespace-nowrap cursor-pointer"
             >
               <span>{step1Copy.nextWhatToPackBtn}</span>
               <ArrowRight className="h-4.5 w-4.5 shrink-0" />

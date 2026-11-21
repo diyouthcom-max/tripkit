@@ -1,0 +1,426 @@
+/* ═══════════════════════════════════════════════════════════════
+   WARM PAPER & FOREST INK · Design Tokens v3 — SCOPED / ISOLATED BUILD
+   Plan a New Trip · 3-step wizard
+   ───────────────────────────────────────────────────────────────
+   权威取值：.cursor/rules/ui-tokens.mdc（与位图冲突时以 mdc 为准）
+   接线：src/main.tsx  →  import './styles/tokens.css';
+   用法：只在 3-step wizard 根容器加 class="tk-scope"，组件内只引用
+        本文件的 tk-* 语义 class 与 --tk-* 变量。
+
+   ⚠ 隔离约定（相对上游 tokens.css 原稿的关键改动）
+   1. 所有变量加 --tk- 前缀，全部类加 tk- 前缀：本项目是全站 Tailwind v4
+      + 既有青绿设计，裸类 .card/.badge/.page/.dock/.num 会全局撞名。
+   2. 不覆盖 src/index.css 的 --font-sans / --font-editorial / --font-mono，
+      不改 body 背景，不新增任何非 --tk-* 变量 → 主页/清单/MyKit 零影响。
+   3. 字体栈补 CJK 回退：本项目默认 zh-CN + 8 语言，Playfair 无 CJK 字形。
+   4. 修掉原稿 `.card + .card, .stack { display:flex... }` 把相邻第二张卡片
+      自身变成 flex 容器的笔误 → 改为独立容器类 .tk-stack。
+   5. 干邑只在 §5 的 7 个许可位；.tk-link-voice 文字用 forest，不含干邑。
+
+   铁律：本文件之外不得新增任何色值 / 阴影 / 圆角 / 字号。需要新值 =
+        先改本文件 + mdc 并说明理由，否则停下来问。
+   自查清单见 ui-tokens.mdc §9。此处刻意不写出被禁字面量，避免
+   「全局搜索命中数必须为 0」被本文件的注释自己污染。
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── 1. COLOR · 12 原子色 + 2 线色 = 14 个权威色值 ───────────── */
+  --tk-paper:        #F9F8F5;   /* 页面底 + 所有内嵌条底，同一值 */
+  --tk-card:         #FFFFFF;   /* 卡片 / 胶囊 / 输入条底 */
+  --tk-ink:          #14231D;   /* 主文字，暖墨黑，不是纯黑 */
+  --tk-ink-2:        #6E7A72;   /* 次文字 + 默认图标 */
+  --tk-forest:       #13382C;   /* 承重色：主标题/选中/分段/主按钮/进度 */
+  --tk-forest-tint:  rgba(19, 56, 44, .07);   /* 选中底色 */
+  --tk-forest-plate: rgba(19, 56, 44, .05);   /* 图标底板 */
+  --tk-forest-done:  rgba(19, 56, 44, .25);   /* 进度已完成段 */
+  --tk-idle:         rgba(20, 40, 35, .10);   /* 进度未到达 / toggle 关 */
+  --tk-cognac:       #C07848;   /* 点睛，只允许 7 处（见 §5） */
+  --tk-cognac-deep:  #A8613D;   /* 干邑 hover / pressed */
+  --tk-press:        #0E2C23;   /* 主按钮 pressed */
+
+  --tk-rule-c:       rgba(20, 40, 35, .07);   /* 线色 1：卡内游丝分隔 */
+  --tk-hair-c:       rgba(20, 40, 35, .06);   /* 线色 2：卡片与控件描边 */
+  --tk-hair-2-c:     rgba(20, 40, 35, .10);   /* 衍生值，仅 secondary 按钮，不计入 14 */
+
+  --tk-rule:         1px solid var(--tk-rule-c);
+  --tk-hair:         1px solid var(--tk-hair-c);
+  --tk-hair-2:       1px solid var(--tk-hair-2-c);
+  --tk-hair-strong:  1.5px solid var(--tk-forest);   /* 选中态描边 */
+
+  /* ── 2. ELEVATION · 只有 4 种，不得发明第 5 种 ──────────────── */
+  --tk-sh-card:   0 1px 2px rgba(20,40,35,.04), 0 12px 28px -12px rgba(20,40,35,.10);
+  --tk-sh-dock:   0 -1px 2px rgba(20,40,35,.03), 0 -12px 32px -12px rgba(20,40,35,.12);
+  --tk-sh-deboss: inset 0 1px 2px rgba(20,40,35,.035);  /* 压进纸里，不是凸起来 */
+  --tk-sh-btn:    0 8px 20px -8px rgba(19,56,44,.35);
+  --tk-sh-press:  rgba(20, 40, 35, .03);                 /* 通用按下底色 */
+
+  /* ── 3. RADIUS / SPACE / SIZE · 8pt 栅格 ─────────────────────── */
+  --tk-r-plate: 10px;  --tk-r-knob: 11px;  --tk-r-ctl: 14px;
+  --tk-r-btn:   16px;  --tk-r-card: 20px;  --tk-r-dock: 22px;
+  --tk-r-badge: 50%;
+
+  --tk-base: 8px;      --tk-m-page: 20px;   --tk-p-card: 20px;
+  --tk-gap-card: 16px; --tk-gap-grid: 12px; --tk-tap: 48px;
+
+  --tk-h-pill: 48px;   --tk-h-input: 56px;  --tk-h-btn: 54px;
+  --tk-h-date: 72px;   --tk-h-track: 44px;
+  --tk-d-plate: 34px;  --tk-d-badge: 20px;  --tk-d-voice: 40px;
+  --tk-w-toggle: 44px; --tk-ht-toggle: 26px; --tk-d-knob: 22px;
+  --tk-g-18: 18px;     --tk-g-20: 20px;     --tk-g-17: 17px;
+
+  /* ── 4. TYPE · CJK 回退为本版新增，不可删 ───────────────────── */
+  --tk-font-serif: "Playfair Display", "Fraunces", "Songti SC", "Noto Serif SC", "STSong", Georgia, serif;
+  --tk-font-sans:  "Inter", "Plus Jakarta Sans", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   数字规则 —— 去工具感的核心，优先级最高
+   Dec 4 / Dec 10, 2026 / 7 Days / 6 Nights / 1 of 3 / 3 selected /
+   3–14°C / 1 of 7 days / 4-star / 20" / ~40% / 4 outfits / Auto
+   温度连接号用 en dash「–」，不是 - 也不是 ~
+   ═══════════════════════════════════════════════════════════════ */
+.tk-num {
+  font-family: var(--tk-font-serif);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  letter-spacing: 0;
+}
+.tk-num--lg  { font-size: 19px; font-weight: 700; color: var(--tk-ink); }
+.tk-num--cap { font-size: 13px; font-weight: 600; color: var(--tk-forest); }
+
+/* 字阶 · 10 级，不得跳级 */
+.tk-t-display { font: 700 30px/1.15 var(--tk-font-serif); letter-spacing: -.02em; color: var(--tk-ink); }
+.tk-t-sub     { font: 400 15px/1.55 var(--tk-font-sans);  color: var(--tk-ink-2); }
+.tk-t-section { font: 650 17px/1.3  var(--tk-font-sans);  color: var(--tk-ink); }
+.tk-t-group   { font: 600 14px/1.3  var(--tk-font-sans);  color: var(--tk-ink); }
+.tk-t-field   { font: 600 13px/1.3  var(--tk-font-sans);  color: var(--tk-ink); margin-bottom: 10px; }
+.tk-t-option  { font: 550 15px/1.3  var(--tk-font-sans);  color: var(--tk-ink); }
+.tk-t-cap     { font: 400 13px/1.45 var(--tk-font-sans);  color: var(--tk-ink-2); }
+.tk-t-btn     { font: 650 16px/1    var(--tk-font-sans);  color: var(--tk-card); }
+.tk-t-btn-sec { font: 600 15px/1    var(--tk-font-sans);  color: var(--tk-ink); }
+.tk-t-micro   { font: 600 11px/1    var(--tk-font-sans);  letter-spacing: .08em; color: var(--tk-ink-2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   图标基座 · lucide-react strokeWidth={1.5} 单色线性
+   默认 --tk-ink-2 / 选中 --tk-forest / 许可位 --tk-cognac / 深底 --tk-card
+   ═══════════════════════════════════════════════════════════════ */
+.tk-glyph { width: var(--tk-g-18); height: var(--tk-g-18); stroke: var(--tk-ink-2); fill: none;
+            stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.tk-glyph--20 { width: var(--tk-g-20); height: var(--tk-g-20); }
+.tk-glyph--17 { width: var(--tk-g-17); height: var(--tk-g-17); }
+.tk-glyph--on  { stroke: var(--tk-forest); }                    /* 选中态 */
+.tk-glyph--inv { stroke: var(--tk-card); }                      /* 深底上的白图标 */
+/* ↓ 干邑许可位 4 / 5 / 1 —— 三个图标修饰类，不得挪作他用 */
+.tk-glyph--w { stroke: var(--tk-cognac); }                      /* 天气云雨 */
+.tk-glyph--z { stroke: var(--tk-cognac); }                      /* Offline 闪电 */
+.tk-glyph--m { stroke: var(--tk-cognac); }                      /* 语音文字链 mic */
+
+/* 图标底板 34×34 R10 */
+.tk-plate {
+  width: var(--tk-d-plate); height: var(--tk-d-plate);
+  border-radius: var(--tk-r-plate);
+  background: var(--tk-forest-plate);
+  display: grid; place-items: center; flex: none;
+}
+.tk-plate--on { background: var(--tk-forest); }                 /* 选中加强：底板升实心 */
+.tk-plate--on .tk-glyph { stroke: var(--tk-card); }
+
+/* 勾选徽章 Ø20 */
+.tk-badge {
+  width: var(--tk-d-badge); height: var(--tk-d-badge); border-radius: var(--tk-r-badge);
+  background: var(--tk-forest); display: grid; place-items: center; flex: none;
+}
+.tk-badge .tk-glyph { width: 12px; height: 12px; stroke: var(--tk-card); }
+/* ↓ 干邑许可位 7：只给 Standard Carry-On 选中卡 */
+.tk-badge--cognac { background: var(--tk-cognac); }
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE LADDER · 全系统唯一选中公式 DEFAULT → PRESSED → SELECTED
+   ═══════════════════════════════════════════════════════════════ */
+.tk-sel {                                    /* pill / vibe card / radio row 共用 */
+  background: var(--tk-forest-tint);
+  border: var(--tk-hair-strong);
+  color: var(--tk-forest);
+}
+.tk-sel .tk-t-option, .tk-sel .tk-t-group { color: var(--tk-forest); font-weight: 650; }
+.tk-sel .tk-glyph { stroke: var(--tk-forest); }
+
+.tk-pressable { transition: background 120ms ease, transform 120ms ease, border-color 120ms ease; }
+.tk-pressable:active { background: var(--tk-sh-press); transform: translateY(1px); }
+.tk-sel.tk-pressable:active { background: rgba(19, 56, 44, .11); }
+
+/* ═══════════════════════════════════════════════════════════════
+   控件配方 · 12 条，尺寸全部来自 ui-tokens.mdc §3
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1 CARD */
+.tk-card {
+  background: var(--tk-card); border: var(--tk-hair); border-radius: var(--tk-r-card);
+  box-shadow: var(--tk-sh-card); padding: var(--tk-p-card);
+  display: flex; flex-direction: column; gap: var(--tk-gap-grid);
+}
+/* 原稿 `.card + .card` 会把相邻第二张卡片自身变成 flex 容器，已修正为独立容器类 */
+.tk-stack { display: flex; flex-direction: column; gap: var(--tk-gap-card); }
+.tk-card__rule { height: 1px; background: var(--tk-rule-c); border: 0; margin: 4px 0; }
+
+/* 2 PILL（活动胶囊 / Care 四项 / climate bias 三颗） */
+.tk-pill {
+  height: var(--tk-h-pill); border-radius: var(--tk-r-ctl);
+  background: var(--tk-card); border: var(--tk-hair);
+  padding: 0 14px; display: flex; align-items: center; gap: 10px;
+  min-width: 0;
+}
+.tk-pill > span { font: 550 15px/1 var(--tk-font-sans); color: var(--tk-ink);
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk-pill__tick { margin-left: auto; width: 14px; height: 14px; stroke: var(--tk-forest); flex: none; }
+
+/* 3 INPUT BAR */
+.tk-input {
+  height: var(--tk-h-input); border-radius: var(--tk-r-btn);
+  background: var(--tk-card); border: var(--tk-hair); box-shadow: var(--tk-sh-card);
+  padding: 0 16px; display: flex; align-items: center; gap: 10px;
+}
+.tk-input::placeholder, .tk-input .tk-ph { font: 400 15px/1 var(--tk-font-sans); color: var(--tk-ink-2); }
+
+/* 4 DATE BAR（压印，不是凸起） */
+.tk-deboss {
+  background: var(--tk-paper); border: var(--tk-hair); border-radius: var(--tk-r-btn);
+  box-shadow: var(--tk-sh-deboss); padding: 16px;
+}
+.tk-datebar { display: flex; flex-direction: column; gap: 6px; }
+.tk-datebar__row { display: flex; align-items: baseline; gap: 10px; }
+.tk-datebar__val { font: 700 19px/1.2 var(--tk-font-serif); color: var(--tk-ink);
+                   font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; }
+.tk-datebar__sub { font: 600 14px/1.3 var(--tk-font-serif); color: var(--tk-forest);
+                   font-variant-numeric: lining-nums; }
+.tk-datebar__note { font: 400 12px/1.3 var(--tk-font-sans); color: var(--tk-ink-2); }
+
+/* 5 SECTION TITLE / 6 FIELD LABEL（落暖纸底，不全大写、不配图标、不给底色） */
+.tk-sec { display: flex; align-items: center; gap: var(--tk-gap-grid); }
+.tk-sec .tk-plate { width: var(--tk-d-plate); height: var(--tk-d-plate); }
+.tk-field { font: 600 13px/1.3 var(--tk-font-sans); color: var(--tk-ink); margin-bottom: 10px; }
+
+/* 7 PRIMARY BUTTON */
+.tk-btn-primary {
+  height: var(--tk-h-btn); border-radius: var(--tk-r-btn); border: 0;
+  background: var(--tk-forest); color: var(--tk-card);
+  font: 650 16px/1 var(--tk-font-sans);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: var(--tk-sh-btn); width: 100%;
+  transition: background 120ms ease, transform 120ms ease;
+}
+.tk-btn-primary:active { background: var(--tk-press); transform: translateY(1px); }
+/* 禁止：0 4px 0 挤出边 / inset 顶部高光 / 渐变 / 外发光 */
+
+/* 8 SECONDARY BUTTON */
+.tk-btn-secondary {
+  height: var(--tk-h-btn); border-radius: var(--tk-r-btn);
+  background: var(--tk-card); border: var(--tk-hair-2);
+  color: var(--tk-ink); font: 600 15px/1 var(--tk-font-sans);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0 18px;
+}
+
+/* ↓ 干邑许可位 2：Clear / Clear all，纯文字永远不给底不给框 */
+.tk-btn-ghost {
+  background: none; border: 0; padding: 0;
+  color: var(--tk-cognac); font: 600 14px/1 var(--tk-font-sans);
+}
+
+/* 许可位 1 的文字链部分：文字用 forest，不含干邑；mic 图标用 .tk-glyph--m */
+.tk-link-voice {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--tk-forest); font: 600 14px/1 var(--tk-font-sans);
+  text-decoration: none; border-bottom: 1px solid rgba(19, 56, 44, .25);
+  padding-bottom: 2px; background: none; border-left: 0; border-right: 0; border-top: 0;
+}
+
+/* ↓ 干邑许可位 3：干邑实心圆盘 + 白 mic，扁平无挤出 */
+.tk-voice {
+  width: var(--tk-d-voice); height: var(--tk-d-voice); border-radius: var(--tk-r-badge);
+  background: var(--tk-cognac); border: 0; display: grid; place-items: center; flex: none;
+}
+.tk-voice .tk-glyph { stroke: var(--tk-card); }
+.tk-voice:active { background: var(--tk-cognac-deep); }
+
+/* ↓ 干邑许可位 6：开启轨道干邑 */
+.tk-toggle {
+  width: var(--tk-w-toggle); height: var(--tk-ht-toggle);
+  border-radius: 999px; border: 0; padding: 0; flex: none;
+  background: var(--tk-idle); position: relative;
+  transition: background 160ms ease;
+}
+.tk-toggle::after {                               /* 纯白圆形滑块 Ø22 */
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: var(--tk-d-knob); height: var(--tk-d-knob); border-radius: var(--tk-r-badge);
+  background: var(--tk-card); box-shadow: 0 1px 2px rgba(20,40,35,.12);
+  transition: transform 160ms ease;
+}
+.tk-toggle[aria-checked="true"] { background: var(--tk-cognac); }
+.tk-toggle[aria-checked="true"]::after { transform: translateX(18px); }
+/* 禁止：内高光堆叠 / 外发光 / 非圆形滑块 */
+
+/* PROGRESS RAIL（顶栏三段） */
+.tk-rail { display: flex; gap: 6px; align-items: center; }
+.tk-rail__seg { height: 4px; border-radius: 2px; flex: 1; background: var(--tk-idle); }
+.tk-rail__seg--now  { background: var(--tk-forest); }
+.tk-rail__seg--done { background: var(--tk-forest-done); }
+.tk-rail__label { font: 600 11px/1 var(--tk-font-sans); letter-spacing: .08em; color: var(--tk-ink-2); }
+.tk-rail__label .tk-num { font-size: 11px; }
+
+/* SEGMENTED —— STATE LADDER 唯一允许实心墨绿的例外 */
+.tk-seg {
+  height: var(--tk-h-track); background: var(--tk-paper); border: var(--tk-hair);
+  border-radius: var(--tk-r-ctl); box-shadow: var(--tk-sh-deboss);
+  padding: 3px; display: flex; gap: 3px;
+}
+.tk-seg__item {
+  flex: 1; border: 0; background: none; border-radius: var(--tk-r-knob);
+  font: 500 14px/1 var(--tk-font-sans); color: var(--tk-ink-2);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 120ms ease, color 120ms ease;
+}
+.tk-seg__item[aria-pressed="true"] { background: var(--tk-forest); color: var(--tk-card); font-weight: 650; }
+.tk-seg__item:active { transform: translateY(1px); }
+
+/* DOCK 吸底栏 —— 不做毛玻璃、不做渐变托底
+   ⚠ 现有 CTA 是 fixed bottom-0 + main 的 pb-[calc(120px+safe-area)]；
+     切到 sticky 时必须同步改底部留白，否则复发遮挡。 */
+.tk-dock {
+  position: sticky; bottom: 0; z-index: 20;
+  background: var(--tk-card); border: var(--tk-hair);
+  border-radius: var(--tk-r-dock) var(--tk-r-dock) 0 0;
+  box-shadow: var(--tk-sh-dock);
+  padding: 14px var(--tk-m-page) 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* 页面壳 —— .tk-scope 是「纯作用域标记」，绝不改 display/padding/min-height。
+   本项目 step1 根容器本身是 grid（grid-cols-1 lg:grid-cols-12），若在此设
+   flex+padding 会直接破版。布局壳另用 .tk-page，按需显式挂载。 */
+.tk-scope { font-family: var(--tk-font-sans); color: var(--tk-ink); }
+.tk-page {
+  background: var(--tk-paper); padding: 0 var(--tk-m-page) 20px;
+  min-height: 100%; display: flex; flex-direction: column; gap: var(--tk-gap-card);
+}
+/* 暖纸底：只在 wizard 处于 step 1 时由根容器挂 .tk-wizard-surface，
+   :has() 让 App.tsx 的 <main> 整块铺底，无需改动 App.tsx，也不影响 step 2/3。 */
+main:has(.tk-wizard-surface) { background: var(--tk-paper); }
+.tk-wizard-surface { color: var(--tk-ink); }
+.tk-scope > .tk-field, .tk-scope > .tk-sec-group { margin-top: 4px; }
+.tk-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--tk-gap-grid); }
+.tk-grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.tk-span2 { grid-column: 1 / -1; }
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 1 · Where & when 应用配方
+   全部取值来自 §1–§4 的 var()，本段不新增任何色值 / 阴影 / 圆角。
+   组件只挂语义 class；状态一律用 aria-* 属性选择器，不靠色值 class 拼。
+   ⚠ 本文件是未分层 CSS，优先级高于 Tailwind v4 的 @layer utilities。
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 原子别名（无新值，仅便于组件替换 arbitrary class） */
+.tk-bg-card   { background: var(--tk-card); }
+.tk-bg-paper  { background: var(--tk-paper); }
+.tk-bg-forest { background: var(--tk-forest); }
+.tk-bg-done   { background: var(--tk-forest-done); }
+.tk-bg-idle   { background: var(--tk-idle); }
+.tk-text-ink   { color: var(--tk-ink); }
+.tk-text-ink2  { color: var(--tk-ink-2); }
+.tk-text-forest{ color: var(--tk-forest); }
+.tk-border-hair { border: var(--tk-hair); }
+.tk-r-card { border-radius: var(--tk-r-card); }
+.tk-r-ctl  { border-radius: var(--tk-r-ctl); }
+.tk-r-btn  { border-radius: var(--tk-r-btn); }
+.tk-sh-card   { box-shadow: var(--tk-sh-card); }
+.tk-sh-deboss { box-shadow: var(--tk-sh-deboss); }
+
+/* SECTION LABEL · 落暖纸底，不给底色不配图标 */
+.tk-step1-label {
+  font: 600 13px/1.3 var(--tk-font-sans);
+  color: var(--tk-ink-2); letter-spacing: .02em;
+}
+
+/* 1 CARD · 目的地清单（保留 divide 行结构，圆角/描边/阴影统一） */
+.tk-dest-card {
+  background: var(--tk-card); border: var(--tk-hair);
+  border-radius: var(--tk-r-card); box-shadow: var(--tk-sh-card);
+  overflow: hidden;
+}
+.tk-dest-card > * + * { border-top: var(--tk-rule); }
+.tk-dest-card svg { stroke: var(--tk-ink-2); }
+.tk-dest-card svg.tk-glyph--on { stroke: var(--tk-forest); }
+.tk-dest-card .tk-input-row { min-height: var(--tk-h-input); }
+
+/* 3 INPUT BAR · 卡内添加站点行 h56 */
+.tk-input-row { border-radius: 0; }
+
+/* 4 DATE BAR · h72 R16 deboss（压进纸里，不是凸起） */
+.tk-datebar-btn {
+  min-height: var(--tk-h-date); border-radius: var(--tk-r-btn);
+  background: var(--tk-paper); border: var(--tk-hair);
+  box-shadow: var(--tk-sh-deboss);
+}
+.tk-datebar-btn[aria-expanded="true"] { border: var(--tk-hair-strong); }
+.tk-datebar-btn svg { stroke: var(--tk-ink-2); }
+.tk-datebar-btn svg.tk-glyph--on { stroke: var(--tk-forest); }
+
+/* 2 PILL · Who's Packing 4 项 · h48 R14 */
+.tk-opt-pill {
+  min-height: var(--tk-h-pill); border-radius: var(--tk-r-ctl);
+  background: var(--tk-card); border: var(--tk-hair);
+  color: var(--tk-ink);
+  transition: background 120ms ease, transform 120ms ease, border-color 120ms ease;
+}
+.tk-opt-pill svg { stroke: var(--tk-ink-2); }
+.tk-opt-pill:active { background: var(--tk-sh-press); transform: translateY(1px); }
+/* STATE LADDER · SELECTED（唯一入口，禁止浅薄荷实心） */
+.tk-opt-pill[aria-checked="true"] {
+  background: var(--tk-forest-tint); border: var(--tk-hair-strong);
+  color: var(--tk-forest); font-weight: 650;
+}
+.tk-opt-pill[aria-checked="true"] svg { stroke: var(--tk-forest); }
+.tk-opt-pill[aria-checked="true"]:active { background: rgba(19, 56, 44, .11); }
+
+/* VIBE CARD · pad16 R20 plate34（R18 与 mdc §3 冲突，按裁决取 --tk-r-card） */
+.tk-vibe {
+  min-height: var(--tk-h-pill); border-radius: var(--tk-r-card);
+  padding: var(--tk-gap-card);
+  background: var(--tk-card); border: var(--tk-hair);
+  color: var(--tk-ink);
+  transition: background 120ms ease, transform 120ms ease, border-color 120ms ease;
+}
+.tk-vibe:active { background: var(--tk-sh-press); transform: translateY(1px); }
+.tk-vibe__plate {
+  width: var(--tk-d-plate); height: var(--tk-d-plate);
+  border-radius: var(--tk-r-plate); background: var(--tk-forest-plate);
+  color: var(--tk-ink-2);
+}
+.tk-vibe__plate svg { stroke: currentColor; }
+.tk-vibe[aria-pressed="true"] {
+  background: var(--tk-forest-tint); border: var(--tk-hair-strong);
+  color: var(--tk-forest); font-weight: 650;
+}
+.tk-vibe[aria-pressed="true"] .tk-vibe__plate {
+  background: var(--tk-forest); color: var(--tk-card);
+}
+.tk-vibe[aria-pressed="true"] > svg { stroke: var(--tk-forest); }
+/* 底板升实心后图标必须反白，否则深绿底 + 深绿描边 = 图标消失 */
+.tk-vibe[aria-pressed="true"] .tk-vibe__plate svg { stroke: var(--tk-card); }
+.tk-vibe[aria-pressed="true"]:active { background: rgba(19, 56, 44, .11); }
+
+/* 7 PRIMARY BUTTON · CTA h54 R16（组件已有 .tk-btn-primary，此处只去掉旧渐变托底） */
+.tk-step1-dock {
+  background: var(--tk-card); border-top: var(--tk-hair);
+  box-shadow: var(--tk-sh-dock);
+}
+.tk-step1-dock .tk-btn-primary { height: var(--tk-h-btn); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-scope, .tk-scope *, .tk-scope *::after, .tk-scope *::before {
+    transition: none !important; transform: none !important;
+  }
+}
