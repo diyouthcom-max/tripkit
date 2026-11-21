@@ -19,6 +19,8 @@ interface AiVoiceInputButtonProps {
   variant?: 'default' | 'gridTile';
   label?: string;
   onError?: (message: string) => void;
+  /** Optional visual class (e.g. tk-voice). Idle trigger only; does not change props/structure/copy. */
+  className?: string;
 }
 
 const PREFERRED_AUDIO_MIMES = [
@@ -66,6 +68,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
   variant = 'default',
   label,
   onError,
+  className,
 }) => {
   const { t, i18n } = useTranslation();
   const [status, setStatus] = useState<'idle' | 'recording' | 'transcribing'>('idle');
@@ -542,6 +545,8 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
     );
   }
 
+  const useTkVoice = Boolean(className && /\btk-voice\b/.test(className));
+
   return (
     <button
       type="button"
@@ -555,9 +560,16 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
           : compact
           ? 'h-8 px-2.5 text-xs'
           : 'h-9 px-3 text-xs'
-      }`}
+      }${className ? ` ${className}` : ''}`}
     >
-      <Mic className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+      <Mic
+        className={
+          useTkVoice
+            ? 'tk-glyph shrink-0'
+            : 'h-3.5 w-3.5 text-[#078C88] shrink-0'
+        }
+        strokeWidth={1.5}
+      />
       {!iconOnly && <span>{displayLabel}</span>}
     </button>
   );

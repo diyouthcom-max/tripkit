@@ -176,6 +176,18 @@
 .tk-pill > span { font: 550 15px/1 var(--tk-font-sans); color: var(--tk-ink);
                   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tk-pill__tick { margin-left: auto; width: 14px; height: 14px; stroke: var(--tk-forest); flex: none; }
+/* STATE LADDER · 双类特异性压过单类 .tk-pill 的 background/border（否则选中态被盖回白底） */
+.tk-pill.tk-sel {
+  background: var(--tk-forest-tint);
+  border: var(--tk-hair-strong);
+  color: var(--tk-forest);
+  font-weight: 650;
+}
+.tk-pill.tk-sel > span {
+  color: var(--tk-forest);
+  font-weight: 650;
+}
+.tk-pill.tk-sel .tk-glyph { stroke: var(--tk-forest); }
 
 /* 3 INPUT BAR */
 .tk-input {
@@ -238,13 +250,20 @@
   padding-bottom: 2px; background: none; border-left: 0; border-right: 0; border-top: 0;
 }
 
-/* ↓ 干邑许可位 3：干邑实心圆盘 + 白 mic，扁平无挤出 */
-.tk-voice {
+/* ↓ 干邑许可位 3：干邑实心圆盘 + 白 mic，扁平无挤出
+   选择器含 button.tk-voice / :hover，双类压过 AiVoiceInputButton 青绿 utility；
+   干邑变量只写一次，总计仍为 §5 的 7 处。 */
+button.tk-voice,
+button.tk-voice:hover {
   width: var(--tk-d-voice); height: var(--tk-d-voice); border-radius: var(--tk-r-badge);
-  background: var(--tk-cognac); border: 0; display: grid; place-items: center; flex: none;
+  background: var(--tk-cognac); border: 0; color: var(--tk-card); padding: 0;
+  display: grid; place-items: center; flex: none;
 }
-.tk-voice .tk-glyph { stroke: var(--tk-card); }
-.tk-voice:active { background: var(--tk-cognac-deep); }
+button.tk-voice .tk-glyph,
+button.tk-voice svg { stroke: var(--tk-card); color: var(--tk-card); }
+button.tk-voice:active { background: var(--tk-cognac-deep); }
+/* STEP1 AI 条未传 iconOnly 时仍会渲染文案 span；圆盘内只留 mic，隐藏文字不影响 aria-label */
+.tk-scope button.tk-voice > span { display: none; }
 
 /* ↓ 干邑许可位 6：开启轨道干邑 */
 .tk-toggle {
@@ -418,6 +437,90 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
   box-shadow: var(--tk-sh-dock);
 }
 .tk-step1-dock .tk-btn-primary { height: var(--tk-h-btn); }
+
+/* ═══════════════════════════════════════════════════════════════
+   V3 净化别名 · 只引用 §1–§4 已有变量，无新色值 / 阴影 / 圆角 / 字号阶
+   ═══════════════════════════════════════════════════════════════ */
+.tk-text-card { color: var(--tk-card); }
+.tk-h-btn { min-height: var(--tk-h-btn); }           /* 54 · 单站行 */
+.tk-h-pill-min { min-height: var(--tk-h-pill); }     /* 48 · 近 46 输入行 */
+.tk-h-plate { min-height: var(--tk-d-plate); }       /* 34 · Add 短钮 */
+
+/* 顶栏左右平衡槽 · 取已有 date 高 72 作 min-width（原 76 的最近权威值） */
+.tk-nav-side { min-width: var(--tk-h-date); }
+
+/* 顶栏 ← Back · 高 40=voice Ø，字阶同 §4 field 13/600，色 ink-2→forest */
+.tk-nav-back {
+  display: inline-flex; align-items: center; gap: var(--tk-base);
+  min-height: var(--tk-d-voice); padding: 0 var(--tk-base);
+  margin-left: calc(var(--tk-base) * -1);
+  border: 0; border-radius: var(--tk-r-badge); background: transparent;
+  font: 600 13px/1 var(--tk-font-sans); color: var(--tk-ink-2);
+  white-space: nowrap; cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.tk-nav-back:hover { background: var(--tk-forest-plate); color: var(--tk-forest); }
+.tk-nav-back:disabled { opacity: .45; }
+.tk-nav-back svg { stroke: currentColor; flex-shrink: 0; }
+
+/* 顶栏 × Close · Ø40 */
+.tk-nav-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--tk-d-voice); height: var(--tk-d-voice);
+  border: 0; border-radius: var(--tk-r-badge); background: transparent;
+  color: var(--tk-ink-2); cursor: pointer; flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+.tk-nav-close:hover { background: var(--tk-forest-plate); color: var(--tk-ink); }
+.tk-nav-close:disabled { opacity: .45; }
+.tk-nav-close svg { stroke: currentColor; }
+
+/* STEP1 AI 快速输入条 */
+.tk-ai-bar {
+  border: var(--tk-hair); background: var(--tk-card);
+  border-radius: var(--tk-r-btn); box-shadow: var(--tk-sh-card);
+  transition: border-color 120ms ease;
+}
+.tk-ai-bar:focus-within { border: var(--tk-hair-strong); }
+.tk-ai-input {
+  flex: 1; min-width: 0; background: transparent; border: 0;
+  font: 400 15px/1.55 var(--tk-font-sans); color: var(--tk-ink);
+}
+.tk-ai-input::placeholder { color: var(--tk-ink-2); }
+.tk-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--tk-d-plate); height: var(--tk-d-plate);
+  border: 0; border-radius: var(--tk-r-badge); background: transparent;
+  color: var(--tk-ink-2); cursor: pointer; flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+.tk-icon-btn:hover { background: var(--tk-forest-plate); color: var(--tk-ink); }
+.tk-icon-btn svg { stroke: currentColor; }
+.tk-ai-submit {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--tk-base); min-height: var(--tk-d-voice);
+  padding: 0 var(--tk-gap-grid); border: 0; border-radius: var(--tk-r-ctl);
+  background: var(--tk-forest); color: var(--tk-card);
+  font: 650 13px/1 var(--tk-font-sans); white-space: nowrap;
+  flex-shrink: 0; cursor: pointer;
+  transition: background 120ms ease;
+}
+.tk-ai-submit:hover { background: var(--tk-press); }
+.tk-ai-submit:disabled { opacity: .45; }
+.tk-ai-submit svg { stroke: currentColor; }
+
+/* 错误/提示条 · 降级为卡底+描边+次文字（不挪用干邑、不自造橙红） */
+.tk-note {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--tk-base); border: var(--tk-hair); background: var(--tk-card);
+  border-radius: var(--tk-r-ctl); padding: var(--tk-base) var(--tk-gap-grid);
+  font: 400 13px/1.45 var(--tk-font-sans); color: var(--tk-ink-2);
+}
+.tk-note__dismiss {
+  background: none; border: 0; padding: 0; color: var(--tk-ink-2);
+  cursor: pointer; flex-shrink: 0;
+}
+.tk-note__dismiss:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   .tk-scope, .tk-scope *, .tk-scope *::after, .tk-scope *::before {

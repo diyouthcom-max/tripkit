@@ -152,7 +152,7 @@ export const ACTIVITY_NAME_MAP: Record<string, Record<AppLanguage, string>> = {
   露营野餐: { 'zh-CN': '露营野餐', 'en-US': 'Camping', 'en-GB': 'Camping', 'es-MX': 'Camping', 'fr-FR': 'Camping', 'de-DE': 'Camping', 'pt-BR': 'Camping', 'ja-JP': 'キャンプ' },
   健身房: { 'zh-CN': '健身房', 'en-US': 'Gym', 'en-GB': 'Gym', 'es-MX': 'Gimnasio', 'fr-FR': 'Fitness', 'de-DE': 'Fitness', 'pt-BR': 'Academia', 'ja-JP': 'ジム' },
   晨跑: { 'zh-CN': '晨跑', 'en-US': 'Morning Run', 'en-GB': 'Morning Run', 'es-MX': 'Correr', 'fr-FR': 'Footing', 'de-DE': 'Morgenlauf', 'pt-BR': 'Corrida', 'ja-JP': '朝ラン' },
-  '博物馆 / 看展': { 'zh-CN': '博物馆看展', 'en-US': 'Museums', 'en-GB': 'Museums', 'es-MX': 'Museos', 'fr-FR': 'Musées', 'de-DE': 'Museen', 'pt-BR': 'Museus', 'ja-JP': '美術館・展示' },
+  '博物馆 / 看展': { 'zh-CN': '博物馆', 'en-US': 'Museums', 'en-GB': 'Museums', 'es-MX': 'Museos', 'fr-FR': 'Musées', 'de-DE': 'Museen', 'pt-BR': 'Museus', 'ja-JP': '美術館・展示' },
   '精品咖啡 / 市集': { 'zh-CN': '咖啡市集', 'en-US': 'Cafés', 'en-GB': 'Cafés', 'es-MX': 'Cafés', 'fr-FR': 'Cafés', 'de-DE': 'Cafés', 'pt-BR': 'Cafés', 'ja-JP': 'カフェ巡り' },
   '正式晚餐 / Bistro': { 'zh-CN': '正式晚餐', 'en-US': 'Fine Dining', 'en-GB': 'Fine Dining', 'es-MX': 'Bistró', 'fr-FR': 'Bistrot', 'de-DE': 'Dinner', 'pt-BR': 'Jantar', 'ja-JP': 'ディナー' },
   '购物 & 退税': { 'zh-CN': '购物退税', 'en-US': 'Shopping', 'en-GB': 'Shopping', 'es-MX': 'Compras', 'fr-FR': 'Shopping', 'de-DE': 'Shopping', 'pt-BR': 'Compras', 'ja-JP': 'ショッピング' },
