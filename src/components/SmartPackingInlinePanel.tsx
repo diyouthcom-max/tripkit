@@ -334,24 +334,24 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
           <button
             type="button"
             onClick={onBackToChecklist}
-            className="inline-flex items-center gap-1 rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#152B29] hover:border-[#0ABAB5] hover:text-[#078C88] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             {t('smartBags.backToChecklist')}
           </button>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-sm font-extrabold tracking-tight text-[#152B29]">
+              <h2 className="text-sm font-extrabold tracking-tight tk-text-ink">
                 {t('smartBags.title')}
               </h2>
               {persistedOverrideCount > 0 && (
-                <span className="inline-flex items-center gap-1 rounded-md border border-[#BEE5E2] bg-[#EFF9F8] px-2 py-0.5 text-[11px] font-bold text-[#076E6A]">
-                  <Pin className="h-3 w-3 text-[#078C88]" />
+                <span className="inline-flex items-center gap-1 rounded-md border tk-bc-hair tk-bg-forest-tint px-2 py-0.5 text-[11px] font-bold tk-text-forest">
+                  <Pin className="h-3 w-3 tk-text-forest" />
                   {t('smartBags.persistedBadge', { count: persistedOverrideCount })}
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-[#647B78]">{t('smartBags.subtitle')}</p>
+            <p className="text-[11px] tk-text-ink2">{t('smartBags.subtitle')}</p>
           </div>
         </div>
 
@@ -360,7 +360,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             <button
               type="button"
               onClick={onResetSmartBagOverrides}
-              className="inline-flex items-center gap-1 rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#5B7370] hover:border-[#0ABAB5] hover:text-[#152B29] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title={t('smartBags.resetOverridesTitle')}
             >
               <RotateCcw className="h-3.5 w-3.5" />
@@ -371,21 +371,21 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             type="button"
             onClick={handleAiReallocate}
             disabled={isAllocating}
-            className="inline-flex items-center gap-1 rounded-xl border border-[#BEE5E2] bg-[#EFF9F8] px-2.5 py-1.5 text-xs font-semibold text-[#076E6A] hover:bg-[#DFF3F1] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-forest-tint px-2.5 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             {isAllocating ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
-              <Sparkles className="h-3.5 w-3.5 text-[#078C88]" />
+              <Sparkles className="h-3.5 w-3.5 tk-text-forest" />
             )}
             {isAllocating ? t('smartBags.aiReallocating') : t('smartBags.aiReallocate')}
           </button>
         </div>
       </div>
 
-      {allocError && <p className="px-1 text-xs font-medium text-[#B96A39]">{allocError}</p>}
+      {allocError && <p className="px-1 text-xs font-medium tk-text-warning">{allocError}</p>}
       {smartBagSummaryTip && (
-        <div className="rounded-xl border border-[#C6E6E3] bg-[#EFF9F8] px-3.5 py-2 text-xs text-[#076E6A]">
+        <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-xs tk-text-forest">
           {t('smartBags.aiTipPrefix')}
           {smartBagSummaryTip}
         </div>
@@ -394,16 +394,16 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
       {/* Luggage Weight Distribution Forecast & Overweight Rebalancing Panel */}
       <section
         aria-label={t('smartBags.forecastTitle')}
-        className={`rounded-2xl border bg-white overflow-hidden transition-colors ${
-          forecast.statusLevel === 'overweight'
-            ? 'border-[#E6BFB3]'
-            : forecast.statusLevel === 'caution'
-            ? 'border-[#E5D3A8]'
-            : 'border-[#DCE8E5]'
-        }`}
+        className={`rounded-2xl border tk-bg-card overflow-hidden transition-colors ${
+ forecast.statusLevel === 'overweight'
+ ? 'tk-bc-danger-hair'
+ : forecast.statusLevel === 'caution'
+ ? 'tk-bc-warning-hair'
+ : 'tk-bc-hair'
+ }`}
       >
         {/* Top Summary Header — 2-row responsive layout prevents narrow-screen title crushing & truncation */}
-        <div className="px-4 sm:px-5 py-3.5 bg-[#FAFDFC] space-y-2.5">
+        <div className="px-4 sm:px-5 py-3.5 tk-bg-paper space-y-2.5">
           <div className="flex items-center justify-between gap-2">
             <button
               type="button"
@@ -422,20 +422,20 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 size="md"
               />
               <div className="min-w-0 flex items-center gap-2 flex-wrap">
-                <h3 className="text-sm font-extrabold tracking-tight text-[#152B29] whitespace-nowrap">
+                <h3 className="text-sm font-extrabold tracking-tight tk-text-ink whitespace-nowrap">
                   {t('smartBags.forecastTitle')}
                 </h3>
-                <span aria-hidden="true" className="text-[#CBDAD7]">
+                <span aria-hidden="true" className="tk-text-ink2">
                   ·
                 </span>
                 <span
                   className={`inline-flex items-center gap-1 text-xs font-bold whitespace-nowrap ${
-                    forecast.statusLevel === 'overweight'
-                      ? 'text-[#B95239]'
-                      : forecast.statusLevel === 'caution'
-                      ? 'text-[#C86D2D]'
-                      : 'text-[#078C88]'
-                  }`}
+ forecast.statusLevel === 'overweight'
+ ? 'tk-text-danger'
+ : forecast.statusLevel === 'caution'
+ ? 'tk-text-warning'
+ : 'tk-text-forest'
+ }`}
                 >
                   {forecast.statusLevel === 'overweight' ? (
                     <>
@@ -461,7 +461,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
               type="button"
               onClick={() => setForecastExpanded((prev) => !prev)}
               aria-label={t('smartBags.forecastTitle')}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#5B7370] hover:bg-[#EEF4F3] hover:text-[#152B29] cursor-pointer"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink cursor-pointer"
             >
               {forecastExpanded ? (
                 <ChevronDown className="h-4 w-4" />
@@ -472,7 +472,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2 pl-0 sm:pl-11.5">
-            <p className="text-xs font-medium text-[#5B7370] tabular-nums">
+            <p className="text-xs font-medium tk-text-ink2 tabular-nums">
               {t('smartBags.forecastSummary', {
                 total: formatCompactByUnit(forecast.totalGrams, unitSystem),
                 carryPct: forecast.carryOnRatioPct,
@@ -481,15 +481,15 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             </p>
 
             {/* Net Weight vs With Suitcase Tare Toggle */}
-            <div className="inline-flex items-center rounded-xl border border-[#DCE8E5] bg-white p-0.5 shrink-0">
+            <div className="inline-flex items-center rounded-xl border tk-bc-hair tk-bg-card p-0.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setIncludeTare(false)}
                 className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                  !includeTare
-                    ? 'bg-[#152B29] text-white'
-                    : 'text-[#5B7370] hover:text-[#152B29]'
-                }`}
+ !includeTare
+ ? 'tk-bg-forest tk-text-card'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
               >
                 {t('smartBags.netOnlyShort')}
               </button>
@@ -497,10 +497,10 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 type="button"
                 onClick={() => setIncludeTare(true)}
                 className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                  includeTare
-                    ? 'bg-[#078C88] text-white'
-                    : 'text-[#5B7370] hover:text-[#152B29]'
-                }`}
+ includeTare
+ ? 'tk-bg-forest tk-text-card'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
               >
                 {t('smartBags.withTareShort')}
               </button>
@@ -509,21 +509,21 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
         </div>
 
         {forecastExpanded && (
-          <div className="border-t border-[#EDF3F1] divide-y divide-[#EDF3F1]">
+          <div className="border-t tk-bc-hair divide-y tk-divide-hair">
             {/* Row 1: Airline Allowance Quick Presets (3-Column Equal Tier Cards) + Optional Suitcase Tare Selectors */}
-            <div className="px-4 sm:px-5 py-3 space-y-2.5 text-xs bg-white">
+            <div className="px-4 sm:px-5 py-3 space-y-2.5 text-xs tk-bg-card">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="font-semibold text-[#3B5552] whitespace-nowrap">
+                  <span className="font-semibold tk-text-ink2 whitespace-nowrap">
                     {copy.airlineAllowance}
                   </span>
-                  <span className="text-[11px] text-[#7A908D] whitespace-nowrap">
+                  <span className="text-[11px] tk-text-ink2 whitespace-nowrap">
                     {copy.carryOnPlusChecked}
                   </span>
                 </div>
 
                 {baggagePreset === 'custom' && (
-                  <span className="tabular-nums text-[11px] font-semibold text-[#078C88]">
+                  <span className="tabular-nums text-[11px] font-semibold tk-text-forest">
                     {t('smartBags.customLimitLabel')} (
                     {formatCompactByUnit(carryOnLimitKg * 1000, unitSystem)} +{' '}
                     {formatCompactByUnit(checkedLimitKg * 1000, unitSystem)})
@@ -532,7 +532,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
               </div>
 
               {onSelectBaggagePreset ? (
-                <div className="grid grid-cols-3 gap-1.5 rounded-xl bg-[#F2F7F6] p-1 w-full">
+                <div className="grid grid-cols-3 gap-1.5 rounded-xl tk-bg-paper p-1 w-full">
                   {(['lcc', 'standard', 'business'] as const).map((presetKey) => {
                     const spec = BAGGAGE_PRESET_SPECS[presetKey];
                     const presetLabels = getBaggagePresetLabels(
@@ -551,18 +551,18 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                         type="button"
                         onClick={() => onSelectBaggagePreset(presetKey)}
                         className={`min-h-[46px] px-2 py-1.5 rounded-lg flex flex-col items-center justify-center text-center transition-colors cursor-pointer ${
-                          isActive
-                            ? 'bg-white text-[#152B29] shadow-xs ring-1 ring-[#DCE8E5]'
-                            : 'text-[#5B7370] hover:text-[#152B29]'
-                        }`}
+ isActive
+ ? 'tk-bg-card tk-text-ink shadow-xs ring-1 tk-rc-hair'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                       >
                         <span className="text-xs font-bold leading-tight whitespace-nowrap">
                           {presetLabels.tierTitle}
                         </span>
                         <span
                           className={`mt-0.5 text-[11px] leading-tight tabular-nums whitespace-nowrap ${
-                            isActive ? 'font-semibold text-[#078C88]' : 'text-[#647B78]'
-                          }`}
+ isActive ? 'font-semibold tk-text-forest' : 'tk-text-ink2'
+ }`}
                         >
                           {presetLabels.allowanceSub}
                         </span>
@@ -571,7 +571,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                   })}
                 </div>
               ) : (
-                <div className="tabular-nums font-semibold text-[#152B29]">
+                <div className="tabular-nums font-semibold tk-text-ink">
                   {t('packing.carryOnLabel')} {formatCompactByUnit(carryOnLimitKg * 1000, unitSystem)} ·{' '}
                   {t('packing.checkedLabel')} {formatCompactByUnit(checkedLimitKg * 1000, unitSystem)}
                 </div>
@@ -579,12 +579,12 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
 
               {includeTare && (
                 <div className="pt-1 flex flex-wrap items-center gap-2 text-[11px]">
-                  <label className="inline-flex items-center gap-1 text-[#5B7370]">
+                  <label className="inline-flex items-center gap-1 tk-text-ink2">
                     <span>{t('smartBags.carryOnShellLabel')}</span>
                     <select
                       value={carryOnShell}
                       onChange={(e) => setCarryOnShell(e.target.value as CarryOnShellPreset)}
-                      className="rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2 py-0.5 font-semibold text-[#152B29] focus:border-[#0ABAB5] focus:outline-none cursor-pointer"
+                      className="rounded-lg border tk-bc-hair tk-bg-paper px-2 py-0.5 font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none cursor-pointer"
                     >
                       {Object.values(CARRY_ON_SHELL_SPECS).map((s) => (
                         <option key={s.id} value={s.id}>
@@ -594,12 +594,12 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                     </select>
                   </label>
                   {(checkedLimitKg > 0 || forecast.checkedNetGrams > 0) && (
-                    <label className="inline-flex items-center gap-1 text-[#5B7370]">
+                    <label className="inline-flex items-center gap-1 tk-text-ink2">
                       <span>{t('smartBags.checkedShellLabel')}</span>
                       <select
                         value={checkedShell}
                         onChange={(e) => setCheckedShell(e.target.value as CheckedShellPreset)}
-                        className="rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2 py-0.5 font-semibold text-[#152B29] focus:border-[#0ABAB5] focus:outline-none cursor-pointer"
+                        className="rounded-lg border tk-bc-hair tk-bg-paper px-2 py-0.5 font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none cursor-pointer"
                       >
                         {Object.values(CHECKED_SHELL_SPECS).map((s) => (
                           <option key={s.id} value={s.id}>
@@ -617,29 +617,29 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             <div className="px-4 sm:px-5 py-3.5 space-y-2.5">
               <div className="flex items-center justify-between gap-2 text-xs">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="h-2.5 w-2.5 rounded-[3px] bg-[#174F4B] shrink-0" aria-hidden="true" />
-                  <span className="font-semibold text-[#152B29] whitespace-nowrap">
+                  <span className="h-2.5 w-2.5 rounded-sm tk-bg-forest shrink-0" aria-hidden="true" />
+                  <span className="font-semibold tk-text-ink whitespace-nowrap">
                     {t('smartBags.carryOnShareLabel')}
                   </span>
-                  <span className="font-num tabular-nums font-bold text-[#174F4B]">
+                  <span className="font-num tabular-nums font-bold tk-text-forest">
                     {forecast.carryOnRatioPct}%
                   </span>
-                  <span className="font-num tabular-nums text-[#647B78] hidden sm:inline">
+                  <span className="font-num tabular-nums tk-text-ink2 hidden sm:inline">
                     ({formatCompactByUnit(forecast.carryOnTotalGrams, unitSystem)})
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-num tabular-nums text-[#647B78] hidden sm:inline">
+                  <span className="font-num tabular-nums tk-text-ink2 hidden sm:inline">
                     ({formatCompactByUnit(forecast.checkedTotalGrams, unitSystem)})
                   </span>
-                  <span className="font-num tabular-nums font-bold text-[#078C88]">
+                  <span className="font-num tabular-nums font-bold tk-text-forest">
                     {forecast.checkedRatioPct}%
                   </span>
-                  <span className="font-semibold text-[#152B29] whitespace-nowrap">
+                  <span className="font-semibold tk-text-ink whitespace-nowrap">
                     {t('smartBags.checkedShareLabel')}
                   </span>
-                  <span className="h-2.5 w-2.5 rounded-[3px] bg-[#078C88] shrink-0" aria-hidden="true" />
+                  <span className="h-2.5 w-2.5 rounded-sm tk-bg-forest shrink-0" aria-hidden="true" />
                 </div>
               </div>
 
@@ -647,7 +647,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
               <svg
                 viewBox="0 0 100 8"
                 preserveAspectRatio="none"
-                className="w-full h-2.5 rounded-full overflow-hidden bg-[#EDF3F1] block"
+                className="w-full h-2.5 rounded-full overflow-hidden tk-bg-forest-plate block"
                 role="img"
                 aria-label={`${t('smartBags.carryOnShareLabel')} ${forecast.carryOnRatioPct}% · ${t('smartBags.checkedShareLabel')} ${forecast.checkedRatioPct}%`}
               >
@@ -658,14 +658,14 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                       y={0}
                       width={forecast.carryOnRatioPct}
                       height={8}
-                      fill="#174F4B"
+                      fill="var(--tk-forest)"
                     />
                     <rect
                       x={forecast.carryOnRatioPct}
                       y={0}
                       width={forecast.checkedRatioPct}
                       height={8}
-                      fill="#078C88"
+                      fill="var(--tk-forest)"
                     />
                   </>
                 )}
@@ -684,17 +684,17 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                         type="button"
                         onClick={() => handleJumpToBag(b.bagId)}
                         title={b.shortLabel}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#E4EEEB] bg-[#FAFDFC] hover:border-[#0ABAB5] hover:bg-[#EFF9F8] px-2 py-1 text-[11px] text-[#35504D] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-lg border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint px-2 py-1 text-[11px] tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         <bagMeta.Icon
                           className={`h-3 w-3 shrink-0 ${HERO_ACCENT_PALETTE[bagMeta.accent].textClass}`}
                           aria-hidden="true"
                         />
                         <span className="font-medium">{b.shortLabel}</span>
-                        <span className="font-num tabular-nums font-bold text-[#152B29]">
+                        <span className="font-num tabular-nums font-bold tk-text-ink">
                           {formatCompactByUnit(b.weightGrams, unitSystem)}
                         </span>
-                        <span className="font-num tabular-nums text-[#7D938F]">
+                        <span className="font-num tabular-nums tk-text-ink2">
                           {b.shareOfItemsPct}%
                         </span>
                       </button>
@@ -704,26 +704,26 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             </div>
 
             {/* Row 3: 2-Column Carry-On vs Checked Limit Gauges */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[#EDF3F1]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x tk-divide-hair">
               {/* Left: Carry-On 3 Bags */}
               <div className="px-4 sm:px-5 py-3.5 space-y-2">
                 <div className="flex items-baseline justify-between gap-2">
                   <div>
-                    <span className="text-xs font-bold text-[#152B29]">
+                    <span className="text-xs font-bold tk-text-ink">
                       {t('smartBags.carryOn3Bags')}
                     </span>
-                    <span className="ml-1.5 text-[11px] text-[#647B78]">
+                    <span className="ml-1.5 text-[11px] tk-text-ink2">
                       {t('smartBags.carryOn3BagsSub')}
                     </span>
                   </div>
                   <span
                     className={`font-num tabular-nums text-xs font-extrabold ${
-                      forecast.carryOnDeltaGrams < 0
-                        ? 'text-[#B95239]'
-                        : forecast.carryOnUtilizationPct >= 85
-                        ? 'text-[#A8791D]'
-                        : 'text-[#152B29]'
-                    }`}
+ forecast.carryOnDeltaGrams < 0
+ ? 'tk-text-danger'
+ : forecast.carryOnUtilizationPct >= 85
+ ? 'tk-text-warning'
+ : 'tk-text-ink'
+ }`}
                   >
                     {formatWeightAgainstLimit(
                       forecast.carryOnTotalGrams,
@@ -737,7 +737,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 <svg
                   viewBox="0 0 100 6"
                   preserveAspectRatio="none"
-                  className="w-full h-1.5 rounded-full overflow-hidden bg-[#EDF3F1] block"
+                  className="w-full h-1.5 rounded-full overflow-hidden tk-bg-forest-plate block"
                   aria-hidden="true"
                 >
                   <rect
@@ -747,15 +747,15 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                     height={6}
                     fill={
                       forecast.carryOnDeltaGrams < 0
-                        ? '#C85A3F'
+                        ? 'var(--tk-danger)'
                         : forecast.carryOnUtilizationPct >= 85
-                        ? '#D97E4A'
-                        : '#174F4B'
+                        ? 'var(--tk-warning)'
+                        : 'var(--tk-forest)'
                     }
                   />
                 </svg>
 
-                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-[#647B78] font-num tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] tk-text-ink2 font-num tabular-nums">
                   <span>
                     {t('smartBags.packedShort')}{' '}
                     {formatCompactByUnit(forecast.carryOnPackedGrams, unitSystem)}
@@ -773,12 +773,12 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                   </span>
                   <span
                     className={`font-bold ${
-                      forecast.carryOnDeltaGrams < 0
-                        ? 'text-[#B95239]'
-                        : forecast.carryOnUtilizationPct >= 85
-                        ? 'text-[#A8791D]'
-                        : 'text-[#078C88]'
-                    }`}
+ forecast.carryOnDeltaGrams < 0
+ ? 'tk-text-danger'
+ : forecast.carryOnUtilizationPct >= 85
+ ? 'tk-text-warning'
+ : 'tk-text-forest'
+ }`}
                   >
                     {forecast.carryOnDeltaGrams < 0
                       ? `${t('smartBags.overLimitPrefix')} ${formatCompactByUnit(
@@ -797,22 +797,22 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
               <div className="px-4 sm:px-5 py-3.5 space-y-2">
                 <div className="flex items-baseline justify-between gap-2">
                   <div>
-                    <span className="text-xs font-bold text-[#152B29]">
+                    <span className="text-xs font-bold tk-text-ink">
                       {t('smartBags.checked6Bags')}
                     </span>
-                    <span className="ml-1.5 text-[11px] text-[#647B78]">
+                    <span className="ml-1.5 text-[11px] tk-text-ink2">
                       {t('smartBags.checked6BagsSub')}
                     </span>
                   </div>
                   <span
                     className={`font-num tabular-nums text-xs font-extrabold ${
-                      (checkedLimitKg <= 0 && forecast.checkedNetGrams > 0) ||
-                      (checkedLimitKg > 0 && forecast.checkedDeltaGrams < 0)
-                        ? 'text-[#B95239]'
-                        : checkedLimitKg > 0 && forecast.checkedUtilizationPct >= 85
-                        ? 'text-[#A8791D]'
-                        : 'text-[#152B29]'
-                    }`}
+ (checkedLimitKg <= 0 && forecast.checkedNetGrams > 0) ||
+ (checkedLimitKg > 0 && forecast.checkedDeltaGrams < 0)
+ ? 'tk-text-danger'
+ : checkedLimitKg > 0 && forecast.checkedUtilizationPct >= 85
+ ? 'tk-text-warning'
+ : 'tk-text-ink'
+ }`}
                   >
                     {checkedLimitKg <= 0
                       ? `${formatCompactByUnit(forecast.checkedTotalGrams, unitSystem)} / ${t(
@@ -830,7 +830,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 <svg
                   viewBox="0 0 100 6"
                   preserveAspectRatio="none"
-                  className="w-full h-1.5 rounded-full overflow-hidden bg-[#EDF3F1] block"
+                  className="w-full h-1.5 rounded-full overflow-hidden tk-bg-forest-plate block"
                   aria-hidden="true"
                 >
                   <rect
@@ -841,15 +841,15 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                     fill={
                       (checkedLimitKg <= 0 && forecast.checkedNetGrams > 0) ||
                       (checkedLimitKg > 0 && forecast.checkedDeltaGrams < 0)
-                        ? '#C85A3F'
+                        ? 'var(--tk-danger)'
                         : checkedLimitKg > 0 && forecast.checkedUtilizationPct >= 85
-                        ? '#D97E4A'
-                        : '#078C88'
+                        ? 'var(--tk-warning)'
+                        : 'var(--tk-forest)'
                     }
                   />
                 </svg>
 
-                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-[#647B78] font-num tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] tk-text-ink2 font-num tabular-nums">
                   <span>
                     {t('smartBags.packedShort')}{' '}
                     {formatCompactByUnit(forecast.checkedPackedGrams, unitSystem)}
@@ -867,13 +867,13 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                   </span>
                   <span
                     className={`font-bold ${
-                      (checkedLimitKg <= 0 && forecast.checkedNetGrams > 0) ||
-                      (checkedLimitKg > 0 && forecast.checkedDeltaGrams < 0)
-                        ? 'text-[#B95239]'
-                        : checkedLimitKg > 0 && forecast.checkedUtilizationPct >= 85
-                        ? 'text-[#A8791D]'
-                        : 'text-[#078C88]'
-                    }`}
+ (checkedLimitKg <= 0 && forecast.checkedNetGrams > 0) ||
+ (checkedLimitKg > 0 && forecast.checkedDeltaGrams < 0)
+ ? 'tk-text-danger'
+ : checkedLimitKg > 0 && forecast.checkedUtilizationPct >= 85
+ ? 'tk-text-warning'
+ : 'tk-text-forest'
+ }`}
                   >
                     {checkedLimitKg <= 0
                       ? forecast.checkedNetGrams > 0
@@ -899,35 +899,35 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
             {/* Row 4: Smart Overweight & Civil Aviation Advisory + 1-Click Rebalancing Actions */}
             <div
               className={`px-4 sm:px-5 py-3 space-y-2.5 ${
-                forecast.statusLevel === 'overweight'
-                  ? 'bg-[#FDF7F5]'
-                  : forecast.statusLevel === 'caution'
-                  ? 'bg-[#FFFDF7]'
-                  : 'bg-[#F8FCFA]'
-              }`}
+ forecast.statusLevel === 'overweight'
+ ? 'tk-bg-danger-tint'
+ : forecast.statusLevel === 'caution'
+ ? 'tk-bg-paper'
+ : 'tk-bg-paper'
+ }`}
             >
               <div className="flex items-start gap-2 text-xs">
                 {forecast.statusLevel === 'overweight' ? (
-                  <ShieldAlert className="h-4 w-4 text-[#B95239] shrink-0 mt-0.5" />
+                  <ShieldAlert className="h-4 w-4 tk-text-danger shrink-0 mt-0.5" />
                 ) : forecast.statusLevel === 'caution' ? (
-                  <AlertTriangle className="h-4 w-4 text-[#A8791D] shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
                 ) : (
-                  <Check className="h-4 w-4 text-[#078C88] shrink-0 mt-0.5" />
+                  <Check className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                 )}
                 <div className="space-y-1 min-w-0">
                   <p
                     className={`font-medium leading-relaxed ${
-                      forecast.statusLevel === 'overweight'
-                        ? 'text-[#8F3923]'
-                        : forecast.statusLevel === 'caution'
-                        ? 'text-[#7C5812]'
-                        : 'text-[#1E4E4B]'
-                    }`}
+ forecast.statusLevel === 'overweight'
+ ? 'tk-text-danger'
+ : forecast.statusLevel === 'caution'
+ ? 'tk-text-warning'
+ : 'tk-text-ink'
+ }`}
                   >
                     {forecast.headlineAdvice}
                   </p>
                   {forecast.statusLevel !== 'healthy' && forecast.wearableReliefCandidate && (
-                    <p className="text-[11px] text-[#647B78] tabular-nums">
+                    <p className="text-[11px] tk-text-ink2 tabular-nums">
                       {t('smartBags.wearableTip', {
                         name: translateDemoPackItemName(
                           forecast.wearableReliefCandidate.itemName,
@@ -945,10 +945,10 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
 
               {forecast.recommendations.length > 0 && (
                 <div className="pt-1 space-y-1.5">
-                  <div className="text-[11px] font-semibold text-[#5B7370]">
+                  <div className="text-[11px] font-semibold tk-text-ink2">
                     {t('smartBags.rebalanceHeading')}
                   </div>
-                  <div className="divide-y divide-[#E9F0EE] rounded-xl border border-[#E2ECEA] bg-white overflow-hidden">
+                  <div className="divide-y tk-divide-hair rounded-xl border tk-bc-hair tk-bg-card overflow-hidden">
                     {forecast.recommendations.map((rec) => (
                       <div
                         key={rec.itemId}
@@ -956,25 +956,25 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-bold text-[#152B29]">
+                            <span className="font-bold tk-text-ink">
                               {translateDemoPackItemName(rec.itemName, activeLang)}
                             </span>
-                            <span className="font-num tabular-nums text-[#5B7370]">
+                            <span className="font-num tabular-nums tk-text-ink2">
                               {formatItemWeightByPref(rec.weightGrams, unitSystem)}
                             </span>
-                            <span className="text-[#8CA39F]" aria-hidden="true">
+                            <span className="tk-text-ink2" aria-hidden="true">
                               ·
                             </span>
-                            <span className="text-[11px] text-[#647B78]">
+                            <span className="text-[11px] tk-text-ink2">
                               {t('smartBags.currentlyInPrefix')} {rec.fromBagLabel}
                             </span>
                           </div>
                           <p
                             className={`text-[11px] mt-0.5 ${
-                              rec.reasonType === 'safety_must_carry_on'
-                                ? 'text-[#B95239] font-medium'
-                                : 'text-[#647B78]'
-                            }`}
+ rec.reasonType === 'safety_must_carry_on'
+ ? 'tk-text-danger font-medium'
+ : 'tk-text-ink2'
+ }`}
                           >
                             {rec.reasonText}
                           </p>
@@ -986,10 +986,10 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                             onAssignItemSmartBag(rec.itemId, rec.toBagId, rec.itemName)
                           }
                           className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                            rec.reasonType === 'safety_must_carry_on'
-                              ? 'bg-[#B95239] text-white hover:bg-[#9E432C]'
-                              : 'bg-[#EFF9F8] border border-[#BEE5E2] text-[#076E6A] hover:bg-[#DFF3F1]'
-                          }`}
+ rec.reasonType === 'safety_must_carry_on'
+ ? 'tk-bg-danger tk-text-card hover:tk-bg-danger'
+ : 'tk-bg-forest-tint border tk-bc-hair tk-text-forest hover:tk-bg-forest-tint'
+ }`}
                         >
                           <ArrowRightLeft className="h-3 w-3 shrink-0" />
                           {t('smartBags.moveToBtnPrefix')} {rec.toBagLabel}
@@ -1049,19 +1049,19 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 setDraggedItem(null);
               }
             }}
-            className={`rounded-2xl border bg-white overflow-hidden transition-colors ${
-              isDropTarget
-                ? 'border-[#078C88] ring-2 ring-[#078C88]/20'
-                : isBagAllDone
-                ? 'border-[#BFE4DA]'
-                : 'border-[#DCE8E5]'
-            }`}
+            className={`rounded-2xl border tk-bg-card overflow-hidden transition-colors ${
+ isDropTarget
+ ? 'tk-bc-forest ring-2 tk-rc-forest'
+ : isBagAllDone
+ ? 'tk-bc-hair'
+ : 'tk-bc-hair'
+ }`}
           >
             {/* Bag Card Header with Per-Bag Weight */}
             <div
               className={`flex items-center justify-between gap-2 px-4 sm:px-5 py-3.5 transition-colors select-none ${
-                isBagAllDone ? 'bg-[#F8FCFA] hover:bg-[#F2FAF7]' : 'hover:bg-[#FAFDFC]'
-              }`}
+ isBagAllDone ? 'tk-bg-paper hover:tk-bg-forest-tint' : 'hover:tk-bg-paper'
+ }`}
             >
               <button
                 type="button"
@@ -1077,21 +1077,21 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 />
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <h3 className="text-sm sm:text-[15px] font-bold text-[#152B29] truncate">
+                    <h3 className="text-sm sm:text-[15px] font-bold tk-text-ink truncate">
                       {bag.title}
                     </h3>
-                    <span className="font-num tabular-nums text-xs font-semibold text-[#5B7370]">
+                    <span className="font-num tabular-nums text-xs font-semibold tk-text-ink2">
                       {bagTotal > 0 ? formatCompactByUnit(bagWeightGrams, unitSystem) : formatItemWeightByPref(0, unitSystem)}
                       {' · '}
                       {bag.defaultCarryOn ? t('smartBags.carryOnWeightTag') : t('smartBags.checkedWeightTag')}
                     </span>
                   </div>
-                  <p className="text-xs text-[#647B78] truncate">{bag.subtitle}</p>
+                  <p className="text-xs tk-text-ink2 truncate">{bag.subtitle}</p>
                 </div>
               </button>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="font-num text-sm font-bold text-[#078C88]">
+                <span className="font-num text-sm font-bold tk-text-forest">
                   {bagDone}/{bagTotal}
                 </span>
                 <button
@@ -1100,7 +1100,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                     setCollapsedBags((prev) => ({ ...prev, [bag.id]: !prev[bag.id] }))
                   }
                   aria-label={bag.title}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-[#5B7370] hover:bg-[#EEF4F3] hover:text-[#152B29] cursor-pointer"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink cursor-pointer"
                 >
                   {isClosed ? (
                     <ChevronRight className="h-4 w-4" />
@@ -1113,9 +1113,9 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
 
             {/* Bag Items */}
             {!isClosed && (
-              <div className="border-t border-[#EDF3F1] divide-y divide-[#F1F6F5]">
+              <div className="border-t tk-bc-hair divide-y tk-divide-hair">
                 {visibleEntries.length === 0 ? (
-                  <div className="px-5 py-4 text-xs text-[#647B78]">
+                  <div className="px-5 py-4 text-xs tk-text-ink2">
                     {t('smartBags.emptyBagHint')}
                   </div>
                 ) : (
@@ -1144,7 +1144,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                           setDraggedItem(null);
                           setDragOverBagId(null);
                         }}
-                        className="bg-white overflow-hidden"
+                        className="tk-bg-card overflow-hidden"
                       >
                         <div className="relative overflow-hidden">
                           {showSwipeBackdrop && (
@@ -1153,11 +1153,11 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                               aria-hidden={swipedItemId !== item.id}
                             >
                               <div
-                                className={`flex items-center px-4 text-white text-xs font-semibold transition-opacity ${
-                                  currentSwipeOffset > 0
-                                    ? 'bg-[#078C88] opacity-100'
-                                    : 'opacity-0'
-                                }`}
+                                className={`flex items-center px-4 tk-text-card text-xs font-semibold transition-opacity ${
+ currentSwipeOffset > 0
+ ? 'tk-bg-forest opacity-100'
+ : 'opacity-0'
+ }`}
                               >
                                 {item.done
                                   ? t('packingExtra.swipeUndo')
@@ -1165,10 +1165,10 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                               </div>
                               <div
                                 className={`flex items-stretch transition-opacity ${
-                                  currentSwipeOffset < 0
-                                    ? 'pointer-events-auto opacity-100'
-                                    : 'pointer-events-none opacity-0'
-                                }`}
+ currentSwipeOffset < 0
+ ? 'pointer-events-auto opacity-100'
+ : 'pointer-events-none opacity-0'
+ }`}
                               >
                                 <button
                                   type="button"
@@ -1176,7 +1176,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     setSwipedItemId(null);
                                     onOpenItemDetail(item.id);
                                   }}
-                                  className="w-14 bg-[#078C88] text-white text-xs font-semibold hover:bg-[#067572] whitespace-nowrap cursor-pointer"
+                                  className="w-14 tk-bg-forest tk-text-card text-xs font-semibold hover:tk-bg-press whitespace-nowrap cursor-pointer"
                                 >
                                   {t('common.edit')}
                                 </button>
@@ -1186,7 +1186,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     onDeleteItem(groupId, item.id);
                                     setSwipedItemId(null);
                                   }}
-                                  className="w-14 bg-[#C85A3F] text-white text-xs font-semibold hover:bg-[#AE4A31] whitespace-nowrap cursor-pointer"
+                                  className="w-14 tk-bg-danger tk-text-card text-xs font-semibold hover:tk-bg-danger whitespace-nowrap cursor-pointer"
                                 >
                                   {t('common.delete')}
                                 </button>
@@ -1215,7 +1215,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                   ? 'none'
                                   : 'transform 200ms cubic-bezier(0.16, 1, 0.3, 1)',
                             }}
-                            className="relative z-10 bg-white px-4 sm:px-5 py-3 hover:bg-[#FAFDFC] transition-colors touch-pan-y cursor-grab active:cursor-grabbing"
+                            className="relative z-10 tk-bg-card px-4 sm:px-5 py-3 hover:tk-bg-paper transition-colors touch-pan-y cursor-grab active:cursor-grabbing"
                           >
                             <div className="flex items-center gap-2.5">
                               {/* 1-Tap Checkbox (Toggles Done Immediately) */}
@@ -1230,14 +1230,14 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                   onToggleItem(groupId, item.id, activeMemberId);
                                 }}
                                 aria-label={item.name}
-                                className="-ml-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl hover:bg-[#F2F6F5] transition-colors cursor-pointer"
+                                className="-ml-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl hover:tk-bg-forest-plate transition-colors cursor-pointer"
                               >
                                 <span
                                   className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
-                                    item.done
-                                      ? 'border-[#078C88] bg-[#078C88] text-white'
-                                      : 'border-[#B9CBC8] bg-white'
-                                  }`}
+ item.done
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-card'
+ }`}
                                 >
                                   {item.done && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
                                 </span>
@@ -1267,19 +1267,19 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                       <span
                                         className={`text-sm font-semibold ${
-                                          item.done
-                                            ? 'line-through text-[#8CA39F]'
-                                            : 'text-[#152B29]'
-                                        }`}
+ item.done
+ ? 'line-through tk-text-ink2'
+ : 'tk-text-ink'
+ }`}
                                       >
                                         {translateDemoPackItemName(item.name, activeLang)}
                                       </span>
                                       {itemQty > 1 && (
-                                        <span className="font-num tabular-nums text-xs font-bold text-[#076E6A]">
+                                        <span className="font-num tabular-nums text-xs font-bold tk-text-forest">
                                           ×{itemQty}
                                         </span>
                                       )}
-                                      <span className="tabular-nums text-xs text-[#7D938F]">
+                                      <span className="tabular-nums text-xs tk-text-ink2">
                                         {formatItemWeightByPref(item.weightGrams, unitSystem)}
                                         {itemQty > 1 &&
                                           ` (${formatItemWeightByPref(itemUnitW, unitSystem)}${t(
@@ -1291,12 +1291,12 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                           ` · ⏰ ${t('common.morningShort')}`}
                                         {item.carryOnOnly && ` · ${t('common.carryOnBadge')}`}
                                         {item.toBuy && (
-                                          <span className="text-[#C85A3F] font-semibold">
+                                          <span className="tk-text-danger font-semibold">
                                             {` · ${copy.toBuyBadge}`}
                                           </span>
                                         )}
                                         {item.alwaysPack && (
-                                          <span className="text-[#076E6A] font-semibold">
+                                          <span className="tk-text-forest font-semibold">
                                             {` · ${copy.alwaysPackBadge}`}
                                           </span>
                                         )}
@@ -1304,7 +1304,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     </div>
                                   );
                                 })()}
-                                <p className="mt-0.5 text-xs text-[#647B78] truncate">
+                                <p className="mt-0.5 text-xs tk-text-ink2 truncate">
                                   {translateDemoPackItemWhy(item.why, activeLang)}
                                 </p>
                               </button>
@@ -1323,10 +1323,10 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                 >
                                   <span
                                     className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold ${
-                                      responsibleMember
-                                        ? HERO_AVATAR_BG[responsibleMember.accent]
-                                        : HERO_AVATAR_BG.peach
-                                    }`}
+ responsibleMember
+ ? HERO_AVATAR_BG[responsibleMember.accent]
+ : HERO_AVATAR_BG.peach
+ }`}
                                   >
                                     {translateMemberInitials(
                                       responsibleMember?.initials ?? '我',
@@ -1342,7 +1342,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     onOpenItemDetail(item.id);
                                   }}
                                   aria-label={item.name}
-                                  className="flex h-9 w-9 items-center justify-center rounded-xl text-[#8BA39F] hover:bg-[#F2F6F5] hover:text-[#152B29] transition-colors cursor-pointer"
+                                  className="flex h-9 w-9 items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink transition-colors cursor-pointer"
                                 >
                                   <MoreHorizontal className="h-4 w-4" />
                                 </button>

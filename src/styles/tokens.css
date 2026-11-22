@@ -690,3 +690,76 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 .tk-hero-link:hover { color: color-mix(in srgb, var(--tk-card) 85%, var(--tk-forest)); }
 .tk-hero-meta { color: color-mix(in srgb, var(--tk-card) 92%, transparent); }
 .tk-hero-meta-sep { color: color-mix(in srgb, var(--tk-card) 65%, transparent); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 1 批 Packing（tk-packing-* / tk-fill-* / 色工具）
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-text-danger { color: var(--tk-danger); }
+.tk-text-warning { color: var(--tk-warning); }
+.tk-text-success { color: var(--tk-success); }
+
+.tk-bg-forest-tint { background: var(--tk-forest-tint); }
+.tk-bg-forest-plate { background: var(--tk-forest-plate); }
+.tk-bg-danger { background: var(--tk-danger); }
+.tk-bg-danger-tint { background: var(--tk-danger-tint); }
+.tk-bg-warning { background: var(--tk-warning); }
+.tk-bg-warning-tint { background: var(--tk-warning-tint); }
+.tk-bg-press { background: var(--tk-press); }
+.tk-bg-overlay { background: var(--tk-overlay); }
+.tk-bg-success { background: var(--tk-success); }
+.tk-bg-swatch-1 { background: var(--tk-swatch-1); }
+.tk-bg-swatch-2 { background: var(--tk-swatch-2); }
+.tk-bg-swatch-3 { background: var(--tk-swatch-3); }
+.tk-bg-swatch-4 { background: var(--tk-swatch-4); }
+.tk-bg-ink2-soft { background: color-mix(in srgb, var(--tk-ink-2) 65%, transparent); }
+
+.tk-bc-hair { border-color: var(--tk-hair-c); }
+.tk-bc-forest { border-color: var(--tk-forest); }
+.tk-bc-ink { border-color: var(--tk-ink); }
+.tk-bc-danger { border-color: var(--tk-danger); }
+.tk-bc-danger-hair { border-color: var(--tk-danger-hair); }
+.tk-bc-warning-hair { border-color: var(--tk-warning-hair); }
+.tk-bc-card { border-color: var(--tk-card); }
+
+.tk-rc-ink { --tw-ring-color: var(--tk-ink); }
+.tk-rc-forest { --tw-ring-color: var(--tk-forest); }
+.tk-rc-hair { --tw-ring-color: var(--tk-hair-c); }
+
+.tk-divide-hair > :not([hidden]) ~ :not([hidden]) { border-color: var(--tk-hair-c); }
+.tk-divide-rule > :not([hidden]) ~ :not([hidden]) { border-color: var(--tk-rule-c); }
+
+.tk-fill-danger { fill: var(--tk-danger); }
+.tk-fill-warning { fill: var(--tk-warning); }
+.tk-fill-forest { fill: var(--tk-forest); }
+.tk-fill-success { fill: var(--tk-success); }
+
+.tk-packing-sheet {
+  background: var(--tk-card);
+  border: var(--tk-hair);
+  box-shadow: var(--tk-sh-card);
+  border-radius: var(--tk-r-dock) var(--tk-r-dock) 0 0;
+}
+@media (min-width: 640px) {
+  .tk-packing-sheet { border-radius: var(--tk-r-dock); }
+}
+
+.hover\:tk-text-ink:hover { color: var(--tk-ink); }
+.hover\:tk-text-ink2:hover { color: var(--tk-ink-2); }
+.hover\:tk-text-forest:hover { color: var(--tk-forest); }
+.hover\:tk-text-danger:hover { color: var(--tk-danger); }
+.hover\:tk-bg-paper:hover { background: var(--tk-paper); }
+.hover\:tk-bg-card:hover { background: var(--tk-card); }
+.hover\:tk-bg-forest-tint:hover { background: var(--tk-forest-tint); }
+.hover\:tk-bg-forest-plate:hover { background: var(--tk-forest-plate); }
+.hover\:tk-bg-press:hover { background: var(--tk-press); }
+.hover\:tk-bg-danger:hover { background: color-mix(in srgb, var(--tk-danger) 82%, var(--tk-ink)); }
+.hover\:tk-bg-danger-tint:hover { background: var(--tk-danger-tint); }
+.hover\:tk-bg-warning-tint:hover { background: var(--tk-warning-tint); }
+.hover\:tk-bc-forest:hover { border-color: var(--tk-forest); }
+.hover\:tk-bc-hair:hover { border-color: var(--tk-hair-c); }
+.focus\:tk-bc-forest:focus { border-color: var(--tk-forest); }
+.group:hover .group-hover\:tk-text-forest { color: var(--tk-forest); }
+.disabled\:tk-text-ink2:disabled { color: var(--tk-ink-2); }
