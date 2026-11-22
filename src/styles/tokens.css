@@ -826,3 +826,41 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 }
 .hover\:tk-text-warning:hover { color: var(--tk-warning); }
 .hover\:tk-bg-warning:hover { background: var(--tk-warning-tint); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 4 批 Memories / MyKit / 影集
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-text-swatch-1 { color: var(--tk-swatch-1); }
+.tk-text-swatch-2 { color: var(--tk-swatch-2); }
+.tk-text-swatch-3 { color: var(--tk-swatch-3); }
+.tk-text-swatch-4 { color: var(--tk-swatch-4); }
+.tk-bc-swatch-1 { border-color: var(--tk-swatch-1); }
+.tk-bc-swatch-2 { border-color: var(--tk-swatch-2); }
+.tk-bc-swatch-3 { border-color: var(--tk-swatch-3); }
+.tk-bc-swatch-4 { border-color: var(--tk-swatch-4); }
+
+.tk-fill-star { fill: var(--tk-route-6); }
+.tk-text-star { color: var(--tk-route-6); }
+
+.tk-photo-chip {
+  background: var(--tk-overlay);
+}
+.tk-photo-chip:hover {
+  background: var(--tk-ink);
+}
+
+.tk-bg-forest-soft {
+  background: color-mix(in srgb, var(--tk-forest) 90%, transparent);
+}
+.tk-bc-danger-soft {
+  border-color: color-mix(in srgb, var(--tk-danger) 70%, transparent);
+}
+.tk-bc-forest-soft {
+  border-color: color-mix(in srgb, var(--tk-forest) 55%, transparent);
+}
+
+.hover\:tk-bg-forest:hover { background: var(--tk-forest); }
+.hover\:tk-bc-swatch-1:hover { border-color: var(--tk-swatch-1); }

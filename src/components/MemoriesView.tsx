@@ -387,16 +387,16 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
       />
 
       {/* Top Clean 2-Row Control Card (Matches PackingView & ItineraryView) */}
-      <section className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-3.5">
+      <section className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-3.5">
         {/* Row 1: Multi-Trip Merger Dropdown + Traceory-style Segmented Filter Bar */}
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="relative">
             <button
               type="button"
               onClick={() => setTripDropdownOpen((v) => !v)}
-              className="h-9 px-3 rounded-xl border border-[#DCE8E5] bg-[#FAFDFC] hover:border-[#078C88] text-xs font-bold text-[#152B29] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="h-9 px-3 rounded-xl border tk-bc-hair tk-bg-card hover:tk-bc-forest text-xs font-bold tk-text-ink inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              <BookOpen className="w-3.5 h-3.5 text-[#078C88]" />
+              <BookOpen className="w-3.5 h-3.5 tk-text-forest" />
               <span className="tabular-nums">
                 {selectedTrips.length > 1
                   ? copy.tripsMergedLabel(selectedTrips.length)
@@ -404,19 +404,19 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                     selectedTrips[0]?.state.setup.cities.join(' · ') ||
                     copy.currentTripFallback}
               </span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#5B7370]" />
+              <ChevronDown className="w-3.5 h-3.5 tk-text-ink2" />
             </button>
 
             {tripDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-72 rounded-2xl border border-[#DCE8E5] bg-white shadow-xl p-3 z-30 space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-[#5B7370] px-1">
+              <div className="absolute left-0 mt-2 w-72 rounded-2xl border tk-bc-hair bg-white shadow-xl p-3 z-30 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-semibold tk-text-ink2 px-1">
                   <span>
                     {copy.selectTripsHint}
                   </span>
                   <button
                     type="button"
                     onClick={() => setTripDropdownOpen(false)}
-                    className="text-[#078C88] font-bold cursor-pointer"
+                    className="tk-text-forest font-bold cursor-pointer"
                   >
                     {copy.doneBtn}
                   </button>
@@ -433,13 +433,13 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                         onClick={() => toggleSelectTripId(tr.id)}
                         className={`w-full flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-left text-xs transition-colors cursor-pointer ${
                           checked
-                            ? 'bg-[#EFF9F8] text-[#093B35] font-bold'
-                            : 'hover:bg-[#F7FAF9] text-[#3B5552]'
+                            ? 'tk-bg-forest-tint tk-text-forest font-bold'
+                            : 'hover:tk-bg-paper tk-text-ink2'
                         }`}
                       >
                         <div className="min-w-0">
                           <div className="truncate">{title}</div>
-                          <div className="text-[11px] font-normal text-[#5B7370] tabular-nums">
+                          <div className="text-[11px] font-normal tk-text-ink2 tabular-nums">
                             {tr.state.setup.departureDate} · {tr.state.setup.days}
                             {copy.daysSuffix}
                           </div>
@@ -447,8 +447,8 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                         <span
                           className={`h-4 w-4 rounded flex items-center justify-center border shrink-0 ${
                             checked
-                              ? 'border-[#078C88] bg-[#078C88] text-white'
-                              : 'border-[#C5D6D2] bg-white'
+                              ? 'tk-bc-forest tk-bg-forest text-white'
+                              : 'tk-bc-hair bg-white'
                           }`}
                         >
                           {checked && <Check className="w-3 h-3" />}
@@ -462,14 +462,14 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
           </div>
 
           {/* Segmented View Controls: All | Favorites | Grid | Map */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-[#EEF5F3] overflow-x-auto max-w-full">
+          <div className="flex items-center gap-1 p-1 rounded-xl tk-bg-forest-tint overflow-x-auto max-w-full">
             <button
               type="button"
               onClick={() => setFilterMode('all')}
               className={`h-7 px-2.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer tabular-nums ${
                 filterMode === 'all'
-                  ? 'bg-white text-[#152B29] shadow-2xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
+                  ? 'bg-white tk-text-ink shadow-2xs'
+                  : 'tk-text-ink2 hover:tk-text-ink'
               }`}
             >
               {copy.allFilter(scopedPhotos.length)}
@@ -479,20 +479,20 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               onClick={() => setFilterMode('favorites')}
               className={`h-7 px-2.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer tabular-nums ${
                 filterMode === 'favorites'
-                  ? 'bg-white text-[#152B29] shadow-2xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
+                  ? 'bg-white tk-text-ink shadow-2xs'
+                  : 'tk-text-ink2 hover:tk-text-ink'
               }`}
             >
               {copy.inBookFilter(favoriteScopedPhotos.length)}
             </button>
-            <span className="h-3.5 w-px bg-[#D5E3DF] mx-0.5 shrink-0" />
+            <span className="h-3.5 w-px tk-bg-forest-plate mx-0.5 shrink-0" />
             <button
               type="button"
               onClick={() => setDisplayMode('grid')}
               className={`h-7 px-2.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 displayMode === 'grid'
-                  ? 'bg-white text-[#152B29] shadow-2xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
+                  ? 'bg-white tk-text-ink shadow-2xs'
+                  : 'tk-text-ink2 hover:tk-text-ink'
               }`}
             >
               <Grid className="w-3.5 h-3.5" />
@@ -503,8 +503,8 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               onClick={() => setDisplayMode('map')}
               className={`h-7 px-2.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 displayMode === 'map'
-                  ? 'bg-white text-[#152B29] shadow-2xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
+                  ? 'bg-white tk-text-ink shadow-2xs'
+                  : 'tk-text-ink2 hover:tk-text-ink'
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
@@ -519,7 +519,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
             type="button"
             disabled={indexingState.running}
             onClick={() => void handleTriggerPhotoIndex()}
-            className="h-10 px-4 rounded-xl bg-[#093B35] hover:bg-[#0C4D45] text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="h-10 px-4 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             {indexingState.running ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -536,18 +536,18 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
           <button
             type="button"
             onClick={() => setStudioOpen(true)}
-            className="h-10 px-3.5 rounded-xl border border-[#DCE8E5] bg-[#FAFDFC] hover:border-[#078C88] text-xs font-bold text-[#152B29] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="h-10 px-3.5 rounded-xl border tk-bc-hair tk-bg-card hover:tk-bc-forest text-xs font-bold tk-text-ink inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#078C88]" />
+            <Sparkles className="w-3.5 h-3.5 tk-text-forest" />
             <span>{copy.aiPhotobookBtn}</span>
           </button>
 
           <button
             type="button"
             onClick={() => setCheckoutModalState({ open: true, tab: 'orders' })}
-            className="h-10 px-3.5 rounded-xl border border-[#DCE8E5] bg-[#FAFDFC] hover:border-[#078C88] text-xs font-bold text-[#152B29] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="h-10 px-3.5 rounded-xl border tk-bc-hair tk-bg-card hover:tk-bc-forest text-xs font-bold tk-text-ink inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
-            <Printer className="w-3.5 h-3.5 text-[#078C88]" />
+            <Printer className="w-3.5 h-3.5 tk-text-forest" />
             <span>{copy.printOrdersBtn}</span>
           </button>
         </div>
@@ -555,16 +555,16 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
 
       {/* Empty State: Traceory-Inspired Local Indexing & Privacy Promise Card */}
       {scopedPhotos.length === 0 ? (
-        <section className="rounded-3xl border border-[#DCE8E5] bg-white px-6 py-12 text-center max-w-2xl mx-auto space-y-5">
-          <div className="mx-auto h-14 w-14 rounded-2xl bg-[#EFF9F8] text-[#078C88] flex items-center justify-center">
+        <section className="rounded-3xl border tk-bc-hair bg-white px-6 py-12 text-center max-w-2xl mx-auto space-y-5">
+          <div className="mx-auto h-14 w-14 rounded-2xl tk-bg-forest-tint tk-text-forest flex items-center justify-center">
             <Camera className="w-7 h-7" />
           </div>
 
           <div className="space-y-2.5 max-w-md mx-auto">
-            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#152B29] text-balance">
+            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight tk-text-ink text-balance">
               {copy.emptyHeadline}
             </h2>
-            <p className="text-xs sm:text-sm text-[#5B7370] leading-relaxed">
+            <p className="text-xs sm:text-sm tk-text-ink2 leading-relaxed">
               {copy.emptyDesc}
             </p>
           </div>
@@ -573,7 +573,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
             <button
               type="button"
               onClick={() => void handleTriggerPhotoIndex()}
-              className="w-full sm:w-auto h-11 px-6 rounded-full bg-[#093B35] hover:bg-[#0C4D45] text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer whitespace-nowrap"
+              className="w-full sm:w-auto h-11 px-6 rounded-full tk-bg-forest hover:tk-bg-press text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer whitespace-nowrap"
             >
               <ImagePlus className="w-4 h-4" />
               <span>{copy.indexAllBtn}</span>
@@ -582,15 +582,15 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
             <button
               type="button"
               onClick={handleLoadSamplePhotos}
-              className="w-full sm:w-auto h-11 px-5 rounded-full border border-[#DCE8E5] bg-white hover:bg-[#F5FAF9] text-xs font-bold text-[#152B29] inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              className="w-full sm:w-auto h-11 px-5 rounded-full border tk-bc-hair bg-white hover:tk-bg-paper text-xs font-bold tk-text-ink inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#078C88]" />
+              <Sparkles className="w-3.5 h-3.5 tk-text-forest" />
               <span>{copy.trySamplesBtn}</span>
             </button>
           </div>
 
-          <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6E8582]">
-            <Shield className="w-3.5 h-3.5 text-[#078C88]" />
+          <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] tk-text-ink2">
+            <Shield className="w-3.5 h-3.5 tk-text-forest" />
             <span>
               {copy.privacyFootnotes}
             </span>
@@ -598,27 +598,27 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
         </section>
       ) : displayMode === 'map' ? (
         /* Footprint Map Mode */
-        <section className="rounded-3xl border border-[#DCE8E5] bg-white p-5 space-y-4">
+        <section className="rounded-3xl border tk-bc-hair bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <h3 className="text-sm font-bold text-[#152B29]">
+              <h3 className="text-sm font-bold tk-text-ink">
                 {copy.mapHeading}
               </h3>
-              <p className="text-xs text-[#5B7370] tabular-nums">
+              <p className="text-xs tk-text-ink2 tabular-nums">
                 {copy.mapSub(geoPoints.length, selectedTrips.length)}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setStudioOpen(true)}
-              className="h-9 px-3.5 rounded-xl bg-[#093B35] text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+              className="h-9 px-3.5 rounded-xl tk-bg-forest text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
             >
               <BookOpen className="w-3.5 h-3.5" />
               <span>{copy.previewBookBtn}</span>
             </button>
           </div>
 
-          <div className="relative w-full h-[360px] rounded-2xl bg-[#EEF5F3] border border-[#DCE8E5] overflow-hidden">
+          <div className="relative w-full h-[360px] rounded-2xl tk-bg-forest-tint border tk-bc-hair overflow-hidden">
             {/* Subtle Coordinate Grid Lines */}
             <svg className="absolute inset-0 w-full h-full" aria-hidden="true">
               <defs>
@@ -626,7 +626,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                   <path
                     d="M 48 0 L 0 0 0 48"
                     fill="none"
-                    stroke="rgba(7,140,136,0.08)"
+                    stroke="var(--tk-hair-2-c)"
                     strokeWidth="1"
                   />
                 </pattern>
@@ -635,7 +635,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               {geoPoints.length > 1 && (
                 <polyline
                   fill="none"
-                  stroke="#078C88"
+                  stroke="var(--tk-route-1)"
                   strokeWidth="2"
                   strokeDasharray="5 5"
                   points={geoPoints
@@ -661,7 +661,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="mt-1 px-1.5 py-0.5 rounded bg-[#093B35]/90 text-[10px] font-semibold text-white whitespace-nowrap">
+                <span className="mt-1 px-1.5 py-0.5 rounded tk-bg-forest-soft text-[10px] font-semibold text-white whitespace-nowrap">
                   D{pt.photo.matchedDay} · {pt.photo.matchedStopTitle || pt.photo.matchedCity || `#${idx + 1}`}
                 </span>
               </button>
@@ -676,12 +676,12 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               tripEntry.state.intel.routeTitle || tripEntry.state.setup.cities.join(' → ');
             return (
               <section key={tripEntry.id} className="space-y-4">
-                <div className="flex items-baseline justify-between gap-2 border-b border-[#DCE8E5] pb-2">
+                <div className="flex items-baseline justify-between gap-2 border-b tk-bc-hair pb-2">
                   <div className="min-w-0">
-                    <h3 className="text-base font-bold text-[#152B29] truncate">
+                    <h3 className="text-base font-bold tk-text-ink truncate">
                       {tripTitle}
                     </h3>
-                    <div className="text-xs text-[#5B7370] tabular-nums">
+                    <div className="text-xs tk-text-ink2 tabular-nums">
                       {tripEntry.state.setup.departureDate} · {copy.photosIndexedLabel(totalCount)}
                     </div>
                   </div>
@@ -692,8 +692,8 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                   return (
                     <div key={`${tripEntry.id}_d${dayNum}`} className="space-y-2.5">
                       {/* Clean Unboxed Metadata Header (Zero-Pill Discipline) */}
-                      <div className="flex items-center gap-2 text-xs text-[#5B7370] tabular-nums">
-                        <span className="font-bold text-[#152B29]">Day {dayNum}</span>
+                      <div className="flex items-center gap-2 text-xs tk-text-ink2 tabular-nums">
+                        <span className="font-bold tk-text-ink">Day {dayNum}</span>
                         <span aria-hidden="true">·</span>
                         <span>{first?.matchedCity}</span>
                         <span aria-hidden="true">·</span>
@@ -713,12 +713,12 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                           return (
                             <div
                               key={photo.id}
-                              className="group relative rounded-2xl border border-[#DCE8E5] bg-white overflow-hidden"
+                              className="group relative rounded-2xl border tk-bc-hair bg-white overflow-hidden"
                             >
                               <button
                                 type="button"
                                 onClick={() => setActivePhotoModal(photo)}
-                                className="block w-full aspect-[4/3] bg-[#EEF4F2] overflow-hidden cursor-pointer"
+                                className="block w-full aspect-[4/3] tk-bg-forest-tint overflow-hidden cursor-pointer"
                               >
                                 {src ? (
                                   <img
@@ -728,7 +728,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                                     className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-200"
                                   />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-xs text-[#5B7370]">
+                                  <div className="w-full h-full flex items-center justify-center text-xs tk-text-ink2">
                                     {photo.fileName}
                                   </div>
                                 )}
@@ -743,12 +743,12 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                                     ? copy.includedInBookTitle
                                     : copy.addToBookTitle
                                 }
-                                className="absolute top-1.5 right-1.5 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-xs inline-flex items-center justify-center text-white transition-colors cursor-pointer"
+                                className="absolute top-1.5 right-1.5 h-9 w-9 rounded-full tk-photo-chip inline-flex items-center justify-center text-white transition-colors cursor-pointer"
                               >
                                 <Star
                                   className={`w-4 h-4 ${
                                     photo.isFavorite
-                                      ? 'fill-[#F5B942] text-[#F5B942]'
+                                      ? 'tk-fill-star tk-text-star'
                                       : 'text-white'
                                   }`}
                                 />
@@ -756,10 +756,10 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
 
                               {/* Unboxed Metadata Footer */}
                               <div className="px-3 py-2 space-y-0.5">
-                                <div className="text-xs font-semibold text-[#152B29] truncate">
+                                <div className="text-xs font-semibold tk-text-ink truncate">
                                   {photo.matchedStopTitle || photo.matchedCity}
                                 </div>
-                                <div className="flex items-center gap-1.5 text-[11px] text-[#5B7370] tabular-nums truncate">
+                                <div className="flex items-center gap-1.5 text-[11px] tk-text-ink2 tabular-nums truncate">
                                   <span>{dpi.estimatedDpi} DPI</span>
                                   {photo.userNote && (
                                     <>
@@ -781,12 +781,12 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
           })}
 
           {/* Sticky / Bottom Book Summary Callout */}
-          <div className="rounded-2xl border border-[#DCE8E5] bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="rounded-2xl border tk-bc-hair bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="space-y-0.5">
-              <div className="text-sm font-bold text-[#152B29]">
+              <div className="text-sm font-bold tk-text-ink">
                 {copy.readyToPrintTitle(favoriteScopedPhotos.length, bookDraft.pageCount)}
               </div>
-              <div className="text-xs text-[#5B7370]">
+              <div className="text-xs tk-text-ink2">
                 {copy.readyToPrintDesc}
               </div>
             </div>
@@ -794,7 +794,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               <button
                 type="button"
                 onClick={() => setStudioOpen(true)}
-                className="h-10 px-4 rounded-xl bg-[#093B35] hover:bg-[#0C4D45] text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+                className="h-10 px-4 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{copy.openStudioBtn}</span>
@@ -807,14 +807,14 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
       {/* Photo Lightbox & Stop Reassignment Modal */}
       {activePhotoModal && (
         <div
-          className="fixed inset-0 z-50 bg-[#082220]/70 backdrop-blur-xs p-4 flex items-center justify-center"
+          className="fixed inset-0 z-50 tk-bg-overlay p-4 flex items-center justify-center"
           onClick={() => setActivePhotoModal(null)}
         >
           <div
-            className="w-full max-w-xl rounded-3xl border border-[#DCE8E5] bg-white overflow-hidden shadow-2xl"
+            className="w-full max-w-xl rounded-3xl border tk-bc-hair bg-white overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[4/3] bg-[#0B1E1C]">
+            <div className="relative aspect-[4/3] tk-bg-ink">
               <img
                 src={
                   photoBlobs[activePhotoModal.id]?.fullDataUrl ||
@@ -827,7 +827,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
               <button
                 type="button"
                 onClick={() => setActivePhotoModal(null)}
-                className="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/50 text-white inline-flex items-center justify-center cursor-pointer"
+                className="absolute top-3 right-3 h-9 w-9 rounded-full tk-photo-chip text-white inline-flex items-center justify-center cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -835,14 +835,14 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
 
             <div className="p-5 space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <div className="text-xs text-[#5B7370] tabular-nums">
+                <div className="text-xs tk-text-ink2 tabular-nums">
                   {activePhotoModal.fileName} · {activePhotoModal.width}×{activePhotoModal.height}px
                   {activePhotoModal.cameraLabel ? ` · ${activePhotoModal.cameraLabel}` : ''}
                 </div>
                 <button
                   type="button"
                   onClick={() => void handleDeletePhoto(activePhotoModal.id)}
-                  className="h-8 px-2.5 rounded-lg text-xs font-semibold text-[#A63A3A] hover:bg-[#FFF5F5] inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                  className="h-8 px-2.5 rounded-lg text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>{copy.removePhotoBtn}</span>
@@ -851,7 +851,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
 
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                     {copy.tripChapterLabel}
                   </label>
                   <select
@@ -865,7 +865,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                         matchedCity: nextTrip?.state.setup.cities[0] || activePhotoModal.matchedCity,
                       });
                     }}
-                    className="w-full h-9 rounded-xl border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-xs tk-text-ink"
                   >
                     {trips.map((tr) => (
                       <option key={tr.id} value={tr.id}>
@@ -876,7 +876,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                     {copy.dayStopTitleLabel}
                   </label>
                   <input
@@ -889,13 +889,13 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                       })
                     }
                     placeholder={activePhotoModal.matchedCity}
-                    className="w-full h-9 rounded-xl border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-xs tk-text-ink"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                   {copy.memoryNoteLabel}
                 </label>
                 <input
@@ -908,7 +908,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                     })
                   }
                   placeholder={copy.memoryNotePlaceholder}
-                  className="w-full h-9 rounded-xl border border-[#DCE8E5] px-3 text-xs text-[#152B29]"
+                  className="w-full h-9 rounded-xl border tk-bc-hair px-3 text-xs tk-text-ink"
                 />
               </div>
             </div>

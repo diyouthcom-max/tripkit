@@ -287,22 +287,22 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#082220]/60 backdrop-blur-xs p-0 sm:p-4 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 flex items-end sm:items-center justify-center"
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-5xl max-h-[94vh] flex flex-col rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl overflow-hidden"
+        className="w-full sm:max-w-5xl max-h-[94vh] flex flex-col rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Studio Bar */}
-        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-b border-[#E6F0EE] bg-white shrink-0">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 border-b tk-bc-hair bg-white shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <BookOpen className="w-5 h-5 text-[#093B35] shrink-0" />
+            <BookOpen className="w-5 h-5 tk-text-forest shrink-0" />
             <div className="min-w-0">
-              <h2 className="text-sm sm:text-base font-bold text-[#152B29] truncate">
+              <h2 className="text-sm sm:text-base font-bold tk-text-ink truncate">
                 {copy.studioTitle}
               </h2>
-              <div className="text-[11px] text-[#5B7370] truncate tabular-nums">
+              <div className="text-[11px] tk-text-ink2 truncate tabular-nums">
                 {copy.signatureSub(draft.pageCount, curatedPhotos.length, selectedTrips.length)}
               </div>
             </div>
@@ -313,12 +313,12 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
               type="button"
               disabled={isExportingPdf}
               onClick={handleExportPdf}
-              className="h-9 px-3 rounded-xl border border-[#DCE8E5] bg-white hover:bg-[#F5FAF9] text-xs font-bold text-[#152B29] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="h-9 px-3 rounded-xl border tk-bc-hair bg-white hover:tk-bg-paper text-xs font-bold tk-text-ink inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               {isExportingPdf ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#078C88]" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin tk-text-forest" />
               ) : (
-                <Download className="w-3.5 h-3.5 text-[#078C88]" />
+                <Download className="w-3.5 h-3.5 tk-text-forest" />
               )}
               <span className="hidden sm:inline">
                 {copy.bleedPdfBtn}
@@ -328,7 +328,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
             <button
               type="button"
               onClick={onOpenPrintCheckout}
-              className="h-9 px-3.5 rounded-xl bg-[#093B35] hover:bg-[#0C4D45] text-xs font-bold text-white inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="h-9 px-3.5 rounded-xl tk-bg-forest hover:tk-bg-press text-xs font-bold text-white inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>{copy.orderPrintBtn}</span>
@@ -338,7 +338,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
               type="button"
               onClick={onClose}
               aria-label={copy.closeAria}
-              className="h-9 w-9 inline-flex items-center justify-center rounded-xl text-[#5B7370] hover:bg-[#F2F7F6] cursor-pointer shrink-0"
+              className="h-9 w-9 inline-flex items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-forest-tint cursor-pointer shrink-0"
             >
               <X className="w-4 h-4" />
             </button>
@@ -346,29 +346,29 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
         </div>
 
         {/* Main 2-Column Studio Body */}
-        <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#E6F0EE]">
+        <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x tk-divide-hair">
           {/* Left Controls Rail (5 cols) */}
-          <div className="lg:col-span-5 p-4 sm:p-5 space-y-4 bg-[#FAFDFC]">
+          <div className="lg:col-span-5 p-4 sm:p-5 space-y-4 tk-bg-card">
             {/* AI Story Director + Explicit Privacy Consent */}
-            <div className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-3">
+            <div className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold text-[#152B29]">
+                <span className="text-xs font-bold tk-text-ink">
                   {copy.aiEditorialHeading}
                 </span>
                 {draft.generatedByAi && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#078C88]">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest">
                     <Check className="w-3 h-3" />
                     {copy.aiCuratedBadge}
                   </span>
                 )}
               </div>
 
-              <label className="flex items-start gap-2.5 text-xs text-[#3B5552] cursor-pointer select-none">
+              <label className="flex items-start gap-2.5 text-xs tk-text-ink2 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={allowPhotoVision}
                   onChange={(e) => setAllowPhotoVision(e.target.checked)}
-                  className="mt-0.5 rounded border-[#BFD4D0] text-[#078C88] focus:ring-[#078C88]"
+                  className="mt-0.5 rounded tk-bc-hair tk-text-forest tk-accent-forest"
                 />
                 <span className="leading-relaxed">
                   {copy.visionConsentText(curatedPhotos.length)}
@@ -376,7 +376,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
               </label>
 
               {aiError && (
-                <div className="rounded-xl bg-[#FFF6F6] border border-[#F2C6C6] px-3 py-2 text-xs text-[#A63A3A]">
+                <div className="rounded-xl tk-bg-danger-tint border tk-bc-danger-hair px-3 py-2 text-xs tk-text-danger">
                   {aiError}
                 </div>
               )}
@@ -385,7 +385,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 type="button"
                 disabled={isGeneratingAi}
                 onClick={() => void handleGenerateAiBook()}
-                className="w-full h-10 rounded-xl bg-[#078C88] hover:bg-[#067572] text-white text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                className="w-full h-10 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
               >
                 {isGeneratingAi ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -400,7 +400,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
 
             {/* Magazine Template Selector */}
             <div className="space-y-1.5">
-              <div className="text-xs font-bold text-[#152B29]">
+              <div className="text-xs font-bold tk-text-ink">
                 {copy.step1Heading}
               </div>
               <div className="grid grid-cols-3 gap-1.5">
@@ -417,8 +417,8 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                     }
                     className={`h-9 px-2 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                       draft.templateId === tplId
-                        ? 'border-[#093B35] bg-[#093B35] text-white'
-                        : 'border-[#DCE8E5] bg-white text-[#3B5552] hover:border-[#078C88]'
+                        ? 'tk-bc-forest tk-bg-forest text-white'
+                        : 'tk-bc-hair bg-white tk-text-ink2 hover:tk-bc-forest'
                     }`}
                   >
                     {copy.templates[tplId]}
@@ -430,7 +430,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
             {/* Trim Size & Binding */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
               <div className="space-y-1.5">
-                <div className="text-xs font-bold text-[#152B29]">
+                <div className="text-xs font-bold tk-text-ink">
                   {copy.step2Heading}
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
@@ -447,8 +447,8 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                       }
                       className={`h-9 px-2.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                         draft.formatId === fmtId
-                          ? 'border-[#078C88] bg-[#EFF9F8] text-[#076E6A]'
-                          : 'border-[#DCE8E5] bg-white text-[#3B5552]'
+                          ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+                          : 'tk-bc-hair bg-white tk-text-ink2'
                       }`}
                     >
                       {copy.formats[fmtId]}
@@ -458,7 +458,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
               </div>
 
               <div className="space-y-1.5">
-                <div className="text-xs font-bold text-[#152B29]">
+                <div className="text-xs font-bold tk-text-ink">
                   {copy.step3Heading}
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
@@ -475,8 +475,8 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                       }
                       className={`h-9 px-2.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                         draft.bindingId === bdId
-                          ? 'border-[#078C88] bg-[#EFF9F8] text-[#076E6A]'
-                          : 'border-[#DCE8E5] bg-white text-[#3B5552]'
+                          ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+                          : 'tk-bc-hair bg-white tk-text-ink2'
                       }`}
                     >
                       {copy.bindings[bdId]}
@@ -487,9 +487,9 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
             </div>
 
             {/* Pre-Press Bleed & DPI Check */}
-            <div className="rounded-2xl border border-[#DCE8E5] bg-white p-3.5 space-y-2.5">
+            <div className="rounded-2xl border tk-bc-hair bg-white p-3.5 space-y-2.5">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold text-[#152B29]">
+                <span className="text-xs font-bold tk-text-ink">
                   {copy.proofingHeading}
                 </span>
                 <button
@@ -497,8 +497,8 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                   onClick={() => setShowBleedGuides((v) => !v)}
                   className={`h-7 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 cursor-pointer whitespace-nowrap ${
                     showBleedGuides
-                      ? 'bg-[#093B35] text-white'
-                      : 'border border-[#DCE8E5] text-[#5B7370]'
+                      ? 'tk-bg-forest text-white'
+                      : 'border tk-bc-hair tk-text-ink2'
                   }`}
                 >
                   <Eye className="w-3 h-3" />
@@ -506,14 +506,14 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 </button>
               </div>
               {lowResCount > 0 ? (
-                <div className="flex items-start gap-2 text-xs text-[#966E0E]">
-                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-[#C99A26]" />
+                <div className="flex items-start gap-2 text-xs tk-text-warning">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 tk-text-warning" />
                   <span>
                     {copy.lowResWarning(lowResCount)}
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 text-xs text-[#216E55]">
+                <div className="flex items-center gap-2 text-xs tk-text-success">
                   <Check className="w-4 h-4 shrink-0" />
                   <span>
                     {copy.allSharpOk}
@@ -524,20 +524,20 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
           </div>
 
           {/* Right Interactive Book Spread & Inline Copy Editor (7 cols) */}
-          <div className="lg:col-span-7 p-4 sm:p-6 flex flex-col justify-between bg-[#F3F7F6] space-y-4">
+          <div className="lg:col-span-7 p-4 sm:p-6 flex flex-col justify-between tk-bg-forest-plate space-y-4">
             {/* Spread Navigation Header */}
             <div className="flex items-center justify-between gap-2">
               <button
                 type="button"
                 disabled={safeIdx === 0}
                 onClick={() => setSpreadIndex((i) => Math.max(0, i - 1))}
-                className="h-9 px-3 rounded-xl border border-[#DCE8E5] bg-white text-xs font-semibold text-[#152B29] disabled:opacity-40 inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                className="h-9 px-3 rounded-xl border tk-bc-hair bg-white text-xs font-semibold tk-text-ink disabled:opacity-40 inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>{copy.prevBtn}</span>
               </button>
 
-              <div className="text-xs font-bold text-[#152B29] tabular-nums">
+              <div className="text-xs font-bold tk-text-ink tabular-nums">
                 {activeSpread?.label} ({safeIdx + 1} / {spreads.length})
               </div>
 
@@ -545,7 +545,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 type="button"
                 disabled={safeIdx >= spreads.length - 1}
                 onClick={() => setSpreadIndex((i) => Math.min(spreads.length - 1, i + 1))}
-                className="h-9 px-3 rounded-xl border border-[#DCE8E5] bg-white text-xs font-semibold text-[#152B29] disabled:opacity-40 inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                className="h-9 px-3 rounded-xl border tk-bc-hair bg-white text-xs font-semibold tk-text-ink disabled:opacity-40 inline-flex items-center gap-1 cursor-pointer whitespace-nowrap"
               >
                 <span>{copy.nextBtn}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -558,21 +558,21 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 className={`relative w-full ${
                   isSquare ? 'max-w-[400px] aspect-square' : 'max-w-[320px] aspect-[148/210]'
                 } rounded-md shadow-xl overflow-hidden transition-all ${
-                  isScrapbook ? 'bg-[#FBF8F1]' : 'bg-white'
+                  isScrapbook ? 'tk-bg-paper' : 'bg-white'
                 }`}
               >
                 {/* 3mm Bleed & Safe Zone Guides Overlay */}
                 {showBleedGuides && (
                   <>
                     <div
-                      className="pointer-events-none absolute inset-[6px] border border-dashed border-[#E11D48]/70 z-20"
+                      className="pointer-events-none absolute inset-[6px] border border-dashed tk-bc-danger-soft z-20"
                       title={copy.trimLineTitle}
                     />
                     <div
-                      className="pointer-events-none absolute inset-[22px] border border-dotted border-[#078C88]/55 z-20"
+                      className="pointer-events-none absolute inset-[22px] border border-dotted tk-bc-forest-soft z-20"
                       title={copy.safeAreaTitle}
                     />
-                    <span className="pointer-events-none absolute top-2 right-2.5 z-20 text-[9px] font-mono font-semibold text-[#E11D48] bg-white/85 px-1.5 py-0.5 rounded">
+                    <span className="pointer-events-none absolute top-2 right-2.5 z-20 text-[9px] font-mono font-semibold tk-text-danger bg-white/85 px-1.5 py-0.5 rounded">
                       3mm BLEED
                     </span>
                   </>
@@ -582,7 +582,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 {activeSpread?.kind === 'cover' && (
                   <div className="w-full h-full flex flex-col">
                     {isScrapbook ? (
-                      <div className="w-full h-full bg-[#EFE8D8] p-7 flex flex-col justify-between items-center text-center">
+                      <div className="w-full h-full tk-bg-paper p-7 flex flex-col justify-between items-center text-center">
                         <div className="w-full h-[64%] bg-white p-2.5 shadow-sm">
                           {curatedPhotos[0] && (
                             <img
@@ -594,15 +594,15 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           )}
                         </div>
                         <div className="pb-2">
-                          <div className="font-serif text-xl font-bold text-[#152B29] text-balance">
+                          <div className="font-serif text-xl font-bold tk-text-ink text-balance">
                             {draft.bookTitle}
                           </div>
-                          <div className="mt-1 text-xs text-[#5B7370]">{draft.bookSubtitle}</div>
+                          <div className="mt-1 text-xs tk-text-ink2">{draft.bookSubtitle}</div>
                         </div>
                       </div>
                     ) : (
                       <>
-                        <div className="w-full h-[66%] bg-[#093B35] overflow-hidden">
+                        <div className="w-full h-[66%] tk-bg-forest overflow-hidden">
                           {curatedPhotos[0] && (
                             <img
                               src={resolvePhotoUrl(curatedPhotos[0])}
@@ -614,13 +614,13 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         </div>
                         <div className="flex-1 bg-white p-6 flex flex-col justify-center">
                           <div
-                            className={`text-xl font-bold text-[#152B29] text-balance ${
+                            className={`text-xl font-bold tk-text-ink text-balance ${
                               isEditorial ? 'tracking-tight' : 'font-serif'
                             }`}
                           >
                             {draft.bookTitle}
                           </div>
-                          <div className="mt-1 text-xs text-[#5B7370]">{draft.bookSubtitle}</div>
+                          <div className="mt-1 text-xs tk-text-ink2">{draft.bookSubtitle}</div>
                         </div>
                       </>
                     )}
@@ -629,13 +629,13 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
 
                 {activeSpread?.kind === 'epigraph' && (
                   <div className="w-full h-full p-8 flex flex-col items-center justify-center text-center space-y-4">
-                    <div className="font-mono text-[10px] tracking-widest text-[#078C88]">
+                    <div className="font-mono text-[10px] tracking-widest tk-text-forest">
                       TRAVEL MONOGRAPH · EDITION I
                     </div>
-                    <p className="font-serif italic text-sm sm:text-base text-[#152B29] leading-relaxed">
+                    <p className="font-serif italic text-sm sm:text-base tk-text-ink leading-relaxed">
                       “{draft.epigraph}”
                     </p>
-                    <div className="pt-4 text-[11px] text-[#5B7370]">
+                    <div className="pt-4 text-[11px] tk-text-ink2">
                       {selectedTrips
                         .map((t) => t.state.intel.routeTitle || t.state.setup.cities.join(' · '))
                         .join('  /  ')}
@@ -646,23 +646,23 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 {activeSpread?.kind === 'chapter' && activeSpread.chapter && (
                   <div className="w-full h-full p-7 flex flex-col justify-between">
                     <div className="space-y-2 pt-3">
-                      <div className="font-mono text-[10px] font-semibold text-[#078C88]">
+                      <div className="font-mono text-[10px] font-semibold tk-text-forest">
                         CHAPTER 0{activeSpread.chapter.chapterNumber} ·{' '}
                         {activeSpread.chapter.dateSpanLabel}
                       </div>
-                      <h3 className="font-serif text-xl font-bold text-[#152B29] text-balance">
+                      <h3 className="font-serif text-xl font-bold tk-text-ink text-balance">
                         {activeSpread.chapter.chapterTitle}
                       </h3>
-                      <div className="text-xs text-[#5B7370]">
+                      <div className="text-xs tk-text-ink2">
                         {activeSpread.chapter.routeLine}
                       </div>
                     </div>
-                    <div className="border-t border-[#DCE8E5] pt-4 space-y-3">
-                      <p className="text-xs sm:text-sm text-[#2B4441] leading-relaxed">
+                    <div className="border-t tk-bc-hair pt-4 space-y-3">
+                      <p className="text-xs sm:text-sm tk-text-ink2 leading-relaxed">
                         {activeSpread.chapter.narrativeIntro}
                       </p>
                       {activeSpread.chapter.highlightsLine && (
-                        <div className="font-mono text-[10px] text-[#5B7370]">
+                        <div className="font-mono text-[10px] tk-text-ink2">
                           {activeSpread.chapter.highlightsLine}
                         </div>
                       )}
@@ -689,17 +689,17 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         />
                       </div>
                       <div className="pt-3 space-y-1">
-                        <div className="flex items-center justify-between gap-2 font-mono text-[10px] text-[#5B7370] tabular-nums">
+                        <div className="flex items-center justify-between gap-2 font-mono text-[10px] tk-text-ink2 tabular-nums">
                           <span>
                             DAY {p.matchedDay} · {p.matchedCity}
                             {p.matchedStopTitle ? ` · ${p.matchedStopTitle}` : ''}
                           </span>
                           <span>{dpiInfo.estimatedDpi} DPI</span>
                         </div>
-                        <div className="font-serif text-sm font-bold text-[#152B29]">
+                        <div className="font-serif text-sm font-bold tk-text-ink">
                           {cap?.headline || p.matchedStopTitle || p.matchedCity}
                         </div>
-                        <p className="text-xs text-[#3B5552] line-clamp-3 leading-relaxed">
+                        <p className="text-xs tk-text-ink2 line-clamp-3 leading-relaxed">
                           {cap?.storyCaption ||
                             p.userNote ||
                             copy.photoCaptionFallback}
@@ -710,12 +710,12 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 })()}
 
                 {activeSpread?.kind === 'colophon' && (
-                  <div className="w-full h-full bg-[#093B35] text-white p-8 flex flex-col items-center justify-center text-center space-y-3">
+                  <div className="w-full h-full tk-bg-forest text-white p-8 flex flex-col items-center justify-center text-center space-y-3">
                     <div className="font-serif text-lg font-bold">{draft.bookTitle}</div>
                     <p className="text-xs text-white/75 leading-relaxed max-w-xs">
                       {draft.colophonSummary}
                     </p>
-                    <div className="pt-4 font-mono text-[10px] text-[#7CE7E3] tabular-nums">
+                    <div className="pt-4 font-mono text-[10px] tk-text-card tabular-nums">
                       {isSquare ? '210×210MM' : '148×210MM'} · 300 DPI ARCHIVAL PRINT
                     </div>
                   </div>
@@ -724,11 +724,11 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
             </div>
 
             {/* Inline Copy Editor for Current Page */}
-            <div className="rounded-2xl border border-[#DCE8E5] bg-white p-3.5 space-y-2">
+            <div className="rounded-2xl border tk-bc-hair bg-white p-3.5 space-y-2">
               {activeSpread?.kind === 'cover' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                       {copy.coverTitleLabel}
                     </label>
                     <input
@@ -742,11 +742,11 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           updatedAt: Date.now(),
                         })
                       }
-                      className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs font-semibold text-[#152B29]"
+                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs font-semibold tk-text-ink"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                       {copy.coverSubtitleLabel}
                     </label>
                     <input
@@ -760,7 +760,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           updatedAt: Date.now(),
                         })
                       }
-                      className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
                     />
                   </div>
                 </div>
@@ -768,7 +768,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
 
               {activeSpread?.kind === 'epigraph' && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                     {copy.openingEpigraphLabel}
                   </label>
                   <input
@@ -781,14 +781,14 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         updatedAt: Date.now(),
                       })
                     }
-                    className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
                   />
                 </div>
               )}
 
               {activeSpread?.kind === 'chapter' && activeSpread.chapter && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                     {copy.chapterNarrativeLabel}
                   </label>
                   <textarea
@@ -803,7 +803,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                       );
                       onUpdateDraft({ ...draft, chapters: nextCh, updatedAt: Date.now() });
                     }}
-                    className="w-full rounded-lg border border-[#DCE8E5] p-2 text-xs text-[#152B29]"
+                    className="w-full rounded-lg border tk-bc-hair p-2 text-xs tk-text-ink"
                   />
                 </div>
               )}
@@ -819,7 +819,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                 return (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                         {copy.photoHeadlineLabel}
                       </label>
                       <input
@@ -835,11 +835,11 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                             updatedAt: Date.now(),
                           })
                         }
-                        className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs font-semibold text-[#152B29]"
+                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs font-semibold tk-text-ink"
                       />
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                         {copy.storyCaptionLabel}
                       </label>
                       <input
@@ -856,7 +856,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           })
                         }
                         placeholder={copy.storyCaptionPlaceholder}
-                        className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
                       />
                     </div>
                   </div>
@@ -865,7 +865,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
 
               {activeSpread?.kind === 'colophon' && (
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
                     {copy.backColophonLabel}
                   </label>
                   <input
@@ -878,7 +878,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         updatedAt: Date.now(),
                       })
                     }
-                    className="w-full h-9 rounded-lg border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
                   />
                 </div>
               )}
