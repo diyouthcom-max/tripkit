@@ -97,6 +97,14 @@
   --tk-swatch-2: var(--tk-forest-done);
   --tk-swatch-3: var(--tk-ink-2);
   --tk-swatch-4: var(--tk-idle);
+  /* 5.5 地图 7 天路线色 · §02 功能语义色独立位（非新发明；供 SVG / Maps SDK 桥接） */
+  --tk-route-1: #078C88;
+  --tk-route-2: #D97E4A;
+  --tk-route-3: #4F6FD8;
+  --tk-route-4: #7E63B8;
+  --tk-route-5: #2E9B78;
+  --tk-route-6: #C88A1E;
+  --tk-route-7: #C95B5B;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -763,3 +771,33 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 .focus\:tk-bc-forest:focus { border-color: var(--tk-forest); }
 .group:hover .group-hover\:tk-text-forest { color: var(--tk-forest); }
 .disabled\:tk-text-ink2:disabled { color: var(--tk-ink-2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 2 批 Itinerary / 地图链路
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-elev-card { box-shadow: var(--tk-sh-card); }
+.tk-elev-dock { box-shadow: var(--tk-sh-dock); }
+.tk-elev-btn { box-shadow: var(--tk-sh-btn); }
+.tk-r-plate { border-radius: var(--tk-r-plate); }
+.tk-accent-forest { accent-color: var(--tk-forest); }
+.tk-decoration-ink2 { text-decoration-color: var(--tk-ink-2); }
+
+.tk-bg-route-1 { background: var(--tk-route-1); }
+.tk-bg-route-2 { background: var(--tk-route-2); }
+.tk-bg-route-3 { background: var(--tk-route-3); }
+.tk-bg-route-4 { background: var(--tk-route-4); }
+.tk-bg-route-5 { background: var(--tk-route-5); }
+.tk-bg-route-6 { background: var(--tk-route-6); }
+.tk-bg-route-7 { background: var(--tk-route-7); }
+
+.tk-itinerary-sheet {
+  background: var(--tk-card);
+  border: var(--tk-hair);
+  box-shadow: var(--tk-sh-card);
+  border-radius: var(--tk-r-dock) var(--tk-r-dock) 0 0;
+}
+@media (min-width: 640px) {
+  .tk-itinerary-sheet { border-radius: var(--tk-r-dock); }
+}

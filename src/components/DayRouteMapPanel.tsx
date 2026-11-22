@@ -66,6 +66,7 @@ import {
 } from './Real2DRouteMapCanvas';
 import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getItineraryMapCopy } from '../i18n/packs/itineraryMapPack';
+import { tkColor } from '../utils/tkColor';
 
 function usePanelLang() {
   const { i18n } = useTranslation();
@@ -102,13 +103,13 @@ interface DayRouteMapPanelProps {
 }
 
 const DAY_ROUTE_COLORS = [
-  '#078C88', // D1
-  '#D97E4A', // D2
-  '#4F6FD8', // D3
-  '#7E63B8', // D4
-  '#2E9B78', // D5
-  '#C88A1E', // D6
-  '#C95B5B', // D7
+  'var(--tk-route-1)', // D1
+  'var(--tk-route-2)', // D2
+  'var(--tk-route-3)', // D3
+  'var(--tk-route-4)', // D4
+  'var(--tk-route-5)', // D5
+  'var(--tk-route-6)', // D6
+  'var(--tk-route-7)', // D7
 ];
 
 function getDayRouteColor(dayNumber?: number): string {
@@ -193,7 +194,7 @@ const MapRouteSkeleton: React.FC<{
       aria-busy="true"
       aria-live="polite"
       aria-label={copy.skeletonAria(cityLabel)}
-      className="absolute inset-0 z-20 h-full w-full bg-[#F2F7F6] overflow-hidden select-none"
+      className="absolute inset-0 z-20 h-full w-full tk-bg-paper overflow-hidden select-none"
     >
       {/* Subtle architectural map grid */}
       <svg
@@ -207,7 +208,7 @@ const MapRouteSkeleton: React.FC<{
             <path
               d="M 48 0 L 0 0 0 48"
               fill="none"
-              stroke="#DCE8E5"
+              stroke="var(--tk-hair-c)"
               strokeWidth="1"
             />
           </pattern>
@@ -217,14 +218,14 @@ const MapRouteSkeleton: React.FC<{
         <path
           d={`M 0 ${svgH * 0.72} Q ${svgW * 0.35} ${svgH * 0.48}, ${svgW * 0.68} ${svgH * 0.66} T ${svgW} ${svgH * 0.38}`}
           fill="none"
-          stroke="#E2EFEA"
+          stroke="var(--tk-hair-c)"
           strokeWidth="16"
           strokeLinecap="round"
         />
         <polyline
           points={polylinePoints}
           fill="none"
-          stroke="#9CCBC7"
+          stroke="var(--tk-hair-c)"
           strokeWidth="3"
           strokeDasharray="7 6"
           strokeLinecap="round"
@@ -232,21 +233,21 @@ const MapRouteSkeleton: React.FC<{
         />
         {pts.map((pt, idx) => (
           <g key={idx}>
-            <circle cx={pt.x} cy={pt.y} r="13" fill="#FFFFFF" stroke="#B7DDD9" strokeWidth="2" />
-            <circle cx={pt.x} cy={pt.y} r="5" fill="#89C2BD" />
+            <circle cx={pt.x} cy={pt.y} r="13" fill="var(--tk-card)" stroke="var(--tk-hair-c)" strokeWidth="2" />
+            <circle cx={pt.x} cy={pt.y} r="5" fill="var(--tk-ink-2)" />
           </g>
         ))}
       </svg>
 
       {/* Center loading status card */}
       <div className="relative z-10 flex h-full items-center justify-center px-4">
-        <div className="rounded-2xl border border-[#DCE8E5] bg-white/95 px-4 py-3 shadow-xs backdrop-blur-xs flex items-center gap-3 max-w-md">
-          <Loader2 className="h-4 w-4 animate-spin text-[#078C88] shrink-0" />
+        <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 shadow-xs flex items-center gap-3 max-w-md">
+          <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
           <div className="min-w-0">
-            <div className="text-xs font-bold text-[#152B29] truncate">
+            <div className="text-xs font-bold tk-text-ink truncate">
               {stageLabel || copy.skeletonTitle(cityLabel)}
             </div>
-            <div className="mt-0.5 text-[11px] text-[#5B7370] font-num tabular-nums truncate">
+            <div className="mt-0.5 text-[11px] tk-text-ink2 font-num tabular-nums truncate">
               {scopeLabel} · {cityLabel}
               {stopCount > 0 ? copy.skeletonStops(stopCount) : ''}
             </div>
@@ -392,34 +393,34 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
   }, [showComparison, previousStops, stops.length, stopPoints]);
 
   return (
-    <div className="bg-[#F4FAF9] divide-y divide-[#E3EFED]">
+    <div className="tk-bg-paper divide-y tk-divide-hair">
       {/* Top City Identity + Quick Navigation Action Bar */}
       <div className="px-4 sm:px-5 py-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white border border-[#CFE6E3] text-[#078C88]">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl tk-bg-card border tk-bc-hair tk-text-forest">
             <Compass className="h-5 w-5" />
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span className="text-xs font-bold text-[#078C88]">
+              <span className="text-xs font-bold tk-text-forest">
                 {copy.scopeCity(scopeLabel)}
               </span>
-              <span aria-hidden="true" className="text-[#CBDAD7]">
+              <span aria-hidden="true" className="tk-text-ink2">
                 ·
               </span>
-              <h4 className="text-base font-extrabold tracking-tight text-[#152B29] truncate">
+              <h4 className="text-base font-extrabold tracking-tight tk-text-ink truncate">
                 {cityLabel || primaryCity || copy.destinationCity}
               </h4>
-              <span aria-hidden="true" className="text-[#CBDAD7]">
+              <span aria-hidden="true" className="tk-text-ink2">
                 ·
               </span>
-              <span className="font-num text-xs text-[#5B7370] tabular-nums">
+              <span className="font-num text-xs tk-text-ink2 tabular-nums">
                 {stops.length > 0
                   ? copy.stopsAndMode(stops.length, activeModeLabel)
                   : copy.noStopsToday}
               </span>
             </div>
-            <p className="mt-0.5 text-xs text-[#5B7370]">
+            <p className="mt-0.5 text-xs tk-text-ink2">
               {fallbackReason === 'sdk_failed'
                 ? copy.sdkFailedDesc
                 : copy.unconfiguredDesc}
@@ -434,7 +435,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={fullDayRouteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <Navigation className="h-3.5 w-3.5" />
               <span>
@@ -448,7 +449,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={activeStopDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <Navigation className="h-3.5 w-3.5" />
               <span>
@@ -461,9 +462,9 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             href={cityExploreUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#C6E6E3] bg-white px-3 py-2 text-xs font-bold text-[#076E6A] hover:border-[#078C88] hover:bg-[#EFF9F8] transition-colors whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap shrink-0"
           >
-            <ExternalLink className="h-3.5 w-3.5 text-[#078C88]" />
+            <ExternalLink className="h-3.5 w-3.5 tk-text-forest" />
             <span>
               {copy.exploreCityOnMaps(primaryCity || cityLabel)}
             </span>
@@ -473,16 +474,16 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             <button
               type="button"
               onClick={handleCopyRouteText}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs font-semibold text-[#3B5552] hover:border-[#078C88] hover:text-[#076E6A] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {copiedKey === 'route' ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-[#078C88]" />
+                  <Check className="h-3.5 w-3.5 tk-text-forest" />
                   <span>{copy.copiedRoute}</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3.5 w-3.5 text-[#078C88]" />
+                  <Copy className="h-3.5 w-3.5 tk-text-forest" />
                   <span>{copy.copyRoute}</span>
                 </>
               )}
@@ -492,16 +493,16 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
       </div>
 
       {/* Interactive Schematic Route Canvas */}
-      <div className="relative bg-[#EDF6F4] overflow-x-auto">
+      <div className="relative tk-bg-paper overflow-x-auto">
         {stops.length === 0 ? (
           <div className="h-44 px-4 flex flex-col items-center justify-center text-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white border border-[#C6E6E3] text-[#078C88]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full tk-bg-card border tk-bc-hair tk-text-forest">
               <MapPin className="h-5 w-5" />
             </div>
-            <div className="text-xs font-bold text-[#152B29]">
+            <div className="text-xs font-bold tk-text-ink">
               {copy.emptyOverviewTitle(dayNumber, cityLabel)}
             </div>
-            <p className="text-xs text-[#5B7370] max-w-md">
+            <p className="text-xs tk-text-ink2 max-w-md">
               {copy.emptyOverviewDesc}
             </p>
           </div>
@@ -522,7 +523,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                 <path
                   d="M 40 0 L 0 0 0 40"
                   fill="none"
-                  stroke="#DCEAE7"
+                  stroke="var(--tk-ink-2)"
                   strokeWidth="1"
                 />
               </pattern>
@@ -533,7 +534,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             <path
               d={`M 0 ${svgHeight - 28} Q ${svgWidth * 0.3} ${svgHeight - 62}, ${svgWidth * 0.62} ${svgHeight - 30} T ${svgWidth} ${svgHeight - 52}`}
               fill="none"
-              stroke="#DFECE9"
+              stroke="var(--tk-hair-c)"
               strokeWidth="14"
               strokeLinecap="round"
             />
@@ -543,7 +544,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               <polyline
                 points={prevStopPoints.map((p) => `${p.x},${p.y}`).join(' ')}
                 fill="none"
-                stroke="#D97E4A"
+                stroke="var(--tk-route-2)"
                 strokeWidth="2.2"
                 strokeDasharray="5 4"
                 opacity="0.82"
@@ -556,7 +557,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               const prev = stopPoints[i - 1];
               const segColor = multiDayMode
                 ? getDayRouteColor(pt.stop.dayNumber)
-                : '#078C88';
+                : 'var(--tk-forest)';
               return (
                 <line
                   key={`seg_${pt.stop.id}`}
@@ -577,10 +578,10 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               const pinColor = multiDayMode
                 ? getDayRouteColor(stop.dayNumber)
                 : stop.isVisited
-                ? '#5B7370'
+                ? 'var(--tk-ink-2)'
                 : stop.isAnchor
-                ? '#D97E4A'
-                : '#078C88';
+                ? 'var(--tk-route-2)'
+                : 'var(--tk-forest)';
               const shortTitle =
                 stop.title.length > 9 ? `${stop.title.slice(0, 9)}…` : stop.title;
               const labelAbove = idx % 2 === 0;
@@ -614,7 +615,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                     cy={y}
                     r={isSelected ? 14 : 11.5}
                     fill={pinColor}
-                    stroke="#FFFFFF"
+                    stroke="var(--tk-card)"
                     strokeWidth={isSelected ? 3 : 2.2}
                   />
                   <text
@@ -623,7 +624,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                     textAnchor="middle"
                     fontSize={isSelected ? '11.5' : '10.5'}
                     fontWeight="800"
-                    fill="#FFFFFF"
+                    fill="var(--tk-card)"
                   >
                     {stop.orderNumber}
                   </text>
@@ -635,7 +636,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                     textAnchor="middle"
                     fontSize="11"
                     fontWeight={isSelected ? '800' : '600'}
-                    fill={isSelected ? '#152B29' : '#3B5552'}
+                    fill={isSelected ? 'var(--tk-forest)' : 'var(--tk-ink-2)'}
                   >
                     {multiDayMode && stop.dayNumber ? `D${stop.dayNumber} ` : ''}
                     {shortTitle}
@@ -646,7 +647,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                     textAnchor="middle"
                     fontSize="10"
                     fontWeight="600"
-                    fill="#647B78"
+                    fill="var(--tk-ink-2)"
                   >
                     {stop.time}
                   </text>
@@ -659,7 +660,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
 
       {/* Interactive Selected Stop Detail & Per-Stop Quick Navigation Bar */}
       {activeStop && (
-        <div className="px-4 sm:px-5 py-3 bg-white flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="px-4 sm:px-5 py-3 tk-bg-card flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="inline-flex items-center gap-1 shrink-0">
               <button
@@ -667,7 +668,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                 disabled={safeIndex <= 0}
                 onClick={() => setSelectedStopIndex((i) => Math.max(0, i - 1))}
                 aria-label={copy.previousStopAria}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] text-[#3B5552] hover:border-[#078C88] disabled:opacity-35 cursor-pointer"
+                className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
               </button>
@@ -678,7 +679,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                   setSelectedStopIndex((i) => Math.min(stops.length - 1, i + 1))
                 }
                 aria-label={copy.nextStopAria}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] text-[#3B5552] hover:border-[#078C88] disabled:opacity-35 cursor-pointer"
+                className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
               >
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>
@@ -686,21 +687,21 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
 
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <span className="font-num font-bold text-[#078C88] tabular-nums">
+                <span className="font-num font-bold tk-text-forest tabular-nums">
                   {copy.stopFraction(activeStop.orderNumber, stops.length)}
                   {multiDayMode && activeStop.dayNumber ? ` · D${activeStop.dayNumber}` : ''} ·{' '}
                   {activeStop.time}
                 </span>
-                <strong className="text-sm font-bold text-[#152B29] truncate">
+                <strong className="text-sm font-bold tk-text-ink truncate">
                   {activeStop.title}
                 </strong>
                 {activeStop.isSwappedIndoor && (
-                  <span className="text-[#8E6F12] font-semibold">
+                  <span className="tk-text-warning font-semibold">
                     · {copy.indoorRainBackup}
                   </span>
                 )}
               </div>
-              <div className="mt-0.5 text-[#5B7370] truncate">
+              <div className="mt-0.5 tk-text-ink2 truncate">
                 {activeStop.district ? `${activeStop.district} · ` : ''}
                 {activeStop.address}
               </div>
@@ -712,9 +713,9 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={activeStopDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-lg bg-[#EFF9F8] border border-[#BEE5E2] px-2.5 py-1.5 font-bold text-[#076E6A] hover:bg-[#DFF3F1] whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1 rounded-lg tk-bg-forest-tint border tk-bc-hair px-2.5 py-1.5 font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
             >
-              <Navigation className="h-3 w-3 text-[#078C88]" />
+              <Navigation className="h-3 w-3 tk-text-forest" />
               <span>
                 {prevStopInSequence
                   ? copy.fromStopDirections(prevStopInSequence.orderNumber)
@@ -726,25 +727,25 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={activeStopSearchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1.5 font-semibold text-[#152B29] hover:border-[#078C88] hover:text-[#076E6A] whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0"
             >
-              <MapPin className="h-3 w-3 text-[#078C88]" />
+              <MapPin className="h-3 w-3 tk-text-forest" />
               <span>{copy.findPin}</span>
             </a>
 
             <button
               type="button"
               onClick={handleCopyActiveStopAddress}
-              className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1.5 font-semibold text-[#4F6865] hover:border-[#078C88] hover:text-[#076E6A] whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
             >
               {copiedKey === 'stop' ? (
                 <>
-                  <Check className="h-3 w-3 text-[#078C88]" />
+                  <Check className="h-3 w-3 tk-text-forest" />
                   <span>{copy.copiedShort}</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3 w-3 text-[#078C88]" />
+                  <Copy className="h-3 w-3 tk-text-forest" />
                   <span>{copy.copyAddress}</span>
                 </>
               )}
@@ -781,8 +782,8 @@ const StopAdvancedMarker: React.FC<{
   const badgeColor = multiDayMode
     ? getDayRouteColor(stop.dayNumber)
     : stop.isVisited
-    ? '#647B78'
-    : '#F59E0B';
+    ? 'var(--tk-ink-2)'
+    : 'var(--tk-warning)';
 
   const displayTitle = translateDemoStopTitle(stop.title, lang);
   const CategoryIcon =
@@ -798,14 +799,15 @@ const StopAdvancedMarker: React.FC<{
 
   const categoryBoxClass =
     stopType === 'dining'
-      ? 'bg-[#FFF4E6] text-[#D97706]'
+      ? 'tk-bg-warning-tint tk-text-warning'
       : stopType === 'hotel'
-      ? 'bg-[#EEF2FF] text-[#4F46E5]'
+      ? 'tk-bg-forest-plate tk-text-forest'
       : stopType === 'shopping'
-      ? 'bg-[#FFF1F2] text-[#E11D48]'
+      ? 'tk-bg-danger-tint tk-text-danger'
       : stopType === 'transit'
-      ? 'bg-[#F0F9FF] text-[#0284C7]'
-      : 'bg-[#EAF8F6] text-[#078C88]';
+      ? 'tk-bg-forest-plate tk-text-ink2'
+      : 'tk-bg-paper tk-text-forest';
+
 
   const handleCardClick = () => {
     if (isSelected && onOpenDetail) {
@@ -829,36 +831,36 @@ const StopAdvancedMarker: React.FC<{
       {compact ? (
         <div className="flex flex-col items-center cursor-pointer select-none">
           <div
-            className={`inline-flex items-center gap-1.5 rounded-full bg-white pl-1 pr-2.5 py-0.5 shadow-[0_6px_16px_rgba(15,34,39,0.14)] border ${
-              isSelected ? 'border-[#078C88] ring-2 ring-[#078C88]/20' : 'border-[#DCE8E5]'
-            }`}
+            className={`inline-flex items-center gap-1.5 rounded-full tk-bg-card pl-1 pr-2.5 py-0.5 tk-elev-card border ${
+ isSelected ? 'tk-bc-forest ring-2 tk-rc-forest' : 'tk-bc-hair'
+ }`}
           >
             <span
-              className="flex h-5 w-5 items-center justify-center rounded-full font-num text-[10.5px] font-extrabold text-white shrink-0"
+              className="flex h-5 w-5 items-center justify-center rounded-full font-num text-[10.5px] font-extrabold tk-text-card shrink-0"
               style={{ backgroundColor: badgeColor }}
             >
               {stop.orderNumber}
             </span>
-            <span className="max-w-[128px] truncate text-[11.5px] font-extrabold text-[#152B29]">
+            <span className="max-w-[128px] truncate text-[11.5px] font-extrabold tk-text-ink">
               {multiDayMode && stop.dayNumber ? `D${stop.dayNumber} · ` : ''}
               {displayTitle}
             </span>
           </div>
           <div
             className={`h-0 w-0 border-x-[5px] border-x-transparent border-t-[6px] -mt-px ${
-              isSelected ? 'border-t-[#078C88]' : 'border-t-white'
-            }`}
+ isSelected ? 'border-t-[color:var(--tk-forest)]' : 'border-t-[color:var(--tk-card)]'
+ }`}
           />
         </div>
       ) : (
         <div className="flex flex-col items-center pt-1 cursor-pointer select-none">
           <div
-            className={`relative flex w-[208px] items-center gap-2 rounded-2xl bg-white p-1.5 pr-2 shadow-[0_8px_22px_rgba(15,34,39,0.15)] border ${
-              isSelected ? 'border-[#078C88] ring-2 ring-[#078C88]/25' : 'border-[#DCE8E5]'
-            }`}
+            className={`relative flex w-[208px] items-center gap-2 rounded-2xl tk-bg-card p-1.5 pr-2 tk-elev-card border ${
+ isSelected ? 'tk-bc-forest ring-2 tk-rc-forest' : 'tk-bc-hair'
+ }`}
           >
             <span
-              className="absolute -top-2 -left-1.5 flex h-5.5 min-w-5.5 items-center justify-center rounded-full border-2 border-white px-1 font-num text-[11px] font-extrabold text-white shadow-xs"
+              className="absolute -top-2 -left-1.5 flex h-5.5 min-w-5.5 items-center justify-center rounded-full border-2 border-white px-1 font-num text-[11px] font-extrabold tk-text-card shadow-xs"
               style={{ backgroundColor: badgeColor }}
             >
               {stop.orderNumber}
@@ -869,22 +871,22 @@ const StopAdvancedMarker: React.FC<{
                 src={thumbPhotoUri}
                 alt=""
                 onError={() => setImgFailed(true)}
-                className="h-9.5 w-9.5 rounded-[10px] object-cover shrink-0 bg-[#F2F7F6]"
+                className="h-9.5 w-9.5 tk-r-plate object-cover shrink-0 tk-bg-paper"
               />
             ) : (
               <div
-                className={`flex h-9.5 w-9.5 items-center justify-center rounded-[10px] shrink-0 ${categoryBoxClass}`}
+                className={`flex h-9.5 w-9.5 items-center justify-center tk-r-plate shrink-0 ${categoryBoxClass}`}
               >
                 <CategoryIcon className="h-4.5 w-4.5" />
               </div>
             )}
 
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[12.5px] font-extrabold leading-tight text-[#152B29]">
+              <div className="truncate text-[12.5px] font-extrabold leading-tight tk-text-ink">
                 {multiDayMode && stop.dayNumber ? `D${stop.dayNumber} · ` : ''}
                 {displayTitle}
               </div>
-              <div className="mt-0.5 truncate text-[10.5px] font-medium leading-tight text-[#647B78]">
+              <div className="mt-0.5 truncate text-[10.5px] font-medium leading-tight tk-text-ink2">
                 {stop.address || stop.district}
               </div>
             </div>
@@ -897,7 +899,7 @@ const StopAdvancedMarker: React.FC<{
                   onOpenDetail();
                 }}
                 title={copy.viewStopDetails}
-                className="flex h-6 w-5 items-center justify-center text-[#8CA39F] hover:text-[#078C88] shrink-0 cursor-pointer"
+                className="flex h-6 w-5 items-center justify-center tk-text-ink2 hover:tk-text-forest shrink-0 cursor-pointer"
               >
                 <ChevronRight className="h-3.5 w-3.5" />
               </button>
@@ -905,8 +907,8 @@ const StopAdvancedMarker: React.FC<{
           </div>
           <div
             className={`h-0 w-0 border-x-[6px] border-x-transparent border-t-[7px] -mt-px ${
-              isSelected ? 'border-t-[#078C88]' : 'border-t-white'
-            }`}
+ isSelected ? 'border-t-[color:var(--tk-forest)]' : 'border-t-[color:var(--tk-card)]'
+ }`}
           />
         </div>
       )}
@@ -1192,7 +1194,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
     const beforeLine = new google.maps.Polyline({
       path: geocodedPrevStops.map((s) => s.position),
       geodesic: true,
-      strokeColor: '#D97E4A',
+      strokeColor: tkColor('--tk-route-2'),
       strokeOpacity: 0,
       strokeWeight: 3,
       zIndex: 1,
@@ -1200,7 +1202,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
         {
           icon: {
             path: 'M 0,-1 0,1',
-            strokeColor: '#D97E4A',
+            strokeColor: tkColor('--tk-route-2'),
             strokeOpacity: 0.78,
             scale: 3,
           },
@@ -1235,7 +1237,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
       const fallbackLine = new google.maps.Polyline({
         path,
         geodesic: true,
-        strokeColor: '#078C88',
+        strokeColor: tkColor('--tk-forest'),
         strokeOpacity: 0,
         strokeWeight: 3,
         icons: [
@@ -1346,7 +1348,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
         const created = primaryRoute.createPolylines();
         created.forEach((pl) => {
           pl.setOptions({
-            strokeColor: '#EAB308',
+            strokeColor: tkColor('--tk-route-6'),
             strokeOpacity: 0.95,
             strokeWeight: 4.5,
             zIndex: 2,
@@ -1479,15 +1481,15 @@ const EmbeddedDayRouteCanvas: React.FC<{
           onClick={() => onRequestSetStay?.()}
         >
           <div className="flex flex-col items-center cursor-pointer select-none">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/90 bg-[#1E293B] pl-1 pr-2.5 py-0.5 text-white shadow-[0_6px_16px_rgba(15,34,39,0.2)]">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#4F46E5] shrink-0">
-                <Home className="h-3 w-3 text-white" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/90 tk-bg-paper pl-1 pr-2.5 py-0.5 tk-text-card tk-elev-card">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full tk-bg-swatch-2 shrink-0">
+                <Home className="h-3 w-3 tk-text-card" />
               </span>
               <span className="max-w-[116px] truncate text-[11px] font-extrabold">
                 {dayStayAnchor.placeName}
               </span>
             </div>
-            <div className="h-0 w-0 border-x-[5px] border-x-transparent border-t-[6px] border-t-[#1E293B] -mt-px" />
+            <div className="h-0 w-0 border-x-[5px] border-x-transparent border-t-[6px] border-t-[color:var(--tk-ink)] -mt-px" />
           </div>
         </AdvancedMarker>
       )}
@@ -1669,7 +1671,7 @@ const ConfiguredInteractiveMapViewport: React.FC<{
     : copy.loadingStopsStage(stops.length, scopeLabel, cityLabel);
 
   return (
-    <div className="bg-[#F2F7F6]">
+    <div className="tk-bg-paper">
       <div className="relative h-80 sm:h-96 w-full">
         {loading && (
           <MapRouteSkeleton
@@ -1719,15 +1721,15 @@ const ConfiguredInteractiveMapViewport: React.FC<{
         {/* Top-Left Auto-Fading Right-Click Hint (vanishes after 3.2s) */}
         {!loading && onHoldMapAddPlace && !holdHintDismissed && (
           <div className="absolute top-3 left-3 z-10 max-w-[calc(100%-76px)]">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#DCE8E5] bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-[#152B29] shadow-sm">
-              <Hand className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border tk-bc-hair tk-bg-card px-3 py-1.5 text-[11px] font-semibold tk-text-ink shadow-sm">
+              <Hand className="h-3.5 w-3.5 tk-text-forest shrink-0" />
               <span className="truncate">
                 {copy.rightClickHint}
               </span>
               <button
                 type="button"
                 onClick={() => setHoldHintDismissed(true)}
-                className="text-[#647B78] hover:text-[#152B29] cursor-pointer"
+                className="tk-text-ink2 hover:tk-text-ink cursor-pointer"
                 aria-label={copy.dismissTip}
               >
                 <X className="h-3 w-3" />
@@ -1744,7 +1746,7 @@ const ConfiguredInteractiveMapViewport: React.FC<{
               onClick={onTriggerFit}
               title={copy.fitAllTitle}
               aria-label={copy.fitAllAria}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E2ECEA] bg-white/96 text-[#152B29] shadow-[0_4px_14px_rgba(15,34,39,0.1)] hover:border-[#078C88] hover:text-[#078C88] transition-colors cursor-pointer"
+              className="flex h-10 w-10 items-center justify-center rounded-full border tk-bc-hair tk-bg-card tk-text-ink tk-elev-card hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer"
             >
               <Crosshair className="h-4 w-4" />
             </button>
@@ -1764,11 +1766,11 @@ const ConfiguredInteractiveMapViewport: React.FC<{
                   ? copy.streetMapAria
                   : copy.satelliteMapAria
               }
-              className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-[0_4px_14px_rgba(15,34,39,0.1)] transition-colors cursor-pointer ${
-                mapStyle === 'satellite'
-                  ? 'border-[#078C88] bg-[#078C88] text-white'
-                  : 'border-[#E2ECEA] bg-white/96 text-[#152B29] hover:border-[#078C88] hover:text-[#078C88]'
-              }`}
+              className={`flex h-10 w-10 items-center justify-center rounded-full border tk-elev-card transition-colors cursor-pointer ${
+ mapStyle === 'satellite'
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest hover:tk-text-forest'
+ }`}
             >
               {mapStyle === 'satellite' ? (
                 <Layers className="h-4 w-4" />
@@ -1787,11 +1789,11 @@ const ConfiguredInteractiveMapViewport: React.FC<{
                     : copy.showMultiDayPreview
                 }
                 aria-label={copy.toggleMultiDayAria}
-                className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-[0_4px_14px_rgba(15,34,39,0.1)] transition-colors cursor-pointer ${
-                  multiDayMode
-                    ? 'border-[#078C88] bg-[#078C88] text-white'
-                    : 'border-[#E2ECEA] bg-white/96 text-[#152B29] hover:border-[#078C88] hover:text-[#078C88]'
-                }`}
+                className={`flex h-10 w-10 items-center justify-center rounded-full border tk-elev-card transition-colors cursor-pointer ${
+ multiDayMode
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest hover:tk-text-forest'
+ }`}
               >
                 <CalendarRange className="h-4 w-4" />
               </button>
@@ -1801,8 +1803,8 @@ const ConfiguredInteractiveMapViewport: React.FC<{
       </div>
 
       {routeNotice && (
-        <div className="border-t border-[#DCE8E5] bg-[#FAFDFC] px-4 py-2 text-[11px] text-[#5B7370] flex items-center gap-1.5">
-          <AlertCircle className="h-3.5 w-3.5 text-[#D97E4A] shrink-0" />
+        <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[11px] tk-text-ink2 flex items-center gap-1.5">
+          <AlertCircle className="h-3.5 w-3.5 tk-text-warning shrink-0" />
           <span>{routeNotice}</span>
         </div>
       )}
@@ -2265,10 +2267,10 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
   return (
     <section
       aria-label={copy.sectionAria(scopeLabel)}
-      className="rounded-2xl border border-[#DCE8E5] bg-white overflow-hidden"
+      className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden"
     >
       {/* Minimalist Single-Line Header Bar */}
-      <div className="flex items-center justify-between gap-2.5 px-4 sm:px-5 py-3 bg-[#FAFDFC]">
+      <div className="flex items-center justify-between gap-2.5 px-4 sm:px-5 py-3 tk-bg-paper">
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
@@ -2276,12 +2278,12 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
         >
           <AccentIconBadge accent="ocean" icon={RouteIcon} size="md" />
           <div className="min-w-0 flex items-center gap-1.5 flex-wrap">
-            <h3 className="text-sm font-extrabold tracking-tight text-[#152B29] whitespace-nowrap">
+            <h3 className="text-sm font-extrabold tracking-tight tk-text-ink whitespace-nowrap">
               {isMultiDayActive
                 ? copy.multiDayHeading(activeMultiDays.map((d) => `D${d}`).join(' / '))
                 : `Day ${dayNumber} · ${displayCityLabel}`}
             </h3>
-            <span className="tabular-nums text-xs text-[#5B7370] leading-snug">
+            <span className="tabular-nums text-xs tk-text-ink2 leading-snug">
               {stops.length > 0
                 ? copy.stopsInline(stops.length)
                 : copy.cityMapInline}
@@ -2302,7 +2304,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
               href={fullDayRouteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap shrink-0"
+              className="h-9 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               {copy.openInMaps}
@@ -2312,7 +2314,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
               href={cityQuickSearchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap shrink-0"
+              className="h-9 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               {copy.exploreShort(displayPrimaryCity)}
@@ -2325,7 +2327,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
             aria-label={
               expanded ? copy.collapsePanelAria : copy.expandPanelAria
             }
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#5B7370] hover:bg-[#EEF4F3] hover:text-[#152B29] cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink cursor-pointer"
           >
             {expanded ? (
               <ChevronDown className="h-4 w-4" />
@@ -2337,13 +2339,13 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
       </div>
 
       {expanded && (
-        <div className="border-t border-[#EDF3F1] divide-y divide-[#EDF3F1]">
+        <div className="border-t tk-bc-hair divide-y tk-divide-hair">
           {/* On-Demand Multi-Day Selector Bar (shown ONLY when Multi-Day toggle is active) */}
           {isMultiDayActive && (
-            <div className="px-4 sm:px-5 py-2 bg-[#F4FBFA] flex items-center justify-between gap-3 text-xs">
+            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex items-center justify-between gap-3 text-xs">
               <HorizontalChipScroller
                 activeKey={activeMultiDays.join(',')}
-                fadeBgClassName="from-[#F4FBFA]"
+                fadeBgClassName=""
                 className="flex-1"
                 ariaLabel={copy.selectMultiDayAria}
               >
@@ -2357,16 +2359,16 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                       data-chip-active={info.day === dayNumber ? 'true' : undefined}
                       onClick={() => handleTogglePreviewDay(info.day)}
                       className={`min-h-[32px] inline-flex items-center gap-1.5 rounded-full border px-3 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                        selected
-                          ? 'bg-white text-[#152B29] shadow-2xs'
-                          : 'border-[#DCE8E5] bg-[#FAFDFC] text-[#7B928E] hover:text-[#3B5552]'
-                      }`}
+ selected
+ ? 'tk-bg-card tk-text-ink shadow-2xs'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-text-ink2'
+ }`}
                       style={selected ? { borderColor: dayColor } : undefined}
                     >
                       <span
                         className="inline-block h-2 w-2 rounded-full shrink-0"
                         style={{
-                          backgroundColor: selected ? dayColor : '#CBDAD7',
+                          backgroundColor: selected ? dayColor : 'var(--tk-hair-c)',
                         }}
                         aria-hidden="true"
                       />
@@ -2385,13 +2387,13 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                       setSelectedPreviewDays(sameCityPopulatedDays);
                       setFitTrigger((n) => n + 1);
                     }}
-                    className="font-semibold text-[#076E6A] hover:underline whitespace-nowrap cursor-pointer"
+                    className="font-semibold tk-text-forest hover:underline whitespace-nowrap cursor-pointer"
                   >
                     {copy.onlyCity(primaryCity)}
                   </button>
                 )}
                 {sameCityPopulatedDays.length >= 2 && (
-                  <span aria-hidden="true" className="text-[#CBDAD7]">
+                  <span aria-hidden="true" className="tk-text-ink2">
                     ·
                   </span>
                 )}
@@ -2401,7 +2403,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                     setSelectedPreviewDays(allPopulatedDays);
                     setFitTrigger((n) => n + 1);
                   }}
-                  className="font-semibold text-[#076E6A] hover:underline whitespace-nowrap cursor-pointer"
+                  className="font-semibold tk-text-forest hover:underline whitespace-nowrap cursor-pointer"
                 >
                   {copy.allDays}
                 </button>
@@ -2411,8 +2413,8 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
 
           {/* On-Demand Reorder Diff Bar (shown ONLY after drag/AI route reorder) */}
           {hasOrderChanged && (
-            <div className="px-4 sm:px-5 py-2 bg-[#FAFDFC] flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="font-num font-semibold tabular-nums text-[#076E6A]">
+            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span className="font-num font-semibold tabular-nums tk-text-forest">
                 {savedKm > 0.05
                   ? copy.routeReorderedSaved(savedKm.toFixed(1), savedPct)
                   : copy.orderUpdated}
@@ -2423,10 +2425,10 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                   type="button"
                   onClick={() => setShowComparison((v) => !v)}
                   className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
-                    showComparison
-                      ? 'border-[#D97E4A]/50 bg-[#FFF8F4] text-[#B85E2B]'
-                      : 'border-[#DCE8E5] bg-white text-[#5B7370] hover:text-[#152B29]'
-                  }`}
+ showComparison
+ ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
+ : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-text-ink'
+ }`}
                 >
                   {showComparison ? (
                     <Eye className="h-3 w-3" />
@@ -2439,7 +2441,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                   <button
                     type="button"
                     onClick={onRestorePreviousOrder}
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2 py-1 text-[11px] font-semibold text-[#4F6865] hover:border-[#078C88] hover:text-[#076E6A] whitespace-nowrap cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2 py-1 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
                   >
                     <RotateCcw className="h-3 w-3" />
                     {copy.undoReorder}

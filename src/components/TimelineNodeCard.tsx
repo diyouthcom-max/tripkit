@@ -443,16 +443,16 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     return (
       <form
         onSubmit={handleSave}
-        className="rounded-2xl border border-[#078C88] bg-[#FAFDFC] p-4 sm:p-5 space-y-3"
+        className="rounded-2xl border tk-bc-forest tk-bg-paper p-4 sm:p-5 space-y-3"
       >
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-[#076E6A]">
+          <span className="text-xs font-bold tk-text-forest">
             {nodeCopy.editStopTitle}
           </span>
           <button
             type="button"
             onClick={onCancelEdit}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-[#647B78] hover:text-[#152B29] cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
           >
             <X className="h-3.5 w-3.5" /> {nodeCopy.cancel}
           </button>
@@ -460,24 +460,24 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
           <div>
-            <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
               {nodeCopy.arrivalLabel}
             </label>
             <input
               type="time"
               value={editTime}
               onChange={(e) => setEditTime(e.target.value)}
-              className="w-full rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 font-num text-xs font-bold text-[#152B29] tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stayDurationLabel}
             </label>
             <select
               value={editDurationMinutes}
               onChange={(e) => setEditDurationMinutes(Number(e.target.value) || 60)}
-              className="w-full rounded-xl border border-[#DCE8E5] bg-white px-2 py-1.5 font-num text-xs font-semibold text-[#152B29] tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 font-num text-xs font-semibold tk-text-ink tabular-nums"
             >
               {[30, 45, 60, 90, 120, 180, 240].map((m) => (
                 <option key={m} value={m}>
@@ -487,24 +487,24 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
               {nodeCopy.closesAtLabel}
             </label>
             <input
               type="time"
               value={editCloseTime}
               onChange={(e) => setEditCloseTime(e.target.value)}
-              className="w-full rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 font-num text-xs font-bold text-[#152B29] tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stopTypeLabel}
             </label>
             <select
               value={editStopType}
               onChange={(e) => setEditStopType(e.target.value as StopType)}
-              className="w-full rounded-xl border border-[#DCE8E5] bg-white px-2 py-1.5 text-xs font-semibold text-[#152B29]"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-xs font-semibold tk-text-ink"
             >
               <option value="attraction">{getStopTypeLabel('attraction', activeLang)}</option>
               <option value="hotel">{getStopTypeLabel('hotel', activeLang)}</option>
@@ -514,7 +514,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-[11px] font-semibold text-[#5B7370] mb-1">
+            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
               {nodeCopy.estSpendLabel(currencyCode)}
             </label>
             <input
@@ -523,7 +523,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               min="0"
               value={editEst}
               onChange={(e) => setEditEst(e.target.value)}
-              className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-1.5 font-num text-xs font-bold text-[#152B29] tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
             />
           </div>
         </div>
@@ -548,14 +548,14 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               }
             }}
             placeholder={nodeCopy.stopNamePlaceholder}
-            className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-sm font-semibold text-[#152B29] focus:border-[#0ABAB5] focus:outline-none"
+            className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <input
             type="text"
             value={editDistrict}
             onChange={(e) => setEditDistrict(e.target.value)}
             placeholder={nodeCopy.districtPlaceholder}
-            className="rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs text-[#152B29] focus:border-[#0ABAB5] focus:outline-none"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
         </div>
 
@@ -565,7 +565,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             value={editAddress}
             onChange={(e) => setEditAddress(e.target.value)}
             placeholder={nodeCopy.streetAddressPlaceholder}
-            className="rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs text-[#152B29] focus:border-[#0ABAB5] focus:outline-none"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
@@ -574,7 +574,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 value={editTransit}
                 onChange={(e) => setEditTransit(e.target.value)}
                 placeholder={nodeCopy.transitNotePlaceholder}
-                className="flex-1 min-w-0 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs text-[#152B29] focus:border-[#0ABAB5] focus:outline-none"
+                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
               />
               <AiVoiceInputButton
                 compact
@@ -595,54 +595,54 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               />
             </div>
             {voiceNoteError && (
-              <p className="text-[11px] font-semibold text-[#B96A39]">{voiceNoteError}</p>
+              <p className="text-[11px] font-semibold tk-text-warning">{voiceNoteError}</p>
             )}
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-4 text-xs">
-          <label className="inline-flex items-center gap-1.5 font-semibold text-[#3B5552] cursor-pointer">
+          <label className="inline-flex items-center gap-1.5 font-semibold tk-text-ink2 cursor-pointer">
             <input
               type="checkbox"
               checked={editIsAnchor}
               onChange={(e) => setEditIsAnchor(e.target.checked)}
-              className="rounded border-[#DCE8E5] accent-[#078C88]"
+              className="rounded tk-bc-hair tk-accent-forest"
             />
             {nodeCopy.meetupAnchorCheckbox}
           </label>
-          <label className="inline-flex items-center gap-1.5 font-semibold text-[#3B5552] cursor-pointer">
+          <label className="inline-flex items-center gap-1.5 font-semibold tk-text-ink2 cursor-pointer">
             <input
               type="checkbox"
               checked={editIsOutdoor}
               onChange={(e) => setEditIsOutdoor(e.target.checked)}
-              className="rounded border-[#DCE8E5] accent-[#078C88]"
+              className="rounded tk-bc-hair tk-accent-forest"
             />
             {nodeCopy.outdoorStopCheckbox}
           </label>
         </div>
 
         {editIsOutdoor && (
-          <div className="pt-2 border-t border-[#E5EFED] grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="pt-2 border-t tk-bc-hair grid grid-cols-1 sm:grid-cols-3 gap-2">
             <input
               type="text"
               value={editRainTitle}
               onChange={(e) => setEditRainTitle(e.target.value)}
               placeholder={nodeCopy.rainTitlePlaceholder}
-              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29]"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
             />
             <input
               type="text"
               value={editRainDistrict}
               onChange={(e) => setEditRainDistrict(e.target.value)}
               placeholder={nodeCopy.rainDistrictPlaceholder}
-              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29]"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
             />
             <input
               type="text"
               value={editRainAddress}
               onChange={(e) => setEditRainAddress(e.target.value)}
               placeholder={nodeCopy.rainAddressPlaceholder}
-              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29]"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
             />
           </div>
         )}
@@ -651,13 +651,13 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
           <button
             type="button"
             onClick={onDelete}
-            className="inline-flex items-center gap-1 rounded-xl border border-[#F0CECA] bg-white px-3 py-1.5 text-xs font-semibold text-[#B83B2E] hover:bg-[#FDF3F2] cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
           >
             <Trash2 className="h-3.5 w-3.5" /> {nodeCopy.deleteStop}
           </button>
           <button
             type="submit"
-            className="inline-flex items-center gap-1 rounded-xl bg-[#078C88] px-4 py-1.5 text-xs font-semibold text-white hover:bg-[#067572] cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
           >
             <Check className="h-3.5 w-3.5" /> {nodeCopy.saveChanges}
           </button>
@@ -716,42 +716,42 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             ? { duration: 0.22, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }
             : { type: 'spring', stiffness: 520, damping: 32, mass: 0.6 }
         }
-        className={`relative rounded-2xl border bg-white overflow-hidden select-none transition-[border-color,box-shadow,opacity,background-color] duration-200 ${
-          isDragOverlay
-            ? 'border-[#078C88] shadow-[0_18px_38px_-12px_rgba(7,140,136,0.34)] ring-2 ring-[#0ABAB5]/60 cursor-grabbing'
-            : isDragging
-            ? 'opacity-35 border-dashed border-[#078C88] bg-[#EFF9F8]/40'
-            : isDragOver
-            ? 'border-[#078C88] ring-2 ring-[#078C88]/60 bg-[#EFF9F8]/20'
-            : pulseMode === 'checkin'
-            ? 'border-[#0ABAB5] shadow-[0_8px_22px_-10px_rgba(7,140,136,0.34)]'
-            : 'border-[#DCE8E5] hover:border-[#BBDAD7]'
-        }`}
+        className={`relative rounded-2xl border tk-bg-card overflow-hidden select-none transition-[border-color,box-shadow,opacity,background-color] duration-200 ${
+ isDragOverlay
+ ? 'tk-bc-forest tk-elev-card ring-2 tk-rc-forest cursor-grabbing'
+ : isDragging
+ ? 'opacity-35 border-dashed tk-bc-forest tk-bg-forest-tint'
+ : isDragOver
+ ? 'tk-bc-forest ring-2 tk-rc-forest tk-bg-forest-tint'
+ : pulseMode === 'checkin'
+ ? 'tk-bc-forest tk-elev-card'
+ : 'tk-bc-hair hover:tk-bc-hair'
+ }`}
       >
         {/* Left-side Swipe Reveal Cue (Right-Swipe = Toggle Visited) */}
         <div
-          className={`absolute inset-y-0 left-0 w-24 bg-[#EFF9F8] text-[#076E6A] text-xs font-bold flex items-center justify-center gap-1 transition-opacity ${
-            dragDeltaX !== null && dragDeltaX > 10 ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
+          className={`absolute inset-y-0 left-0 w-24 tk-bg-forest-tint tk-text-forest text-xs font-bold flex items-center justify-center gap-1 transition-opacity ${
+ dragDeltaX !== null && dragDeltaX > 10 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+ }`}
           aria-hidden="true"
         >
-          <CheckCircle2 className="h-4 w-4 text-[#078C88] shrink-0" />
+          <CheckCircle2 className="h-4 w-4 tk-text-forest shrink-0" />
           <span>{isVisited ? nodeCopy.swipeUndo : nodeCopy.swipeDone}</span>
         </div>
 
         {/* Right-side Swipe Action Tray (Left-Swipe = Edit / Delete) */}
         <div
           className={`absolute inset-y-0 right-0 w-[132px] flex items-stretch transition-opacity ${
-            isSwipedOpen || (dragDeltaX !== null && dragDeltaX < -10)
-              ? 'opacity-100'
-              : 'opacity-0 pointer-events-none'
-          }`}
+ isSwipedOpen || (dragDeltaX !== null && dragDeltaX < -10)
+ ? 'opacity-100'
+ : 'opacity-0 pointer-events-none'
+ }`}
           aria-hidden={!isSwipedOpen && dragDeltaX === null}
         >
           <button
             type="button"
             onClick={handleBeginEdit}
-            className="w-[66px] bg-[#078C88] hover:bg-[#067572] text-white text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
+            className="w-[66px] tk-bg-forest hover:tk-bg-press tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
             <Pencil className="h-3.5 w-3.5" />
             <span>{nodeCopy.swipeEdit}</span>
@@ -762,7 +762,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               onSwipeOpenChange(false);
               onDelete();
             }}
-            className="w-[66px] bg-[#B83B2E] hover:bg-[#9E3126] text-white text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
+            className="w-[66px] tk-bg-danger hover:tk-bg-paper tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
             <Trash2 className="h-3.5 w-3.5" />
             <span>{nodeCopy.swipeDelete}</span>
@@ -809,9 +809,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               }
             }
           }}
-          className={`relative bg-white p-3.5 sm:p-4 flex gap-3.5 sm:gap-4 touch-pan-y ${
-            dragDeltaX !== null ? 'transition-none' : 'transition-transform duration-200 ease-out'
-          } ${onOpenDetail ? 'cursor-pointer' : ''}`}
+          className={`relative tk-bg-card p-3.5 sm:p-4 flex gap-3.5 sm:gap-4 touch-pan-y ${
+ dragDeltaX !== null ? 'transition-none' : 'transition-transform duration-200 ease-out'
+ } ${onOpenDetail ? 'cursor-pointer' : ''}`}
         >
           {/* Left Storefront Visual Thumbnail + Numbered Order Badge */}
           <button
@@ -821,7 +821,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               onOpenDetail?.();
             }}
             title={nodeCopy.thumbTitle}
-            className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0 bg-[#143734] group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078C88]"
+            className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0 tk-bg-paper group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest"
           >
             {showThumbImage ? (
               <img
@@ -834,11 +834,11 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
               />
             ) : (
-              <div className="h-full w-full bg-gradient-to-br from-[#153936] via-[#1C4D49] to-[#102927] flex flex-col items-center justify-center p-2 text-center">
+              <div className="h-full w-full tk-bg-forest flex flex-col items-center justify-center p-2 text-center">
                 {isPlaceLoading ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-[#7DE2DC] mb-1.5" />
+                  <Loader2 className="h-5 w-5 animate-spin tk-text-card mb-1.5" />
                 ) : (
-                  <StopCategoryIcon className="h-6 w-6 text-[#7DE2DC] mb-1.5" />
+                  <StopCategoryIcon className="h-6 w-6 tk-text-card mb-1.5" />
                 )}
                 <span className="text-[10px] font-semibold text-white/85 line-clamp-2 leading-tight">
                   {getStopTypeLabel(node.stopType, activeLang) || displayDistrict}
@@ -851,15 +851,15 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
             {/* Top-left numbered order badge (Packy-inspired warm gold / visited teal) */}
             <span
-              className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-num text-xs font-extrabold text-white ring-2 ring-white shadow-xs tabular-nums ${
-                isVisited ? 'bg-[#078C88]' : 'bg-[#D99B26]'
-              }`}
+              className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-num text-xs font-extrabold tk-text-card ring-2 ring-white shadow-xs tabular-nums ${
+ isVisited ? 'tk-bg-forest' : 'tk-bg-warning'
+ }`}
             >
               {index + 1}
             </span>
 
             {isVisited && (
-              <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md bg-[#078C88]/90 backdrop-blur-xs px-1.5 py-0.5 text-[10px] font-bold text-white text-center truncate">
+              <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold tk-text-card text-center truncate">
                 {nodeCopy.visitedBadge}
               </span>
             )}
@@ -894,10 +894,10 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       }}
                       onClick={(e) => e.stopPropagation()}
                       className={`inline-flex h-7 w-7 -ml-1.5 -my-1 items-center justify-center rounded-lg transition-colors touch-none shrink-0 ${
-                        isDragOverlay
-                          ? 'bg-[#EFF9F8] text-[#078C88] cursor-grabbing'
-                          : 'text-[#7B928E] hover:bg-[#EFF9F8] hover:text-[#078C88] active:bg-[#EFF9F8] active:text-[#078C88] cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#078C88]'
-                      }`}
+ isDragOverlay
+ ? 'tk-bg-forest-tint tk-text-forest cursor-grabbing'
+ : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-forest tk-bg-forest-tint tk-text-forest cursor-grab active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest'
+ }`}
                     >
                       <GripVertical className="h-4 w-4" />
                     </button>
@@ -917,7 +917,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                         ? nodeCopy.visitedUndoTitle
                         : nodeCopy.markVisitedTitle
                     }
-                    className="text-[#078C88] hover:opacity-80 cursor-pointer shrink-0 inline-flex items-center justify-center"
+                    className="tk-text-forest hover:opacity-80 cursor-pointer shrink-0 inline-flex items-center justify-center"
                   >
                     <motion.span
                       initial={false}
@@ -930,36 +930,36 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       className="inline-flex"
                     >
                       {isVisited ? (
-                        <CheckCircle2 className="h-4 w-4 text-[#078C88]" />
+                        <CheckCircle2 className="h-4 w-4 tk-text-forest" />
                       ) : (
-                        <Circle className="h-4 w-4 text-[#9DB3AF]" />
+                        <Circle className="h-4 w-4 tk-text-ink2" />
                       )}
                     </motion.span>
                   </motion.button>
 
                   <span
                     className={`font-num text-xs sm:text-sm font-bold tabular-nums ${
-                      isVisited ? 'text-[#5B7370]' : 'text-[#4F6865]'
-                    }`}
+ isVisited ? 'tk-text-ink2' : 'tk-text-ink2'
+ }`}
                   >
                     {formatTimeByPref(node.time, timeFormat)}
                   </span>
 
                   {previousOrderIndex !== undefined && previousOrderIndex !== index && (
-                    <span className="text-[11px] font-semibold text-[#D97E4A] tabular-nums">
+                    <span className="text-[11px] font-semibold tk-text-warning tabular-nums">
                       {nodeCopy.wasOrder(previousOrderIndex + 1)}
                     </span>
                   )}
 
                   {isSwappedActive && (
-                    <span className="text-[11px] font-semibold text-[#8E6F12]">
+                    <span className="text-[11px] font-semibold tk-text-warning">
                       {nodeCopy.rainBackupBadge}
                     </span>
                   )}
 
                   {!isVisited && Boolean(scheduledLeadMinutes) && (
-                    <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-[#076E6A] tabular-nums">
-                      <BellRing className="h-3 w-3 text-[#078C88]" />
+                    <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold tk-text-forest tabular-nums">
+                      <BellRing className="h-3 w-3 tk-text-forest" />
                       <span>-{scheduledLeadMinutes}m</span>
                     </span>
                   )}
@@ -973,7 +973,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       disabled={index === 0}
                       onClick={() => onMoveOrder('up')}
                       title={nodeCopy.moveUp}
-                      className="h-7 w-7 rounded-lg text-[#647B78] hover:bg-[#F2F6F5] hover:text-[#152B29] disabled:opacity-30 flex items-center justify-center cursor-pointer"
+                      className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink disabled:opacity-30 flex items-center justify-center cursor-pointer"
                     >
                       <ArrowUp className="h-3.5 w-3.5" />
                     </button>
@@ -982,7 +982,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       disabled={index >= totalInDay - 1}
                       onClick={() => onMoveOrder('down')}
                       title={nodeCopy.moveDown}
-                      className="h-7 w-7 rounded-lg text-[#647B78] hover:bg-[#F2F6F5] hover:text-[#152B29] disabled:opacity-30 flex items-center justify-center cursor-pointer"
+                      className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink disabled:opacity-30 flex items-center justify-center cursor-pointer"
                     >
                       <ArrowDown className="h-3.5 w-3.5" />
                     </button>
@@ -990,7 +990,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       type="button"
                       onClick={handleBeginEdit}
                       title={nodeCopy.editStop}
-                      className="h-7 w-7 rounded-lg text-[#647B78] hover:bg-[#EFF9F8] hover:text-[#078C88] flex items-center justify-center cursor-pointer"
+                      className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-forest flex items-center justify-center cursor-pointer"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
@@ -998,7 +998,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       type="button"
                       onClick={onDelete}
                       title={nodeCopy.deleteStopTip}
-                      className="h-7 w-7 rounded-lg text-[#647B78] hover:bg-[#FDF3F2] hover:text-[#B83B2E] flex items-center justify-center cursor-pointer"
+                      className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -1011,7 +1011,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                         e.stopPropagation();
                         onOpenDetail();
                       }}
-                      className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1 text-xs font-semibold text-[#078C88] hover:bg-[#EFF9F8] whitespace-nowrap cursor-pointer"
+                      className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
                     >
                       <span>{nodeCopy.details}</span>
                       <ChevronRight className="h-3.5 w-3.5" />
@@ -1028,81 +1028,81 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                     e.stopPropagation();
                     onOpenDetail?.();
                   }}
-                  className={`text-left text-base sm:text-lg font-extrabold tracking-tight hover:text-[#078C88] transition-colors cursor-pointer ${
-                    isVisited ? 'text-[#4F6865]' : 'text-[#152B29]'
-                  }`}
+                  className={`text-left text-base sm:text-lg font-extrabold tracking-tight hover:tk-text-forest transition-colors cursor-pointer ${
+ isVisited ? 'tk-text-ink2' : 'tk-text-ink'
+ }`}
                 >
                   {localizedTitle}
                 </button>
                 {node.isAnchor && (
-                  <span className="text-[11px] font-semibold text-[#078C88]">
+                  <span className="text-[11px] font-semibold tk-text-forest">
                     {nodeCopy.meetupAnchorBadge}
                   </span>
                 )}
               </div>
 
               {/* Row 3: Packy-Style Clean Unboxed Metadata (Strictly Real Google Rating when Available) */}
-              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-[13px] text-[#4F6865]">
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-[13px] tk-text-ink2">
                 {hasRealGoogleRating ? (
                   <>
-                    <span className="inline-flex items-center gap-1 font-num font-bold text-[#152B29] tabular-nums">
-                      <Star className="h-3.5 w-3.5 fill-[#D99B26] text-[#D99B26] shrink-0" />
+                    <span className="inline-flex items-center gap-1 font-num font-bold tk-text-ink tabular-nums">
+                      <Star className="h-3.5 w-3.5 tk-fill-warning tk-text-warning shrink-0" />
                       {livePlace!.rating!.toFixed(1)}
                       {livePlace?.userRatingCount ? (
-                        <span className="font-normal text-[#647B78] text-xs">
+                        <span className="font-normal tk-text-ink2 text-xs">
                           ({livePlace.userRatingCount.toLocaleString()})
                         </span>
                       ) : null}
                     </span>
-                    <span aria-hidden="true" className="text-[#CBDAD7]">
+                    <span aria-hidden="true" className="tk-text-ink2">
                       ·
                     </span>
                   </>
                 ) : getStopTypeLabel(node.stopType, activeLang) ? (
                   <>
-                    <span className="font-semibold text-[#078C88]">
+                    <span className="font-semibold tk-text-forest">
                       {getStopTypeLabel(node.stopType, activeLang)}
                     </span>
-                    <span aria-hidden="true" className="text-[#CBDAD7]">
+                    <span aria-hidden="true" className="tk-text-ink2">
                       ·
                     </span>
                   </>
                 ) : null}
 
-                <span className="font-num font-medium text-[#2C3A38] tabular-nums">
+                <span className="font-num font-medium tk-text-ink tabular-nums">
                   {stayDurationLabel}
                 </span>
 
-                <span aria-hidden="true" className="text-[#CBDAD7]">
+                <span aria-hidden="true" className="tk-text-ink2">
                   ·
                 </span>
 
                 {node.logged ? (
-                  <span className="font-num font-semibold text-[#076E6A] tabular-nums">
+                  <span className="font-num font-semibold tk-text-forest tabular-nums">
                     {nodeCopy.loggedAmount(sym, node.estLocal.toFixed(0))}
                   </span>
                 ) : node.estLocal === 0 ? (
-                  <span className="font-semibold text-[#2C3A38]">
+                  <span className="font-semibold tk-text-ink">
                     {nodeCopy.freeEntry}
                   </span>
                 ) : (
-                  <span className="font-num tabular-nums text-[#4F6865]">
+                  <span className="font-num tabular-nums tk-text-ink2">
                     {nodeCopy.estAmount(sym, node.estLocal.toFixed(0))}
                   </span>
                 )}
 
                 {displayDistrict && (
                   <>
-                    <span aria-hidden="true" className="text-[#CBDAD7]">
+                    <span aria-hidden="true" className="tk-text-ink2">
                       ·
                     </span>
-                    <span className="text-[#5B7370]">{displayDistrict}</span>
+                    <span className="tk-text-ink2">{displayDistrict}</span>
                   </>
                 )}
 
                 {linkedPassCount > 0 && (
                   <>
-                    <span aria-hidden="true" className="text-[#CBDAD7]">
+                    <span aria-hidden="true" className="tk-text-ink2">
                       ·
                     </span>
                     <button
@@ -1111,9 +1111,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                         e.stopPropagation();
                         onOpenDetail?.();
                       }}
-                      className="inline-flex items-center gap-1 font-semibold text-[#076E6A] hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:underline cursor-pointer"
                     >
-                      <QrCode className="h-3 w-3 text-[#078C88]" />
+                      <QrCode className="h-3 w-3 tk-text-forest" />
                       <span>
                         {nodeCopy.ticketsCount(linkedPassCount)}
                       </span>
@@ -1123,9 +1123,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </div>
 
               {/* Row 4: Clean Opening Hours + One-Line Stop / Transit Summary (Zero Button Bloat) */}
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[#647B78]">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs tk-text-ink2">
                 <span className="inline-flex items-center gap-1 font-num tabular-nums">
-                  <Clock className="h-3 w-3 text-[#7B928E] shrink-0" />
+                  <Clock className="h-3 w-3 tk-text-ink2 shrink-0" />
                   {todayHoursLine
                     ? todayHoursLine
                     : `${nodeCopy.closesPrefix}${formatTimeByPref(
@@ -1136,9 +1136,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </div>
 
               {(node.stopNote || localizedTransitNote) && (
-                <p className="mt-1 text-xs text-[#4F6865] leading-relaxed line-clamp-1">
+                <p className="mt-1 text-xs tk-text-ink2 leading-relaxed line-clamp-1">
                   {node.stopNote ? (
-                    <span className="font-medium text-[#152B29]">{node.stopNote}</span>
+                    <span className="font-medium tk-text-ink">{node.stopNote}</span>
                   ) : (
                     localizedTransitNote
                   )}
@@ -1148,8 +1148,8 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               {!isVisited && urgency.status !== 'ok' && (
                 <p
                   className={`mt-1.5 inline-flex items-center gap-1 text-xs font-semibold ${
-                    urgency.status === 'conflict' ? 'text-[#B83B2E]' : 'text-[#B96A39]'
-                  }`}
+ urgency.status === 'conflict' ? 'tk-text-danger' : 'tk-text-warning'
+ }`}
                 >
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                   <span>
