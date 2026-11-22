@@ -71,6 +71,32 @@
   /* ── 4. TYPE · CJK 回退为本版新增，不可删 ───────────────────── */
   --tk-font-serif: "Playfair Display", "Fraunces", "Songti SC", "Noto Serif SC", "STSong", Georgia, serif;
   --tk-font-sans:  "Inter", "Plus Jakarta Sans", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  /* ── 5. 全站迁移语义位（2026-11-21 用户裁决 A1+B1+C）────────────
+     仅新增变量，不改 §1 的 14 值；功能语义色逐字沿用主工作区既有字面量，
+     装饰性色板一律 alias 到 §1，不引入新色相族、不新增干邑许可位。   */
+  /* 5.1 功能状态色 · A1 保留，供预算超支 / 删除危险 / 临行提醒 */
+  --tk-danger:        #B83B2E;
+  --tk-danger-tint:   #FDF3F2;
+  --tk-danger-hair:   #F0CECA;
+  --tk-warning:       #7A4B16;
+  --tk-warning-tint:  #FFFBF2;
+  --tk-warning-hair:  #F2E2BA;
+  --tk-success:       var(--tk-forest);
+  /* 5.2 页面壳 · B1 第 0 批铺底用 */
+  --tk-surface-raised: var(--tk-card);
+  --tk-hero-ink:       var(--tk-forest);
+  --tk-overlay:        rgba(20, 40, 35, .45);
+  /* 5.3 数据可视 */
+  --tk-chart-1:  var(--tk-forest);
+  --tk-chart-2:  var(--tk-forest-done);
+  --tk-chart-3:  var(--tk-idle);
+  --tk-marker:   var(--tk-forest);
+  /* 5.4 分类色板 · 装饰性多色收敛：区分改由明度 + 图标承担，不靠色相 */
+  --tk-swatch-1: var(--tk-forest);
+  --tk-swatch-2: var(--tk-forest-done);
+  --tk-swatch-3: var(--tk-ink-2);
+  --tk-swatch-4: var(--tk-idle);
 }
 
 /* ═══════════════════════════════════════════════════════════════

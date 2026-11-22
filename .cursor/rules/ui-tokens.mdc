@@ -105,3 +105,21 @@ alwaysApply: true
 **新增的是「配方类 / 原子别名」，不是新取值**：`tk-bg-* / tk-text-* / tk-border-hair / tk-r-* / tk-sh-*` 只是 `var()` 别名；`tk-dest-card / tk-datebar-btn / tk-opt-pill / tk-vibe / tk-step1-label / tk-step1-dock / tk-wizard-surface` 是 §8 既有配方在现有 DOM 结构上的应用组合。全部只用 §1–§4 变量，`--tk-cognac` 引用数保持 **7** 不变。
 
 **结构适配说明**：现有中文稿 DOM 与 V3 英文长图不是同一套组件（目的地是 divide 行列表、日期是单个展开按钮、顶栏是圆点进度而非三段 rail）。在「结构/字段/文案/选项数量一律不动」前提下，尺寸只落可对应部分：`tk-opt-pill` h48 R14 / `tk-datebar-btn` h72 R16 deboss / `tk-dest-card` R20 hair sh-card / `tk-input-row` h56 / `tk-btn-primary` h54 R16。顶栏圆点保留结构，仅换 `--tk-forest / --tk-forest-done / --tk-idle` 三色。选中态一律由 `aria-checked` / `aria-pressed` 属性选择器驱动，杜绝「浅薄荷实心」复发。
+
+## 11. 全站迁移裁决（2026-11-21 用户确认 A1 + B1 + C 全量）
+
+**优先级**：本节是用户对全站风格迁移的最新裁决，覆盖「作用域铁律」中「v3 目前只允许作用于 3-step wizard」这一句；§1–§9 的全部取值、禁令、结构红线继续全站生效。`src/styles/tokens.css` 的 `:root` 已按本节新增 §5 语义位。
+
+**A1 · 只收装饰，保留功能**：`HERO_ACCENT_PALETTE` / `TAB_ACCENT_MAP` 的装饰性多色（tab 强调、头像色卡、分类色板）收敛到 §1 三色 + 明度阶（`--tk-swatch-*`），分类区分改由明度与图标承担，不靠色相。用于 `overBudget` / `isDailyOver` / 删除 hover 的功能语义色保留，落 `--tk-danger-*` / `--tk-warning-*` / `--tk-success`。不得把功能色收成墨绿，也不得把干邑用于状态色。
+
+**B1 · 第 0 批全站铺暖纸，保留 `:has()` 兜底**：外壳底改 `--tk-paper`，顶栏 / Hero / 底栏 / 遮罩用 `--tk-surface-raised` / `--tk-hero-ink` / `--tk-overlay`。`tokens.css` 的 `main:has(.tk-wizard-surface)` 规则**必须保留**；`.tk-scope` 仍为纯作用域标记。不改 `src/index.css` 的三个字体变量、不覆盖任何非 `--tk-*` 变量。
+
+**C · 语义位全量**：新增分组见 `tokens.css` §5。§1 的「14 个权威值」口径不变（wizard 核心色板），§5 是独立的全站语义位分组；两者不混算。新增真实色值只有 6 个，全部逐字沿用主工作区既有字面量，不是新发明；其余均为 `var()` alias。
+
+**6 批顺序**：0 页面壳 → 1 Packing → 2 Itinerary / 地图 → 3 Budget → 4 Memories → 5 Settings / GoModeWallet 及长尾。每批 1 个 commit、停下等验收；沿用 §9 的 6 项自查 + 8 语言 + 390/1440 双端复查。
+
+**§9 禁令的扩展口径**：`bg-[#...]` / `text-[#...]` 等禁令按批扩展到**已迁移**页面；未迁移页面在轮到之前不追究。每批收口时该批文件内命中数必须为 0。
+
+**本轮不碰**：组 3 标题类 150 处 `truncate`、A 类横滑条、C 类 `object-cover` 图片、结构 / 字段 / 文案 / 选项数量 / 8 语言 i18n。干邑仍严格 §5 的 7 个许可位，`var(--tk-cognac)` 引用数保持 7。
+
+**关于 `.tk-note`**：`tokens.css` 末尾「不挪用干邑、不自造橙红」只约束 wizard 内的 `.tk-note`；主工作区的功能提示条按 A1 使用 `--tk-warning-*` / `--tk-danger-*`，二者不冲突。
