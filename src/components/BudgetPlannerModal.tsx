@@ -322,31 +322,31 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="budget-planner-modal-title"
-      className="fixed inset-0 z-50 bg-[#082220]/55 backdrop-blur-xs p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh]"
+        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh]"
       >
         <div
           aria-hidden="true"
-          className="w-10 h-1.5 rounded-full bg-[#DCE8E5] mx-auto mt-2.5 sm:hidden shrink-0"
+          className="w-10 h-1.5 rounded-full tk-bg-paper mx-auto mt-2.5 sm:hidden shrink-0"
         />
 
         {/* Header */}
-        <div className="px-5 pt-3.5 pb-3 border-b border-[#EDF3F1] flex items-center justify-between gap-3 shrink-0">
+        <div className="px-5 pt-3.5 pb-3 border-b tk-bc-hair flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="h-9 w-9 rounded-xl bg-[#EFF9F8] text-[#078C88] inline-flex items-center justify-center shrink-0">
+            <span className="h-9 w-9 rounded-xl tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
               <SlidersHorizontal className="h-4 w-4" />
             </span>
             <div className="min-w-0">
               <h2
                 id="budget-planner-modal-title"
-                className="text-base sm:text-lg font-extrabold tracking-tight text-[#152B29] truncate"
+                className="text-base sm:text-lg font-extrabold tracking-tight tk-text-ink truncate"
               >
                 {copy.plannerTitle}
               </h2>
-              <p className="text-xs text-[#647B78] truncate">
+              <p className="text-xs tk-text-ink2 truncate">
                 {copy.plannerSubtitle(safeDays, tripCode, homeCurrency)}
               </p>
             </div>
@@ -356,7 +356,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label={copy.closeAria}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-full text-[#4F6865] hover:bg-[#F2F6F5] hover:text-[#152B29] transition-colors shrink-0 cursor-pointer"
+            className="h-9 w-9 inline-flex items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink transition-colors shrink-0 cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -366,7 +366,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
         <form onSubmit={handleSave} className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
           {/* Top Bar: Mode Switcher + Edit Currency Switcher */}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="grid grid-cols-2 rounded-xl bg-[#F2F6F5] p-1 flex-1 min-w-[240px]">
+            <div className="grid grid-cols-2 rounded-xl tk-bg-forest-plate p-1 flex-1 min-w-[240px]">
               <button
                 type="button"
                 onClick={() => {
@@ -376,10 +376,10 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                   }
                 }}
                 className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                  planMode === 'top_down'
-                    ? 'bg-white text-[#152B29] shadow-2xs'
-                    : 'text-[#5B7370] hover:text-[#152B29]'
-                }`}
+ planMode === 'top_down'
+ ? 'tk-bg-card tk-text-ink shadow-2xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
               >
                 {copy.modeTopDown}
               </button>
@@ -392,25 +392,25 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                   }
                 }}
                 className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                  planMode === 'bottom_up'
-                    ? 'bg-white text-[#152B29] shadow-2xs'
-                    : 'text-[#5B7370] hover:text-[#152B29]'
-                }`}
+ planMode === 'bottom_up'
+ ? 'tk-bg-card tk-text-ink shadow-2xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
               >
                 {copy.modeBottomUp}
               </button>
             </div>
 
             {!sameCurrency && (
-              <div className="inline-flex items-center rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] p-0.5">
+              <div className="inline-flex items-center rounded-xl border tk-bc-hair tk-bg-paper p-0.5">
                 <button
                   type="button"
                   onClick={() => handleSwitchEditUnit('home')}
                   className={`rounded-lg px-2.5 py-1 text-xs font-bold font-num whitespace-nowrap cursor-pointer ${
-                    editUnit === 'home'
-                      ? 'bg-[#093B35] text-white'
-                      : 'text-[#4F6865] hover:text-[#152B29]'
-                  }`}
+ editUnit === 'home'
+ ? 'tk-bg-forest tk-text-card'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                 >
                   {copy.fillInCurrency(homeCurrency)}
                 </button>
@@ -418,10 +418,10 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                   type="button"
                   onClick={() => handleSwitchEditUnit('local')}
                   className={`rounded-lg px-2.5 py-1 text-xs font-bold font-num whitespace-nowrap cursor-pointer ${
-                    editUnit === 'local'
-                      ? 'bg-[#093B35] text-white'
-                      : 'text-[#4F6865] hover:text-[#152B29]'
-                  }`}
+ editUnit === 'local'
+ ? 'tk-bg-forest tk-text-card'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                 >
                   {copy.fillInCurrency(tripCode)}
                 </button>
@@ -430,17 +430,17 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
           </div>
 
           {/* Budget Allocation Fields */}
-          <div className="rounded-2xl border border-[#DCE8E5] bg-[#F8FAF9] p-4 space-y-3.5">
+          <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-4 space-y-3.5">
             {planMode === 'top_down' ? (
               <>
                 {/* 1. Overall Trip Total Budget */}
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <label className="font-bold text-[#152B29]">
+                    <label className="font-bold tk-text-ink">
                       {copy.step1Total(activeCode)}
                     </label>
                     {!sameCurrency && (
-                      <span className="font-num text-[#647B78] tabular-nums">
+                      <span className="font-num tk-text-ink2 tabular-nums">
                         ≈{' '}
                         {formatCurrencyAmount(
                           activeCode === homeCurrency ? finalTotalLocal : finalTotalHome,
@@ -450,8 +450,8 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2 focus-within:border-[#078C88]">
-                    <span className="font-num text-lg font-extrabold text-[#093B35]">
+                  <div className="flex items-center gap-2 rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2 focus-within:tk-bc-forest">
+                    <span className="font-num text-lg font-extrabold tk-text-ink">
                       {activeSym}
                     </span>
                     <input
@@ -460,7 +460,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       step="any"
                       value={totalDraft}
                       onChange={(e) => setTotalDraft(e.target.value)}
-                      className="w-full bg-transparent font-num text-xl font-extrabold text-[#152B29] focus:outline-none tabular-nums"
+                      className="w-full bg-transparent font-num text-xl font-extrabold tk-text-ink focus:outline-none tabular-nums"
                     />
                   </div>
                 </div>
@@ -468,11 +468,11 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                 {/* 2. Prepaid Flights / Hotels + 3. Shopping Pool */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#3B5552] mb-1">
+                    <label className="block text-xs font-bold tk-text-ink2 mb-1">
                       {copy.step2Prepaid(activeCode)}
                     </label>
-                    <div className="flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 focus-within:border-[#078C88]">
-                      <span className="font-num text-sm font-bold text-[#5B7370]">
+                    <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 focus-within:tk-bc-forest">
+                      <span className="font-num text-sm font-bold tk-text-ink2">
                         {activeSym}
                       </span>
                       <input
@@ -481,17 +481,17 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                         step="any"
                         value={prepaidDraft}
                         onChange={(e) => setPrepaidDraft(e.target.value)}
-                        className="w-full bg-transparent font-num text-base font-bold text-[#152B29] focus:outline-none tabular-nums"
+                        className="w-full bg-transparent font-num text-base font-bold tk-text-ink focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#3B5552] mb-1">
+                    <label className="block text-xs font-bold tk-text-ink2 mb-1">
                       {copy.step3Shopping(activeCode)}
                     </label>
-                    <div className="flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 focus-within:border-[#078C88]">
-                      <span className="font-num text-sm font-bold text-[#5B7370]">
+                    <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 focus-within:tk-bc-forest">
+                      <span className="font-num text-sm font-bold tk-text-ink2">
                         {activeSym}
                       </span>
                       <input
@@ -500,7 +500,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                         step="any"
                         value={shoppingDraft}
                         onChange={(e) => setShoppingDraft(e.target.value)}
-                        className="w-full bg-transparent font-num text-base font-bold text-[#152B29] focus:outline-none tabular-nums"
+                        className="w-full bg-transparent font-num text-base font-bold tk-text-ink focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
@@ -509,24 +509,24 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                 {/* Auto-Computed Daily Food & Transit Result */}
                 <div
                   className={`rounded-xl border px-3.5 py-3 flex items-center justify-between gap-3 ${
-                    topDownOverAllocated
-                      ? 'border-[#E8B4AE] bg-[#FDF5F4]'
-                      : 'border-[#BFE3DF] bg-[#EFF9F8]'
-                  }`}
+ topDownOverAllocated
+ ? 'tk-bc-hair tk-bg-paper'
+ : 'tk-bc-hair tk-bg-forest-tint'
+ }`}
                 >
                   <div className="min-w-0">
-                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#076E6A]">
+                    <div className="inline-flex items-center gap-1.5 text-xs font-bold tk-text-forest">
                       <Calculator className="h-3.5 w-3.5 shrink-0" />
                       <span>
                         {copy.autoSplitDailyHeading(safeDays)}
                       </span>
                     </div>
                     {topDownOverAllocated ? (
-                      <p className="mt-0.5 text-xs text-[#B83B2E]">
+                      <p className="mt-0.5 text-xs tk-text-danger">
                         {copy.topDownOverError}
                       </p>
                     ) : (
-                      <p className="mt-0.5 text-xs text-[#4F6865] font-num tabular-nums">
+                      <p className="mt-0.5 text-xs tk-text-ink2 font-num tabular-nums">
                         {copy.nativeDailyCapPrefix}
                         <strong>
                           {formatCurrencyAmount(finalDailyLocal, tripCode, {
@@ -546,12 +546,12 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                   </div>
 
                   <div className="text-right shrink-0 font-num tabular-nums">
-                    <div className="text-lg font-extrabold text-[#093B35]">
+                    <div className="text-lg font-extrabold tk-text-ink">
                       {formatCurrencyAmount(derivedDailyActive, activeCode, {
                         fallbackSymbol: activeSym,
                       })}
                     </div>
-                    <div className="text-[11px] text-[#5B7370]">
+                    <div className="text-[11px] tk-text-ink2">
                       /{copy.perDaySuffix}
                     </div>
                   </div>
@@ -562,11 +562,11 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                 {/* Bottom-Up Mode: Edit Daily Cap + Shopping + Prepaid -> Auto Sum Total */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#152B29] mb-1">
+                    <label className="block text-xs font-bold tk-text-ink mb-1">
                       {copy.dailyFoodTransitLabel(safeDays)}
                     </label>
-                    <div className="flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 focus-within:border-[#078C88]">
-                      <span className="font-num text-sm font-bold text-[#093B35]">
+                    <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 focus-within:tk-bc-forest">
+                      <span className="font-num text-sm font-bold tk-text-ink">
                         {activeSym}
                       </span>
                       <input
@@ -575,17 +575,17 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                         step="any"
                         value={dailyDraft}
                         onChange={(e) => setDailyDraft(e.target.value)}
-                        className="w-full bg-transparent font-num text-base font-extrabold text-[#152B29] focus:outline-none tabular-nums"
+                        className="w-full bg-transparent font-num text-base font-extrabold tk-text-ink focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#3B5552] mb-1">
+                    <label className="block text-xs font-bold tk-text-ink2 mb-1">
                       {copy.shoppingVatPoolLabel}
                     </label>
-                    <div className="flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 focus-within:border-[#078C88]">
-                      <span className="font-num text-sm font-bold text-[#5B7370]">
+                    <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 focus-within:tk-bc-forest">
+                      <span className="font-num text-sm font-bold tk-text-ink2">
                         {activeSym}
                       </span>
                       <input
@@ -594,17 +594,17 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                         step="any"
                         value={shoppingDraft}
                         onChange={(e) => setShoppingDraft(e.target.value)}
-                        className="w-full bg-transparent font-num text-base font-bold text-[#152B29] focus:outline-none tabular-nums"
+                        className="w-full bg-transparent font-num text-base font-bold tk-text-ink focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#3B5552] mb-1">
+                    <label className="block text-xs font-bold tk-text-ink2 mb-1">
                       {copy.prepaidFlightsStaysLabel}
                     </label>
-                    <div className="flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 focus-within:border-[#078C88]">
-                      <span className="font-num text-sm font-bold text-[#5B7370]">
+                    <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 focus-within:tk-bc-forest">
+                      <span className="font-num text-sm font-bold tk-text-ink2">
                         {activeSym}
                       </span>
                       <input
@@ -613,22 +613,22 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                         step="any"
                         value={prepaidDraft}
                         onChange={(e) => setPrepaidDraft(e.target.value)}
-                        className="w-full bg-transparent font-num text-base font-bold text-[#152B29] focus:outline-none tabular-nums"
+                        className="w-full bg-transparent font-num text-base font-bold tk-text-ink focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Auto-Summed Overall Trip Budget */}
-                <div className="rounded-xl border border-[#BFE3DF] bg-[#EFF9F8] px-3.5 py-3 flex items-center justify-between gap-3">
+                <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#076E6A]">
+                    <div className="inline-flex items-center gap-1.5 text-xs font-bold tk-text-forest">
                       <Calculator className="h-3.5 w-3.5 shrink-0" />
                       <span>
                         {copy.autoSumTotalHeading}
                       </span>
                     </div>
-                    <p className="mt-0.5 text-xs text-[#4F6865] font-num tabular-nums">
+                    <p className="mt-0.5 text-xs tk-text-ink2 font-num tabular-nums">
                       {formatCurrencyAmount(finalTotalLocal, tripCode, {
                         withCode: true,
                       })}
@@ -646,7 +646,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                     </p>
                   </div>
 
-                  <div className="text-right shrink-0 font-num text-xl font-extrabold text-[#093B35] tabular-nums">
+                  <div className="text-right shrink-0 font-num text-xl font-extrabold tk-text-ink tabular-nums">
                     {formatCurrencyAmount(derivedTotalActive, activeCode, {
                       fallbackSymbol: activeSym,
                     })}
@@ -657,11 +657,11 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
           </div>
 
           {/* Exchange Rate Engine & Custom Rate Lock Box */}
-          <div className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-3">
+          <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <ArrowRightLeft className="h-4 w-4 text-[#078C88] shrink-0" />
-                <span className="text-xs font-bold text-[#152B29]">
+                <ArrowRightLeft className="h-4 w-4 tk-text-forest shrink-0" />
+                <span className="text-xs font-bold tk-text-ink">
                   {copy.fxHeading}
                 </span>
               </div>
@@ -669,28 +669,28 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
               <button
                 type="button"
                 onClick={onOpenCurrencyPicker}
-                className="rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1 text-xs font-bold text-[#093B35] hover:border-[#0ABAB5] cursor-pointer"
+                className="rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 text-xs font-bold tk-text-ink hover:tk-bc-forest cursor-pointer"
               >
                 {copy.totalsInCurrencyBtn(homeCurrency)}
               </button>
             </div>
 
             {sameCurrency ? (
-              <p className="text-xs text-[#5B7370]">
+              <p className="text-xs tk-text-ink2">
                 {copy.sameCurrencyDesc(tripCode)}
               </p>
             ) : (
               <>
-                <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#F8FAF9] px-3 py-2.5 text-xs">
-                  <div className="font-num font-bold text-[#152B29] tabular-nums">
+                <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl tk-bg-paper px-3 py-2.5 text-xs">
+                  <div className="font-num font-bold tk-text-ink tabular-nums">
                     1 {tripCode} ={' '}
-                    <span className="text-[#078C88]">
+                    <span className="tk-text-forest">
                       {effectiveLocalToHomeRate >= 100
                         ? effectiveLocalToHomeRate.toFixed(2)
                         : effectiveLocalToHomeRate.toFixed(4)}
                     </span>{' '}
                     {homeCurrency}
-                    <span className="ml-2 font-sans font-semibold text-[11px] text-[#647B78]">
+                    <span className="ml-2 font-sans font-semibold text-[11px] tk-text-ink2">
                       (
                       {useCustomFx
                         ? copy.fxCustomLocked
@@ -706,10 +706,10 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       type="button"
                       disabled={syncingLiveFx}
                       onClick={() => void handleRefreshLiveRate()}
-                      className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#3B5552] hover:border-[#0ABAB5] disabled:opacity-50 cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest disabled:opacity-50 cursor-pointer"
                     >
                       <RefreshCw
-                        className={`h-3 w-3 ${syncingLiveFx ? 'animate-spin text-[#078C88]' : ''}`}
+                        className={`h-3 w-3 ${syncingLiveFx ? 'animate-spin tk-text-forest' : ''}`}
                       />
                       <span>{copy.syncLiveBtn}</span>
                     </button>
@@ -718,10 +718,10 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       type="button"
                       onClick={() => setUseCustomFx((v) => !v)}
                       className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold cursor-pointer ${
-                        useCustomFx
-                          ? 'bg-[#093B35] text-white'
-                          : 'border border-[#DCE8E5] bg-white text-[#3B5552] hover:border-[#0ABAB5]'
-                      }`}
+ useCustomFx
+ ? 'tk-bg-forest tk-text-card'
+ : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-forest'
+ }`}
                     >
                       {copy.customRateBtn}
                     </button>
@@ -730,7 +730,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
 
                 {useCustomFx && (
                   <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <span className="text-xs font-semibold text-[#3B5552] font-num">
+                    <span className="text-xs font-semibold tk-text-ink2 font-num">
                       1 {tripCode} =
                     </span>
                     <input
@@ -739,9 +739,9 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       step="any"
                       value={customFxDraft}
                       onChange={(e) => setCustomFxDraft(e.target.value)}
-                      className="w-28 rounded-lg border border-[#078C88] bg-[#FAFDFC] px-2.5 py-1 font-num text-xs font-bold text-[#152B29] tabular-nums focus:outline-none"
+                      className="w-28 rounded-lg border tk-bc-forest tk-bg-paper px-2.5 py-1 font-num text-xs font-bold tk-text-ink tabular-nums focus:outline-none"
                     />
-                    <span className="text-xs font-semibold text-[#3B5552] font-num">
+                    <span className="text-xs font-semibold tk-text-ink2 font-num">
                       {homeCurrency}
                     </span>
                     <button
@@ -754,7 +754,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                             : autoFxInfo.rate.toFixed(4)
                         );
                       }}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#647B78] hover:text-[#152B29] ml-auto cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 hover:tk-text-ink ml-auto cursor-pointer"
                     >
                       <RotateCcw className="h-3 w-3" />
                       <span>{copy.resetAutoRateBtn}</span>
@@ -763,7 +763,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                 )}
 
                 {liveSyncMsg && (
-                  <p className="text-[11px] font-medium text-[#076E6A]">{liveSyncMsg}</p>
+                  <p className="text-[11px] font-medium tk-text-forest">{liveSyncMsg}</p>
                 )}
               </>
             )}
@@ -774,7 +774,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
             <button
               type="submit"
               disabled={planMode === 'top_down' && topDownOverAllocated}
-              className="w-full h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#093B35] px-4 text-sm font-bold text-white hover:bg-[#072B27] disabled:opacity-40 transition-colors cursor-pointer"
+              className="w-full h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl tk-bg-forest px-4 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
             >
               <Check className="h-4 w-4 shrink-0" />
               <span>

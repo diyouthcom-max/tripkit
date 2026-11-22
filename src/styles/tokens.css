@@ -801,3 +801,28 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 @media (min-width: 640px) {
   .tk-itinerary-sheet { border-radius: var(--tk-r-dock); }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 3 批 Budget / 账本
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-bg-chart-1 { background: var(--tk-chart-1); }
+.tk-bg-chart-2 { background: var(--tk-chart-2); }
+.tk-bg-ink { background: var(--tk-ink); }
+.tk-bc-warning { border-color: var(--tk-warning); }
+
+.tk-budget-hero-grad {
+  background: linear-gradient(to right, var(--tk-paper), var(--tk-card), var(--tk-paper));
+}
+.tk-budget-vat-card {
+  background: linear-gradient(to bottom, var(--tk-warning-tint), var(--tk-card));
+  border-color: var(--tk-warning-hair);
+}
+
+.active\:tk-bg-press:active { background: var(--tk-press); }
+.active\:tk-bg-danger:active {
+  background: color-mix(in srgb, var(--tk-danger) 82%, var(--tk-ink));
+}
+.hover\:tk-text-warning:hover { color: var(--tk-warning); }
+.hover\:tk-bg-warning:hover { background: var(--tk-warning-tint); }

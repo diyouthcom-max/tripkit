@@ -33,6 +33,7 @@ import {
   ReferenceLine,
   Cell,
 } from 'recharts';
+import { tkColor } from '../utils/tkColor';
 import { useTranslation } from 'react-i18next';
 import {
   translateDemoExpenseTitle,
@@ -165,25 +166,25 @@ const DailyTrendTooltip: React.FC<ChartTooltipProps> = ({
   const hasSharedDiff = Math.abs(datum.grossDailySpent - datum.dailySpent) > 0.01;
 
   return (
-    <div className="rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2.5 shadow-lg text-xs space-y-1.5">
-      <div className="font-bold text-[#152B29]">
+    <div className="rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 shadow-lg text-xs space-y-1.5">
+      <div className="font-bold tk-text-ink">
         {copy.dayHeading(datum.dayNum, datum.isToday)}
       </div>
       <div className="flex items-center justify-between gap-5">
-        <span className="text-[#5B7370]">
+        <span className="tk-text-ink2">
           {copy.dailyMyShare}
         </span>
         <span
           className={`font-num font-bold tabular-nums ${
-            overBudget ? 'text-[#B83B2E]' : 'text-[#078C88]'
-          }`}
+ overBudget ? 'tk-text-danger' : 'tk-text-forest'
+ }`}
         >
           {sym}
           {datum.dailySpent.toFixed(2)}
         </span>
       </div>
       {hasSharedDiff && (
-        <div className="flex items-center justify-between gap-5 text-[#647B78]">
+        <div className="flex items-center justify-between gap-5 tk-text-ink2">
           <span>{copy.wholeBillTotal}</span>
           <span className="font-num tabular-nums">
             {sym}
@@ -193,21 +194,21 @@ const DailyTrendTooltip: React.FC<ChartTooltipProps> = ({
       )}
       {includeShopping && (
         <div className="flex items-center justify-between gap-5">
-          <span className="text-[#5B7370]">{copy.shoppingLabel}</span>
-          <span className="font-num font-bold text-[#7E63B8] tabular-nums">
+          <span className="tk-text-ink2">{copy.shoppingLabel}</span>
+          <span className="font-num font-bold tk-text-ink2 tabular-nums">
             {sym}
             {datum.shoppingSpent.toFixed(2)}
           </span>
         </div>
       )}
-      <div className="pt-1 border-t border-[#EDF3F1] flex items-center justify-between gap-5">
-        <span className="text-[#647B78]">
+      <div className="pt-1 border-t tk-bc-hair flex items-center justify-between gap-5">
+        <span className="tk-text-ink2">
           {copy.vsLimit(sym, datum.limit.toFixed(0))}
         </span>
         <span
           className={`font-num font-bold tabular-nums ${
-            overBudget ? 'text-[#B83B2E]' : 'text-[#078C88]'
-          }`}
+ overBudget ? 'tk-text-danger' : 'tk-text-forest'
+ }`}
         >
           {datum.diff >= 0
             ? `${copy.savedPrefix}${sym}${datum.diff.toFixed(2)}`
@@ -717,11 +718,11 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
     travelersCount > 1 || sharedExpenses.length > 0 || settlementHistory.length > 0;
 
   const renderQuickAccountingBar = () => (
-    <section className="rounded-2xl border border-[#DCE8E5] bg-white px-3.5 py-2.5 shadow-2xs space-y-2">
+    <section className="rounded-2xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 shadow-2xs space-y-2">
       <div className="flex flex-col sm:flex-row sm:items-center gap-2">
         <form
           onSubmit={handleVoiceExpenseFormSubmit}
-          className="flex-1 min-w-0 flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] pl-3 pr-1.5 py-1 focus-within:border-[#078C88] focus-within:bg-white transition-colors"
+          className="flex-1 min-w-0 flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper pl-3 pr-1.5 py-1 focus-within:tk-bc-forest focus-within:tk-bg-card transition-colors"
         >
           <AccentIconBadge accent="lavender" icon={Receipt} size="xs" ring={false} />
           <input
@@ -729,7 +730,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             value={voiceExpenseText}
             onChange={(e) => setVoiceExpenseText(e.target.value)}
             placeholder={t('budget.voiceBarPlaceholder')}
-            className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm text-[#152B29] placeholder:text-[#889F9B] focus:outline-none"
+            className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
           />
           <AiVoiceInputButton
             iconOnly
@@ -748,7 +749,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             <button
               type="submit"
               disabled={isParsingVoiceExpense || !voiceExpenseText.trim()}
-              className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-8 inline-flex items-center justify-center gap-1 rounded-lg tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {isParsingVoiceExpense ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -773,12 +774,12 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               type="button"
               disabled={isParsingReceipt}
               onClick={() => fileInputRef.current?.click()}
-              className="h-9 flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-white px-3 text-xs font-semibold text-[#152B29] hover:border-[#0ABAB5] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-9 flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 text-xs font-semibold tk-text-ink hover:tk-bc-forest disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {isParsingReceipt ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-[#078C88] shrink-0" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest shrink-0" />
               ) : (
-                <Camera className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                <Camera className="h-3.5 w-3.5 tk-text-forest shrink-0" />
               )}
               {isParsingReceipt ? t('budget.parsingReceipt') : t('budget.snapReceipt')}
             </button>
@@ -789,7 +790,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                 setManualPrefillTitle('');
                 setManualModalOpen(true);
               }}
-              className="h-9 flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 rounded-xl bg-[#093B35] px-3.5 text-xs font-bold text-white hover:bg-[#072B27] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-9 flex-1 sm:flex-initial inline-flex items-center justify-center gap-1 rounded-xl tk-bg-forest px-3.5 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5 shrink-0" />
               <span>{t('budget.manualEntry')}</span>
@@ -799,15 +800,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
       </div>
 
       {voiceExpenseError && (
-        <div className="flex items-center justify-between gap-2 rounded-xl border border-[#EBD6B9] bg-[#FDF8F1] px-3.5 py-2 text-xs font-semibold text-[#875220]">
+        <div className="flex items-center justify-between gap-2 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3.5 py-2 text-xs font-semibold tk-text-warning">
           <span className="inline-flex items-center gap-1.5">
-            <AlertCircle className="h-3.5 w-3.5 text-[#B96A39] shrink-0" />
+            <AlertCircle className="h-3.5 w-3.5 tk-text-warning shrink-0" />
             {voiceExpenseError}
           </span>
           <button
             type="button"
             onClick={() => setVoiceExpenseError(null)}
-            className="text-[#7A491A] hover:underline cursor-pointer"
+            className="tk-text-ink2 hover:underline cursor-pointer"
           >
             {t('budget.collapse')}
           </button>
@@ -815,7 +816,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
       )}
 
       {receiptFeedback && (
-        <div className="flex items-center justify-between gap-2 rounded-xl border border-[#C6E6E3] bg-[#EFF9F8] px-3.5 py-2 text-xs font-semibold text-[#076E6A]">
+        <div className="flex items-center justify-between gap-2 rounded-xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-xs font-semibold tk-text-forest">
           <span className="inline-flex items-center gap-1.5">
             <Check className="h-3.5 w-3.5 shrink-0" />
             {receiptFeedback}
@@ -823,7 +824,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           <button
             type="button"
             onClick={() => setReceiptFeedback(null)}
-            className="text-[#5B7370] hover:text-[#152B29] cursor-pointer"
+            className="tk-text-ink2 hover:tk-text-ink cursor-pointer"
           >
             {t('budget.collapse')}
           </button>
@@ -837,15 +838,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
       {/* Compact Sub-View Switcher (Only When Multi-Traveler / Shared Split Active) */}
       {showSplitSwitcher && (
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-xl bg-[#EAF1EF] p-1 w-full sm:w-auto">
+          <div className="grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-xl tk-bg-paper p-1 w-full sm:w-auto">
             <button
               type="button"
               onClick={() => setFinanceView('overview')}
               className={`rounded-lg px-3.5 py-1.5 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                financeView === 'overview'
-                  ? 'bg-white text-[#152B29] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ financeView === 'overview'
+ ? 'tk-bg-card tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
               {t('budget.overviewTab')}
             </button>
@@ -853,21 +854,21 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               type="button"
               onClick={() => setFinanceView('split')}
               className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                financeView === 'split'
-                  ? 'bg-white text-[#6355B5] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ financeView === 'split'
+ ? 'tk-bg-card tk-text-ink2 shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
-              <Users className="h-3.5 w-3.5 text-[#6355B5] shrink-0" />
+              <Users className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
               <span>{t('budget.splitTab')}</span>
               <span
                 className={`font-num text-[11px] tabular-nums ${
-                  owed > 0.01
-                    ? 'text-[#078C88] font-bold'
-                    : owed < -0.01
-                    ? 'text-[#C86D2D] font-bold'
-                    : 'text-[#7B928E]'
-                }`}
+ owed > 0.01
+ ? 'tk-text-forest font-bold'
+ : owed < -0.01
+ ? 'tk-text-ink2 font-bold'
+ : 'tk-text-ink2'
+ }`}
               >
                 {owed > 0.01
                   ? `+${sym}${Math.round(owed)}`
@@ -881,7 +882,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           <button
             type="button"
             onClick={() => onOpenAiAssistant(voiceExpenseText || undefined)}
-            className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-[#078C88] hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Sparkles className="h-3.5 w-3.5 shrink-0" />
             <span>{t('budget.openCopilotLink')} →</span>
@@ -895,7 +896,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left: One-Sentence Net Settlement & Settlement History */}
           <div className="lg:col-span-5 space-y-5">
-            <section className="rounded-2xl bg-[#078C88] p-6 text-white">
+            <section className="rounded-2xl tk-bg-forest p-6 tk-text-card">
               <p className="text-xs font-semibold opacity-85">
                 {copy.splitHeroSubtitle}
               </p>
@@ -929,7 +930,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   type="button"
                   disabled={Math.abs(owed) < 0.01 && unsettledCount === 0}
                   onClick={onSettleUp}
-                  className="rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-[#076E6A] hover:bg-[#EFF9F8] disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
+                  className="rounded-xl tk-bg-card px-4 py-2.5 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   {Math.abs(owed) < 0.01 && unsettledCount === 0
                     ? copy.settledBadge
@@ -939,22 +940,22 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </section>
 
             {/* Convert Me-Paid to AA / Percentage */}
-            <section className="rounded-2xl border border-[#DCE8E5] bg-white p-5">
+            <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <AccentIconBadge accent="teal" icon={ArrowRightLeft} size="sm" />
-                  <h3 className="text-sm font-bold text-[#152B29]">
+                  <h3 className="text-sm font-bold tk-text-ink">
                     {copy.convertToSplitHeading}
                   </h3>
                 </div>
-                <span className="text-xs text-[#647B78]">
+                <span className="text-xs tk-text-ink2">
                   {copy.fromAllMineHint}
                 </span>
               </div>
-              <div className="mt-3 divide-y divide-[#F1F6F5] border-t border-[#EDF3F1]">
+              <div className="mt-3 divide-y tk-divide-hair border-t tk-bc-hair">
                 {mePaidExpenses.length === 0 ? (
-                  <div className="py-4 flex items-center gap-2 text-xs text-[#647B78]">
-                    <CheckCircle2 className="h-4 w-4 text-[#078C88]" />
+                  <div className="py-4 flex items-center gap-2 text-xs tk-text-ink2">
+                    <CheckCircle2 className="h-4 w-4 tk-text-forest" />
                     {copy.noPersonalLeft}
                   </div>
                 ) : (
@@ -974,10 +975,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                               size="sm"
                             />
                             <div className="min-w-0">
-                              <div className="font-semibold text-[#152B29] truncate">
+                              <div className="font-semibold tk-text-ink truncate">
                                 {translateDemoExpenseTitle(ex.title, activeLang)}
                               </div>
-                              <div className="text-[#647B78] mt-0.5 tabular-nums">
+                              <div className="tk-text-ink2 mt-0.5 tabular-nums">
                                 {sym}
                                 {ex.amountLocal.toFixed(2)} · Day {ex.day ?? 1} {ex.time}
                               </div>
@@ -987,7 +988,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                             <button
                               type="button"
                               onClick={() => onConvertExpenseToSplit(ex.id, 50)}
-                              className="rounded-lg border border-[#C6E6E3] bg-[#EFF9F8] px-2.5 py-1.5 font-semibold text-[#076E6A] hover:bg-[#DFF3F1] whitespace-nowrap shrink-0 cursor-pointer"
+                              className="rounded-lg border tk-bc-hair tk-bg-forest-tint px-2.5 py-1.5 font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
                             >
                               {copy.fiftyFiftyBtn}
                             </button>
@@ -1002,10 +1003,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                 }
                               }}
                               className={`rounded-lg border px-2.5 py-1.5 font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
-                                isConfiguringRatio
-                                  ? 'border-[#078C88] bg-[#078C88] text-white'
-                                  : 'border-[#DCE8E5] bg-[#F8FAF9] text-[#3B5552] hover:border-[#0ABAB5]'
-                              }`}
+ isConfiguringRatio
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest'
+ }`}
                             >
                               {copy.byRatioBtn}
                             </button>
@@ -1013,7 +1014,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         </div>
 
                         {isConfiguringRatio && (
-                          <div className="pt-2 border-t border-[#EDF3F1] space-y-2">
+                          <div className="pt-2 border-t tk-bc-hair space-y-2">
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <div className="flex flex-wrap items-center gap-1">
                                 {[70, 60, 40, 30, 0].map((pct) => (
@@ -1022,17 +1023,17 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                     type="button"
                                     onClick={() => setCustomPct(pct)}
                                     className={`rounded-md px-2 py-1 font-num font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
-                                      customPct === pct
-                                        ? 'bg-[#078C88] text-white'
-                                        : 'bg-[#F2F6F5] text-[#4F6865] hover:bg-[#E4EEEC]'
-                                    }`}
+ customPct === pct
+ ? 'tk-bg-forest tk-text-card'
+ : 'tk-bg-forest-plate tk-text-ink2 hover:tk-bg-paper'
+ }`}
                                   >
                                     {pct}:{100 - pct}
                                   </button>
                                 ))}
                               </div>
                               <div className="inline-flex items-center gap-1 font-num tabular-nums">
-                                <span className="text-[#5B7370]">
+                                <span className="tk-text-ink2">
                                   {copy.myShareInputLabel}
                                 </span>
                                 <input
@@ -1043,19 +1044,19 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                   onChange={(e) =>
                                     setCustomPct(clampSharePct(Number(e.target.value)))
                                   }
-                                  className="w-12 rounded-md border border-[#DCE8E5] bg-white px-1.5 py-0.5 text-center font-bold text-[#152B29]"
+                                  className="w-12 rounded-md border tk-bc-hair tk-bg-card px-1.5 py-0.5 text-center font-bold tk-text-ink"
                                 />
-                                <span className="text-[#5B7370]">%</span>
+                                <span className="tk-text-ink2">%</span>
                               </div>
                             </div>
 
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-num text-[#5B7370] tabular-nums">
+                              <span className="font-num tk-text-ink2 tabular-nums">
                                 {copy.partnerPaysPreview(
                                   displayCompanionName,
                                   100 - clampSharePct(customPct)
                                 )}
-                                <strong className="text-[#076E6A]">
+                                <strong className="tk-text-forest">
                                   +{sym}
                                   {partnerAmtPreview.toFixed(2)}
                                 </strong>
@@ -1066,7 +1067,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                   onConvertExpenseToSplit(ex.id, clampSharePct(customPct));
                                   setRatioOpenId(null);
                                 }}
-                                className="rounded-lg bg-[#078C88] px-3 py-1 font-semibold text-white hover:bg-[#067572] whitespace-nowrap shrink-0 cursor-pointer"
+                                className="rounded-lg tk-bg-forest px-3 py-1 font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                               >
                                 {copy.applyRatioSplit}
                               </button>
@@ -1082,32 +1083,32 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
             {/* Settlement History Audit Trail */}
             {settlementHistory.length > 0 && (
-              <section className="rounded-2xl border border-[#DCE8E5] bg-white p-5">
+              <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <AccentIconBadge accent="peach" icon={History} size="sm" />
-                    <h3 className="text-sm font-bold text-[#152B29]">
+                    <h3 className="text-sm font-bold tk-text-ink">
                       {copy.settlementHistoryTitle}
                     </h3>
                   </div>
-                  <span className="font-num text-xs text-[#647B78] tabular-nums">
+                  <span className="font-num text-xs tk-text-ink2 tabular-nums">
                     {copy.settlementCount(settlementHistory.length)}
                   </span>
                 </div>
-                <div className="mt-3 divide-y divide-[#F1F6F5] border-t border-[#EDF3F1] text-xs">
+                <div className="mt-3 divide-y tk-divide-hair border-t tk-bc-hair text-xs">
                   {settlementHistory.map((rec) => (
                     <div key={rec.id} className="py-2.5 flex items-center justify-between gap-3">
                       <div>
-                        <div className="font-semibold text-[#152B29]">
+                        <div className="font-semibold tk-text-ink">
                           {rec.amountLocal >= 0
                             ? copy.receivedFrom(displayCompanionName)
                             : copy.paidTo(displayCompanionName)}
                         </div>
-                        <div className="mt-0.5 font-num text-[#647B78] tabular-nums">
+                        <div className="mt-0.5 font-num tk-text-ink2 tabular-nums">
                           {rec.settledAt} · {copy.clearedItemsCount(rec.itemCount)}
                         </div>
                       </div>
-                      <div className="font-num font-bold text-[#078C88] tabular-nums shrink-0">
+                      <div className="font-num font-bold tk-text-forest tabular-nums shrink-0">
                         {sym}
                         {Math.abs(rec.amountLocal).toFixed(2)} ✓
                       </div>
@@ -1120,24 +1121,24 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
           {/* Right: Shared Split Ledger */}
           <div className="lg:col-span-7">
-            <section className="rounded-2xl border border-[#DCE8E5] bg-white p-5">
+            <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5">
                   <AccentIconBadge accent="lavender" icon={Users} size="sm" />
-                  <h3 className="text-sm font-bold text-[#152B29]">
+                  <h3 className="text-sm font-bold tk-text-ink">
                     {copy.sharedSplitLedgerTitle}
                   </h3>
                 </div>
-                <span className="font-num text-xs text-[#647B78] tabular-nums">
+                <span className="font-num text-xs tk-text-ink2 tabular-nums">
                   {settledCount > 0
                     ? copy.openSettledCounts(unsettledCount, settledCount)
                     : copy.sharedCount(sharedExpenses.length)}
                 </span>
               </div>
 
-              <div className="mt-3 divide-y divide-[#F1F6F5] border-t border-[#EDF3F1]">
+              <div className="mt-3 divide-y tk-divide-hair border-t tk-bc-hair">
                 {sharedExpenses.length === 0 ? (
-                  <p className="py-6 text-center text-xs text-[#647B78]">
+                  <p className="py-6 text-center text-xs tk-text-ink2">
                     {copy.noSplitExpensesEmpty}
                   </p>
                 ) : (
@@ -1163,10 +1164,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                             size="sm"
                           />
                           <div className="min-w-0 flex-1">
-                            <div className="font-semibold text-[#152B29] truncate">
+                            <div className="font-semibold tk-text-ink truncate">
                               {translateDemoExpenseTitle(ex.title, activeLang)}
                             </div>
-                            <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[#647B78] tabular-nums">
+                            <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 tk-text-ink2 tabular-nums">
                               <span>
                                 {copy.totalPrefix}
                                 {sym}
@@ -1175,7 +1176,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                               <span aria-hidden="true">·</span>
                               <span
                                 className={
-                                  ex.split === 'ratio' ? 'font-semibold text-[#076E6A]' : ''
+                                  ex.split === 'ratio' ? 'font-semibold tk-text-forest' : ''
                                 }
                               >
                                 {details.shortLabel}
@@ -1189,15 +1190,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         <div className="flex items-center gap-3 shrink-0">
                           <div className="text-right font-num tabular-nums">
                             {ex.settled ? (
-                              <div className="font-semibold text-[#7B928E]">
+                              <div className="font-semibold tk-text-ink2">
                                 {copy.settledAmtPrefix}({sym}
                                 {Math.abs(delta).toFixed(2)})
                               </div>
                             ) : (
                               <div
                                 className={`font-bold ${
-                                  delta >= 0 ? 'text-[#078C88]' : 'text-[#B96A39]'
-                                }`}
+ delta >= 0 ? 'tk-text-forest' : 'tk-text-warning'
+ }`}
                               >
                                 {delta > 0.005
                                   ? copy.companionOwesInline(
@@ -1209,7 +1210,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                   : copy.evenLabel}
                               </div>
                             )}
-                            <div className="text-[11px] text-[#7B928E]">
+                            <div className="text-[11px] tk-text-ink2">
                               Day {ex.day ?? 1} · {ex.time}
                             </div>
                           </div>
@@ -1223,7 +1224,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                               setEditingExpenseId(ex.id);
                               setFinanceView('overview');
                             }}
-                            className="rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1 text-[11px] font-semibold text-[#3B5552] hover:border-[#0ABAB5] hover:text-[#078C88] whitespace-nowrap cursor-pointer"
+                            className="rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
                           >
                             {t('common.edit')}
                           </button>
@@ -1240,15 +1241,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
       ) : (
         <>
           {/* 1. UNIFIED DUAL-TRACK OVERSEAS TRAVELER WALLET HERO CARD */}
-          <section className="rounded-3xl border border-[#D8E7E4] bg-white shadow-[0_8px_28px_-14px_rgba(15,35,33,0.14)] overflow-hidden">
+          <section className="rounded-3xl border tk-bc-hair tk-bg-card tk-elev-card overflow-hidden">
             {/* TRACK 1: Route Board Header + Fixed Prepaid Sunk Cost (Excluded from Daily Cap) */}
-            <div className="px-4 sm:px-6 pt-4 pb-3.5 border-b border-[#EDF3F1] bg-gradient-to-r from-[#F9FCFB] via-white to-[#F6FBFA] space-y-2">
+            <div className="px-4 sm:px-6 pt-4 pb-3.5 border-b tk-bc-hair tk-budget-hero-grad space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-[#E8F6F4] text-[#078C88] shrink-0">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-xl tk-bg-forest-tint tk-text-forest shrink-0">
                     <Wallet className="h-4 w-4" />
                   </span>
-                  <h2 className="text-sm sm:text-base font-extrabold text-[#142927] tracking-tight truncate">
+                  <h2 className="text-sm sm:text-base font-extrabold tk-text-ink tracking-tight truncate">
                     {routeBoardTitle}
                   </h2>
                 </div>
@@ -1258,10 +1259,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     type="button"
                     onClick={() => setCurrencyPickerOpen(true)}
                     aria-label={copy.switchCurrencyAria}
-                    className="h-7 inline-flex items-center gap-1 rounded-full border border-[#D8E7E4] bg-white px-2.5 font-num text-xs font-bold text-[#152B29] hover:border-[#078C88] whitespace-nowrap cursor-pointer transition-colors"
+                    className="h-7 inline-flex items-center gap-1 rounded-full border tk-bc-hair tk-bg-card px-2.5 font-num text-xs font-bold tk-text-ink hover:tk-bc-forest whitespace-nowrap cursor-pointer transition-colors"
                   >
                     <span>{homeCurrency}</span>
-                    <ChevronDown className="h-3.5 w-3.5 text-[#647B78] shrink-0" />
+                    <ChevronDown className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
                   </button>
                   <button
                     type="button"
@@ -1269,7 +1270,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       setBudgetPlannerFocus('overall');
                       setBudgetPlannerOpen(true);
                     }}
-                    className="h-7 inline-flex items-center gap-1 rounded-full border border-[#D8E7E4] bg-white px-2.5 text-xs font-semibold text-[#3C5B57] hover:border-[#078C88] hover:text-[#076E6A] whitespace-nowrap cursor-pointer transition-colors"
+                    className="h-7 inline-flex items-center gap-1 rounded-full border tk-bc-hair tk-bg-card px-2.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer transition-colors"
                   >
                     <SlidersHorizontal className="h-3 w-3 shrink-0" />
                     <span>{copy.adjustBtn}</span>
@@ -1287,22 +1288,22 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   }}
                   className="inline-flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-left group cursor-pointer"
                 >
-                  <span className="font-semibold text-[#5B7370]">
+                  <span className="font-semibold tk-text-ink2">
                     {walletCopy.fixedPrepaidLabel}:
                   </span>
-                  <span className="font-num font-bold text-[#152B29] tabular-nums group-hover:text-[#078C88] transition-colors">
+                  <span className="font-num font-bold tk-text-ink tabular-nums group-hover:tk-text-forest transition-colors">
                     {formatCurrencyAmount(prepaidHome, homeCurrency, {
                       compactDecimals: true,
                     })}{' '}
                     {homeCurrency}
                   </span>
-                  <span className="text-[11px] text-[#758E8A]">
+                  <span className="text-[11px] tk-text-ink2">
                     ({walletCopy.fixedPrepaidSub})
                   </span>
                 </button>
 
                 {!sameCurrency && (
-                  <span className="font-num text-[11px] font-medium text-[#6B8581] tabular-nums whitespace-nowrap">
+                  <span className="font-num text-[11px] font-medium tk-text-ink2 tabular-nums whitespace-nowrap">
                     1 {tripCode} ={' '}
                     {fxSummary.rate >= 100
                       ? fxSummary.rate.toFixed(2)
@@ -1330,10 +1331,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       data-chip-active={active ? 'true' : undefined}
                       onClick={() => onSelectDay(day)}
                       className={`min-h-[32px] inline-flex items-center gap-1.5 rounded-full px-3 text-xs font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                        active
-                          ? 'border-[#093B35] bg-[#093B35] text-white'
-                          : 'border-[#E2ECEA] bg-[#F5F8F7] text-[#354E4B] hover:border-[#B8D8D4] hover:text-[#152B29]'
-                      }`}
+ active
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-hair hover:tk-text-ink'
+ }`}
                     >
                       <span className="font-num font-bold">D{day}</span>
                       {cityLabel && <span>{cityLabel}</span>}
@@ -1345,7 +1346,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0 space-y-1.5">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                    <span className="text-xs font-bold text-[#076E6A]">
+                    <span className="text-xs font-bold tk-text-forest">
                       {walletCopy.todayLiquidTitle(currentDay)}
                     </span>
                     <button
@@ -1354,7 +1355,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         setBudgetPlannerFocus('daily');
                         setBudgetPlannerOpen(true);
                       }}
-                      className="text-[11px] font-semibold text-[#647B78] hover:text-[#078C88] underline decoration-dotted underline-offset-2 cursor-pointer tabular-nums"
+                      className="text-[11px] font-semibold tk-text-ink2 hover:tk-text-forest underline decoration-dotted underline-offset-2 cursor-pointer tabular-nums"
                     >
                       {copy.dailyRateAdjust(sym, budget.dailyBudgetLocal)}
                     </button>
@@ -1364,25 +1365,25 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 font-num tabular-nums">
                     <span
                       className={`text-3xl sm:text-[34px] font-extrabold tracking-tight leading-none ${
-                        isDailyOver ? 'text-[#B83B2E]' : 'text-[#132927]'
-                      }`}
+ isDailyOver ? 'tk-text-danger' : 'tk-text-ink'
+ }`}
                     >
                       {isDailyOver
                         ? `-${sym}${Math.abs(dailyBalance).toFixed(2)}`
                         : `${sym}${dailyBalance.toFixed(2)}`}
                     </span>
-                    <span className="text-xs sm:text-sm font-bold text-[#4C6B67]">
+                    <span className="text-xs sm:text-sm font-bold tk-text-ink2">
                       {tripCode}
                     </span>
-                    <span className="text-xs sm:text-sm font-medium text-[#758E8A]">
+                    <span className="text-xs sm:text-sm font-medium tk-text-ink2">
                       / {walletCopy.plannedLabel(`${sym}${dailyAvailable.toFixed(2)}`)}
                     </span>
                   </div>
 
                   {/* Quiet Contextual Footnote: Home Currency Equivalent + Rollover / Shared Split */}
-                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[#5B7370] font-num tabular-nums">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs tk-text-ink2 font-num tabular-nums">
                     {!sameCurrency && (
-                      <span className="font-medium text-[#46635F]">
+                      <span className="font-medium tk-text-ink2">
                         ≈{' '}
                         {formatHomeCurrencyEquivalent(
                           Math.abs(dailyBalance),
@@ -1397,15 +1398,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     {currentDay > 1 && Math.abs(dynamicRollover) >= 0.01 && (
                       <>
                         {!sameCurrency && (
-                          <span aria-hidden="true" className="text-[#A8BEBA]">
+                          <span aria-hidden="true" className="tk-text-ink2">
                             ·
                           </span>
                         )}
                         <span
                           className={
                             dynamicRollover > 0
-                              ? 'text-[#078C88] font-semibold'
-                              : 'text-[#B96A39] font-semibold'
+                              ? 'tk-text-forest font-semibold'
+                              : 'tk-text-warning font-semibold'
                           }
                         >
                           {dynamicRollover > 0
@@ -1420,7 +1421,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     )}
                     {Math.abs(grossDailySpent - myDailySpent) >= 0.01 && (
                       <>
-                        <span aria-hidden="true" className="text-[#A8BEBA]">
+                        <span aria-hidden="true" className="tk-text-ink2">
                           ·
                         </span>
                         <span>
@@ -1442,7 +1443,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       cy="40"
                       r={radius}
                       fill="none"
-                      stroke="#EAF2F0"
+                      stroke="var(--tk-idle)"
                       strokeWidth="7"
                     />
                     <circle
@@ -1450,7 +1451,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       cy="40"
                       r={radius}
                       fill="none"
-                      stroke={isDailyOver ? '#B83B2E' : '#078C88'}
+                      stroke={isDailyOver ? 'var(--tk-danger)' : 'var(--tk-forest)'}
                       strokeWidth="7"
                       strokeLinecap="round"
                       strokeDasharray={circumference}
@@ -1460,12 +1461,12 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-1">
                     <span
                       className={`font-num text-xs sm:text-sm font-extrabold tabular-nums leading-tight ${
-                        isDailyOver ? 'text-[#B83B2E]' : 'text-[#152B29]'
+                        isDailyOver ? 'tk-text-danger' : 'tk-text-ink'
                       }`}
                     >
                       {isDailyOver ? copy.overLabel : `${dailyPct}%`}
                     </span>
-                    <span className="text-[10px] font-medium text-[#647B78] leading-tight">
+                    <span className="text-[10px] font-medium tk-text-ink2 leading-tight">
                       {isDailyOver ? walletCopy.overBudgetPctLabel : copy.spentLabel}
                     </span>
                   </div>
@@ -1474,10 +1475,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             </div>
 
             {/* TRACK 3: Asset Distribution Strip (Physical Cash | Credit Card Charged | Transit Pass) */}
-            <div className="bg-[#F6FAF9] border-t border-[#E6EFED] px-4 sm:px-6 py-3 space-y-2.5">
+            <div className="tk-bg-paper border-t tk-bc-hair px-4 sm:px-6 py-3 space-y-2.5">
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-[#5B7370] mr-1 shrink-0">
-                  <Wallet className="h-3.5 w-3.5 text-[#078C88]" />
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide tk-text-ink2 mr-1 shrink-0">
+                  <Wallet className="h-3.5 w-3.5 tk-text-forest" />
                   <span>{walletCopy.assetsDistributionTitle}</span>
                 </span>
 
@@ -1486,17 +1487,17 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   type="button"
                   onClick={() => openWalletEditor('cash')}
                   className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 transition-colors cursor-pointer ${
-                    editingWallet === 'cash'
-                      ? 'border-[#078C88] bg-white text-[#076E6A] shadow-2xs'
-                      : 'border-[#DCE8E5] bg-white/85 text-[#2C4744] hover:border-[#0ABAB5]'
-                  }`}
+ editingWallet === 'cash'
+ ? 'tk-bc-forest tk-bg-card tk-text-forest shadow-2xs'
+ : 'tk-bc-hair bg-white/85 tk-text-ink hover:tk-bc-forest'
+ }`}
                 >
-                  <Banknote className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
-                  <span className="text-[#5B7370]">{walletCopy.cashOnHandLabel}</span>
+                  <Banknote className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                  <span className="tk-text-ink2">{walletCopy.cashOnHandLabel}</span>
                   <span
                     className={`font-num font-bold tabular-nums ${
-                      budget.cashLocal < 0 ? 'text-[#B83B2E]' : 'text-[#152B29]'
-                    }`}
+ budget.cashLocal < 0 ? 'tk-text-danger' : 'tk-text-ink'
+ }`}
                   >
                     {sym}
                     {budget.cashLocal.toFixed(0)} {tripCode}
@@ -1508,14 +1509,14 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   type="button"
                   onClick={() => openWalletEditor('card')}
                   className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 transition-colors cursor-pointer ${
-                    editingWallet === 'card'
-                      ? 'border-[#078C88] bg-white text-[#076E6A] shadow-2xs'
-                      : 'border-[#DCE8E5] bg-white/85 text-[#2C4744] hover:border-[#0ABAB5]'
-                  }`}
+ editingWallet === 'card'
+ ? 'tk-bc-forest tk-bg-card tk-text-forest shadow-2xs'
+ : 'tk-bc-hair bg-white/85 tk-text-ink hover:tk-bc-forest'
+ }`}
                 >
-                  <CreditCard className="h-3.5 w-3.5 text-[#1D6FA5] shrink-0" />
-                  <span className="text-[#5B7370]">{walletCopy.cardChargedLabel}</span>
-                  <span className="font-num font-bold text-[#152B29] tabular-nums">
+                  <CreditCard className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
+                  <span className="tk-text-ink2">{walletCopy.cardChargedLabel}</span>
+                  <span className="font-num font-bold tk-text-ink tabular-nums">
                     {formatCurrencyAmount(cardChargedHome, homeCurrency, {
                       compactDecimals: true,
                     })}{' '}
@@ -1528,20 +1529,20 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   type="button"
                   onClick={() => openWalletEditor('transit')}
                   className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 transition-colors cursor-pointer ${
-                    editingWallet === 'transit'
-                      ? 'border-[#078C88] bg-white text-[#076E6A] shadow-2xs'
-                      : 'border-[#DCE8E5] bg-white/85 text-[#2C4744] hover:border-[#0ABAB5]'
-                  }`}
+ editingWallet === 'transit'
+ ? 'tk-bc-forest tk-bg-card tk-text-forest shadow-2xs'
+ : 'tk-bc-hair bg-white/85 tk-text-ink hover:tk-bc-forest'
+ }`}
                 >
-                  <TrainFront className="h-3.5 w-3.5 text-[#6355B5] shrink-0" />
-                  <span className="text-[#5B7370]">
+                  <TrainFront className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
+                  <span className="tk-text-ink2">
                     {translateIntelField('transitPassName', intel.transitPassName, activeLang) ||
                       walletCopy.transitPassLabel}
                   </span>
                   <span
                     className={`font-num font-bold tabular-nums ${
-                      budget.transitPassLocal < 0 ? 'text-[#B83B2E]' : 'text-[#152B29]'
-                    }`}
+ budget.transitPassLocal < 0 ? 'tk-text-danger' : 'tk-text-ink'
+ }`}
                   >
                     {sym}
                     {budget.transitPassLocal.toFixed(0)}
@@ -1551,9 +1552,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
               {/* On-Demand Inline Calibration Panel (Appears Only When User Clicks an Asset Chip) */}
               {editingWallet === 'cash' && (
-                <div className="rounded-xl border border-[#D4E6E3] bg-white p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+                <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-bold text-[#152B29]">
+                    <span className="font-bold tk-text-ink">
                       {walletCopy.cashOnHandLabel} ({tripCode})
                     </span>
                     {[50, 100, 200].map((amt) => (
@@ -1564,7 +1565,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                           onAdjustWalletBalance('cash', 'add', amt);
                           setEditingWallet(null);
                         }}
-                        className="rounded-lg bg-[#EFF9F8] px-2.5 py-1 font-num font-semibold text-[#076E6A] hover:bg-[#DFF3F1] cursor-pointer"
+                        className="rounded-lg tk-bg-forest-tint px-2.5 py-1 font-num font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
                       >
                         +{sym}
                         {amt}
@@ -1578,7 +1579,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       value={walletExactDraft}
                       onChange={(e) => setWalletExactDraft(e.target.value)}
                       placeholder={copy.actualCashPlaceholder}
-                      className="w-24 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1 font-num font-bold text-[#152B29] tabular-nums"
+                      className="w-24 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 font-num font-bold tk-text-ink tabular-nums"
                     />
                     <button
                       type="button"
@@ -1586,7 +1587,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         onAdjustWalletBalance('cash', 'set', parseFloat(walletExactDraft) || 0);
                         setEditingWallet(null);
                       }}
-                      className="rounded-lg bg-[#078C88] px-3 py-1 font-semibold text-white hover:bg-[#067572] cursor-pointer"
+                      className="rounded-lg tk-bg-forest px-3 py-1 font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {copy.setBalanceBtn}
                     </button>
@@ -1595,9 +1596,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               )}
 
               {editingWallet === 'card' && (
-                <div className="rounded-xl border border-[#D4E6E3] bg-white p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+                <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-bold text-[#152B29]">
+                    <span className="font-bold tk-text-ink">
                       {t('budget.walletCard')} ({homeCurrency})
                     </span>
                     {cardQuickTopUpPresets.map((amtHome) => (
@@ -1613,7 +1614,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                           onAdjustWalletBalance('card', 'add', deltaUsd);
                           setEditingWallet(null);
                         }}
-                        className="rounded-lg bg-[#EFF9F8] px-2.5 py-1 font-num font-semibold text-[#076E6A] hover:bg-[#DFF3F1] cursor-pointer"
+                        className="rounded-lg tk-bg-forest-tint px-2.5 py-1 font-num font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
                       >
                         +{homeSym}
                         {amtHome.toLocaleString('en-US')}
@@ -1627,7 +1628,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       value={walletExactDraft}
                       onChange={(e) => setWalletExactDraft(e.target.value)}
                       placeholder={copy.limitPlaceholder(homeCurrency)}
-                      className="w-28 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1 font-num font-bold text-[#152B29] tabular-nums"
+                      className="w-28 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 font-num font-bold tk-text-ink tabular-nums"
                     />
                     <button
                       type="button"
@@ -1641,7 +1642,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         onAdjustWalletBalance('card', 'set', targetUsd);
                         setEditingWallet(null);
                       }}
-                      className="rounded-lg bg-[#078C88] px-3 py-1 font-semibold text-white hover:bg-[#067572] cursor-pointer"
+                      className="rounded-lg tk-bg-forest px-3 py-1 font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {copy.setLimitBtn}
                     </button>
@@ -1650,9 +1651,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               )}
 
               {editingWallet === 'transit' && (
-                <div className="rounded-xl border border-[#D4E6E3] bg-white p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+                <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 flex flex-wrap items-center justify-between gap-2.5 text-xs">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-bold text-[#152B29]">
+                    <span className="font-bold tk-text-ink">
                       {translateIntelField('transitPassName', intel.transitPassName, activeLang) ||
                         walletCopy.transitPassLabel}
                     </span>
@@ -1664,7 +1665,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                           onAdjustWalletBalance('transit', 'add', amt);
                           setEditingWallet(null);
                         }}
-                        className="rounded-lg bg-[#EFF9F8] px-2.5 py-1 font-num font-semibold text-[#076E6A] hover:bg-[#DFF3F1] cursor-pointer"
+                        className="rounded-lg tk-bg-forest-tint px-2.5 py-1 font-num font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
                       >
                         +{sym}
                         {amt}
@@ -1678,7 +1679,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       value={walletExactDraft}
                       onChange={(e) => setWalletExactDraft(e.target.value)}
                       placeholder={copy.passBalancePlaceholder}
-                      className="w-24 rounded-lg border border-[#DCE8E5] bg-[#F8FAF9] px-2.5 py-1 font-num font-bold text-[#152B29] tabular-nums"
+                      className="w-24 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 font-num font-bold tk-text-ink tabular-nums"
                     />
                     <button
                       type="button"
@@ -1686,7 +1687,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         onAdjustWalletBalance('transit', 'set', parseFloat(walletExactDraft) || 0);
                         setEditingWallet(null);
                       }}
-                      className="rounded-lg bg-[#078C88] px-3 py-1 font-semibold text-white hover:bg-[#067572] cursor-pointer"
+                      className="rounded-lg tk-bg-forest px-3 py-1 font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {copy.setBalanceBtn}
                     </button>
@@ -1700,16 +1701,16 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           {renderQuickAccountingBar()}
 
           {/* 3. MULTI-CURRENCY PRACTICAL LEDGER WITH GOLDEN VAT ENVELOPE BADGES */}
-          <section className="rounded-2xl border border-[#DCE8E5] bg-white overflow-hidden">
-            <div className="px-4 sm:px-5 py-4 border-b border-[#EDF3F1] space-y-3">
+          <section className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden">
+            <div className="px-4 sm:px-5 py-4 border-b tk-bc-hair space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="flex items-start gap-2.5 min-w-0">
                   <AccentIconBadge accent="lavender" icon={Receipt} size="md" className="mt-0.5" />
                   <div className="min-w-0">
-                    <h3 className="text-sm font-bold text-[#152B29]">
+                    <h3 className="text-sm font-bold tk-text-ink">
                       {copy.ledgerTitle}
                     </h3>
-                    <p className="mt-0.5 text-xs text-[#5B7370] tabular-nums">
+                    <p className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
                       {copy.ledgerSummary(
                         visibleLedger.length,
                         sym,
@@ -1719,7 +1720,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] text-[#7B928E] sm:hidden whitespace-nowrap">
+                <span className="text-[11px] tk-text-ink2 sm:hidden whitespace-nowrap">
                   {copy.swipeEditHint}
                 </span>
               </div>
@@ -1734,17 +1735,17 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   data-chip-active={ledgerDayFilter === 'all' ? 'true' : undefined}
                   onClick={() => setLedgerDayFilter('all')}
                   className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    ledgerDayFilter === 'all'
-                      ? 'border-[#093B35] bg-[#093B35] text-white'
-                      : 'border-[#E2ECEA] bg-[#F5F8F7] text-[#354E4B] hover:border-[#B8D8D4] hover:text-[#152B29]'
-                  }`}
+ ledgerDayFilter === 'all'
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-hair hover:tk-text-ink'
+ }`}
                 >
                   <LayoutGrid className="h-3.5 w-3.5 shrink-0" />
                   <span>{copy.allFilterChip}</span>
                   <span
                     className={`font-num text-[11px] tabular-nums ${
-                      ledgerDayFilter === 'all' ? 'text-white/80' : 'text-[#6D8581]'
-                    }`}
+ ledgerDayFilter === 'all' ? 'text-white/80' : 'tk-text-ink2'
+ }`}
                   >
                     {expenses.length}
                   </span>
@@ -1762,18 +1763,18 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         onSelectDay(day);
                       }}
                       className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                        isSelected
-                          ? 'border-[#093B35] bg-[#093B35] text-white'
-                          : 'border-[#E2ECEA] bg-[#F5F8F7] text-[#354E4B] hover:border-[#B8D8D4] hover:text-[#152B29]'
-                      }`}
+ isSelected
+ ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-hair hover:tk-text-ink'
+ }`}
                     >
                       <span className="font-num font-bold">D{day}</span>
                       {cityLabel && <span>{cityLabel}</span>}
                       {expenseCount > 0 && (
                         <span
                           className={`font-num text-[11px] tabular-nums ${
-                            isSelected ? 'text-white/80' : 'text-[#6D8581]'
-                          }`}
+ isSelected ? 'text-white/80' : 'tk-text-ink2'
+ }`}
                         >
                           {expenseCount}
                         </span>
@@ -1791,10 +1792,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     setLedgerBucketFilter(e.target.value as 'all' | 'daily' | 'shopping' | 'vat')
                   }
                   className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-xs font-semibold focus:outline-none cursor-pointer truncate ${
-                    ledgerBucketFilter !== 'all'
-                      ? 'border-[#6355B5] bg-[#F4F1FC] text-[#6355B5]'
-                      : 'border-[#DCE8E5] bg-[#F8FAF9] text-[#3B5552]'
-                  }`}
+ ledgerBucketFilter !== 'all'
+ ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink2'
+ }`}
                 >
                   <option value="all">{copy.allCategoriesOpt}</option>
                   <option value="daily">{copy.foodDailyName}</option>
@@ -1811,10 +1812,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     setLedgerAccountFilter(e.target.value as 'all' | 'card' | 'cash' | 'transit')
                   }
                   className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-xs font-semibold focus:outline-none cursor-pointer truncate ${
-                    ledgerAccountFilter !== 'all'
-                      ? 'border-[#1D6FA5] bg-[#EDF5FC] text-[#1D6FA5]'
-                      : 'border-[#DCE8E5] bg-[#F8FAF9] text-[#3B5552]'
-                  }`}
+ ledgerAccountFilter !== 'all'
+ ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink2'
+ }`}
                 >
                   <option value="all">{copy.allWalletsOpt}</option>
                   <option value="card">{t('budget.walletCard')}</option>
@@ -1824,10 +1825,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
               </div>
             </div>
 
-            <div className="divide-y divide-[#F1F6F5]">
+            <div className="divide-y tk-divide-hair">
               {visibleLedger.length === 0 ? (
                 <div className="px-5 py-8 text-center space-y-2">
-                  <p className="text-xs text-[#647B78]">{copy.noMatchingExpenses}</p>
+                  <p className="text-xs tk-text-ink2">{copy.noMatchingExpenses}</p>
                   {(ledgerDayFilter !== 'all' ||
                     ledgerBucketFilter !== 'all' ||
                     ledgerAccountFilter !== 'all') && (
@@ -1838,7 +1839,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         setLedgerBucketFilter('all');
                         setLedgerAccountFilter('all');
                       }}
-                      className="text-xs font-semibold text-[#078C88] hover:underline cursor-pointer"
+                      className="text-xs font-semibold tk-text-forest hover:underline cursor-pointer"
                     >
                       {copy.resetFiltersBtn}
                     </button>
@@ -1889,27 +1890,27 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           {/* 4. BELOW-FOLD ANALYTICS & DESTINATION TAX-FREE POOL */}
           <div
             className={`grid grid-cols-1 gap-5 items-start ${
-              showVatSummaryCard ? 'lg:grid-cols-12' : ''
-            }`}
+ showVatSummaryCard ? 'lg:grid-cols-12' : ''
+ }`}
           >
             {/* Daily Spending Trend vs Budget Limit Chart (Recharts) */}
             <section
-              className={`rounded-2xl border border-[#DCE8E5] bg-white p-5 ${
-                showVatSummaryCard ? 'lg:col-span-7' : ''
-              }`}
+              className={`rounded-2xl border tk-bc-hair tk-bg-card p-5 ${
+ showVatSummaryCard ? 'lg:col-span-7' : ''
+ }`}
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2.5">
                     <AccentIconBadge accent="teal" icon={TrendingUp} size="sm" />
-                    <h3 className="text-sm font-bold text-[#152B29]">
+                    <h3 className="text-sm font-bold tk-text-ink">
                       {copy.trendChartTitle}
                     </h3>
                   </div>
-                  <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#5B7370]">
+                  <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tk-text-ink2">
                     <span>
                       {copy.dailyAvgPrefix}
-                      <strong className="font-num text-[#152B29] tabular-nums">
+                      <strong className="font-num tk-text-ink tabular-nums">
                         {sym}
                         {avgDailyBurn.toFixed(2)}
                       </strong>
@@ -1917,7 +1918,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     <span aria-hidden="true">·</span>
                     <span>
                       {copy.limitPrefix}
-                      <strong className="font-num text-[#B96A39] tabular-nums">
+                      <strong className="font-num tk-text-warning tabular-nums">
                         {sym}
                         {budget.dailyBudgetLocal.toFixed(0)}
                         {copy.perDaySuffix}
@@ -1928,8 +1929,8 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       {copy.cumulativePrefix}
                       <strong
                         className={`font-num tabular-nums ${
-                          cumulativeDiff >= 0 ? 'text-[#078C88]' : 'text-[#B83B2E]'
-                        }`}
+ cumulativeDiff >= 0 ? 'tk-text-forest' : 'tk-text-danger'
+ }`}
                       >
                         {cumulativeDiff >= 0
                           ? `${copy.savedPrefix}${sym}${cumulativeDiff.toFixed(2)}`
@@ -1939,7 +1940,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     {overBudgetDays > 0 && (
                       <>
                         <span aria-hidden="true">·</span>
-                        <span className="font-semibold text-[#B83B2E]">
+                        <span className="font-semibold tk-text-danger">
                           {copy.daysOverLimit(overBudgetDays)}
                         </span>
                       </>
@@ -1947,15 +1948,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 rounded-xl bg-[#F2F6F5] p-1 shrink-0">
+                <div className="flex items-center gap-1 rounded-xl tk-bg-forest-plate p-1 shrink-0">
                   <button
                     type="button"
                     onClick={() => setChartIncludeShopping(false)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
-                      !chartIncludeShopping
-                        ? 'bg-white text-[#152B29] shadow-xs'
-                        : 'text-[#5B7370] hover:text-[#152B29]'
-                    }`}
+ !chartIncludeShopping
+ ? 'tk-bg-card tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                   >
                     {copy.dailyOnlyTab}
                   </button>
@@ -1963,10 +1964,10 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     type="button"
                     onClick={() => setChartIncludeShopping(true)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
-                      chartIncludeShopping
-                        ? 'bg-white text-[#152B29] shadow-xs'
-                        : 'text-[#5B7370] hover:text-[#152B29]'
-                    }`}
+ chartIncludeShopping
+ ? 'tk-bg-card tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                   >
                     {copy.plusShoppingTab}
                   </button>
@@ -1979,18 +1980,18 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     data={chartData}
                     margin={{ top: 18, right: 16, left: -6, bottom: 0 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#EDF3F1" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={tkColor('--tk-rule-c')} vertical={false} />
                     <XAxis
                       dataKey="dayLabel"
-                      tick={{ fill: '#5B7370', fontSize: 11, fontWeight: 600 }}
-                      axisLine={{ stroke: '#DCE8E5' }}
+                      tick={{ fill: tkColor('--tk-ink-2'), fontSize: 11, fontWeight: 600 }}
+                      axisLine={{ stroke: tkColor('--tk-hair-c') }}
                       tickLine={false}
                     />
                     <YAxis
                       domain={[0, yAxisMax]}
                       tickFormatter={(v) => `${sym}${v}`}
                       tick={{
-                        fill: '#647B78',
+                        fill: tkColor('--tk-ink-2'),
                         fontSize: 11,
                         fontFamily: 'JetBrains Mono, monospace',
                       }}
@@ -1998,7 +1999,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       tickLine={false}
                     />
                     <Tooltip
-                      cursor={{ fill: '#F5FAF9' }}
+                      cursor={{ fill: tkColor('--tk-forest-tint') }}
                       content={
                         <DailyTrendTooltip
                           sym={sym}
@@ -2009,13 +2010,13 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     />
                     <ReferenceLine
                       y={budget.dailyBudgetLocal}
-                      stroke="#B96A39"
+                      stroke={tkColor('--tk-warning')}
                       strokeDasharray="5 4"
                       strokeWidth={1.5}
                       label={{
                         value: copy.limitChartLabel(sym, budget.dailyBudgetLocal),
                         position: 'insideTopRight',
-                        fill: '#B96A39',
+                        fill: tkColor('--tk-warning'),
                         fontSize: 11,
                         fontWeight: 600,
                       }}
@@ -2030,7 +2031,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       {chartData.map((entry) => (
                         <Cell
                           key={`cell-${entry.dayNum}`}
-                          fill={entry.dailySpent > entry.limit ? '#B83B2E' : '#078C88'}
+                          fill={entry.dailySpent > entry.limit ? tkColor('--tk-danger') : tkColor('--tk-chart-1')}
                         />
                       ))}
                     </Bar>
@@ -2040,7 +2041,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         name={copy.shoppingLabel}
                         stackId="spend"
                         barSize={26}
-                        fill="#7E63B8"
+                        fill={tkColor('--tk-chart-2')}
                         radius={[6, 6, 0, 0]}
                       />
                     )}
@@ -2048,35 +2049,35 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       type="monotone"
                       dataKey="trendTotal"
                       name={copy.spendTrendName}
-                      stroke="#152B29"
+                      stroke={tkColor('--tk-ink')}
                       strokeWidth={2}
-                      dot={{ r: 3.5, fill: '#FFFFFF', stroke: '#152B29', strokeWidth: 2 }}
-                      activeDot={{ r: 5, fill: '#078C88', stroke: '#FFFFFF', strokeWidth: 2 }}
+                      dot={{ r: 3.5, fill: tkColor('--tk-card'), stroke: tkColor('--tk-ink'), strokeWidth: 2 }}
+                      activeDot={{ r: 5, fill: tkColor('--tk-forest'), stroke: tkColor('--tk-card'), strokeWidth: 2 }}
                     />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-3 pt-3 border-t border-[#EDF3F1] flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-[#5B7370]">
+              <div className="mt-3 pt-3 border-t tk-bc-hair flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs tk-text-ink2">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-xs bg-[#078C88]" />
+                  <span className="h-2.5 w-2.5 rounded-xs tk-bg-chart-1" />
                   {copy.legendWithin}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-xs bg-[#B83B2E]" />
+                  <span className="h-2.5 w-2.5 rounded-xs tk-bg-danger" />
                   {copy.legendOver}
                 </span>
                 {chartIncludeShopping && (
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-xs bg-[#7E63B8]" />
+                    <span className="h-2.5 w-2.5 rounded-xs tk-bg-chart-2" />
                     {copy.legendShoppingExcl}
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-0.5 w-4 bg-[#152B29]" /> {copy.legendTrendLine}
+                  <span className="h-0.5 w-4 tk-bg-ink" /> {copy.legendTrendLine}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="h-0.5 w-4 border-t-2 border-dashed border-[#B96A39]" />
+                  <span className="h-0.5 w-4 border-t-2 border-dashed tk-bc-warning" />
                   {copy.legendTargetLimit}
                 </span>
               </div>
@@ -2084,18 +2085,18 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 
             {/* Destination-Aware Shopping & Tax-Free Pool Card (Hidden cleanly for non-VAT US trips with 0 shopping) */}
             {showVatSummaryCard && (
-              <section className="lg:col-span-5 rounded-2xl border border-[#EFE2BE] bg-gradient-to-b from-[#FFFDF7] to-white p-5 space-y-3.5">
+              <section className="lg:col-span-5 rounded-2xl border tk-budget-vat-card p-5 space-y-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-[#FFF3CD] text-[#9A620A] shrink-0">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl tk-bg-warning-tint tk-text-warning shrink-0">
                       <MailCheck className="h-4 w-4" />
                     </span>
                     <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-[#152B29] truncate">
+                      <h3 className="text-sm font-bold tk-text-ink truncate">
                         {walletCopy.vatPoolCardTitle}
                       </h3>
                       {vatMeta.supportsVat && (
-                        <p className="text-[11px] font-semibold text-[#9A620A]">
+                        <p className="text-[11px] font-semibold tk-text-warning">
                           {vatMeta.programName} · {walletCopy.vatRefundablePct(vatMeta.refundPct)}
                         </p>
                       )}
@@ -2107,27 +2108,27 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       setBudgetPlannerFocus('shopping');
                       setBudgetPlannerOpen(true);
                     }}
-                    className="text-xs font-semibold text-[#5B7370] hover:text-[#9A620A] whitespace-nowrap shrink-0 cursor-pointer tabular-nums"
+                    className="text-xs font-semibold tk-text-ink2 hover:tk-text-warning whitespace-nowrap shrink-0 cursor-pointer tabular-nums"
                   >
                     {copy.vatMinAdjust(sym, intel.vatThresholdLocal)}
                   </button>
                 </div>
 
-                <div className="font-num text-2xl font-extrabold text-[#152B29] tabular-nums">
+                <div className="font-num text-2xl font-extrabold tk-text-ink tabular-nums">
                   {sym}
                   {shoppingSpent.toFixed(2)}{' '}
-                  <span className="text-xs font-semibold text-[#5B7370]">{tripCode}</span>{' '}
-                  <span className="text-sm font-medium text-[#758E8A]">
+                  <span className="text-xs font-semibold tk-text-ink2">{tripCode}</span>{' '}
+                  <span className="text-sm font-medium tk-text-ink2">
                     / {sym}
                     {budget.shoppingReserveLocal}
                   </span>
                 </div>
 
-                <div className="pt-3 border-t border-[#F3EBCE] text-xs space-y-2.5">
+                <div className="pt-3 border-t tk-bc-hair text-xs space-y-2.5">
                   {vatMeta.supportsVat && (
                     <div className="flex items-center justify-between">
-                      <span className="text-[#5B7370]">{copy.estAirportVat}</span>
-                      <span className="font-num font-extrabold text-[#078C88] tabular-nums">
+                      <span className="tk-text-ink2">{copy.estAirportVat}</span>
+                      <span className="font-num font-extrabold tk-text-forest tabular-nums">
                         +{sym}
                         {estVatRefund.toFixed(2)} {tripCode}
                       </span>
@@ -2141,9 +2142,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         return (
                           <div
                             key={item.id}
-                            className="flex items-center justify-between gap-2 text-[#4F6865]"
+                            className="flex items-center justify-between gap-2 tk-text-ink2"
                           >
-                            <span className="truncate font-medium text-[#152B29]">
+                            <span className="truncate font-medium tk-text-ink">
                               {translateDemoExpenseTitle(item.title, activeLang)}
                             </span>
                             <button
@@ -2151,12 +2152,12 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                               onClick={() => onCycleVatStatus(item.id)}
                               title={copy.cycleVatTitle}
                               className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer ${
-                                st === 'stamped'
-                                  ? 'border-[#96D9BE] bg-[#EAF8F2] text-[#0A6A4B]'
-                                  : st === 'form_ready'
-                                  ? 'border-[#E6BE5A] bg-[#FFF6D6] text-[#8A5406]'
-                                  : 'border-[#EBD08A] bg-[#FFFBEB] text-[#9A630D]'
-                              }`}
+ st === 'stamped'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : st === 'form_ready'
+ ? 'tk-bc-warning-hair tk-bg-warning-tint tk-text-warning'
+ : 'tk-bc-warning-hair tk-bg-warning-tint tk-text-warning'
+ }`}
                             >
                               <MailCheck className="h-3 w-3 shrink-0" />
                               {getVatStatusLabel(st, activeLang)}
@@ -2168,7 +2169,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   )}
 
                   {subThresholdShoppingItem && (
-                    <p className="rounded-xl bg-[#FFF8E4] px-3 py-2 text-[#875220] leading-relaxed tabular-nums">
+                    <p className="rounded-xl tk-bg-warning-tint px-3 py-2 tk-text-warning leading-relaxed tabular-nums">
                       {copy.bundleTip(
                         translateDemoExpenseTitle(subThresholdShoppingItem.title, activeLang),
                         `${sym}${(intel.vatThresholdLocal - subThresholdShoppingItem.amountLocal).toFixed(2)}`,
@@ -2178,9 +2179,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   )}
 
                   {vatMeta.supportsVat && intel.vatExitAirport && (
-                    <p className="text-[#5B7370] leading-relaxed">
+                    <p className="tk-text-ink2 leading-relaxed">
                       {copy.customsStampPrefix}
-                      <strong className="text-[#152B29]">
+                      <strong className="tk-text-ink">
                         {translateIntelField('vatExitAirport', intel.vatExitAirport, activeLang)}
                       </strong>
                     </p>
