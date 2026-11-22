@@ -581,3 +581,112 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
     transition: none !important; transform: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 0 批页面壳（tk-shell-* / tk-hero-*）
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   Hero scrim 用 color-mix 派生不透明度，保持原 WCAG 结构，不用 --tk-overlay
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-shell-root { background: var(--tk-paper); color: var(--tk-ink); }
+
+.tk-shell-ink { color: var(--tk-ink); }
+.tk-shell-muted { color: var(--tk-ink-2); }
+.tk-shell-accent { color: var(--tk-forest); }
+.tk-shell-on-card { color: var(--tk-card); }
+
+.tk-shell-topbar {
+  background: var(--tk-surface-raised);
+  border-bottom: var(--tk-hair);
+  box-shadow: var(--tk-sh-card);
+}
+.tk-shell-desktop {
+  background: var(--tk-surface-raised);
+  border-bottom: var(--tk-hair);
+}
+.tk-shell-desktop--raised { box-shadow: var(--tk-sh-card); }
+.tk-shell-bottomnav {
+  background: var(--tk-surface-raised);
+  border-top: var(--tk-hair);
+  box-shadow: var(--tk-sh-dock);
+}
+
+.tk-shell-chip {
+  background: var(--tk-paper);
+  border: var(--tk-hair);
+  color: var(--tk-ink);
+}
+.tk-shell-chip:hover { border-color: var(--tk-forest); }
+.tk-shell-hover-plate:hover { background: var(--tk-forest-plate); }
+.tk-shell-rule { border-color: var(--tk-hair-c); }
+
+.tk-shell-fill {
+  background: var(--tk-forest);
+  color: var(--tk-card);
+}
+.tk-shell-fill:hover { background: var(--tk-press); }
+
+.tk-shell-dot-sync { background: var(--tk-warning); }
+.tk-shell-dot-err { background: var(--tk-danger); }
+.tk-shell-dot-ok { background: var(--tk-success); }
+
+.tk-shell-tab-border-1 { border-color: var(--tk-swatch-1); }
+.tk-shell-tab-border-2 { border-color: var(--tk-swatch-2); }
+.tk-shell-tab-border-3 { border-color: var(--tk-swatch-3); }
+.tk-shell-tab-border-4 { border-color: var(--tk-swatch-4); }
+.tk-shell-tab-idle { color: var(--tk-ink-2); }
+.tk-shell-tab-idle:hover { color: var(--tk-ink); }
+
+.tk-shell-thumb-ring { border: var(--tk-hair); }
+
+.tk-hero-stage {
+  background: var(--tk-hero-ink);
+  box-shadow: var(--tk-sh-card);
+}
+.tk-hero-scrim-top {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--tk-hero-ink) 45%, transparent),
+    color-mix(in srgb, var(--tk-hero-ink) 15%, transparent),
+    transparent
+  );
+}
+.tk-hero-scrim-bottom {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--tk-hero-ink) 88%, transparent),
+    color-mix(in srgb, var(--tk-hero-ink) 48%, transparent),
+    transparent
+  );
+}
+.tk-hero-crew {
+  border: 1px solid color-mix(in srgb, var(--tk-card) 25%, transparent);
+  background: color-mix(in srgb, var(--tk-hero-ink) 55%, transparent);
+  color: var(--tk-card);
+}
+.tk-hero-crew:hover {
+  background: color-mix(in srgb, var(--tk-hero-ink) 70%, transparent);
+}
+.tk-hero-crew-icon { color: var(--tk-card); }
+.tk-hero-crew:hover .tk-hero-crew-icon { color: var(--tk-card); }
+.tk-hero-title-hit:hover {
+  background: color-mix(in srgb, var(--tk-card) 12%, transparent);
+}
+.tk-hero-menu-btn--on {
+  border-color: var(--tk-card);
+  background: var(--tk-forest);
+  color: var(--tk-card);
+}
+.tk-hero-menu-btn--off {
+  border-color: color-mix(in srgb, var(--tk-card) 30%, transparent);
+  background: color-mix(in srgb, var(--tk-hero-ink) 50%, transparent);
+  color: color-mix(in srgb, var(--tk-card) 90%, transparent);
+}
+.tk-hero-menu-btn--off:hover {
+  border-color: color-mix(in srgb, var(--tk-card) 60%, transparent);
+  background: color-mix(in srgb, var(--tk-hero-ink) 65%, transparent);
+}
+.tk-hero-link { color: var(--tk-card); }
+.tk-hero-link:hover { color: color-mix(in srgb, var(--tk-card) 85%, var(--tk-forest)); }
+.tk-hero-meta { color: color-mix(in srgb, var(--tk-card) 92%, transparent); }
+.tk-hero-meta-sep { color: color-mix(in srgb, var(--tk-card) 65%, transparent); }

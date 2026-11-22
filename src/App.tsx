@@ -7783,13 +7783,13 @@ export default function App() {
   };
 
   const appContent = (
-    <div className="min-h-screen bg-[#F8FAF9] text-[#152B29] flex flex-col">
+    <div className="tk-shell-root min-h-screen flex flex-col">
       {/* Scheme A: Immersive Destination Scenic Cover + Scroll-Down Floating Sticky Bar */}
       {wizardOverlayMode === null && (
         <>
           {/* 1. Mobile Floating Glass Sticky Bar on Scroll Down (Strictly 48px, <8% viewport height) */}
           <div
-            className={`md:hidden fixed top-0 left-0 right-0 z-40 h-12 px-3.5 flex items-center justify-between gap-2 bg-white/88 backdrop-blur-xl border-b border-[#DCE8E5]/85 shadow-[0_6px_20px_-8px_rgba(21,43,41,0.12)] transition-[transform,opacity] duration-200 ease-out ${
+            className={`tk-shell-topbar md:hidden fixed top-0 left-0 right-0 z-40 h-12 px-3.5 flex items-center justify-between gap-2 transition-[transform,opacity] duration-200 ease-out ${
               isHeaderCollapsed
                 ? 'translate-y-0 opacity-100'
                 : '-translate-y-full opacity-0 pointer-events-none'
@@ -7816,14 +7816,14 @@ export default function App() {
                     objectPosition: `50% ${activeCoverVisual.focusY}%`,
                     filter: activeCoverVisual.tone.filterCss,
                   }}
-                  className="h-6 w-6 rounded-lg object-cover ring-1 ring-black/10 shrink-0"
+                  className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
                 />
-                <span className="truncate text-sm font-extrabold tracking-tight text-[#152B29]">
+                <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
                   {cleanDestinationTitle}
                 </span>
                 <ChevronDown
-                  className={`h-3.5 w-3.5 text-[#5B7370] transition-transform duration-150 shrink-0 ${
-                    tripMenuSource === 'mobile_sticky' ? 'rotate-180 text-[#078C88]' : ''
+                  className={`h-3.5 w-3.5 tk-shell-muted transition-transform duration-150 shrink-0 ${
+                    tripMenuSource === 'mobile_sticky' ? 'rotate-180 tk-shell-accent' : ''
                   }`}
                 />
               </button>
@@ -7854,24 +7854,24 @@ export default function App() {
                 onClick={() => setInviteModalOpen(true)}
                 title={t('header.inviteCrew')}
                 aria-label={t('header.inviteCrew')}
-                className="h-8 inline-flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-2 text-[11px] font-bold text-[#152B29] cursor-pointer"
+                className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-xl px-2 text-[11px] font-bold cursor-pointer"
               >
                 {renderCrewAvatarsCluster('xs')}
                 {activeRoomId && (
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${
                       syncStatus === 'syncing'
-                        ? 'bg-[#D97E4A] animate-pulse'
+                        ? 'tk-shell-dot-sync animate-pulse'
                         : syncStatus === 'error'
-                        ? 'bg-[#C95B5B]'
-                        : 'bg-[#078C88]'
+                        ? 'tk-shell-dot-err'
+                        : 'tk-shell-dot-ok'
                     }`}
                   />
                 )}
                 {trip.crew.length > 1 && (
-                  <span className="tabular-nums text-[#3B5552]">{trip.crew.length}</span>
+                  <span className="tabular-nums tk-shell-muted">{trip.crew.length}</span>
                 )}
-                <UserPlus className="h-3 w-3 text-[#078C88]" />
+                <UserPlus className="h-3 w-3 tk-shell-accent" />
               </button>
             </div>
           </div>
@@ -7887,7 +7887,7 @@ export default function App() {
               }`}
             >
               {/* Clipped Scenic Cover Photo + Tone + Contrast Scrims (Separate from TripBookModal dropdown so menu never clips) */}
-              <div className="absolute inset-0 overflow-hidden rounded-b-3xl md:rounded-3xl bg-[#152B29] shadow-[0_10px_28px_-12px_rgba(15,35,33,0.28)]">
+              <div className="tk-hero-stage absolute inset-0 overflow-hidden rounded-b-3xl md:rounded-3xl">
                 <img
                   src={activeCoverVisual.imageUrl}
                   alt={cleanDestinationTitle}
@@ -7911,8 +7911,8 @@ export default function App() {
                   />
                 )}
                 {/* Top & Bottom Measured WCAG Scrims */}
-                <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/45 via-black/15 to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#091514]/88 via-[#091514]/48 to-transparent pointer-events-none" />
+                <div className="tk-hero-scrim-top absolute inset-x-0 top-0 h-20 pointer-events-none" />
+                <div className="tk-hero-scrim-bottom absolute inset-x-0 bottom-0 h-28 pointer-events-none" />
               </div>
 
               {/* Top-Right Overlaid Frosted Glass Action Row (Crew Avatars without "同行成员" + Cover + Export + Settings) */}
@@ -7923,24 +7923,24 @@ export default function App() {
                   onClick={() => setInviteModalOpen(true)}
                   title={t('header.inviteCrew')}
                   aria-label={t('header.inviteCrew')}
-                  className="group h-9 inline-flex items-center gap-1.5 rounded-xl border border-white/25 bg-black/35 hover:bg-black/50 backdrop-blur-md px-2.5 text-xs font-bold text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98]"
+                  className="tk-hero-crew group h-9 inline-flex items-center gap-1.5 rounded-xl px-2.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98]"
                 >
                   {renderCrewAvatarsCluster('sm')}
                   {activeRoomId && (
                     <span
                       className={`h-2 w-2 rounded-full ${
                         syncStatus === 'syncing'
-                          ? 'bg-[#F59E0B] animate-pulse'
+                          ? 'tk-shell-dot-sync animate-pulse'
                           : syncStatus === 'error'
-                          ? 'bg-[#F87171]'
-                          : 'bg-[#34D399]'
+                          ? 'tk-shell-dot-err'
+                          : 'tk-shell-dot-ok'
                       }`}
                     />
                   )}
                   {trip.crew.length > 1 && (
-                    <span className="tabular-nums text-white/95">{trip.crew.length}</span>
+                    <span className="tabular-nums tk-shell-on-card">{trip.crew.length}</span>
                   )}
-                  <UserPlus className="h-3.5 w-3.5 text-[#7CE7E3] group-hover:text-white transition-colors ml-0.5" />
+                  <UserPlus className="tk-hero-crew-icon h-3.5 w-3.5 transition-colors ml-0.5" />
                 </button>
               </div>
 
@@ -7955,17 +7955,17 @@ export default function App() {
                     onClick={() =>
                       setTripMenuSource((prev) => (prev === 'hero' ? null : 'hero'))
                     }
-                    className="group inline-flex items-center gap-2 rounded-xl -ml-1.5 px-1.5 py-0.5 text-left hover:bg-white/12 transition-colors cursor-pointer max-w-full"
+                    className="tk-hero-title-hit group inline-flex items-center gap-2 rounded-xl -ml-1.5 px-1.5 py-0.5 text-left transition-colors cursor-pointer max-w-full"
                     title={t('header.switchTripTitle')}
                   >
-                    <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate shrink-0">
+                    <h1 className="tk-shell-on-card text-2xl sm:text-[28px] font-extrabold tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate shrink-0">
                       {cleanDestinationTitle}
                     </h1>
                     <span
-                      className={`inline-flex h-6 w-6 items-center justify-center rounded-lg border backdrop-blur-md transition-all shrink-0 ${
+                      className={`inline-flex h-6 w-6 items-center justify-center rounded-lg border transition-all shrink-0 ${
                         tripMenuSource === 'hero'
-                          ? 'border-[#7CE7E3] bg-[#078C88]/80 text-white'
-                          : 'border-white/30 bg-black/30 text-white/90 group-hover:border-white/60 group-hover:bg-black/45'
+                          ? 'tk-hero-menu-btn--on'
+                          : 'tk-hero-menu-btn--off'
                       }`}
                     >
                       <ChevronDown
@@ -7997,12 +7997,12 @@ export default function App() {
                 </div>
 
                 {/* Clean 1-Line Travel Context (No Pro Badge, No VAT Exit Prompt) */}
-                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium text-white/92 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
+                <div className="tk-hero-meta mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
                   <button
                     type="button"
                     onClick={() => setWizardOverlayMode('edit_current')}
                     title={t('header.editDaysTitle')}
-                    className="tabular-nums font-semibold text-white hover:text-[#7CE7E3] underline-offset-2 hover:underline transition-colors cursor-pointer"
+                    className="tk-hero-link tabular-nums font-semibold underline-offset-2 hover:underline transition-colors cursor-pointer"
                   >
                     {compactDateSpan
                       ? `${compactDateSpan} (${t('header.daysCount', { count: trip.setup.days })})`
@@ -8010,20 +8010,20 @@ export default function App() {
                   </button>
                   {!compactDateSpan && (
                     <>
-                      <span aria-hidden="true" className="text-white/65">
+                      <span aria-hidden="true" className="tk-hero-meta-sep">
                         ·
                       </span>
                       <span>{translateTripStyleLabel(trip.setup.tripStyle, preferences.language)}</span>
                     </>
                   )}
-                  <span aria-hidden="true" className="text-white/65">
+                  <span aria-hidden="true" className="tk-hero-meta-sep">
                     ·
                   </span>
                   <span className="tabular-nums">
                     {formatTempRangeByPref(trip.intel.tempRange, preferences.unitSystem)}{' '}
                     {translateRainChanceLabel(trip.intel.rainChance, preferences.language)}
                   </span>
-                  <span aria-hidden="true" className="text-white/65">
+                  <span aria-hidden="true" className="tk-hero-meta-sep">
                     ·
                   </span>
                   <span className="tabular-nums">
@@ -8038,17 +8038,17 @@ export default function App() {
 
           {/* 3. Desktop Integrated Sticky Bar (Merges Destination Switcher + Tabs + Actions into 1 slim 48px row when scrolled) */}
           <div
-            className={`hidden md:block sticky top-0 z-30 border-b transition-shadow duration-200 ${
+            className={`tk-shell-desktop hidden md:block sticky top-0 z-30 transition-shadow duration-200 ${
               isHeaderCollapsed
-                ? 'border-[#DCE8E5] bg-white/90 backdrop-blur-xl shadow-[0_6px_22px_-10px_rgba(21,43,41,0.12)]'
-                : 'border-[#E3ECEA] bg-white/95 backdrop-blur-md mt-2'
+                ? 'tk-shell-desktop--raised'
+                : 'mt-2'
             }`}
           >
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 h-12">
               <div className="flex items-center gap-5 min-w-0 h-full">
                 {/* Compact Destination Switcher (Revealed smoothly when scrolled past cover) */}
                 {isHeaderCollapsed && (
-                  <div className="relative flex items-center pr-4 border-r border-[#E3ECEA] shrink-0">
+                  <div className="tk-shell-rule relative flex items-center pr-4 border-r shrink-0">
                     <button
                       ref={desktopStickyMenuAnchorRef}
                       type="button"
@@ -8059,7 +8059,7 @@ export default function App() {
                           prev === 'desktop_sticky' ? null : 'desktop_sticky'
                         )
                       }
-                      className="inline-flex items-center gap-2 rounded-xl px-2 py-1 -ml-2 hover:bg-[#F2F8F7] transition-colors cursor-pointer max-w-[240px]"
+                      className="tk-shell-hover-plate inline-flex items-center gap-2 rounded-xl px-2 py-1 -ml-2 transition-colors cursor-pointer max-w-[240px]"
                       title={t('header.switchTripTitle')}
                     >
                       <img
@@ -8069,14 +8069,14 @@ export default function App() {
                           objectPosition: `50% ${activeCoverVisual.focusY}%`,
                           filter: activeCoverVisual.tone.filterCss,
                         }}
-                        className="h-6 w-6 rounded-lg object-cover ring-1 ring-black/10 shrink-0"
+                        className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
                       />
-                      <span className="truncate text-sm font-extrabold tracking-tight text-[#152B29]">
+                      <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
                         {cleanDestinationTitle}
                       </span>
                       <ChevronDown
-                        className={`h-3.5 w-3.5 text-[#5B7370] transition-transform duration-150 shrink-0 ${
-                          tripMenuSource === 'desktop_sticky' ? 'rotate-180 text-[#078C88]' : ''
+                        className={`h-3.5 w-3.5 tk-shell-muted transition-transform duration-150 shrink-0 ${
+                          tripMenuSource === 'desktop_sticky' ? 'rotate-180 tk-shell-accent' : ''
                         }`}
                       />
                     </button>
@@ -8109,12 +8109,12 @@ export default function App() {
                     const tabToken = HERO_ACCENT_PALETTE[TAB_ACCENT_MAP[item.id]];
                     const activeBorderClass =
                       item.id === 'itinerary'
-                        ? 'border-[#1D6FA5]'
+                        ? 'tk-shell-tab-border-2'
                         : item.id === 'budget'
-                        ? 'border-[#7E63B8]'
+                        ? 'tk-shell-tab-border-3'
                         : item.id === 'memories'
-                        ? 'border-[#C9637B]'
-                        : 'border-[#078C88]';
+                        ? 'tk-shell-tab-border-4'
+                        : 'tk-shell-tab-border-1';
                     return (
                       <button
                         key={item.id}
@@ -8126,12 +8126,12 @@ export default function App() {
                         className={`relative inline-flex h-full items-center gap-1.5 border-b-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                           active
                             ? `${activeBorderClass} ${tabToken.textClass}`
-                            : 'border-transparent text-[#5B7370] hover:text-[#152B29]'
+                            : 'tk-shell-tab-idle border-transparent'
                         }`}
                       >
                         <Icon
                           className={`h-4 w-4 shrink-0 ${
-                            active ? tabToken.textClass : 'text-[#7D938F]'
+                            active ? tabToken.textClass : 'tk-shell-muted'
                           }`}
                         />
                         <span>{t(item.i18nKey)}</span>
@@ -8149,24 +8149,24 @@ export default function App() {
                       onClick={() => setInviteModalOpen(true)}
                       title={t('header.inviteCrew')}
                       aria-label={t('header.inviteCrew')}
-                      className="h-8 inline-flex items-center gap-1.5 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] hover:border-[#0ABAB5] px-2.5 text-xs font-bold text-[#152B29] transition-colors cursor-pointer"
+                      className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-xl px-2.5 text-xs font-bold transition-colors cursor-pointer"
                     >
                       {renderCrewAvatarsCluster('xs')}
                       {activeRoomId && (
                         <span
                           className={`h-1.5 w-1.5 rounded-full ${
                             syncStatus === 'syncing'
-                              ? 'bg-[#D97E4A] animate-pulse'
+                              ? 'tk-shell-dot-sync animate-pulse'
                               : syncStatus === 'error'
-                              ? 'bg-[#C95B5B]'
-                              : 'bg-[#078C88]'
+                              ? 'tk-shell-dot-err'
+                              : 'tk-shell-dot-ok'
                           }`}
                         />
                       )}
                       {trip.crew.length > 1 && (
-                        <span className="tabular-nums text-[#3B5552]">{trip.crew.length}</span>
+                        <span className="tabular-nums tk-shell-muted">{trip.crew.length}</span>
                       )}
-                      <UserPlus className="h-3.5 w-3.5 text-[#078C88]" />
+                      <UserPlus className="h-3.5 w-3.5 tk-shell-accent" />
                     </button>
                   </>
                 )}
@@ -8174,7 +8174,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => handleOpenAiAssistant()}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#067572] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="tk-shell-fill inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>{t('nav.aiAssistant')}</span>
@@ -8577,7 +8577,7 @@ export default function App() {
 
       {/* Mobile Bottom Glass Navigation: 5 Thumb-Zone Touchpoints (within 15% sticky height cap) */}
       {wizardOverlayMode === null && (
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-[#E3ECEA] bg-white/95 backdrop-blur-md">
+        <nav className="tk-shell-bottomnav md:hidden fixed bottom-0 left-0 right-0 z-30">
           <div className="grid grid-cols-5 h-14 px-1">
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
@@ -8593,7 +8593,7 @@ export default function App() {
                     setTab(item.id);
                   }}
                   className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer ${
-                    active ? tabToken.textClass : 'text-[#647B78]'
+                    active ? tabToken.textClass : 'tk-shell-muted'
                   }`}
                 >
                   <span
@@ -8615,7 +8615,7 @@ export default function App() {
                   type="button"
                   onClick={() => handleOpenAiAssistant()}
                   className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer ${
-                    aiDrawerOpen ? aiToken.textClass : 'text-[#647B78]'
+                    aiDrawerOpen ? aiToken.textClass : 'tk-shell-muted'
                   }`}
                 >
                   <span
