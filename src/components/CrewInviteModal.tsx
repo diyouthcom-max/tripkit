@@ -51,6 +51,7 @@ import {
 } from '../i18n';
 import type { AppLanguage, CrewMember, SeatId, TripState } from '../types';
 import { HERO_AVATAR_BG } from '../utils/accentTheme';
+import { tkColor } from '../utils/tkColor';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
 import { getCrewInviteCopy } from '../i18n/packs/crewInvitePack';
 
@@ -422,41 +423,41 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#0F211F]/55 backdrop-blur-xs p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay p-0 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-xl max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl flex flex-col"
+        className="w-full sm:max-w-xl max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-[#E6EFED] bg-white/95 backdrop-blur-md px-5 py-4">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b tk-bc-hair bg-white/95 px-5 py-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-extrabold tracking-tight text-[#152B29]">
+              <h2 className="text-base font-extrabold tracking-tight tk-text-ink">
                 {copy.modalTitle}
               </h2>
               {activeRoomId ? (
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-[#E6F7F6] px-2 py-0.5 text-[11px] font-bold text-[#078C88]">
+                <span className="inline-flex items-center gap-1.5 rounded-md tk-bg-forest-tint px-2 py-0.5 text-[11px] font-bold tk-text-forest">
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${
-                      syncStatus === 'syncing'
-                        ? 'bg-[#D97E4A] animate-pulse'
-                        : syncStatus === 'error'
-                        ? 'bg-[#C95B5B]'
-                        : 'bg-[#078C88]'
-                    }`}
+ syncStatus === 'syncing'
+ ? 'tk-bg-warning animate-pulse'
+ : syncStatus === 'error'
+ ? 'tk-bg-danger'
+ : 'tk-bg-forest'
+ }`}
                   />
                   {copy.cloudRoomBadge} <span className="font-num">{activeRoomId}</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 rounded-md bg-[#F2F6F5] px-2 py-0.5 text-[11px] font-semibold text-[#5B7370]">
+                <span className="inline-flex items-center gap-1 rounded-md tk-bg-forest-plate px-2 py-0.5 text-[11px] font-semibold tk-text-ink2">
                   <CloudOff className="h-3 w-3" />
                   {copy.localOnlyBadge}
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-xs text-[#5B7370] truncate">
+            <p className="mt-0.5 text-xs tk-text-ink2 truncate">
               {activeRoomId
                 ? copy.subtitleActive(FIRESTORE_REGION, lastSyncedByName)
                 : copy.subtitleIdle}
@@ -465,7 +466,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-[#5B7370] hover:bg-[#F2F6F5] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="rounded-xl p-2 tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink transition-colors cursor-pointer"
             aria-label={copy.closeAria}
           >
             <X className="h-4 w-4" />
@@ -475,18 +476,18 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
         <div className="p-5 space-y-5">
           {/* Google Auth Gate Banner */}
           {!authReady ? (
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#E3ECEA] bg-[#F8FAF9] py-6 text-xs font-semibold text-[#5B7370]">
-              <Loader2 className="h-4 w-4 animate-spin text-[#078C88]" />
+            <div className="flex items-center justify-center gap-2 rounded-2xl border tk-bc-hair tk-bg-paper py-6 text-xs font-semibold tk-text-ink2">
+              <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
               {copy.checkingSession}
             </div>
           ) : !authUser ? (
-            <div className="rounded-2xl border border-[#CDE6E4] bg-[#F2FAF9] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+            <div className="rounded-2xl border tk-bc-hair tk-bg-warning-tint p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#152B29]">
-                  <ShieldCheck className="h-4 w-4 text-[#078C88] shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs font-bold tk-text-ink">
+                  <ShieldCheck className="h-4 w-4 tk-text-forest shrink-0" />
                   {copy.signInTitle}
                 </div>
-                <p className="text-xs text-[#5B7370] leading-relaxed">
+                <p className="text-xs tk-text-ink2 leading-relaxed">
                   {copy.signInDesc}
                 </p>
               </div>
@@ -500,7 +501,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                     void handleGoogleSignIn();
                   }
                 }}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#093B35] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#078C88] disabled:opacity-50 transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl tk-bg-forest px-4 py-2.5 text-xs font-bold text-white hover:tk-bg-forest disabled:opacity-50 transition-colors shrink-0 cursor-pointer"
               >
                 {busyAction === 'signin' ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -511,18 +512,18 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
               </button>
             </div>
           ) : (
-            <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#E3ECEA] bg-[#F8FAF9] px-3.5 py-2.5">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="h-7 w-7 rounded-full bg-[#093B35] text-white text-xs font-bold flex items-center justify-center shrink-0">
+                <div className="h-7 w-7 rounded-full tk-bg-forest text-white text-xs font-bold flex items-center justify-center shrink-0">
                   {(authUser.displayName || authUser.email || copy.avatarFallbackChar)
                     .slice(0, 1)
                     .toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-[#152B29] truncate">
+                  <div className="text-xs font-bold tk-text-ink truncate">
                     {authUser.displayName || copy.defaultTravelerName}
                   </div>
-                  <div className="text-[11px] text-[#5B7370] truncate">
+                  <div className="text-[11px] tk-text-ink2 truncate">
                     {copy.signedInReady}
                   </div>
                 </div>
@@ -531,7 +532,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                 type="button"
                 disabled={busyAction === 'signout'}
                 onClick={handleSignOut}
-                className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#5B7370] hover:text-[#152B29] cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-[11px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer shrink-0"
               >
                 <LogOut className="h-3 w-3" />
                 {copy.signOutBtn}
@@ -541,14 +542,14 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
           {/* Error Banner */}
           {errorMsg && (
-            <div className="rounded-xl border border-[#F0C7C7] bg-[#FDF4F4] px-3.5 py-2.5 flex items-start gap-2 text-xs text-[#A33A3A]">
+            <div className="rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-3.5 py-2.5 flex items-start gap-2 text-xs tk-text-danger">
               <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
               <span className="leading-relaxed break-all">{errorMsg}</span>
             </div>
           )}
 
           {/* Mode Tabs */}
-          <div className="grid grid-cols-2 rounded-xl bg-[#F1F6F5] p-1 text-xs font-bold">
+          <div className="grid grid-cols-2 rounded-xl tk-bg-warning-tint p-1 text-xs font-bold">
             <button
               type="button"
               onClick={() => {
@@ -556,10 +557,10 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                 setErrorMsg(null);
               }}
               className={`rounded-lg py-2 transition-colors cursor-pointer ${
-                modalTab === 'invite'
-                  ? 'bg-white text-[#078C88] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ modalTab === 'invite'
+ ? 'bg-white tk-text-forest shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
               {copy.tabInvite}
             </button>
@@ -570,10 +571,10 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                 setErrorMsg(null);
               }}
               className={`rounded-lg py-2 transition-colors cursor-pointer ${
-                modalTab === 'join'
-                  ? 'bg-white text-[#078C88] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ modalTab === 'join'
+ ? 'bg-white tk-text-forest shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
               {copy.tabJoin}
             </button>
@@ -583,25 +584,25 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
             <div className="space-y-5">
               {/* Cloud Room Creation OR 3-in-1 Invite Card */}
               {!activeRoomId ? (
-                <div className="rounded-2xl border border-[#DCE8E5] bg-[#FAFCFB] p-4 space-y-3.5">
+                <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-3.5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <div className="text-sm font-extrabold text-[#152B29]">
+                      <div className="text-sm font-extrabold tk-text-ink">
                         {copy.createRoomTitle(trip.intel.routeTitle)}
                       </div>
-                      <p className="mt-1 text-xs text-[#5B7370] leading-relaxed">
+                      <p className="mt-1 text-xs tk-text-ink2 leading-relaxed">
                         {copy.createRoomDescBefore}
                         <strong>{copy.createRoomDescStrong}</strong>
                         {copy.createRoomDescAfter}
                       </p>
                     </div>
-                    <Cloud className="h-5 w-5 text-[#078C88] shrink-0 mt-0.5" />
+                    <Cloud className="h-5 w-5 tk-text-forest shrink-0 mt-0.5" />
                   </div>
                   <button
                     type="button"
                     disabled={!authUser || busyAction === 'create'}
                     onClick={handleCreateCloudRoom}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#078C88] px-4 py-3 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-45 transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl tk-bg-forest px-4 py-3 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-45 transition-colors cursor-pointer"
                   >
                     {busyAction === 'create' ? (
                       <>
@@ -617,14 +618,14 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                   </button>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-[#CBE6E3] bg-[#F5FBFA] p-4 space-y-4">
+                <div className="rounded-2xl border tk-bc-hair tk-bg-forest-tint p-4 space-y-4">
                   {/* 1. 6-Char Invite Code */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-[#DFEFED]">
+                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b tk-bc-hair">
                     <div>
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#5B7370]">
+                      <div className="text-[11px] font-bold uppercase tracking-wider tk-text-ink2">
                         {copy.step1CodeLabel}
                       </div>
-                      <div className="mt-1 font-num tabular-nums text-2xl font-extrabold tracking-[0.22em] text-[#078C88]">
+                      <div className="mt-1 font-num tabular-nums text-2xl font-extrabold tracking-[0.22em] tk-text-forest">
                         {activeRoomId}
                       </div>
                     </div>
@@ -638,12 +639,12 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             copy.copiedCodeToast(activeRoomId)
                           )
                         }
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-[#CBE6E3] bg-white px-3 py-2 text-xs font-bold text-[#152B29] hover:border-[#078C88] hover:text-[#078C88] transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-bold tk-text-ink hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer"
                       >
                         {copiedKey === 'code' ? (
-                          <Check className="h-3.5 w-3.5 text-[#078C88]" />
+                          <Check className="h-3.5 w-3.5 tk-text-forest" />
                         ) : (
-                          <Copy className="h-3.5 w-3.5 text-[#078C88]" />
+                          <Copy className="h-3.5 w-3.5 tk-text-forest" />
                         )}
                         {copy.copyCodeBtn}
                       </button>
@@ -651,10 +652,10 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         type="button"
                         onClick={() => setShowQrPanel((v) => !v)}
                         className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition-colors cursor-pointer ${
-                          showQrPanel
-                            ? 'border-[#078C88] bg-[#078C88] text-white'
-                            : 'border-[#CBE6E3] bg-white text-[#152B29] hover:border-[#078C88]'
-                        }`}
+ showQrPanel
+ ? 'tk-bc-forest tk-bg-forest text-white'
+ : 'tk-bc-hair bg-white tk-text-ink hover:tk-bc-forest'
+ }`}
                       >
                         <QrCode className="h-3.5 w-3.5" />
                         {copy.qrCodeBtn}
@@ -664,21 +665,21 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
                   {/* 2. Face-to-Face QR Code Drawer */}
                   {showQrPanel && (
-                    <div className="rounded-2xl border border-[#DCE8E5] bg-white p-4 flex flex-col sm:flex-row items-center gap-4">
-                      <div className="rounded-xl border border-[#E6EFED] bg-white p-2.5 shrink-0">
+                    <div className="rounded-2xl border tk-bc-hair bg-white p-4 flex flex-col sm:flex-row items-center gap-4">
+                      <div className="rounded-xl border tk-bc-hair bg-white p-2.5 shrink-0">
                         <QRCodeSVG
                           value={inviteUrl}
                           size={136}
                           level="M"
-                          bgColor="#FFFFFF"
-                          fgColor="#152B29"
+                          bgColor={tkColor('--tk-card')}
+                          fgColor={tkColor('--tk-ink')}
                         />
                       </div>
                       <div className="space-y-1.5 text-center sm:text-left">
-                        <div className="text-xs font-extrabold text-[#152B29]">
+                        <div className="text-xs font-extrabold tk-text-ink">
                           {copy.step3QrTitle}
                         </div>
-                        <p className="text-xs text-[#5B7370] leading-relaxed">
+                        <p className="text-xs tk-text-ink2 leading-relaxed">
                           {copy.step3QrDesc(trip.intel.routeTitle)}
                         </p>
                       </div>
@@ -687,12 +688,12 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
                   {/* 3. Direct Invite Link + Formatted Copy */}
                   <div className="space-y-2.5">
-                    <div className="text-[11px] font-bold text-[#5B7370]">
+                    <div className="text-[11px] font-bold tk-text-ink2">
                       {copy.step2LinkLabel}
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl border border-[#DCE8E5] bg-white px-3 py-2">
-                      <Link2 className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
-                      <span className="font-num text-xs text-[#334E4B] truncate flex-1">
+                    <div className="flex items-center gap-2 rounded-xl border tk-bc-hair bg-white px-3 py-2">
+                      <Link2 className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                      <span className="font-num text-xs tk-text-ink truncate flex-1">
                         {inviteUrl}
                       </span>
                       <button
@@ -704,7 +705,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             copy.copiedLinkToast
                           )
                         }
-                        className="text-xs font-bold text-[#078C88] hover:underline shrink-0 cursor-pointer"
+                        className="text-xs font-bold tk-text-forest hover:underline shrink-0 cursor-pointer"
                       >
                         {copiedKey === 'url' ? t('common.copied') : copy.copyLinkBtn}
                       </button>
@@ -720,7 +721,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             copy.copiedInviteMsgToast
                           )
                         }
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-2.5 text-xs font-bold text-white hover:bg-[#067572] transition-colors cursor-pointer"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2.5 text-xs font-bold text-white hover:tk-bg-press transition-colors cursor-pointer"
                       >
                         {copiedKey === 'wechat' ? (
                           <Check className="h-3.5 w-3.5" />
@@ -733,9 +734,9 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         <button
                           type="button"
                           onClick={handleNativeShare}
-                          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CBE6E3] bg-white px-3.5 py-2.5 text-xs font-bold text-[#152B29] hover:border-[#078C88] transition-colors cursor-pointer"
+                          className="inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-xs font-bold tk-text-ink hover:tk-bc-forest transition-colors cursor-pointer"
                         >
-                          <Share2 className="h-3.5 w-3.5 text-[#078C88]" />
+                          <Share2 className="h-3.5 w-3.5 tk-text-forest" />
                           {copy.shareBtn}
                         </button>
                       )}
@@ -747,15 +748,15 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
               {/* Current Crew Roster & Seat Perspective Selector */}
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#152B29]">
-                    <Users className="h-3.5 w-3.5 text-[#078C88]" />
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold tk-text-ink">
+                    <Users className="h-3.5 w-3.5 tk-text-forest" />
                     {copy.seatsHeading(trip.crew.length)}
                   </div>
                   {trip.crew.length < 4 && !addingLocalSeat && (
                     <button
                       type="button"
                       onClick={() => setAddingLocalSeat(true)}
-                      className="text-xs font-bold text-[#078C88] hover:underline cursor-pointer"
+                      className="text-xs font-bold tk-text-forest hover:underline cursor-pointer"
                     >
                       {copy.addSeatBtnLink}
                     </button>
@@ -763,7 +764,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                 </div>
 
                 {addingLocalSeat && (
-                  <div className="rounded-xl border border-[#CBE6E3] bg-[#F5FBFA] p-3 space-y-2.5">
+                  <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint p-3 space-y-2.5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <input
                         type="text"
@@ -771,7 +772,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={newSeatName}
                         onChange={(e) => setNewSeatName(e.target.value)}
                         placeholder={copy.nicknamePlaceholder}
-                        className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                       <input
                         type="text"
@@ -779,7 +780,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={newSeatRole}
                         onChange={(e) => setNewSeatRole(e.target.value)}
                         placeholder={copy.rolePlaceholder}
-                        className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                     <div className="flex items-center justify-end gap-2">
@@ -789,7 +790,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                           setAddingLocalSeat(false);
                           setNewSeatName('');
                         }}
-                        className="rounded-lg px-2.5 py-1 text-xs font-semibold text-[#5B7370] cursor-pointer"
+                        className="rounded-lg px-2.5 py-1 text-xs font-semibold tk-text-ink2 cursor-pointer"
                       >
                         {t('common.cancel')}
                       </button>
@@ -808,7 +809,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                           setNewSeatName('');
                           setAddingLocalSeat(false);
                         }}
-                        className="rounded-lg bg-[#078C88] px-3 py-1.5 text-xs font-bold text-white cursor-pointer"
+                        className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-bold text-white cursor-pointer"
                       >
                         {copy.addSeatBtn}
                       </button>
@@ -830,10 +831,10 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                       <div
                         key={member.id}
                         className={`rounded-xl border px-3.5 py-2.5 transition-colors ${
-                          isMyActiveSeat
-                            ? 'border-[#078C88] bg-[#F4FBFA]'
-                            : 'border-[#E3ECEA] bg-white'
-                        }`}
+ isMyActiveSeat
+ ? 'tk-bc-forest tk-bg-forest-tint'
+ : 'tk-bc-hair bg-white'
+ }`}
                       >
                         {isEditing ? (
                           <div className="space-y-2">
@@ -844,7 +845,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                 value={editNameDraft}
                                 onChange={(e) => setEditNameDraft(e.target.value)}
                                 placeholder={copy.editNicknamePlaceholder}
-                                className="rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
                               />
                               <input
                                 type="text"
@@ -852,21 +853,21 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                 value={editRoleDraft}
                                 onChange={(e) => setEditRoleDraft(e.target.value)}
                                 placeholder={copy.editRolePlaceholder}
-                                className="rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
                               />
                             </div>
                             <div className="flex justify-end gap-2">
                               <button
                                 type="button"
                                 onClick={() => setEditingMemberId(null)}
-                                className="px-2.5 py-1 text-xs font-semibold text-[#5B7370] cursor-pointer"
+                                className="px-2.5 py-1 text-xs font-semibold tk-text-ink2 cursor-pointer"
                               >
                                 {t('common.cancel')}
                               </button>
                               <button
                                 type="button"
                                 onClick={() => saveInlineEdit(member.id)}
-                                className="rounded-lg bg-[#078C88] px-3 py-1 text-xs font-bold text-white cursor-pointer"
+                                className="rounded-lg tk-bg-forest px-3 py-1 text-xs font-bold text-white cursor-pointer"
                               >
                                 {t('common.save')}
                               </button>
@@ -877,29 +878,29 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             <div className="flex items-center gap-2.5 min-w-0">
                               <span
                                 className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0 ${
-                                  HERO_AVATAR_BG[member.accent] || HERO_AVATAR_BG.teal
-                                }`}
+ HERO_AVATAR_BG[member.accent] || HERO_AVATAR_BG.teal
+ }`}
                               >
                                 {displayInitials}
                               </span>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="text-xs font-bold text-[#152B29] truncate">
+                                  <span className="text-xs font-bold tk-text-ink truncate">
                                     {displayName}
                                   </span>
                                   {member.claimedByUid && (
-                                    <span className="inline-flex items-center gap-0.5 rounded bg-[#E6F7F6] px-1.5 py-0.5 text-[10px] font-bold text-[#078C88]">
+                                    <span className="inline-flex items-center gap-0.5 rounded tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-bold tk-text-forest">
                                       <CheckCircle2 className="h-2.5 w-2.5" />
                                       {copy.claimedBadge}
                                     </span>
                                   )}
                                   {isMyActiveSeat && (
-                                    <span className="rounded bg-[#152B29] px-1.5 py-0.5 text-[10px] font-bold text-white">
+                                    <span className="rounded tk-bg-ink px-1.5 py-0.5 text-[10px] font-bold text-white">
                                       {copy.activeViewBadge}
                                     </span>
                                   )}
                                 </div>
-                                <div className="text-[11px] text-[#5B7370] truncate">
+                                <div className="text-[11px] tk-text-ink2 truncate">
                                   {translateDemoCrewRole(member.role, activeLang)}
                                 </div>
                               </div>
@@ -913,7 +914,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                     onChangeClaimedSeatLocal(seatId);
                                     onToast(copy.switchViewToast(displayName));
                                   }}
-                                  className="rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#5B7370] hover:border-[#078C88] hover:text-[#078C88] cursor-pointer"
+                                  className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest cursor-pointer"
                                 >
                                   {copy.switchViewBtn}
                                 </button>
@@ -921,7 +922,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => startInlineEdit(member)}
-                                className="rounded-lg p-1.5 text-[#5B7370] hover:bg-[#EDF4F2] hover:text-[#152B29] cursor-pointer"
+                                className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink cursor-pointer"
                                 aria-label={copy.editMemberLabel(displayName)}
                                 title={copy.editMemberLabel(displayName)}
                               >
@@ -933,7 +934,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onRemoveCompanionSeatLocal(member.id)}
-                                    className="rounded-lg p-1.5 text-[#7A908D] hover:bg-[#FDF3F2] hover:text-[#B83B2E] cursor-pointer"
+                                    className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger cursor-pointer"
                                     aria-label={copy.removeMemberLabel(displayName)}
                                     title={copy.removeMemberLabel(displayName)}
                                   >
@@ -957,7 +958,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                       onDisconnectRoom();
                       onToast(copy.disconnectToast);
                     }}
-                    className="text-xs font-semibold text-[#7A5B5B] hover:underline cursor-pointer"
+                    className="text-xs font-semibold tk-text-ink2 hover:underline cursor-pointer"
                   >
                     {copy.disconnectBtn}
                   </button>
@@ -968,7 +969,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
             /* Join Room & Claim Seat View */
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#152B29]">
+                <label className="block text-xs font-bold tk-text-ink">
                   {copy.enterCodeLabel}
                 </label>
                 <div className="flex items-center gap-2">
@@ -978,13 +979,13 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                     value={joinCodeInput}
                     onChange={(e) => setJoinCodeInput(normalizeRoomCode(e.target.value))}
                     placeholder={copy.codePlaceholder}
-                    className="flex-1 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 py-2.5 font-num tabular-nums text-base font-extrabold tracking-[0.2em] uppercase text-[#152B29] placeholder:tracking-normal placeholder:font-normal placeholder:text-xs focus:border-[#078C88] focus:bg-white focus:outline-none"
+                    className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 font-num tabular-nums text-base font-extrabold tracking-[0.2em] uppercase tk-text-ink placeholder:tracking-normal placeholder:font-normal placeholder:text-xs focus:tk-bc-forest focus:bg-white focus:outline-none"
                   />
                   <button
                     type="button"
                     disabled={!authUser || busyAction === 'lookup' || joinCodeInput.length < 6}
                     onClick={() => authUser && loadRoomForClaim(joinCodeInput, authUser)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-45 transition-colors cursor-pointer shrink-0"
+                    className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2.5 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-45 transition-colors cursor-pointer shrink-0"
                   >
                     {busyAction === 'lookup' ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -998,17 +999,17 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
               {/* Seat Claiming Card once roomPreview is loaded */}
               {roomPreview && (
-                <div className="rounded-2xl border border-[#078C88] bg-[#F4FBFA] p-4 space-y-4">
-                  <div className="flex items-start justify-between gap-2 border-b border-[#DCECE9] pb-3">
+                <div className="rounded-2xl border tk-bc-forest tk-bg-forest-tint p-4 space-y-4">
+                  <div className="flex items-start justify-between gap-2 border-b tk-bc-hair pb-3">
                     <div>
-                      <div className="text-[11px] font-bold text-[#078C88]">
+                      <div className="text-[11px] font-bold tk-text-forest">
                         {copy.foundRoomPrefix}
                         <span className="font-num">{roomPreview.roomId}</span>
                       </div>
-                      <div className="mt-0.5 text-sm font-extrabold text-[#152B29]">
+                      <div className="mt-0.5 text-sm font-extrabold tk-text-ink">
                         {roomPreview.routeTitle}
                       </div>
-                      <div className="mt-0.5 text-xs text-[#5B7370]">
+                      <div className="mt-0.5 text-xs tk-text-ink2">
                         {copy.organizerRev(roomPreview.ownerName)}
                         <span className="font-num">v{roomPreview.revision}</span>
                       </div>
@@ -1017,7 +1018,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
 
                   {/* Step 1: Choose which seat to claim */}
                   <div className="space-y-2">
-                    <div className="text-xs font-bold text-[#152B29]">
+                    <div className="text-xs font-bold tk-text-ink">
                       {copy.step1ClaimTitle}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1038,30 +1039,30 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             type="button"
                             onClick={() => handleSelectClaimSeatOption(sid)}
                             className={`text-left rounded-xl border p-2.5 transition-colors cursor-pointer ${
-                              active
-                                ? 'border-[#078C88] bg-white ring-1 ring-[#078C88]'
-                                : 'border-[#DCE8E5] bg-white/75 hover:border-[#0ABAB5]'
-                            }`}
+ active
+ ? 'tk-bc-forest bg-white ring-1 tk-ring-forest'
+ : 'tk-bc-hair bg-white/75 hover:tk-bc-forest'
+ }`}
                           >
                             <div className="flex items-center justify-between gap-1.5">
-                              <span className="text-xs font-extrabold text-[#152B29] truncate">
+                              <span className="text-xs font-extrabold tk-text-ink truncate">
                                 {copy.iAmName(seatDisplayName)}
                               </span>
                               {claimedByMe ? (
-                                <span className="rounded bg-[#E6F7F6] px-1.5 py-0.5 text-[10px] font-bold text-[#078C88]">
+                                <span className="rounded tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-bold tk-text-forest">
                                   {copy.mySeatBadge}
                                 </span>
                               ) : claimedByOther ? (
-                                <span className="rounded bg-[#F5EFE6] px-1.5 py-0.5 text-[10px] font-semibold text-[#8C6535]">
+                                <span className="rounded tk-bg-warning-tint px-1.5 py-0.5 text-[10px] font-semibold tk-text-warning">
                                   {copy.takenBadge}
                                 </span>
                               ) : (
-                                <span className="rounded bg-[#EDF4F2] px-1.5 py-0.5 text-[10px] font-semibold text-[#5B7370]">
+                                <span className="rounded tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-semibold tk-text-ink2">
                                   {copy.openBadge}
                                 </span>
                               )}
                             </div>
-                            <div className="mt-0.5 text-[11px] text-[#5B7370] truncate">
+                            <div className="mt-0.5 text-[11px] tk-text-ink2 truncate">
                               {translateDemoCrewRole(seat.role, activeLang)}
                             </div>
                           </button>
@@ -1077,16 +1078,16 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                             )
                           }
                           className={`text-left rounded-xl border border-dashed p-2.5 transition-colors cursor-pointer ${
-                            selectedClaimSeat ===
-                            ALL_SEATS[roomPreview.tripPayload?.crew?.length || 1]
-                              ? 'border-[#078C88] bg-white ring-1 ring-[#078C88]'
-                              : 'border-[#B8D4D0] bg-white/60 hover:border-[#078C88]'
-                          }`}
+ selectedClaimSeat ===
+ ALL_SEATS[roomPreview.tripPayload?.crew?.length || 1]
+ ? 'tk-bc-forest bg-white ring-1 tk-ring-forest'
+ : 'tk-bc-hair bg-white/60 hover:tk-bc-forest'
+ }`}
                         >
-                          <div className="text-xs font-extrabold text-[#078C88]">
+                          <div className="text-xs font-extrabold tk-text-forest">
                             {copy.joinAsNewTitle}
                           </div>
-                          <div className="mt-0.5 text-[11px] text-[#5B7370]">
+                          <div className="mt-0.5 text-[11px] tk-text-ink2">
                             {copy.joinAsNewSub}
                           </div>
                         </button>
@@ -1097,7 +1098,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                   {/* Step 2: Confirm Nickname & Role */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block text-[11px] font-bold text-[#5B7370] mb-1">
+                      <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
                         {copy.myNicknameLabel}
                       </label>
                       <input
@@ -1106,11 +1107,11 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={claimNickname}
                         onChange={(e) => setClaimNickname(e.target.value)}
                         placeholder={copy.nicknameEgPlaceholder}
-                        className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs font-semibold text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-bold text-[#5B7370] mb-1">
+                      <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
                         {copy.tripRoleLabel}
                       </label>
                       <input
@@ -1119,7 +1120,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={claimRole}
                         onChange={(e) => setClaimRole(e.target.value)}
                         placeholder={copy.roleEgPlaceholder}
-                        className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs text-[#152B29] focus:border-[#078C88] focus:outline-none"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1128,7 +1129,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                     type="button"
                     disabled={busyAction === 'claim'}
                     onClick={handleConfirmClaimSeat}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#078C88] px-4 py-3 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-50 transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl tk-bg-forest px-4 py-3 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-50 transition-colors cursor-pointer"
                   >
                     {busyAction === 'claim' ? (
                       <>
@@ -1148,7 +1149,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
               {/* Recent Joined Rooms Bookmarks (limit(5)) */}
               {authUser && recentRooms.length > 0 && (
                 <div className="space-y-2 pt-1">
-                  <div className="text-[11px] font-bold text-[#5B7370]">
+                  <div className="text-[11px] font-bold tk-text-ink2">
                     {copy.recentRoomsTitle}
                   </div>
                   <div className="space-y-1.5">
@@ -1160,20 +1161,20 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                           setJoinCodeInput(bm.roomId);
                           void loadRoomForClaim(bm.roomId, authUser);
                         }}
-                        className="w-full flex items-center justify-between gap-2 rounded-xl border border-[#E3ECEA] bg-[#F8FAF9] px-3.5 py-2.5 text-left hover:border-[#078C88] transition-colors cursor-pointer"
+                        className="w-full flex items-center justify-between gap-2 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-left hover:tk-bc-forest transition-colors cursor-pointer"
                       >
                         <div className="min-w-0">
-                          <div className="text-xs font-bold text-[#152B29] truncate">
+                          <div className="text-xs font-bold tk-text-ink truncate">
                             {bm.routeTitle}
                           </div>
-                          <div className="text-[11px] text-[#5B7370]">
+                          <div className="text-[11px] tk-text-ink2">
                             {copy.codePrefix}
-                            <span className="font-num font-bold text-[#078C88]">{bm.roomId}</span>
+                            <span className="font-num font-bold tk-text-forest">{bm.roomId}</span>
                             {copy.seatPrefix}
                             <span className="font-num">{bm.seatId.toUpperCase()}</span>
                           </div>
                         </div>
-                        <span className="text-xs font-bold text-[#078C88] shrink-0">
+                        <span className="text-xs font-bold tk-text-forest shrink-0">
                           {copy.reconnectBtn}
                         </span>
                       </button>
@@ -1185,32 +1186,32 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
           )}
 
           {/* Security Rules & GCP Billing Budget Alert Guide */}
-          <div className="rounded-2xl border border-[#E3ECEA] bg-[#F8FAF9] overflow-hidden">
+          <div className="rounded-2xl border tk-bc-hair tk-bg-paper overflow-hidden">
             <button
               type="button"
               onClick={() => setShowSecurityGuide((v) => !v)}
               className="w-full flex items-center justify-between gap-2 px-4 py-3 text-left cursor-pointer"
             >
-              <div className="flex items-center gap-2 text-xs font-bold text-[#152B29]">
-                <ShieldCheck className="h-4 w-4 text-[#078C88] shrink-0" />
+              <div className="flex items-center gap-2 text-xs font-bold tk-text-ink">
+                <ShieldCheck className="h-4 w-4 tk-text-forest shrink-0" />
                 <span>{copy.securityGuideTitle}</span>
               </div>
               {showSecurityGuide ? (
-                <ChevronUp className="h-4 w-4 text-[#5B7370] shrink-0" />
+                <ChevronUp className="h-4 w-4 tk-text-ink2 shrink-0" />
               ) : (
-                <ChevronDown className="h-4 w-4 text-[#5B7370] shrink-0" />
+                <ChevronDown className="h-4 w-4 tk-text-ink2 shrink-0" />
               )}
             </button>
 
             {showSecurityGuide && (
-              <div className="border-t border-[#E3ECEA] px-4 py-3.5 space-y-3 text-xs text-[#47605D] leading-relaxed">
+              <div className="border-t tk-bc-hair px-4 py-3.5 space-y-3 text-xs tk-text-ink2 leading-relaxed">
                 <div className="space-y-1">
-                  <div className="font-bold text-[#152B29]">{copy.sec1Title}</div>
+                  <div className="font-bold tk-text-ink">{copy.sec1Title}</div>
                   <ul className="list-disc pl-4 space-y-1 text-[11px]">
                     <li>
                       <strong>{copy.sec1SingleRegionTitle}</strong>
                       {copy.sec1SingleRegionA}
-                      <code className="font-num font-bold text-[#078C88]">
+                      <code className="font-num font-bold tk-text-forest">
                         {FIRESTORE_REGION}
                       </code>
                       {copy.sec1SingleRegionB}
@@ -1231,8 +1232,8 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                   </ul>
                 </div>
 
-                <div className="space-y-1.5 pt-1 border-t border-[#E6EFED]">
-                  <div className="font-bold text-[#152B29]">{copy.sec2Title}</div>
+                <div className="space-y-1.5 pt-1 border-t tk-bc-hair">
+                  <div className="font-bold tk-text-ink">{copy.sec2Title}</div>
                   <ol className="list-decimal pl-4 space-y-1 text-[11px]">
                     <li>
                       {copy.sec2Step1A}
@@ -1243,7 +1244,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                     <li>
                       {copy.sec2Step2Prefix}
                       <span className="inline-flex items-center gap-1 ml-1">
-                        <code className="font-num rounded bg-white border border-[#DCE8E5] px-1.5 py-0.5 text-[#152B29]">
+                        <code className="font-num rounded bg-white border tk-bc-hair px-1.5 py-0.5 tk-text-ink">
                           {FIREBASE_PROJECT_ID}
                         </code>
                         <button
@@ -1255,7 +1256,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                               copy.copiedProjectToast(FIREBASE_PROJECT_ID)
                             )
                           }
-                          className="text-[#078C88] font-bold hover:underline cursor-pointer"
+                          className="tk-text-forest font-bold hover:underline cursor-pointer"
                         >
                           {copiedKey === 'gcp_pid' ? t('common.copied') : copy.copyProjectIdBtn}
                         </button>

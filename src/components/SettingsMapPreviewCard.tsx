@@ -12,6 +12,7 @@ import {
   buildGoogleMapsSearchUrl,
   getConfiguredGoogleMapsApiKey,
 } from '../utils/googleMapsHelpers';
+import { tkColor } from '../utils/tkColor';
 import type { AppLanguage } from '../types';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
 import { getMapPreviewCopy } from '../i18n/packs/utilsAndModalsPack';
@@ -124,7 +125,7 @@ const ThumbnailMapProbe: React.FC<{
 
   return (
     <AdvancedMarker position={pinPos} title={pinTitle}>
-      <Pin background="#078C88" borderColor="#FFFFFF" glyphColor="#FFFFFF" />
+      <Pin background={tkColor('--tk-route-1')} borderColor={tkColor('--tk-card')} glyphColor={tkColor('--tk-card')} />
     </AdvancedMarker>
   );
 };
@@ -164,14 +165,14 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
     <div className="pl-2.5 pr-4 py-3.5 space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3.5 min-w-0 flex-1">
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#D3E5F6] bg-[#EDF5FC] text-[#1D6FA5]">
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border tk-bc-hair tk-bg-forest-tint tk-text-swatch-3">
             <MapPin className="h-4 w-4" />
           </span>
           <div className="min-w-0">
-            <div className="text-sm font-bold text-[#152B29]">
+            <div className="text-sm font-bold tk-text-ink">
               {copy.cardTitle}
             </div>
-            <div className="mt-0.5 text-xs text-[#52667A]">
+            <div className="mt-0.5 text-xs tk-text-ink2">
               {apiKey ? copy.connectedSub : copy.standardSub}
             </div>
           </div>
@@ -182,7 +183,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
             <button
               type="button"
               onClick={() => setPreviewOpen(false)}
-              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#5B7370] hover:text-[#152B29] whitespace-nowrap cursor-pointer"
+              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
             >
               {copy.hidePreviewBtn}
             </button>
@@ -191,7 +192,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
             type="button"
             onClick={handleRunTest}
             disabled={testing}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-60 whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-60 whitespace-nowrap cursor-pointer"
           >
             {testing ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -204,9 +205,9 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
       </div>
 
       {previewOpen && (
-        <div className="rounded-xl border border-[#D3E5F6] bg-white overflow-hidden">
+        <div className="rounded-xl border tk-bc-hair bg-white overflow-hidden">
           {apiKey ? (
-            <div className="h-44 w-full bg-[#F2F7FB]">
+            <div className="h-44 w-full tk-bg-forest-plate">
               <GoogleMap
                 mapId="DEMO_MAP_ID"
                 defaultCenter={DEFAULT_PREVIEW_COORDS}
@@ -228,15 +229,15 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
               </GoogleMap>
             </div>
           ) : (
-            <div className="px-4 py-3.5 bg-[#FAFCFE] flex flex-wrap items-center justify-between gap-3">
-              <div className="text-xs text-[#4F6478] leading-relaxed">
+            <div className="px-4 py-3.5 tk-bg-card flex flex-wrap items-center justify-between gap-3">
+              <div className="text-xs tk-text-ink2 leading-relaxed">
                 {copy.externalMapsHint}
               </div>
               <a
                 href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-lg border border-[#D3E5F6] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#1D6FA5] hover:bg-[#EDF5FC] whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-swatch-3 hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
               >
                 <ExternalLink className="h-3 w-3" />
                 {copy.openMapsBtn}
@@ -246,11 +247,11 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
 
           {probeResult && (
             <div
-              className={`border-t border-[#E4EEF8] px-3.5 py-2 text-[11px] leading-relaxed ${
-                probeResult.ok
-                  ? 'bg-[#F3FAF9] text-[#076E6A]'
-                  : 'bg-[#FFFBF2] text-[#8E5B12]'
-              }`}
+              className={`border-t tk-bc-hair px-3.5 py-2 text-[11px] leading-relaxed ${
+ probeResult.ok
+ ? 'tk-bg-forest-tint tk-text-forest'
+ : 'tk-bg-warning-tint tk-text-warning'
+ }`}
             >
               {probeResult.message}
             </div>

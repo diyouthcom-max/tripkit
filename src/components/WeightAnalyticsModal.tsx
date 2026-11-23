@@ -30,16 +30,17 @@ import type {
   UnitSystem,
 } from '../types';
 import { isItemCarryOnWeight } from '../utils/packingHelpers';
+import { tkColor } from '../utils/tkColor';
 
 type ChartMetric = 'weight' | 'workload' | 'packed';
 
-const GROUP_COLOR_MAP: Record<PackingGroup['colorKey'], string> = {
-  teal: '#078C88',
-  lavender: '#7E63B8',
-  lemon: '#C9A227',
-  peach: '#D97E4A',
-  rose: '#C9637B',
-  mint: '#2E8B6E',
+const GROUP_COLOR_TOKEN: Record<PackingGroup['colorKey'], string> = {
+  teal: '--tk-swatch-1',
+  lavender: '--tk-swatch-2',
+  lemon: '--tk-swatch-3',
+  peach: '--tk-swatch-4',
+  rose: '--tk-swatch-3',
+  mint: '--tk-swatch-2',
 };
 
 interface CategoryChartDatum {
@@ -67,9 +68,9 @@ const CategoryPieTooltip: React.FC<{
   const tipCopy = getCategoryPieTooltipCopy(lang);
 
   return (
-    <div className="rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2.5 shadow-lg text-xs space-y-1">
-      <div className="font-bold text-[#152B29]">{d.name}</div>
-      <div className="flex items-center justify-between gap-4 text-[#5B7370]">
+    <div className="rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 shadow-lg text-xs space-y-1">
+      <div className="font-bold tk-text-ink">{d.name}</div>
+      <div className="flex items-center justify-between gap-4 tk-text-ink2">
         <span>
           {metric === 'packed'
             ? tipCopy.packedItems
@@ -77,14 +78,14 @@ const CategoryPieTooltip: React.FC<{
             ? tipCopy.totalItems
             : tipCopy.categoryWeight}
         </span>
-        <span className="font-num font-bold text-[#152B29] tabular-nums">
+        <span className="font-num font-bold tk-text-ink tabular-nums">
           {metric === 'weight'
             ? formatTotalWeightByPref(d.weightGrams, unitSystem)
             : tipCopy.countText(d.value)}{' '}
           ({d.pct}%)
         </span>
       </div>
-      <div className="flex items-center justify-between gap-4 text-[#647B78] border-t border-[#EDF3F1] pt-1">
+      <div className="flex items-center justify-between gap-4 tk-text-ink2 border-t tk-bc-hair pt-1">
         <span>{tipCopy.progressLabel}</span>
         <span className="font-num tabular-nums">
           {tipCopy.progressStats(d.doneCount, d.totalCount, d.pendingCount)}
@@ -205,7 +206,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
       pendingCount: gPending,
       totalCount: gTotal,
       weightGrams: gWeightGrams,
-      color: GROUP_COLOR_MAP[g.colorKey] || '#078C88',
+      color: tkColor(GROUP_COLOR_TOKEN[g.colorKey] || '--tk-swatch-1'),
     };
   });
 
@@ -222,35 +223,35 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#082220]/55 backdrop-blur-xs p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label={copy.dialogAria}
-        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh]"
+        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile Grab Handle */}
         <div className="pt-2.5 pb-0.5 flex justify-center sm:hidden shrink-0">
-          <span className="h-1 w-10 rounded-full bg-[#D5E2DF]" />
+          <span className="h-1 w-10 rounded-full tk-bg-forest-plate" />
         </div>
 
         {/* 1. Clean Packy-Style Header */}
-        <div className="px-5 pt-3.5 pb-3 flex items-center justify-between gap-3 bg-white border-b border-[#EDF3F1] shrink-0">
+        <div className="px-5 pt-3.5 pb-3 flex items-center justify-between gap-3 bg-white border-b tk-bc-hair shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <AccentIconBadge accent="teal" icon={PieChartIcon} size="md" />
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-extrabold tracking-tight text-[#152B29] truncate">
+                <h2 className="text-base sm:text-lg font-extrabold tracking-tight tk-text-ink truncate">
                   {copy.headerTitle}
                 </h2>
-                <span className="inline-flex items-center rounded-full bg-[#EFF9F8] px-2.5 py-0.5 font-num text-xs font-bold text-[#076E6A] tabular-nums shrink-0">
+                <span className="inline-flex items-center rounded-full tk-bg-forest-tint px-2.5 py-0.5 font-num text-xs font-bold tk-text-forest tabular-nums shrink-0">
                   {totalWeightFormatted}
                 </span>
               </div>
-              <p className="text-[11px] text-[#647B78] tabular-nums truncate">
+              <p className="text-[11px] tk-text-ink2 tabular-nums truncate">
                 {t('packingExtra.preNightAndMorning', {
                   pre: preNightCount,
                   morning: morningCount,
@@ -263,7 +264,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label={t('common.close')}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-full text-[#526B68] hover:bg-[#F2F6F5] hover:text-[#152B29] transition-colors shrink-0 cursor-pointer"
+            className="h-9 w-9 inline-flex items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink transition-colors shrink-0 cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -272,13 +273,13 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
         {/* 2. Scrollable Analytics Body */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
           {/* Airline Allowance Preset Selector + Dual Quota Cards */}
-          <div className="rounded-2xl border border-[#DCE8E5] bg-[#FAFDFC] p-3.5 sm:p-4 space-y-3">
+          <div className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 sm:p-4 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold text-[#152B29]">
+              <span className="text-xs font-bold tk-text-ink">
                 {copy.quotaComparisonTitle}
               </span>
               {onSelectBaggagePreset && (
-                <div className="inline-flex items-center gap-1 rounded-xl bg-[#EDF4F2] p-0.5">
+                <div className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-tint p-0.5">
                   {(['lcc', 'standard', 'business'] as const).map((presetKey) => {
                     const labels = getBaggagePresetLabels(presetKey, activeLang, unitSystem);
                     const isActive = baggagePreset === presetKey;
@@ -288,10 +289,10 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                         type="button"
                         onClick={() => onSelectBaggagePreset(presetKey)}
                         className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                          isActive
-                            ? 'bg-white text-[#152B29] shadow-xs'
-                            : 'text-[#5B7370] hover:text-[#152B29]'
-                        }`}
+ isActive
+ ? 'bg-white tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                       >
                         {labels.tierTitle}
                       </button>
@@ -305,32 +306,32 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
               {/* Carry-On Card */}
               <div
                 className={`rounded-xl border bg-white p-3 space-y-2 ${
-                  isCarryOnOverweight ? 'border-[#E6A290]' : 'border-[#E3ECEA]'
-                }`}
+ isCarryOnOverweight ? 'tk-bc-danger-hair' : 'tk-bc-hair'
+ }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#152B29]">
-                    <Briefcase className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold tk-text-ink">
+                    <Briefcase className="h-3.5 w-3.5 tk-text-forest shrink-0" />
                     {t('packing.carryOnLabel')}
                   </span>
                   <span
                     className={`font-num text-xs font-extrabold tabular-nums ${
-                      isCarryOnOverweight ? 'text-[#B95239]' : 'text-[#076E6A]'
-                    }`}
+ isCarryOnOverweight ? 'tk-text-danger' : 'tk-text-forest'
+ }`}
                   >
                     {formatWeightAgainstLimit(carryOnGrams, carryOnLimitKg, unitSystem, 1)}
                   </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#EAF1EF]">
+                <div className="h-1.5 w-full overflow-hidden rounded-full tk-bg-forest-plate">
                   <div
                     style={{ width: `${carryOnPct}%` }}
                     className={`h-full rounded-full transition-all ${
-                      isCarryOnOverweight ? 'bg-[#D9534F]' : 'bg-[#078C88]'
-                    }`}
+ isCarryOnOverweight ? 'tk-bg-danger' : 'tk-bg-forest'
+ }`}
                   />
                 </div>
                 {isCarryOnOverweight && (
-                  <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#B95239]">
+                  <div className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-danger">
                     <AlertTriangle className="h-3 w-3 shrink-0" />
                     <span>{copy.carryOnOverWarning}</span>
                   </div>
@@ -340,32 +341,32 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
               {/* Checked Bag Card */}
               <div
                 className={`rounded-xl border bg-white p-3 space-y-2 ${
-                  isCheckedOverweight ? 'border-[#E6A290]' : 'border-[#E3ECEA]'
-                }`}
+ isCheckedOverweight ? 'tk-bc-danger-hair' : 'tk-bc-hair'
+ }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#152B29]">
-                    <Luggage className="h-3.5 w-3.5 text-[#5B7370] shrink-0" />
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold tk-text-ink">
+                    <Luggage className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
                     {t('packing.checkedLabel')}
                   </span>
                   <span
                     className={`font-num text-xs font-extrabold tabular-nums ${
-                      isCheckedOverweight ? 'text-[#B95239]' : 'text-[#3B5552]'
-                    }`}
+ isCheckedOverweight ? 'tk-text-danger' : 'tk-text-ink2'
+ }`}
                   >
                     {formatWeightAgainstLimit(checkedGrams, checkedLimitKg, unitSystem, 0)}
                   </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#EAF1EF]">
+                <div className="h-1.5 w-full overflow-hidden rounded-full tk-bg-forest-plate">
                   <div
                     style={{ width: `${checkedPct}%` }}
                     className={`h-full rounded-full transition-all ${
-                      isCheckedOverweight ? 'bg-[#D9534F]' : 'bg-[#3B7C78]'
-                    }`}
+ isCheckedOverweight ? 'tk-bg-danger' : 'tk-bg-forest'
+ }`}
                   />
                 </div>
                 {isCheckedOverweight && (
-                  <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#B95239]">
+                  <div className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-danger">
                     <AlertTriangle className="h-3 w-3 shrink-0" />
                     <span>
                       {checkedLimitKg <= 0
@@ -379,13 +380,13 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
           </div>
 
           {/* Category Weight Donut & Interactive Breakdown */}
-          <div className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-4">
+          <div className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="text-sm font-bold text-[#152B29]">
+                <h3 className="text-sm font-bold tk-text-ink">
                   {t('packingExtra.chartTitle')}
                 </h3>
-                <p className="mt-0.5 text-xs text-[#5B7370] tabular-nums">
+                <p className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
                   {heaviestPendingGroup && heaviestPendingGroup.weightGrams > 0
                     ? copy.heaviestCategory(
                         heaviestPendingGroup.name,
@@ -395,7 +396,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                 </p>
               </div>
 
-              <div className="inline-flex items-center gap-1 rounded-xl bg-[#F2F6F5] p-1 shrink-0">
+              <div className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-plate p-1 shrink-0">
                 {(
                   [
                     { id: 'weight' as const, label: t('packingExtra.metricWeight') },
@@ -408,10 +409,10 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                     type="button"
                     onClick={() => setChartMetric(m.id)}
                     className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                      chartMetric === m.id
-                        ? 'bg-white text-[#152B29] shadow-xs'
-                        : 'text-[#5B7370] hover:text-[#152B29]'
-                    }`}
+ chartMetric === m.id
+ ? 'bg-white tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
                   >
                     {m.label}
                   </button>
@@ -422,7 +423,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
               <div className="sm:col-span-5 h-44 relative flex items-center justify-center">
                 {pieSegments.length === 0 ? (
-                  <div className="text-center px-4 text-xs text-[#647B78]">
+                  <div className="text-center px-4 text-xs tk-text-ink2">
                     {t('packingExtra.chartEmpty')}
                   </div>
                 ) : (
@@ -456,7 +457,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span className="font-num text-sm font-extrabold text-[#152B29] tabular-nums">
+                      <span className="font-num text-sm font-extrabold tk-text-ink tabular-nums">
                         {chartMetric === 'weight'
                           ? `${metricTotal.toFixed(1)} ${unitSystem === 'imperial' ? 'lb' : 'kg'}`
                           : `${metricTotal}${copy.metricCountSuffix}`}
@@ -466,7 +467,7 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                 )}
               </div>
 
-              <div className="sm:col-span-7 divide-y divide-[#F1F6F5]">
+              <div className="sm:col-span-7 divide-y tk-divide-hair">
                 {categoryData.map((row) => (
                   <button
                     key={row.id}
@@ -475,26 +476,26 @@ export const WeightAnalyticsModal: React.FC<WeightAnalyticsModalProps> = ({
                       onFocusCategory?.(row.id);
                       onClose();
                     }}
-                    className="w-full py-2 flex items-center justify-between gap-3 text-left hover:bg-[#FAFDFC] rounded-lg px-2 cursor-pointer"
+                    className="w-full py-2 flex items-center justify-between gap-3 text-left hover:tk-bg-paper rounded-lg px-2 cursor-pointer"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span
                         className="h-2.5 w-2.5 rounded-xs shrink-0"
                         style={{ backgroundColor: row.color }}
                       />
-                      <span className="text-xs font-bold text-[#152B29] truncate">
+                      <span className="text-xs font-bold tk-text-ink truncate">
                         {row.name}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0 font-num text-xs text-[#5B7370] tabular-nums">
-                      <span className="font-semibold text-[#152B29]">
+                    <div className="flex items-center gap-2 shrink-0 font-num text-xs tk-text-ink2 tabular-nums">
+                      <span className="font-semibold tk-text-ink">
                         {formatTotalWeightByPref(row.weightGrams, unitSystem)}
                       </span>
-                      <span className="text-[#9AB0AD]">·</span>
+                      <span className="tk-text-ink2">·</span>
                       <span>
                         {row.doneCount}/{row.totalCount}
                       </span>
-                      <ChevronRight className="h-3.5 w-3.5 text-[#9AB0AD]" />
+                      <ChevronRight className="h-3.5 w-3.5 tk-text-ink2" />
                     </div>
                   </button>
                 ))}

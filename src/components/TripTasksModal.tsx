@@ -219,16 +219,16 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="trip-tasks-modal-title"
-      className="fixed inset-0 z-50 bg-[#082220]/55 backdrop-blur-xs p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
+        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
       >
         {/* Mobile Sheet Grab Handle */}
         <div
           aria-hidden="true"
-          className="w-10 h-1.5 rounded-full bg-[#DCE8E5] mx-auto mt-2.5 sm:hidden shrink-0"
+          className="w-10 h-1.5 rounded-full tk-bg-forest-plate mx-auto mt-2.5 sm:hidden shrink-0"
         />
 
         {/* 1. Minimalist Packy-Style Single-Row Header */}
@@ -236,11 +236,11 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
           <div className="flex items-center gap-2 min-w-0">
             <h2
               id="trip-tasks-modal-title"
-              className="text-base sm:text-lg font-extrabold tracking-tight text-[#152B29] truncate"
+              className="text-base sm:text-lg font-extrabold tracking-tight tk-text-ink truncate"
             >
               {copy.modalTitle}
             </h2>
-            <span className="text-xs font-semibold text-[#076E6A] tabular-nums whitespace-nowrap">
+            <span className="text-xs font-semibold tk-text-forest tabular-nums whitespace-nowrap">
               {copy.doneProgress(doneCount, scopedTasks.length)}
             </span>
           </div>
@@ -249,7 +249,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label={t('common.close')}
-            className="min-h-[44px] min-w-[44px] -mr-2 flex items-center justify-center rounded-full text-[#3F5855] hover:bg-[#F2F6F5] hover:text-[#152B29] transition-colors cursor-pointer shrink-0"
+            className="min-h-[44px] min-w-[44px] -mr-2 flex items-center justify-center rounded-full tk-text-ink hover:tk-bg-paper hover:tk-text-ink transition-colors cursor-pointer shrink-0"
           >
             <X className="h-5 w-5" />
           </button>
@@ -259,7 +259,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
         <div className="px-5 pb-3 bg-white shrink-0">
           <div
             role="tablist"
-            className="grid grid-cols-3 gap-1 rounded-2xl bg-[#F2F5F4] p-1"
+            className="grid grid-cols-3 gap-1 rounded-2xl tk-bg-forest-plate p-1"
           >
             {(
               [
@@ -290,15 +290,15 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                   aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
                   className={`min-h-[50px] rounded-xl px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                    isActive
-                      ? 'bg-white text-[#152B29] shadow-xs font-bold'
-                      : 'text-[#59726F] hover:text-[#152B29] font-medium'
-                  }`}
+ isActive
+ ? 'bg-white tk-text-ink shadow-xs font-bold'
+ : 'tk-text-ink2 hover:tk-text-ink font-medium'
+ }`}
                 >
                   <Icon
                     className={`h-4 w-4 ${
-                      isActive ? 'text-[#093B35]' : 'text-[#6C8481]'
-                    }`}
+ isActive ? 'tk-text-forest' : 'tk-text-ink2'
+ }`}
                   />
                   <span className="text-[11px] sm:text-xs leading-none truncate max-w-full tabular-nums">
                     {tab.label}
@@ -343,10 +343,10 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       data-chip-active={isActive ? 'true' : undefined}
                       onClick={() => setStatusFilter(pill.id)}
                       className={`min-h-[36px] px-4 py-1.5 rounded-full text-xs font-bold tabular-nums whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                        isActive
-                          ? 'bg-[#093B35] text-white'
-                          : 'border border-[#DCE8E5] bg-white text-[#233B38] hover:bg-[#F3F8F7]'
-                      }`}
+ isActive
+ ? 'tk-bg-forest text-white'
+ : 'border tk-bc-hair bg-white tk-text-forest hover:tk-bg-forest-tint'
+ }`}
                     >
                       {pill.label}
                     </button>
@@ -355,8 +355,8 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
               </HorizontalChipScroller>
 
               {visibleTasks.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-[#D5E4E1] bg-[#FAFDFC] px-4 py-8 text-center space-y-3">
-                  <p className="text-xs text-[#647B78]">
+                <div className="rounded-2xl border border-dashed tk-bc-hair tk-bg-card px-4 py-8 text-center space-y-3">
+                  <p className="text-xs tk-text-ink2">
                     {scopedTasks.length === 0
                       ? t('tasks.emptyAll')
                       : statusFilter === 'todo'
@@ -367,14 +367,14 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveTab('templates')}
-                      className="rounded-xl bg-[#093B35] px-3.5 py-2 text-xs font-bold text-white cursor-pointer"
+                      className="rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold text-white cursor-pointer"
                     >
                       {copy.browseTemplatesBtn}
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveTab('add')}
-                      className="rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2 text-xs font-bold text-[#152B29] cursor-pointer"
+                      className="rounded-xl border tk-bc-hair bg-white px-3.5 py-2 text-xs font-bold tk-text-ink cursor-pointer"
                     >
                       + {t('tasks.addTaskBtn')}
                     </button>
@@ -392,19 +392,19 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       return (
                         <div
                           key={task.id}
-                          className="rounded-2xl border border-[#078C88] bg-[#F8FAF9] p-3.5 space-y-2.5"
+                          className="rounded-2xl border tk-bc-forest tk-bg-paper p-3.5 space-y-2.5"
                         >
                           <input
                             type="text"
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
-                            className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs font-semibold text-[#152B29]"
+                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-ink"
                           />
                           <div className="grid grid-cols-2 gap-2">
                             <select
                               value={editCategory}
                               onChange={(e) => setEditCategory(e.target.value as TripTaskCategory)}
-                              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#152B29]"
+                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-ink"
                             >
                               {TASK_CATEGORIES.map((cat) => (
                                 <option key={cat} value={cat}>
@@ -417,7 +417,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                               value={editTiming}
                               onChange={(e) => setEditTiming(e.target.value)}
                               placeholder={t('tasks.timingPlaceholder')}
-                              className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-1.5 text-xs text-[#152B29]"
+                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink"
                             />
                           </div>
                           <input
@@ -425,13 +425,13 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                             value={editNote}
                             onChange={(e) => setEditNote(e.target.value)}
                             placeholder={t('tasks.notePlaceholder')}
-                            className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-1.5 text-xs text-[#5B7370]"
+                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink2"
                           />
                           <div className="flex items-center justify-end gap-2">
                             <button
                               type="button"
                               onClick={() => setEditingId(null)}
-                              className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1 text-xs font-semibold text-[#5B7370] cursor-pointer"
+                              className="rounded-lg border tk-bc-hair bg-white px-3 py-1 text-xs font-semibold tk-text-ink2 cursor-pointer"
                             >
                               {t('common.cancel')}
                             </button>
@@ -447,7 +447,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                                 });
                                 setEditingId(null);
                               }}
-                              className="rounded-lg bg-[#093B35] px-3.5 py-1 text-xs font-semibold text-white cursor-pointer"
+                              className="rounded-lg tk-bg-forest px-3.5 py-1 text-xs font-semibold text-white cursor-pointer"
                             >
                               {t('common.save')}
                             </button>
@@ -459,7 +459,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     return (
                       <div
                         key={task.id}
-                        className="rounded-2xl border border-[#DCE8E5] bg-white overflow-hidden"
+                        className="rounded-2xl border tk-bc-hair bg-white overflow-hidden"
                       >
                         <div className="p-3.5 flex items-start justify-between gap-2.5">
                           <button
@@ -469,10 +469,10 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                           >
                             <span
                               className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors ${
-                                task.done
-                                  ? 'border-[#078C88] bg-[#078C88] text-white'
-                                  : 'border-[#B9CBC8] bg-white'
-                              }`}
+ task.done
+ ? 'tk-bc-forest tk-bg-forest text-white'
+ : 'tk-bc-hair bg-white'
+ }`}
                             >
                               {task.done && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
                             </span>
@@ -480,12 +480,12 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                             <div className="min-w-0 flex-1">
                               <div
                                 className={`text-sm font-bold leading-snug ${
-                                  task.done ? 'line-through text-[#8CA39F]' : 'text-[#152B29]'
-                                }`}
+ task.done ? 'line-through tk-text-ink2' : 'tk-text-ink'
+ }`}
                               >
                                 {translateDemoTaskTitle(task.title, activeLang)}
                               </div>
-                              <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-[#647B78]">
+                              <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs tk-text-ink2">
                                 <AccentIconBadge
                                   accent={iconMeta.accent}
                                   icon={iconMeta.Icon}
@@ -499,7 +499,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                                 </span>
                               </div>
                               {task.note && (
-                                <p className="mt-0.5 text-xs text-[#738A87] leading-relaxed">
+                                <p className="mt-0.5 text-xs tk-text-ink2 leading-relaxed">
                                   {translateDemoTaskNote(task.note, activeLang)}
                                 </p>
                               )}
@@ -515,8 +515,8 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                               >
                                 <span
                                   className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
-                                    HERO_AVATAR_BG[taskOwner.accent]
-                                  }`}
+ HERO_AVATAR_BG[taskOwner.accent]
+ }`}
                                 >
                                   {translateMemberInitials(taskOwner.initials, activeLang)}
                                 </span>
@@ -528,7 +528,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                               onClick={() =>
                                 setExpandedMenuId((prev) => (prev === task.id ? null : task.id))
                               }
-                              className="flex h-7 w-7 items-center justify-center rounded-lg text-[#8BA39F] hover:bg-[#F2F6F5] hover:text-[#152B29] cursor-pointer"
+                              className="flex h-7 w-7 items-center justify-center rounded-lg tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink cursor-pointer"
                             >
                               <MoreHorizontal className="h-4 w-4" />
                             </button>
@@ -536,7 +536,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                         </div>
 
                         {isMenuOpen && (
-                          <div className="border-t border-[#EDF3F1] bg-[#F8FAF9] px-3.5 py-2 flex items-center justify-end gap-2 text-xs">
+                          <div className="border-t tk-bc-hair tk-bg-paper px-3.5 py-2 flex items-center justify-end gap-2 text-xs">
                             <button
                               type="button"
                               onClick={() => {
@@ -547,9 +547,9 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                                 setEditNote(task.note ?? '');
                                 setExpandedMenuId(null);
                               }}
-                              className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-2.5 py-1 font-semibold text-[#152B29] cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1 font-semibold tk-text-ink cursor-pointer"
                             >
-                              <Pencil className="h-3 w-3 text-[#078C88]" />
+                              <Pencil className="h-3 w-3 tk-text-forest" />
                               {t('common.edit')}
                             </button>
                             <button
@@ -558,7 +558,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                                 onDeleteTask(task.id);
                                 setExpandedMenuId(null);
                               }}
-                              className="inline-flex items-center gap-1 rounded-lg border border-[#F2D5CC] bg-white px-2.5 py-1 font-semibold text-[#B95239] cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-danger-hair bg-white px-2.5 py-1 font-semibold tk-text-danger cursor-pointer"
                             >
                               <Trash2 className="h-3 w-3" />
                               {t('common.delete')}
@@ -585,7 +585,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                 return (
                   <div
                     key={tpl.label}
-                    className="rounded-2xl border border-[#DCE8E5] bg-white p-3.5 flex items-center justify-between gap-3"
+                    className="rounded-2xl border tk-bc-hair bg-white p-3.5 flex items-center justify-between gap-3"
                   >
                     <div className="flex items-start gap-3 min-w-0 flex-1">
                       <div className="mt-0.5 shrink-0">
@@ -596,13 +596,13 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-bold text-[#152B29] truncate">
+                        <div className="text-sm font-bold tk-text-ink truncate">
                           {tpl.title}
                         </div>
-                        <div className="mt-0.5 text-xs text-[#5B7370]">
+                        <div className="mt-0.5 text-xs tk-text-ink2">
                           {translateTaskCategory(tpl.category, activeLang)} · {tpl.timing}
                         </div>
-                        <p className="mt-0.5 text-xs text-[#738A87] truncate">{tpl.note}</p>
+                        <p className="mt-0.5 text-xs tk-text-ink2 truncate">{tpl.note}</p>
                       </div>
                     </div>
 
@@ -617,7 +617,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                             setManualNote(tpl.note);
                             setActiveTab('add');
                           }}
-                          className="px-2 py-1.5 text-xs font-semibold text-[#526B68] hover:text-[#152B29] whitespace-nowrap cursor-pointer"
+                          className="px-2 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
                         >
                           {copy.tweakBtn}
                         </button>
@@ -636,10 +636,10 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                           setAddedTemplateKeys((prev) => ({ ...prev, [tpl.label]: true }));
                         }}
                         className={`h-9 inline-flex items-center justify-center gap-1 rounded-xl px-3.5 text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                          isAdded
-                            ? 'bg-[#EFF9F8] text-[#078C88] border border-[#BEE5E2] cursor-default'
-                            : 'bg-[#093B35] text-white hover:bg-[#072B27]'
-                        }`}
+ isAdded
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-hair cursor-default'
+ : 'tk-bg-forest text-white hover:tk-bg-press'
+ }`}
                       >
                         {isAdded ? (
                           <>
@@ -671,17 +671,17 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                 }}
                 className="space-y-2"
               >
-                <label className="block text-xs font-bold text-[#3B5552]">
+                <label className="block text-xs font-bold tk-text-ink2">
                   {copy.voiceAddLabel}
                 </label>
-                <div className="flex items-center gap-2 rounded-2xl border border-[#DCE8E5] bg-[#F8FAF9] pl-3.5 pr-2 py-1.5 focus-within:border-[#078C88] focus-within:bg-white transition-colors">
-                  <Sparkles className="h-4 w-4 text-[#078C88] shrink-0" />
+                <div className="flex items-center gap-2 rounded-2xl border tk-bc-hair tk-bg-paper pl-3.5 pr-2 py-1.5 focus-within:tk-bc-forest focus-within:bg-white transition-colors">
+                  <Sparkles className="h-4 w-4 tk-text-forest shrink-0" />
                   <input
                     type="text"
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder={t('tasks.desktopPlaceholder')}
-                    className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm text-[#152B29] placeholder:text-[#889F9B] focus:outline-none"
+                    className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
                   />
                   <AiVoiceInputButton
                     iconOnly
@@ -698,7 +698,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                   <button
                     type="submit"
                     disabled={isParsingAi || !aiInput.trim()}
-                    className="h-8 inline-flex items-center justify-center gap-1 rounded-xl bg-[#078C88] px-3 text-xs font-bold text-white hover:bg-[#067572] disabled:opacity-40 whitespace-nowrap shrink-0 cursor-pointer"
+                    className="h-8 inline-flex items-center justify-center gap-1 rounded-xl tk-bg-forest px-3 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-40 whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {isParsingAi ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -707,13 +707,13 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     )}
                   </button>
                 </div>
-                {aiError && <p className="text-xs font-medium text-[#B96A39]">{aiError}</p>}
+                {aiError && <p className="text-xs font-medium tk-text-warning">{aiError}</p>}
               </form>
 
-              <div className="border-t border-[#EDF3F1] pt-3.5">
+              <div className="border-t tk-bc-hair pt-3.5">
                 <form onSubmit={handleManualSubmit} className="space-y-3">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-[#3B5552]">
+                    <label className="block text-xs font-bold tk-text-ink2">
                       {copy.manualDetailsLabel}
                     </label>
                     <input
@@ -721,7 +721,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       value={manualTitle}
                       onChange={(e) => setManualTitle(e.target.value)}
                       placeholder={t('tasks.taskNamePlaceholder')}
-                      className="w-full rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 py-2.5 text-sm font-semibold text-[#152B29] focus:border-[#078C88] focus:bg-white focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     />
                   </div>
 
@@ -729,7 +729,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     <select
                       value={manualCategory}
                       onChange={(e) => setManualCategory(e.target.value as TripTaskCategory)}
-                      className="rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs font-semibold text-[#152B29] focus:border-[#078C88] focus:bg-white focus:outline-none"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     >
                       {TASK_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
@@ -742,7 +742,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       value={manualTiming}
                       onChange={(e) => setManualTiming(e.target.value)}
                       placeholder={t('tasks.timingPlaceholder')}
-                      className="rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs text-[#152B29] focus:border-[#078C88] focus:bg-white focus:outline-none"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     />
                   </div>
 
@@ -751,12 +751,12 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     value={manualNote}
                     onChange={(e) => setManualNote(e.target.value)}
                     placeholder={t('tasks.notePlaceholder')}
-                    className="w-full rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 py-2 text-xs text-[#5B7370] focus:border-[#078C88] focus:bg-white focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-xs tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
                   />
 
                   {crew.length > 1 && (
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs text-[#647B78] mr-1">
+                      <span className="text-xs tk-text-ink2 mr-1">
                         {copy.assignToLabel}
                       </span>
                       {crew.map((m) => (
@@ -765,15 +765,15 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                           type="button"
                           onClick={() => setManualOwnerId(m.id)}
                           className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold cursor-pointer ${
-                            manualOwnerId === m.id
-                              ? 'border-[#093B35] bg-[#093B35] text-white'
-                              : 'border-[#DCE8E5] bg-white text-[#3B5552]'
-                          }`}
+ manualOwnerId === m.id
+ ? 'tk-bc-forest tk-bg-forest text-white'
+ : 'tk-bc-hair bg-white tk-text-ink2'
+ }`}
                         >
                           <span
                             className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold ${
-                              HERO_AVATAR_BG[m.accent]
-                            }`}
+ HERO_AVATAR_BG[m.accent]
+ }`}
                           >
                             {translateMemberInitials(m.initials, activeLang)}
                           </span>
@@ -784,8 +784,8 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                   )}
 
                   {addSuccess && (
-                    <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#076E6A]">
-                      <Check className="h-3.5 w-3.5 text-[#078C88] shrink-0" />
+                    <p className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-forest">
+                      <Check className="h-3.5 w-3.5 tk-text-forest shrink-0" />
                       <span>{addSuccess}</span>
                     </p>
                   )}
@@ -793,7 +793,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                   <button
                     type="submit"
                     disabled={!manualTitle.trim()}
-                    className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#093B35] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#072B27] disabled:opacity-40 transition-colors cursor-pointer"
+                    className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-2xl tk-bg-forest px-4 py-2.5 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
                   >
                     <Plus className="h-4 w-4" />
                     <span>{t('tasks.confirmAdd')}</span>

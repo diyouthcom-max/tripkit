@@ -392,14 +392,14 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
   return (
     <div className="space-y-3">
       {/* Zero-Scroll AI Voice & One-Sentence Smart Task Input Bar */}
-      <section className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-2.5">
+      <section className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-2.5">
         <form onSubmit={handleAiTaskFormSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
             type="text"
             value={aiTaskInput}
             onChange={(e) => setAiTaskInput(e.target.value)}
             placeholder={t('tasks.aiBarPlaceholder')}
-            className="flex-1 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 py-2 text-sm text-[#152B29] placeholder:text-[#889F9B] focus:border-[#0ABAB5] focus:bg-white focus:outline-none"
+            className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
           />
           <div className="flex items-center gap-2 shrink-0">
             <AiVoiceInputButton
@@ -412,7 +412,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
             <button
               type="submit"
               disabled={isAiParsingTask || !aiTaskInput.trim()}
-              className="flex-1 sm:flex-initial h-9 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#078C88] px-3.5 text-xs font-semibold text-white hover:bg-[#067572] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="flex-1 sm:flex-initial h-9 inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-3.5 text-xs font-semibold text-white hover:tk-bg-press disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {isAiParsingTask ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -425,40 +425,40 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
         </form>
 
         {lastVoiceText && !aiTaskError && (
-          <p className="text-xs text-[#5B7370]">
+          <p className="text-xs tk-text-ink2">
             {t('voice.heardPrefix')}
-            <span className="font-semibold text-[#152B29]">{lastVoiceText}</span>
+            <span className="font-semibold tk-text-ink">{lastVoiceText}</span>
           </p>
         )}
-        {aiTaskError && <p className="text-xs font-medium text-[#B96A39]">{aiTaskError}</p>}
+        {aiTaskError && <p className="text-xs font-medium tk-text-warning">{aiTaskError}</p>}
       </section>
 
       {/* Section Header */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
           <AccentIconBadge accent="teal" icon={ListTodo} size="xs" />
-          <h2 className="text-sm font-extrabold tracking-tight text-[#152B29]">
+          <h2 className="text-sm font-extrabold tracking-tight tk-text-ink">
             {t('tasks.workspaceTitle')}
           </h2>
         </div>
-        <span className="text-xs text-[#647B78]">{t('tasks.workspaceSwipeHint')}</span>
+        <span className="text-xs tk-text-ink2">{t('tasks.workspaceSwipeHint')}</span>
       </div>
 
       {/* Main Interactive Task List Card */}
-      <section className="rounded-2xl border border-[#DCE8E5] bg-white overflow-hidden">
+      <section className="rounded-2xl border tk-bc-hair bg-white overflow-hidden">
         {visibleTasks.length === 0 ? (
           <div className="px-5 py-8 text-center space-y-2">
-            <p className="text-sm font-bold text-[#152B29]">
+            <p className="text-sm font-bold tk-text-ink">
               {scopedTasks.length === 0
                 ? t('tasks.emptyAll')
                 : taskFilter === 'todo'
                 ? t('tasks.emptyTodo')
                 : t('tasks.emptyDone')}
             </p>
-            <p className="text-xs text-[#647B78]">{t('tasks.emptyHint')}</p>
+            <p className="text-xs tk-text-ink2">{t('tasks.emptyHint')}</p>
           </div>
         ) : (
-          <div className="divide-y divide-[#F1F6F5]">
+          <div className="divide-y tk-divide-hair">
             {visibleTasks.map((task) => {
               const taskOwner = memberLookup.get(task.ownerId || 'm1') || crew[0];
               const isMenuOpen = expandedTaskId === task.id;
@@ -477,7 +477,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
               return (
                 <div key={task.id} className="bg-white overflow-hidden">
                   {isEditing && editDraft ? (
-                    <div className="bg-[#F8FAF9] px-4 sm:px-5 py-3.5 space-y-2.5">
+                    <div className="tk-bg-paper px-4 sm:px-5 py-3.5 space-y-2.5">
                       <input
                         type="text"
                         value={editDraft.title}
@@ -485,7 +485,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                           setEditDraft({ ...editDraft, title: e.target.value })
                         }
                         placeholder={t('tasks.taskNamePlaceholder')}
-                        className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs font-semibold text-[#152B29]"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink"
                       />
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <select
@@ -496,7 +496,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                               category: e.target.value as TripTaskCategory,
                             })
                           }
-                          className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-2 text-xs font-semibold text-[#152B29]"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs font-semibold tk-text-ink"
                         >
                           {TASK_CATEGORIES.map((cat) => (
                             <option key={cat} value={cat}>
@@ -512,14 +512,14 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                             setEditDraft({ ...editDraft, timing: e.target.value })
                           }
                           placeholder={t('tasks.timingPlaceholder')}
-                          className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-2 text-xs text-[#152B29]"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs tk-text-ink"
                         />
                         <select
                           value={editDraft.ownerId}
                           onChange={(e) =>
                             setEditDraft({ ...editDraft, ownerId: e.target.value })
                           }
-                          className="rounded-xl border border-[#DCE8E5] bg-white px-2.5 py-2 text-xs font-semibold text-[#152B29]"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs font-semibold tk-text-ink"
                         >
                           {crew.map((m) => (
                             <option key={m.id} value={m.id}>
@@ -536,7 +536,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                           setEditDraft({ ...editDraft, note: e.target.value })
                         }
                         placeholder={t('tasks.notePlaceholder')}
-                        className="w-full rounded-xl border border-[#DCE8E5] bg-white px-3 py-2 text-xs text-[#5B7370]"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs tk-text-ink2"
                       />
                       <div className="flex items-center justify-end gap-2 pt-0.5 text-xs">
                         <button
@@ -545,14 +545,14 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                             setEditingTaskId(null);
                             setEditDraft(null);
                           }}
-                          className="rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 font-semibold text-[#5B7370] cursor-pointer"
+                          className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 font-semibold tk-text-ink2 cursor-pointer"
                         >
                           {t('common.cancel')}
                         </button>
                         <button
                           type="button"
                           onClick={() => saveEdit(task.id)}
-                          className="rounded-lg bg-[#078C88] px-3.5 py-1.5 font-semibold text-white cursor-pointer"
+                          className="rounded-lg tk-bg-forest px-3.5 py-1.5 font-semibold text-white cursor-pointer"
                         >
                           {t('common.saveChanges')}
                         </button>
@@ -568,24 +568,24 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                           >
                             <div
                               className={`flex items-center px-4 text-white text-xs font-semibold transition-opacity ${
-                                currentSwipeOffset > 0
-                                  ? 'bg-[#078C88] opacity-100'
-                                  : 'opacity-0'
-                              }`}
+ currentSwipeOffset > 0
+ ? 'tk-bg-forest opacity-100'
+ : 'opacity-0'
+ }`}
                             >
                               {task.done ? t('tasks.swipeTodo') : t('tasks.swipeDone')}
                             </div>
                             <div
                               className={`flex items-stretch transition-opacity ${
-                                currentSwipeOffset < 0
-                                  ? 'pointer-events-auto opacity-100'
-                                  : 'pointer-events-none opacity-0'
-                              }`}
+ currentSwipeOffset < 0
+ ? 'pointer-events-auto opacity-100'
+ : 'pointer-events-none opacity-0'
+ }`}
                             >
                               <button
                                 type="button"
                                 onClick={() => beginEdit(task)}
-                                className="w-14 bg-[#078C88] text-white text-xs font-semibold hover:bg-[#067572] whitespace-nowrap cursor-pointer"
+                                className="w-14 tk-bg-forest text-white text-xs font-semibold hover:tk-bg-press whitespace-nowrap cursor-pointer"
                               >
                                 {t('common.edit')}
                               </button>
@@ -595,7 +595,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                                   onDeleteTask(task.id);
                                   setSwipedTaskId(null);
                                 }}
-                                className="w-14 bg-[#C85A3F] text-white text-xs font-semibold hover:bg-[#AE4A31] whitespace-nowrap cursor-pointer"
+                                className="w-14 tk-bg-danger text-white text-xs font-semibold hover:tk-bg-danger whitespace-nowrap cursor-pointer"
                               >
                                 {t('common.delete')}
                               </button>
@@ -615,7 +615,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                                 ? 'none'
                                 : 'transform 200ms cubic-bezier(0.16, 1, 0.3, 1)',
                           }}
-                          className="relative z-10 bg-white px-4 sm:px-5 py-3.5 hover:bg-[#FAFDFC] transition-colors touch-pan-y"
+                          className="relative z-10 bg-white px-4 sm:px-5 py-3.5 hover:tk-bg-paper transition-colors touch-pan-y"
                         >
                           <div className="flex items-center gap-3">
                             <button
@@ -632,10 +632,10 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                             >
                               <span
                                 className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors ${
-                                  task.done
-                                    ? 'border-[#078C88] bg-[#078C88] text-white'
-                                    : 'border-[#B9CBC8] bg-white'
-                                }`}
+ task.done
+ ? 'tk-bc-forest tk-bg-forest text-white'
+ : 'tk-bc-hair bg-white'
+ }`}
                               >
                                 {task.done && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
                               </span>
@@ -644,16 +644,16 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                                 <div className="flex items-baseline gap-2 flex-wrap">
                                   <span
                                     className={`text-sm font-semibold ${
-                                      task.done
-                                        ? 'line-through text-[#8CA39F]'
-                                        : 'text-[#152B29]'
-                                    }`}
+ task.done
+ ? 'line-through tk-text-ink2'
+ : 'tk-text-ink'
+ }`}
                                   >
                                     {translateDemoTaskTitle(task.title, activeLang)}
                                   </span>
                                 </div>
 
-                                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-[#7D938F]">
+                                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs tk-text-ink2">
                                   <AccentIconBadge
                                     accent={taskIconMeta.accent}
                                     icon={taskIconMeta.Icon}
@@ -668,7 +668,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                                 </div>
 
                                 {task.note && (
-                                  <p className="mt-1 text-xs text-[#647B78] leading-relaxed">
+                                  <p className="mt-1 text-xs tk-text-ink2 leading-relaxed">
                                     {translateDemoTaskNote(task.note, activeLang)}
                                   </p>
                                 )}
@@ -688,10 +688,10 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                               >
                                 <span
                                   className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold ${
-                                    taskOwner
-                                      ? HERO_AVATAR_BG[taskOwner.accent]
-                                      : HERO_AVATAR_BG.peach
-                                  }`}
+ taskOwner
+ ? HERO_AVATAR_BG[taskOwner.accent]
+ : HERO_AVATAR_BG.peach
+ }`}
                                 >
                                   {translateMemberInitials(taskOwner?.initials ?? '我', activeLang)}
                                 </span>
@@ -707,10 +707,10 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                                 }}
                                 aria-label={task.title}
                                 className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors cursor-pointer ${
-                                  isMenuOpen
-                                    ? 'border-[#078C88] bg-[#EFF9F8] text-[#076E6A]'
-                                    : 'border-transparent text-[#8BA39F] hover:bg-[#F2F6F5] hover:text-[#152B29]'
-                                }`}
+ isMenuOpen
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'border-transparent tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink'
+ }`}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
                               </button>
@@ -720,13 +720,13 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                       </div>
 
                       {isMenuOpen && (
-                        <div className="border-t border-[#EDF3F1] bg-[#F8FAF9] px-4 sm:px-5 py-2.5 flex items-center justify-end gap-2 text-xs">
+                        <div className="border-t tk-bc-hair tk-bg-paper px-4 sm:px-5 py-2.5 flex items-center justify-end gap-2 text-xs">
                           <button
                             type="button"
                             onClick={() => beginEdit(task)}
-                            className="inline-flex items-center gap-1 rounded-lg border border-[#DCE8E5] bg-white px-3 py-1.5 font-semibold text-[#152B29] hover:border-[#0ABAB5] cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-3 py-1.5 font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer"
                           >
-                            <Pencil className="h-3 w-3 text-[#078C88]" />
+                            <Pencil className="h-3 w-3 tk-text-forest" />
                             {t('common.edit')}
                           </button>
                           <button
@@ -735,7 +735,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                               onDeleteTask(task.id);
                               setExpandedTaskId(null);
                             }}
-                            className="inline-flex items-center gap-1 rounded-lg border border-[#F2D5CC] bg-white px-3 py-1.5 font-semibold text-[#B95239] hover:bg-[#FDF3F0] cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-lg border tk-bc-danger-hair bg-white px-3 py-1.5 font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
                           >
                             <Trash2 className="h-3 w-3" />
                             {t('common.delete')}
@@ -752,14 +752,14 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
       </section>
 
       {/* Quick Presets & Fast Add Card (Right Under Thumb, Zero Deep Scroll) */}
-      <section className="rounded-2xl border border-[#DCE8E5] bg-white p-4 space-y-3">
+      <section className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="text-xs font-bold text-[#152B29]">{t('tasks.presetsTitle')}</span>
+          <span className="text-xs font-bold tk-text-ink">{t('tasks.presetsTitle')}</span>
           {!showCreateDrawer && (
             <button
               type="button"
               onClick={() => onChangeShowCreateDrawer(true)}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#078C88] hover:underline cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest hover:underline cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               {t('tasks.customAddBtn')}
@@ -773,7 +773,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
               key={preset.label}
               type="button"
               onClick={() => handlePresetTap(preset)}
-              className="min-h-[38px] rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-1.5 text-xs font-semibold text-[#152B29] hover:border-[#0ABAB5] hover:text-[#078C88] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="min-h-[38px] rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               + {preset.label}
             </button>
@@ -787,15 +787,15 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               onSubmit={handleQuickSubmit}
-              className="overflow-hidden border-t border-[#EDF3F1] pt-3 space-y-2.5"
+              className="overflow-hidden border-t tk-bc-hair pt-3 space-y-2.5"
             >
-              <div className="flex items-center justify-between text-xs font-bold text-[#152B29]">
+              <div className="flex items-center justify-between text-xs font-bold tk-text-ink">
                 <span>{t('tasks.manualTitle')}</span>
                 <button
                   type="button"
                   onClick={() => onChangeShowCreateDrawer(false)}
                   aria-label={t('common.close')}
-                  className="p-1 text-[#647B78] hover:text-[#152B29] cursor-pointer"
+                  className="p-1 tk-text-ink2 hover:tk-text-ink cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -807,7 +807,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                   value={quickTitle}
                   onChange={(e) => setQuickTitle(e.target.value)}
                   placeholder={t('tasks.taskNamePlaceholder')}
-                  className="flex-1 rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3.5 py-2.5 text-sm text-[#152B29] placeholder:text-[#889F9B] focus:border-[#0ABAB5] focus:bg-white focus:outline-none"
+                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
                 <AiVoiceInputButton
                   compact
@@ -822,7 +822,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as TripTaskCategory)}
-                  className="rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs font-semibold text-[#152B29]"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink"
                 >
                   {TASK_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -836,12 +836,12 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                   value={newTiming}
                   onChange={(e) => setNewTiming(e.target.value)}
                   placeholder={t('tasks.timingPlaceholder')}
-                  className="rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs text-[#152B29] focus:border-[#0ABAB5] focus:bg-white focus:outline-none"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
                 <select
                   value={newOwnerId}
                   onChange={(e) => setNewOwnerId(e.target.value)}
-                  className="rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs font-semibold text-[#152B29]"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink"
                 >
                   {crew.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -857,21 +857,21 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder={t('tasks.notePlaceholder')}
-                className="w-full rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] px-3 py-2 text-xs text-[#5B7370] placeholder:text-[#889F9B] focus:border-[#0ABAB5] focus:bg-white focus:outline-none"
+                className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink2 placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
               />
 
               <div className="flex items-center justify-end gap-2 pt-0.5">
                 <button
                   type="button"
                   onClick={() => onChangeShowCreateDrawer(false)}
-                  className="rounded-xl border border-[#DCE8E5] bg-white px-3.5 py-2 text-xs font-semibold text-[#5B7370] cursor-pointer"
+                  className="rounded-xl border tk-bc-hair bg-white px-3.5 py-2 text-xs font-semibold tk-text-ink2 cursor-pointer"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={!quickTitle.trim()}
-                  className="rounded-xl bg-[#078C88] px-4 py-2 text-xs font-semibold text-white hover:bg-[#067572] disabled:opacity-50 cursor-pointer"
+                  className="rounded-xl tk-bg-forest px-4 py-2 text-xs font-semibold text-white hover:tk-bg-press disabled:opacity-50 cursor-pointer"
                 >
                   {t('tasks.confirmAdd')}
                 </button>

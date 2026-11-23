@@ -434,12 +434,12 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
       return (
         <div
           title={livePreview || t('voice.listening')}
-          className="min-h-[60px] w-full rounded-2xl border border-[#E6B8AE] bg-[#FDF4F2] px-2 py-2 flex flex-col items-center justify-center gap-1.5 text-[#A1422C]"
+          className="min-h-[60px] w-full rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint px-2 py-2 flex flex-col items-center justify-center gap-1.5 tk-text-danger"
         >
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C85A3F] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C85A3F]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full tk-bg-danger opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 tk-bg-danger" />
             </span>
             <span className="font-num text-[11px] font-bold tabular-nums">{formattedDuration}</span>
           </div>
@@ -447,7 +447,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
             <button
               type="button"
               onClick={finishRecording}
-              className="inline-flex items-center gap-0.5 rounded-md bg-[#078C88] px-1.5 py-0.5 text-[10px] font-bold text-white hover:bg-[#067572] whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-0.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
             >
               <Square className="h-2 w-2 fill-current" />
               <span>{t('voice.doneBtn')}</span>
@@ -457,7 +457,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
               onClick={cancelRecording}
               title={t('voice.cancelTitle')}
               aria-label={t('voice.cancelTitle')}
-              className="flex h-5 w-5 items-center justify-center rounded-md text-[#8C5042] hover:bg-[#F8E2DC] cursor-pointer"
+              className="flex h-5 w-5 items-center justify-center rounded-md tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
             >
               <X className="h-3 w-3" />
             </button>
@@ -468,8 +468,8 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
 
     if (status === 'transcribing') {
       return (
-        <div className="min-h-[60px] w-full rounded-2xl border border-[#BEE5E2] bg-[#EFF9F8] px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 text-[#076E6A]">
-          <Loader2 className="h-4 w-4 animate-spin text-[#078C88] shrink-0" />
+        <div className="min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-forest">
+          <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
           <span className="text-[11px] font-semibold whitespace-nowrap truncate max-w-full">
             {t('voice.transcribing')}
           </span>
@@ -484,9 +484,9 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
         onClick={() => void startRecording()}
         title={t('voice.tooltipSpeech')}
         aria-label={displayLabel}
-        className="min-h-[60px] w-full rounded-2xl border border-[#DCE8E5] bg-[#F8FAF9] hover:border-[#078C88] hover:bg-[#EFF9F8] disabled:opacity-50 px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 text-[#152B29] transition-colors cursor-pointer"
+        className="min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint disabled:opacity-50 px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors cursor-pointer"
       >
-        <Mic className="h-4 w-4 text-[#078C88] shrink-0" />
+        <Mic className="h-4 w-4 tk-text-forest shrink-0" />
         <span className="text-[11px] sm:text-xs font-semibold whitespace-nowrap truncate max-w-full">
           {displayLabel}
         </span>
@@ -498,24 +498,24 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
     return (
       <div
         title={livePreview || t('voice.listening')}
-        className={`inline-flex items-center gap-1.5 rounded-xl border border-[#E6B8AE] bg-[#FDF4F2] px-2.5 text-xs font-semibold text-[#A1422C] max-w-full shrink-0 ${
-          compact ? 'min-h-[32px] py-1' : 'min-h-[36px] py-1'
-        }`}
+        className={`inline-flex items-center gap-1.5 rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-2.5 text-xs font-semibold tk-text-danger max-w-full shrink-0 ${
+ compact ? 'min-h-[32px] py-1' : 'min-h-[36px] py-1'
+ }`}
       >
         <span className="relative flex h-2.5 w-2.5 shrink-0">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C85A3F] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C85A3F]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full tk-bg-danger opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 tk-bg-danger" />
         </span>
         <span className="font-num tabular-nums shrink-0">{formattedDuration}</span>
         {!compact && (
-          <span className="max-w-[120px] sm:max-w-[180px] truncate text-[#7A3524] font-medium">
+          <span className="max-w-[120px] sm:max-w-[180px] truncate tk-text-danger font-medium">
             {livePreview ? `“${livePreview}”` : t('voice.listening')}
           </span>
         )}
         <button
           type="button"
           onClick={finishRecording}
-          className="inline-flex items-center gap-1 rounded-lg bg-[#078C88] px-2 py-0.5 text-xs font-bold text-white hover:bg-[#067572] whitespace-nowrap shrink-0 cursor-pointer"
+          className="inline-flex items-center gap-1 rounded-lg tk-bg-forest px-2 py-0.5 text-xs font-bold text-white hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
         >
           <Square className="h-2.5 w-2.5 fill-current" />
           {t('voice.doneBtn')}
@@ -525,7 +525,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
           onClick={cancelRecording}
           title={t('voice.cancelTitle')}
           aria-label={t('voice.cancelTitle')}
-          className="flex h-6 w-6 items-center justify-center rounded-lg text-[#8C5042] hover:bg-[#F8E2DC] shrink-0 cursor-pointer"
+          className="flex h-6 w-6 items-center justify-center rounded-lg tk-text-danger hover:tk-bg-danger-tint shrink-0 cursor-pointer"
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -536,11 +536,11 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
   if (status === 'transcribing') {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 rounded-xl border border-[#BEE5E2] bg-[#EFF9F8] text-xs font-semibold text-[#076E6A] whitespace-nowrap shrink-0 ${
-          compact ? 'h-8 px-2.5' : 'h-9 px-3'
-        }`}
+        className={`inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-forest-tint text-xs font-semibold tk-text-forest whitespace-nowrap shrink-0 ${
+ compact ? 'h-8 px-2.5' : 'h-9 px-3'
+ }`}
       >
-        <Loader2 className="h-3.5 w-3.5 animate-spin text-[#078C88]" />
+        <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest" />
         {t('voice.transcribing')}
       </span>
     );
@@ -555,7 +555,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
       onClick={() => void startRecording()}
       title={t('voice.tooltipSpeech')}
       aria-label={displayLabel}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#CDEAE7] bg-[#EAF7F6] font-semibold text-[#076E6A] hover:border-[#078C88] hover:bg-[#DEF2F0] disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+      className={`inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-forest-tint font-semibold tk-text-forest hover:tk-bc-forest hover:tk-bg-warning-tint disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
         iconOnly
           ? 'h-8 w-8 p-0'
           : compact
@@ -567,7 +567,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
         className={
           useTkVoice
             ? 'tk-glyph shrink-0'
-            : 'h-3.5 w-3.5 text-[#078C88] shrink-0'
+            : 'h-3.5 w-3.5 tk-text-forest shrink-0'
         }
         strokeWidth={1.5}
       />

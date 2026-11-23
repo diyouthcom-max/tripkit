@@ -864,3 +864,234 @@ main:has(.tk-wizard-surface) { background: var(--tk-paper); }
 
 .hover\:tk-bg-forest:hover { background: var(--tk-forest); }
 .hover\:tk-bc-swatch-1:hover { border-color: var(--tk-swatch-1); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 5 批 A 段 · 全局壳 + Settings / GoMode / accentTheme
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+/* body / selection */
+.tk-body-surface {
+  background: var(--tk-paper);
+  color: var(--tk-ink);
+}
+.tk-selection-forest::selection,
+.tk-selection-forest *::selection {
+  background: color-mix(in srgb, var(--tk-forest) 20%, transparent);
+  color: var(--tk-forest);
+}
+
+/* accentTheme soft badges · 明度阶 1..4 */
+.tk-accent-av-1 { background: var(--tk-swatch-1); color: var(--tk-card); }
+.tk-accent-av-2 { background: var(--tk-ink); color: var(--tk-card); }
+.tk-accent-av-3 { background: var(--tk-swatch-3); color: var(--tk-card); }
+.tk-accent-av-4 { background: color-mix(in srgb, var(--tk-forest) 72%, var(--tk-ink)); color: var(--tk-card); }
+
+.tk-accent-text-1 { color: var(--tk-swatch-1); }
+.tk-accent-text-2 { color: var(--tk-forest); }
+.tk-accent-text-3 { color: var(--tk-swatch-3); }
+.tk-accent-text-4 { color: var(--tk-ink-2); }
+
+.tk-accent-dot-1 { background: var(--tk-swatch-1); }
+.tk-accent-dot-2 { background: var(--tk-swatch-2); }
+.tk-accent-dot-3 { background: var(--tk-swatch-3); }
+.tk-accent-dot-4 { background: var(--tk-swatch-4); }
+
+.tk-accent-soft-1 {
+  background: color-mix(in srgb, var(--tk-swatch-1) 10%, transparent);
+  color: var(--tk-swatch-1);
+}
+.tk-accent-soft-2 {
+  background: color-mix(in srgb, var(--tk-swatch-2) 35%, transparent);
+  color: var(--tk-forest);
+}
+.tk-accent-soft-3 {
+  background: color-mix(in srgb, var(--tk-swatch-3) 12%, transparent);
+  color: var(--tk-swatch-3);
+}
+.tk-accent-soft-4 {
+  background: color-mix(in srgb, var(--tk-swatch-4) 55%, transparent);
+  color: var(--tk-ink-2);
+}
+
+.tk-accent-badge-1 {
+  background: color-mix(in srgb, var(--tk-swatch-1) 10%, transparent);
+  color: var(--tk-swatch-1);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-1) 20%, transparent);
+}
+.tk-accent-badge-2 {
+  background: color-mix(in srgb, var(--tk-swatch-2) 35%, transparent);
+  color: var(--tk-forest);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-2) 55%, transparent);
+}
+.tk-accent-badge-3 {
+  background: color-mix(in srgb, var(--tk-swatch-3) 12%, transparent);
+  color: var(--tk-swatch-3);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-3) 22%, transparent);
+}
+.tk-accent-badge-4 {
+  background: color-mix(in srgb, var(--tk-swatch-4) 55%, transparent);
+  color: var(--tk-ink-2);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-4) 80%, transparent);
+}
+
+.tk-accent-interactive-1 {
+  background: color-mix(in srgb, var(--tk-swatch-1) 10%, transparent);
+  color: var(--tk-swatch-1);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-1) 20%, transparent);
+}
+.tk-accent-interactive-1:hover {
+  background: color-mix(in srgb, var(--tk-swatch-1) 15%, transparent);
+}
+.tk-accent-interactive-2 {
+  background: color-mix(in srgb, var(--tk-swatch-2) 35%, transparent);
+  color: var(--tk-forest);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-2) 55%, transparent);
+}
+.tk-accent-interactive-2:hover {
+  background: color-mix(in srgb, var(--tk-swatch-2) 48%, transparent);
+}
+.tk-accent-interactive-3 {
+  background: color-mix(in srgb, var(--tk-swatch-3) 12%, transparent);
+  color: var(--tk-swatch-3);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-3) 22%, transparent);
+}
+.tk-accent-interactive-3:hover {
+  background: color-mix(in srgb, var(--tk-swatch-3) 18%, transparent);
+}
+.tk-accent-interactive-4 {
+  background: color-mix(in srgb, var(--tk-swatch-4) 55%, transparent);
+  color: var(--tk-ink-2);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tk-swatch-4) 80%, transparent);
+}
+.tk-accent-interactive-4:hover {
+  background: color-mix(in srgb, var(--tk-swatch-4) 70%, transparent);
+}
+
+/* membership CTA gradients · 仅引用已有变量 */
+.tk-grad-membership-pro {
+  background: linear-gradient(
+    to right,
+    var(--tk-warning),
+    color-mix(in srgb, var(--tk-warning) 55%, var(--tk-forest)),
+    var(--tk-forest)
+  );
+}
+.tk-grad-membership-teal {
+  background: linear-gradient(
+    to right,
+    var(--tk-press),
+    var(--tk-forest),
+    var(--tk-swatch-1)
+  );
+}
+
+.tk-sheet-header {
+  background: color-mix(in srgb, var(--tk-paper) 95%, transparent);
+  border-color: var(--tk-hair-c);
+}
+
+.tk-ring-forest { --tw-ring-color: color-mix(in srgb, var(--tk-forest) 70%, transparent); }
+.tk-ring-ink { --tw-ring-color: var(--tk-ink); }
+
+.placeholder\:tk-text-ink2::placeholder { color: var(--tk-ink-2); }
+.focus\:tk-text-forest:focus { color: var(--tk-forest); }
+
+.hover\:tk-bc-danger:hover { border-color: var(--tk-danger); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   全站迁移 · 第 5 批 B 段 · 弹层 / 组件长尾
+   仅组合 §1 / §5 已有变量；不新增色值 / 阴影 / 圆角 / 字号 / 干邑位
+   ═══════════════════════════════════════════════════════════════ */
+
+.tk-grad-auth-hero {
+  background: linear-gradient(
+    to bottom right,
+    var(--tk-forest),
+    color-mix(in srgb, var(--tk-forest) 70%, var(--tk-swatch-1)),
+    var(--tk-swatch-1)
+  );
+}
+.tk-grad-auth-scrim {
+  background: linear-gradient(
+    to top,
+    var(--tk-forest),
+    color-mix(in srgb, var(--tk-forest) 45%, transparent),
+    color-mix(in srgb, var(--tk-forest) 25%, transparent)
+  );
+}
+.tk-grad-pro-hero {
+  background: linear-gradient(
+    to right,
+    var(--tk-press),
+    var(--tk-forest),
+    color-mix(in srgb, var(--tk-forest) 75%, var(--tk-ink))
+  );
+}
+.tk-grad-cover-scrim {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--tk-ink) 85%, transparent),
+    color-mix(in srgb, var(--tk-ink) 45%, transparent),
+    transparent
+  );
+}
+.tk-grad-cover-fade {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--tk-ink) 80%, transparent),
+    color-mix(in srgb, var(--tk-ink) 55%, transparent),
+    var(--tk-paper)
+  );
+}
+.tk-grad-wizard-paper {
+  background: linear-gradient(
+    to bottom,
+    var(--tk-paper),
+    color-mix(in srgb, var(--tk-paper) 96%, transparent),
+    transparent
+  );
+}
+
+.tk-bg-ink-soft {
+  background: color-mix(in srgb, var(--tk-ink) 45%, transparent);
+}
+.tk-bg-ink-strong {
+  background: color-mix(in srgb, var(--tk-ink) 92%, transparent);
+}
+.tk-bg-forest-12 {
+  background: color-mix(in srgb, var(--tk-forest) 12%, transparent);
+}
+.tk-bg-forest-40 {
+  background: color-mix(in srgb, var(--tk-forest) 40%, transparent);
+}
+.tk-bg-forest-50 {
+  background: color-mix(in srgb, var(--tk-forest) 50%, transparent);
+}
+.tk-bg-forest-55 {
+  background: color-mix(in srgb, var(--tk-forest) 55%, transparent);
+}
+.tk-bc-forest-35 {
+  border-color: color-mix(in srgb, var(--tk-forest) 35%, transparent);
+}
+.tk-bc-forest-50 {
+  border-color: color-mix(in srgb, var(--tk-forest) 50%, transparent);
+}
+.tk-ring-forest-35 {
+  --tw-ring-color: color-mix(in srgb, var(--tk-forest) 35%, transparent);
+}
+.tk-ring-forest-10 {
+  --tw-ring-color: color-mix(in srgb, var(--tk-forest) 10%, transparent);
+}
+
+.tk-elev-soft { box-shadow: var(--tk-sh-card); }
+.hover\:tk-elev-soft:hover { box-shadow: var(--tk-sh-card); }
+
+.disabled\:tk-bg-forest-plate:disabled { background: var(--tk-forest-plate); }
+.focus-within\:tk-bc-forest:focus-within { border-color: var(--tk-forest); }
+
+.focus-within\:tk-ring-forest-10:focus-within {
+  --tw-ring-color: color-mix(in srgb, var(--tk-forest) 10%, transparent);
+}

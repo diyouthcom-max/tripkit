@@ -14,8 +14,8 @@
   }
 
   body {
-    background-color: #F8FAF9;
-    color: #152B29;
+    background-color: var(--tk-paper);
+    color: var(--tk-ink);
   }
 }
 

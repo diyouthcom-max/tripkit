@@ -288,20 +288,20 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#082220]/55 backdrop-blur-xs p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-2xl max-h-[92vh] flex flex-col rounded-t-3xl sm:rounded-3xl border border-[#DCE8E5] bg-white shadow-2xl overflow-hidden"
+        className="w-full sm:max-w-2xl max-h-[92vh] flex flex-col rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sm:hidden w-10 h-1 rounded-full bg-[#DCE8E5] mx-auto mt-2.5 shrink-0" />
+        <div className="sm:hidden w-10 h-1 rounded-full tk-bg-forest-plate mx-auto mt-2.5 shrink-0" />
 
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-[#E8F0EE] shrink-0">
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b tk-bc-hair shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <Printer className="w-5 h-5 text-[#093B35] shrink-0" />
-            <h2 className="text-base font-bold text-[#152B29] truncate">
+            <Printer className="w-5 h-5 tk-text-forest shrink-0" />
+            <h2 className="text-base font-bold tk-text-ink truncate">
               {copy.modalTitle}
             </h2>
           </div>
@@ -309,23 +309,23 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
             type="button"
             onClick={onClose}
             aria-label={copy.closeAria}
-            className="h-9 w-9 inline-flex items-center justify-center rounded-xl text-[#5B7370] hover:bg-[#F2F7F6] hover:text-[#152B29] transition-colors cursor-pointer shrink-0"
+            className="h-9 w-9 inline-flex items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink transition-colors cursor-pointer shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Segmented Tabs */}
-        <div className="px-5 pt-3 pb-2 bg-[#FAFDFC] border-b border-[#E8F0EE] shrink-0">
-          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#EDF4F2]">
+        <div className="px-5 pt-3 pb-2 tk-bg-card border-b tk-bc-hair shrink-0">
+          <div className="grid grid-cols-2 gap-1 p-1 rounded-xl tk-bg-forest-tint">
             <button
               type="button"
               onClick={() => setActiveTab('checkout')}
               className={`h-9 rounded-lg text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                activeTab === 'checkout'
-                  ? 'bg-white text-[#152B29] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ activeTab === 'checkout'
+ ? 'bg-white tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
               {copy.tabCheckout}
             </button>
@@ -333,10 +333,10 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
               type="button"
               onClick={() => setActiveTab('orders')}
               className={`h-9 rounded-lg text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                activeTab === 'orders'
-                  ? 'bg-white text-[#152B29] shadow-xs'
-                  : 'text-[#5B7370] hover:text-[#152B29]'
-              }`}
+ activeTab === 'orders'
+ ? 'bg-white tk-text-ink shadow-xs'
+ : 'tk-text-ink2 hover:tk-text-ink'
+ }`}
             >
               {isAdmin ? copy.tabAdminOrders : copy.tabMyOrders}
             </button>
@@ -348,23 +348,23 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
           {activeTab === 'checkout' ? (
             createdOrder ? (
               <div className="space-y-4">
-                <div className="rounded-2xl border border-[#BCE5E2] bg-[#F2FAF9] p-4 space-y-2">
+                <div className="rounded-2xl border tk-bc-hair tk-bg-warning-tint p-4 space-y-2">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#093B35]">
-                      <Check className="w-4 h-4 text-[#078C88]" />
+                    <span className="inline-flex items-center gap-1.5 text-sm font-bold tk-text-forest">
+                      <Check className="w-4 h-4 tk-text-forest" />
                       {copy.orderCreatedTitle}
                     </span>
-                    <span className="font-mono text-xs font-bold text-[#078C88] tabular-nums">
+                    <span className="font-mono text-xs font-bold tk-text-forest tabular-nums">
                       {createdOrder.orderId}
                     </span>
                   </div>
-                  <p className="text-xs text-[#3B5552] leading-relaxed">
+                  <p className="text-xs tk-text-ink2 leading-relaxed">
                     {copy.orderCreatedSteps}
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-[#DCE8E5] p-4 space-y-2 text-xs text-[#3B5552]">
-                  <div className="font-bold text-sm text-[#152B29]">《{createdOrder.bookTitle}》</div>
+                <div className="rounded-2xl border tk-bc-hair p-4 space-y-2 text-xs tk-text-ink2">
+                  <div className="font-bold text-sm tk-text-ink">《{createdOrder.bookTitle}》</div>
                   <div>
                     {formatLabel} · {bindingLabel}
                   </div>
@@ -372,7 +372,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                     {createdOrder.pageCount}P · {createdOrder.photoCount}{' '}
                     {copy.photosUnit} · ×{createdOrder.copies}{' '}
                     {copy.copiesUnit} ·{' '}
-                    <strong className="text-[#093B35]">
+                    <strong className="tk-text-forest">
                       {pricing.currencySymbol}
                       {createdOrder.totalPrice} {createdOrder.currencyCode}
                     </strong>
@@ -384,7 +384,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                     type="button"
                     disabled={exportingPdf}
                     onClick={handleDownloadPrintPdf}
-                    className="w-full h-11 rounded-xl bg-[#093B35] hover:bg-[#0C4D45] text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                    className="w-full h-11 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
                   >
                     {exportingPdf ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -400,7 +400,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                     href={buildWhatsAppClaimUrl(buildOrderManifestText(createdOrder), language)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full h-11 rounded-xl bg-[#078C88] hover:bg-[#067572] text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
+                    className="w-full h-11 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>
@@ -412,9 +412,9 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                     <button
                       type="button"
                       onClick={() => void handleCopyManifest(createdOrder)}
-                      className="h-10 rounded-xl border border-[#DCE8E5] bg-white hover:bg-[#F6FAF9] text-xs font-semibold text-[#152B29] inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+                      className="h-10 rounded-xl border tk-bc-hair bg-white hover:tk-bg-paper text-xs font-semibold tk-text-ink inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
                     >
-                      <Copy className="w-3.5 h-3.5 text-[#078C88]" />
+                      <Copy className="w-3.5 h-3.5 tk-text-forest" />
                       <span>{copy.copyOrderBtn}</span>
                     </button>
                     <button
@@ -423,9 +423,9 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                         setCreatedOrder(null);
                         setActiveTab('orders');
                       }}
-                      className="h-10 rounded-xl border border-[#DCE8E5] bg-white hover:bg-[#F6FAF9] text-xs font-semibold text-[#152B29] inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+                      className="h-10 rounded-xl border tk-bc-hair bg-white hover:tk-bg-paper text-xs font-semibold tk-text-ink inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
                     >
-                      <Package className="w-3.5 h-3.5 text-[#078C88]" />
+                      <Package className="w-3.5 h-3.5 tk-text-forest" />
                       <span>{copy.viewOrderStatusBtn}</span>
                     </button>
                   </div>
@@ -434,26 +434,26 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
             ) : (
               <form onSubmit={handlePlaceOrder} className="space-y-5">
                 {/* Spec & Price Card */}
-                <div className="rounded-2xl border border-[#DCE8E5] bg-[#FAFDFC] p-4 space-y-3">
+                <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-sm font-bold text-[#152B29] truncate">
+                      <div className="text-sm font-bold tk-text-ink truncate">
                         《{draft.bookTitle}》
                       </div>
-                      <div className="mt-0.5 text-xs text-[#5B7370] truncate">
+                      <div className="mt-0.5 text-xs tk-text-ink2 truncate">
                         {selectedTripsSummary}
                       </div>
                     </div>
                     <div className="text-right shrink-0 tabular-nums">
-                      <div className="text-lg font-extrabold text-[#093B35]">
+                      <div className="text-lg font-extrabold tk-text-forest">
                         {pricing.currencySymbol}
                         {pricing.totalPrice}
                       </div>
-                      <div className="text-[11px] text-[#5B7370]">{pricing.currencyCode}</div>
+                      <div className="text-[11px] tk-text-ink2">{pricing.currencyCode}</div>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#E6F0EE] flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#3B5552]">
+                  <div className="pt-2 border-t tk-bc-hair flex flex-wrap items-center gap-x-2 gap-y-1 text-xs tk-text-ink2">
                     <span>{formatLabel}</span>
                     <span aria-hidden="true">·</span>
                     <span>{bindingLabel}</span>
@@ -465,12 +465,12 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                   </div>
 
                   {/* Copies Stepper */}
-                  <div className="pt-2 border-t border-[#E6F0EE] flex items-center justify-between gap-3">
-                    <div className="text-xs text-[#3B5552]">
-                      <span className="font-semibold text-[#152B29]">
+                  <div className="pt-2 border-t tk-bc-hair flex items-center justify-between gap-3">
+                    <div className="text-xs tk-text-ink2">
+                      <span className="font-semibold tk-text-ink">
                         {copy.printCopiesLabel}
                       </span>
-                      <span className="ml-2 text-[#078C88]">
+                      <span className="ml-2 tk-text-forest">
                         {copy.promoBulkLabel}
                       </span>
                     </div>
@@ -478,24 +478,24 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       <button
                         type="button"
                         onClick={() => setCopies((c) => Math.max(1, c - 1))}
-                        className="h-8 w-8 rounded-lg border border-[#DCE8E5] bg-white inline-flex items-center justify-center text-[#152B29] hover:bg-[#F2F7F6] cursor-pointer"
+                        className="h-8 w-8 rounded-lg border tk-bc-hair bg-white inline-flex items-center justify-center tk-text-ink hover:tk-bg-paper cursor-pointer"
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="w-7 text-center text-sm font-bold text-[#152B29] tabular-nums">
+                      <span className="w-7 text-center text-sm font-bold tk-text-ink tabular-nums">
                         {copies}
                       </span>
                       <button
                         type="button"
                         onClick={() => setCopies((c) => Math.min(20, c + 1))}
-                        className="h-8 w-8 rounded-lg border border-[#DCE8E5] bg-white inline-flex items-center justify-center text-[#152B29] hover:bg-[#F2F7F6] cursor-pointer"
+                        className="h-8 w-8 rounded-lg border tk-bc-hair bg-white inline-flex items-center justify-center tk-text-ink hover:tk-bg-paper cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="text-[11px] text-[#5B7370] flex flex-wrap items-center justify-between gap-2 tabular-nums">
+                  <div className="text-[11px] tk-text-ink2 flex flex-wrap items-center justify-between gap-2 tabular-nums">
                     <span>
                       {copy.unitLabel} {pricing.currencySymbol}
                       {pricing.unitSubtotal}
@@ -511,12 +511,12 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
 
                 {/* Shipping Form */}
                 <div className="space-y-3">
-                  <div className="text-xs font-bold text-[#152B29]">
+                  <div className="text-xs font-bold tk-text-ink">
                     {copy.deliveryInfoHeading}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-[#5B7370] mb-1">
+                      <label className="block text-xs font-medium tk-text-ink2 mb-1">
                         {copy.recipientLabel}
                       </label>
                       <input
@@ -526,11 +526,11 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                         value={recipientName}
                         onChange={(e) => setRecipientName(e.target.value)}
                         placeholder={copy.recipientPlaceholder}
-                        className="w-full h-10 rounded-xl border border-[#DCE8E5] px-3 text-sm text-[#152B29] focus:outline-none focus:border-[#078C88]"
+                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#5B7370] mb-1">
+                      <label className="block text-xs font-medium tk-text-ink2 mb-1">
                         {copy.phoneLabel}
                       </label>
                       <input
@@ -540,12 +540,12 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder={copy.phonePlaceholder}
-                        className="w-full h-10 rounded-xl border border-[#DCE8E5] px-3 text-sm text-[#152B29] tabular-nums focus:outline-none focus:border-[#078C88]"
+                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink tabular-nums focus:outline-none focus:tk-bc-forest"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#5B7370] mb-1">
+                    <label className="block text-xs font-medium tk-text-ink2 mb-1">
                       {copy.addressLabel}
                     </label>
                     <input
@@ -555,11 +555,11 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       value={shippingAddress}
                       onChange={(e) => setShippingAddress(e.target.value)}
                       placeholder={copy.addressPlaceholder}
-                      className="w-full h-10 rounded-xl border border-[#DCE8E5] px-3 text-sm text-[#152B29] focus:outline-none focus:border-[#078C88]"
+                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#5B7370] mb-1">
+                    <label className="block text-xs font-medium tk-text-ink2 mb-1">
                       {copy.noteLabel}
                     </label>
                     <input
@@ -568,20 +568,20 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       value={customerNote}
                       onChange={(e) => setCustomerNote(e.target.value)}
                       placeholder={copy.notePlaceholder}
-                      className="w-full h-10 rounded-xl border border-[#DCE8E5] px-3 text-sm text-[#152B29] focus:outline-none focus:border-[#078C88]"
+                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2 text-[11px] text-[#5B7370]">
-                  <ShieldCheck className="w-4 h-4 text-[#078C88] shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-[11px] tk-text-ink2">
+                  <ShieldCheck className="w-4 h-4 tk-text-forest shrink-0 mt-0.5" />
                   <span>
                     {copy.prepressGuarantee}
                   </span>
                 </div>
 
                 {submitError && (
-                  <div className="rounded-xl border border-[#F2C6C6] bg-[#FFF6F6] px-3.5 py-2.5 text-xs text-[#A63A3A]">
+                  <div className="rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-3.5 py-2.5 text-xs tk-text-danger">
                     {submitError}
                   </div>
                 )}
@@ -589,7 +589,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full h-11 rounded-xl bg-[#093B35] hover:bg-[#0C4D45] text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                  className="w-full h-11 rounded-xl tk-bg-forest hover:tk-bg-press text-white text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer whitespace-nowrap"
                 >
                   {submitting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -605,16 +605,16 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
           ) : (
             <div className="space-y-3">
               {loadingOrders ? (
-                <div className="py-10 flex items-center justify-center gap-2 text-xs text-[#5B7370]">
-                  <Loader2 className="w-4 h-4 animate-spin text-[#078C88]" />
+                <div className="py-10 flex items-center justify-center gap-2 text-xs tk-text-ink2">
+                  <Loader2 className="w-4 h-4 animate-spin tk-text-forest" />
                   <span>{copy.loadingOrders}</span>
                 </div>
               ) : orders.length === 0 ? (
                 <div className="py-10 text-center space-y-2">
-                  <p className="text-sm font-semibold text-[#152B29]">
+                  <p className="text-sm font-semibold tk-text-ink">
                     {copy.noOrdersTitle}
                   </p>
-                  <p className="text-xs text-[#5B7370]">
+                  <p className="text-xs tk-text-ink2">
                     {copy.noOrdersDesc}
                   </p>
                 </div>
@@ -626,26 +626,26 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                   return (
                     <div
                       key={ord.orderId}
-                      className="rounded-2xl border border-[#DCE8E5] p-4 space-y-2.5"
+                      className="rounded-2xl border tk-bc-hair p-4 space-y-2.5"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <div className="text-sm font-bold text-[#152B29] truncate">
+                          <div className="text-sm font-bold tk-text-ink truncate">
                             《{ord.bookTitle}》
                           </div>
-                          <div className="mt-0.5 text-xs text-[#5B7370] font-mono tabular-nums">
+                          <div className="mt-0.5 text-xs tk-text-ink2 font-mono tabular-nums">
                             {ord.orderId} · {ord.pageCount}P × {ord.copies} ·{' '}
                             {ord.totalPrice} {ord.currencyCode}
                           </div>
                         </div>
-                        <span className="text-xs font-bold text-[#078C88] whitespace-nowrap shrink-0">
+                        <span className="text-xs font-bold tk-text-forest whitespace-nowrap shrink-0">
                           {statusText}
                         </span>
                       </div>
 
                       {ord.trackingNumber && (
-                        <div className="flex items-center gap-1.5 text-xs text-[#152B29] tabular-nums">
-                          <Truck className="w-3.5 h-3.5 text-[#078C88]" />
+                        <div className="flex items-center gap-1.5 text-xs tk-text-ink tabular-nums">
+                          <Truck className="w-3.5 h-3.5 tk-text-forest" />
                           <span>
                             {copy.trackingPrefix}
                             {ord.trackingNumber}
@@ -654,13 +654,13 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       )}
 
                       {shipInfo && (
-                        <div className="rounded-xl bg-[#F7FAF9] p-3 text-xs text-[#3B5552] space-y-0.5">
-                          <div className="font-semibold text-[#152B29]">
+                        <div className="rounded-xl tk-bg-paper p-3 text-xs tk-text-ink2 space-y-0.5">
+                          <div className="font-semibold tk-text-ink">
                             {shipInfo.recipientName} · {shipInfo.phone}
                           </div>
                           <div>{shipInfo.shippingAddress}</div>
                           {shipInfo.customerNote && (
-                            <div className="text-[#5B7370]">{shipInfo.customerNote}</div>
+                            <div className="tk-text-ink2">{shipInfo.customerNote}</div>
                           )}
                         </div>
                       )}
@@ -670,7 +670,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                           <button
                             type="button"
                             onClick={() => void handleLoadOrderShipping(ord)}
-                            className="h-8 px-3 rounded-lg border border-[#DCE8E5] text-xs font-semibold text-[#3B5552] hover:bg-[#F2F7F6] cursor-pointer whitespace-nowrap"
+                            className="h-8 px-3 rounded-lg border tk-bc-hair text-xs font-semibold tk-text-ink2 hover:tk-bg-paper cursor-pointer whitespace-nowrap"
                           >
                             {copy.viewAddressBtn}
                           </button>
@@ -680,7 +680,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                           href={buildWhatsAppClaimUrl(buildOrderManifestText(ord), language)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="h-8 px-3 rounded-lg border border-[#DCE8E5] text-xs font-semibold text-[#078C88] hover:bg-[#F2FAF9] inline-flex items-center gap-1 whitespace-nowrap"
+                          className="h-8 px-3 rounded-lg border tk-bc-hair text-xs font-semibold tk-text-forest hover:tk-bg-warning-tint inline-flex items-center gap-1 whitespace-nowrap"
                         >
                           <ExternalLink className="w-3 h-3" />
                           <span>{copy.contactDeskBtn}</span>
@@ -691,7 +691,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                             type="button"
                             disabled={updatingOrderId === ord.orderId}
                             onClick={() => void handleCancelMyOrder(ord)}
-                            className="h-8 px-3 rounded-lg border border-[#DCE8E5] text-xs font-semibold text-[#7D938F] hover:text-[#A63A3A] cursor-pointer whitespace-nowrap"
+                            className="h-8 px-3 rounded-lg border tk-bc-hair text-xs font-semibold tk-text-ink2 hover:tk-text-danger cursor-pointer whitespace-nowrap"
                           >
                             {copy.cancelBtn}
                           </button>
@@ -700,7 +700,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
 
                       {/* Admin Fulfillment Bar */}
                       {isAdmin && (
-                        <div className="pt-2.5 border-t border-[#E8F0EE] space-y-2">
+                        <div className="pt-2.5 border-t tk-bc-hair space-y-2">
                           <div className="flex items-center gap-2">
                             <input
                               type="text"
@@ -712,13 +712,13 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                                 }))
                               }
                               placeholder={copy.trackingPlaceholder}
-                              className="flex-1 h-8 rounded-lg border border-[#DCE8E5] px-2.5 text-xs text-[#152B29]"
+                              className="flex-1 h-8 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
                             />
                             <button
                               type="button"
                               disabled={updatingOrderId === ord.orderId}
                               onClick={() => void handleAdminStatusChange(ord, 'shipped')}
-                              className="h-8 px-3 rounded-lg bg-[#093B35] text-white text-xs font-bold cursor-pointer whitespace-nowrap"
+                              className="h-8 px-3 rounded-lg tk-bg-forest text-white text-xs font-bold cursor-pointer whitespace-nowrap"
                             >
                               {copy.markShippedBtn}
                             </button>
@@ -732,10 +732,10 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                                   disabled={updatingOrderId === ord.orderId}
                                   onClick={() => void handleAdminStatusChange(ord, st)}
                                   className={`h-7 px-2.5 rounded-lg border text-[11px] font-semibold cursor-pointer whitespace-nowrap ${
-                                    ord.status === st
-                                      ? 'border-[#078C88] bg-[#EFF9F8] text-[#078C88]'
-                                      : 'border-[#DCE8E5] text-[#5B7370] hover:text-[#152B29]'
-                                  }`}
+ ord.status === st
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'tk-bc-hair tk-text-ink2 hover:tk-text-ink'
+ }`}
                                 >
                                   {copy.statusLabels[st]}
                                 </button>

@@ -104,18 +104,18 @@ export const ExpertAuditModal: React.FC<ExpertAuditModalProps> = ({ open, onClos
   const items = AUDIT_ITEMS[activeLang] || AUDIT_ITEMS['en-US']!;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#152B29]/45 backdrop-blur-xs p-4">
-      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-white border border-[#DCE8E5] shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#EDF3F1]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center tk-bg-ink-soft p-4">
+      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-white border tk-bc-hair shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b tk-bc-hair">
           <div>
-            <h2 className="text-base font-bold text-[#152B29]">
+            <h2 className="text-base font-bold tk-text-ink">
               {activeLang === 'zh-CN'
                 ? '长期旅行专家 × AI 产品优化对照'
                 : activeLang === 'en-GB'
                 ? 'Long-Haul Travel Specialist × AI Architecture Notes'
                 : 'Long-Term Travel Specialist × AI Architecture Notes'}
             </h2>
-            <p className="text-xs text-[#5B7370] mt-0.5">
+            <p className="text-xs tk-text-ink2 mt-0.5">
               {activeLang === 'zh-CN'
                 ? '针对原 HTML 原型中 5 处真实业务漏洞与 AI 交互的落地升级'
                 : '5 core workflow fixes & live multimodal upgrades across packing, routing, and expense splitting'}
@@ -125,24 +125,24 @@ export const ExpertAuditModal: React.FC<ExpertAuditModalProps> = ({ open, onClos
             type="button"
             onClick={onClose}
             aria-label={activeLang === 'zh-CN' ? '关闭' : 'Close'}
-            className="rounded-lg p-1.5 text-[#647B78] hover:bg-[#F2F6F5] cursor-pointer"
+            className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-paper cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto divide-y divide-[#EDF3F1] space-y-4">
+        <div className="p-6 overflow-y-auto divide-y tk-divide-hair space-y-4">
           {items.map((item) => (
             <div key={item.title} className="pt-4 first:pt-0 space-y-1.5">
-              <h3 className="text-sm font-bold text-[#078C88]">{item.title}</h3>
-              <p className="text-xs text-[#647B78]">
-                <strong className="text-[#B83B2E]">
+              <h3 className="text-sm font-bold tk-text-forest">{item.title}</h3>
+              <p className="text-xs tk-text-ink2">
+                <strong className="tk-text-danger">
                   {activeLang === 'zh-CN' ? '原版问题：' : 'Previous issue: '}
                 </strong>
                 {item.before}
               </p>
-              <p className="text-xs text-[#152B29] flex items-start gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#078C88] shrink-0 mt-0.5" />
+              <p className="text-xs tk-text-ink flex items-start gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 tk-text-forest shrink-0 mt-0.5" />
                 <span>
                   <strong>{activeLang === 'zh-CN' ? '已优化：' : 'Upgraded: '}</strong>
                   {item.after}

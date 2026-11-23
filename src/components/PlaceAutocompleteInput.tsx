@@ -488,7 +488,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
           className={`${className || ''} ${value ? 'pr-8' : ''}`}
         />
         {loading ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-[#078C88] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         ) : value ? (
           <button
             type="button"
@@ -501,7 +501,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
             }}
             title={acCopy.clearInput}
             aria-label={acCopy.clearInput}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full text-[#7C9390] hover:bg-[#EAF3F1] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -509,7 +509,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
       </div>
 
       {dropdownOpen && suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 z-30 mt-1 rounded-xl border border-[#DCE8E5] bg-white py-1 shadow-lg divide-y divide-[#F1F6F5]">
+        <ul className="absolute left-0 right-0 z-30 mt-1 rounded-xl border tk-bc-hair bg-white py-1 shadow-lg divide-y tk-divide-hair">
           {suggestions.map((suggestion, idx) => {
             const pred = suggestion.placePrediction;
             if (!pred) return null;
@@ -523,16 +523,16 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
                   onMouseEnter={() => setHighlightedIdx(idx)}
                   onClick={() => void handleSelectSuggestion(suggestion)}
                   className={`w-full px-3 py-2 text-left transition-colors flex items-start gap-2 cursor-pointer ${
-                    highlightedIdx === idx ? 'bg-[#EFF9F8]' : 'hover:bg-[#EFF9F8]'
-                  }`}
+ highlightedIdx === idx ? 'tk-bg-forest-tint' : 'hover:tk-bg-forest-tint'
+ }`}
                 >
-                  <MapPin className="h-3.5 w-3.5 text-[#078C88] shrink-0 mt-0.5" />
+                  <MapPin className="h-3.5 w-3.5 tk-text-forest shrink-0 mt-0.5" />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-xs font-bold text-[#152B29] truncate">
+                    <span className="block text-xs font-bold tk-text-ink truncate">
                       {mainLabel}
                     </span>
                     {subLabel && (
-                      <span className="block text-[11px] text-[#647B78] leading-snug">
+                      <span className="block text-[11px] tk-text-ink2 leading-snug">
                         {subLabel}
                       </span>
                     )}
@@ -545,8 +545,8 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
       )}
 
       {dropdownOpen && lookupError && isFocused && suggestions.length === 0 && (
-        <div className="absolute left-0 right-0 z-30 mt-1 rounded-xl border border-[#EADFA8] bg-[#FFFDF5] px-3 py-2 text-[11px] text-[#8E5B12] shadow-md flex items-start gap-1.5">
-          <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#D97E4A]" />
+        <div className="absolute left-0 right-0 z-30 mt-1 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-[11px] tk-text-warning shadow-md flex items-start gap-1.5">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 tk-text-warning" />
           <span>{lookupError}</span>
         </div>
       )}
@@ -613,7 +613,7 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
               onClick={() => props.onChange('')}
               title={acCopy.clearInput}
               aria-label={acCopy.clearInput}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full text-[#7C9390] hover:bg-[#EAF3F1] hover:text-[#152B29] transition-colors cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -622,9 +622,9 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
       )}
 
       {!apiKey && fallbackFocused && (
-        <div className="px-1 text-[11px] text-[#647B78] leading-snug">
+        <div className="px-1 text-[11px] tk-text-ink2 leading-snug">
           {acCopy.missingApiKeyBefore ? `${acCopy.missingApiKeyBefore} ` : ''}
-          <code className="font-mono text-[10px] bg-[#EEF4F3] px-1 py-0.5 rounded">
+          <code className="font-mono text-[10px] tk-bg-forest-plate px-1 py-0.5 rounded">
             VITE_GOOGLE_MAPS_API_KEY
           </code>{' '}
           {acCopy.missingApiKeyAfter}
@@ -637,7 +637,7 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
             href={lookupHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#078C88] hover:underline whitespace-nowrap"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest hover:underline whitespace-nowrap"
           >
             <ExternalLink className="h-3 w-3" />
             {acCopy.searchOnMaps(trimmed)}

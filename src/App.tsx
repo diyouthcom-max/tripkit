@@ -8252,14 +8252,14 @@ export default function App() {
         ) : (
           <>
             {firedScheduledBanner && (
-              <div className="mb-4 rounded-2xl border border-[#0ABAB5] bg-[#EFF9F8] px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+              <div className="mb-4 rounded-2xl border tk-bc-forest tk-bg-forest-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
                 <div className="flex items-start gap-3 min-w-0">
                   <AccentIconBadge accent="teal" icon={BellRing} size="md" />
                   <div className="min-w-0">
-                    <div className="text-xs font-bold text-[#076E6A]">
+                    <div className="text-xs font-bold tk-text-forest">
                       {firedScheduledBanner.title}
                     </div>
-                    <p className="mt-0.5 text-xs text-[#3B5552] line-clamp-2 sm:truncate">
+                    <p className="mt-0.5 text-xs tk-text-ink2 line-clamp-2 sm:truncate">
                       {firedScheduledBanner.body}
                     </p>
                   </div>
@@ -8277,7 +8277,7 @@ export default function App() {
                         setTab(firedScheduledBanner.targetTab);
                         setFiredScheduledBanner(null);
                       }}
-                      className="rounded-lg bg-[#078C88] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#067572] whitespace-nowrap cursor-pointer"
+                      className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-semibold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
                     >
                       {firedScheduledBanner.targetTab === 'itinerary'
                         ? appCopy.bannerViewStop
@@ -8287,14 +8287,14 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => handleSnoozeScheduledBanner(firedScheduledBanner, 15)}
-                    className="rounded-lg border border-[#C6E6E3] bg-white px-3 py-1.5 text-xs font-semibold text-[#076E6A] hover:bg-[#FAFDFC] whitespace-nowrap cursor-pointer"
+                    className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-card whitespace-nowrap cursor-pointer"
                   >
                     {appCopy.bannerSnooze15m}
                   </button>
                   <button
                     type="button"
                     onClick={() => setFiredScheduledBanner(null)}
-                    className="rounded-lg px-2 py-1.5 text-xs font-semibold text-[#5B7370] hover:text-[#152B29] whitespace-nowrap cursor-pointer"
+                    className="rounded-lg px-2 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
                   >
                     {t('header.gotIt')}
                   </button>
@@ -8305,15 +8305,15 @@ export default function App() {
             {tab === 'packing' &&
               preferences.workspaceBannerEnabled &&
               activeReminderBanner && (
-              <div className="mb-5 rounded-2xl border border-[#F2E2BA] bg-[#FFFBF2] px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mb-5 rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-start gap-3 min-w-0">
                   <AccentIconBadge accent="peach" icon={BellRing} size="md" />
                   <div className="min-w-0">
-                    <div className="text-xs font-bold text-[#7A4B16]">
+                    <div className="text-xs font-bold tk-text-warning">
                       {activeReminderBanner.headline}
                     </div>
                     {activeReminderBanner.items.length > 0 && (
-                      <p className="mt-0.5 text-xs text-[#8E622B] line-clamp-2 sm:truncate">
+                      <p className="mt-0.5 text-xs tk-text-warning line-clamp-2 sm:truncate">
                         {t('header.pendingPackPrefix')}
                         {activeReminderBanner.items.join(' · ')}
                       </p>
@@ -8324,7 +8324,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => handleSnoozeReminder(60)}
-                    className="rounded-lg border border-[#EAD4AE] bg-white px-3 py-1.5 text-xs font-semibold text-[#7A4B16] hover:bg-[#FFF5E6] whitespace-nowrap cursor-pointer"
+                    className="rounded-lg border tk-bc-warning-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-warning hover:tk-bg-warning-tint whitespace-nowrap cursor-pointer"
                   >
                     {t('header.snoozeOneHour')}
                   </button>
@@ -8334,7 +8334,7 @@ export default function App() {
                       setReminderDismissed(true);
                       setActiveReminderBanner(null);
                     }}
-                    className="rounded-lg px-2 py-1.5 text-xs font-semibold text-[#7A4B16] hover:underline whitespace-nowrap cursor-pointer"
+                    className="rounded-lg px-2 py-1.5 text-xs font-semibold tk-text-warning hover:underline whitespace-nowrap cursor-pointer"
                   >
                     {t('header.gotIt')}
                   </button>
@@ -8864,7 +8864,7 @@ export default function App() {
       />
 
       {toast && (
-        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 rounded-xl bg-[#152B29] px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
+        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 rounded-xl tk-bg-ink px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
           {toast}
         </div>
       )}

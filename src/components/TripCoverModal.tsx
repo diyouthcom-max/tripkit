@@ -199,28 +199,28 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-xs p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-ink/55 p-0 sm:p-4"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label={copy.dialogAria}
-        className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl bg-white text-[#152B29] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl bg-white tk-text-ink shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile grab handle */}
         <div className="sm:hidden pt-2.5 pb-1 flex justify-center">
-          <span className="h-1.5 w-10 rounded-full bg-[#D5E4E1]" />
+          <span className="h-1.5 w-10 rounded-full tk-bg-forest-plate" />
         </div>
 
         {/* Header */}
-        <div className="px-5 pt-3 sm:pt-4 pb-3 border-b border-[#E8F0EE] flex items-center justify-between gap-3">
+        <div className="px-5 pt-3 sm:pt-4 pb-3 border-b tk-bc-hair flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-extrabold tracking-tight text-[#152B29]">
+            <h2 className="text-base font-extrabold tracking-tight tk-text-ink">
               {copy.modalTitle}
             </h2>
-            <p className="text-xs text-[#647B78] mt-0.5">
+            <p className="text-xs tk-text-ink2 mt-0.5">
               {copy.modalSubtitle}
             </p>
           </div>
@@ -228,7 +228,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label={copy.closeAria}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#DCE8E5] bg-[#F8FAF9] text-[#5B7370] hover:text-[#152B29] transition-colors cursor-pointer shrink-0"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-text-ink transition-colors cursor-pointer shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
@@ -245,8 +245,8 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
               className={`relative h-40 sm:h-44 w-full rounded-2xl overflow-hidden select-none touch-none shadow-sm ring-1 ring-black/10 ${
-                draggingFocus ? 'cursor-grabbing' : 'cursor-grab'
-              }`}
+ draggingFocus ? 'cursor-grabbing' : 'cursor-grab'
+ }`}
             >
               <img
                 src={previewImgUrl}
@@ -261,12 +261,12 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
               {activeToneMeta.scrimExtraClass && (
                 <div className={`absolute inset-0 pointer-events-none ${activeToneMeta.scrimExtraClass}`} />
               )}
-              <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/40 to-transparent pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0B1918]/85 via-[#0B1918]/45 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 top-0 h-14 tk-grad-cover-scrim pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-24 tk-grad-cover-scrim pointer-events-none" />
 
               {/* Drag Hint Badge */}
-              <div className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/20 px-2.5 py-1 text-[11px] font-semibold text-white pointer-events-none">
-                <MoveVertical className="h-3 w-3 text-[#7CE7E3]" />
+              <div className="absolute top-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-xl tk-bg-overlay border border-white/20 px-2.5 py-1 text-[11px] font-semibold text-white pointer-events-none">
+                <MoveVertical className="h-3 w-3 tk-text-card" />
                 <span>
                   {draggingFocus
                     ? copy.framingPct(focusY)
@@ -279,7 +279,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                   type="button"
                   onPointerDown={(e) => e.stopPropagation()}
                   onClick={() => setFocusY(50)}
-                  className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-xl bg-black/40 hover:bg-black/55 backdrop-blur-md border border-white/20 px-2 py-1 text-[11px] font-semibold text-white cursor-pointer"
+                  className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-xl tk-bg-overlay hover:tk-bg-ink/55 border border-white/20 px-2 py-1 text-[11px] font-semibold text-white cursor-pointer"
                 >
                   <RotateCcw className="h-3 w-3" />
                   <span>{copy.centerBtn}</span>
@@ -312,17 +312,17 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
               disabled={uploading}
               onClick={() => fileInputRef.current?.click()}
               className={`flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
-                mode === 'custom' && draftCustomUrl
-                  ? 'border-[#078C88] bg-[#EFF9F8] text-[#078C88]'
-                  : 'border-[#CFE0DD] bg-[#F8FAF9] text-[#152B29] hover:border-[#078C88] hover:bg-[#F2FAF9]'
-              }`}
+ mode === 'custom' && draftCustomUrl
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-forest hover:tk-bg-warning-tint'
+ }`}
             >
               {uploading ? (
-                <Loader2 className="h-4 w-4 animate-spin text-[#078C88]" />
+                <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
               ) : draftCustomUrl ? (
-                <ImagePlus className="h-4 w-4 text-[#078C88]" />
+                <ImagePlus className="h-4 w-4 tk-text-forest" />
               ) : (
-                <Upload className="h-4 w-4 text-[#078C88]" />
+                <Upload className="h-4 w-4 tk-text-forest" />
               )}
               <span>
                 {uploading
@@ -339,7 +339,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setMode('custom')}
-                    className="min-h-[44px] rounded-2xl border border-[#DCE8E5] bg-white px-3 text-xs font-semibold text-[#152B29] hover:border-[#078C88] cursor-pointer shrink-0"
+                    className="min-h-[44px] rounded-2xl border tk-bc-hair bg-white px-3 text-xs font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer shrink-0"
                   >
                     {copy.useUploadedBtn}
                   </button>
@@ -348,7 +348,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                   type="button"
                   onClick={handleRemoveCustomPhoto}
                   title={copy.removeCustomTitle}
-                  className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-2xl border border-[#F0D6CF] bg-[#FDF6F4] text-[#B95239] hover:bg-[#FCEAE5] transition-colors cursor-pointer shrink-0"
+                  className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint tk-text-danger hover:tk-bg-danger-tint transition-colors cursor-pointer shrink-0"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -359,7 +359,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
           {/* Curated Destination Landscape Gallery */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#152B29]">
+              <span className="text-xs font-bold tk-text-ink">
                 {copy.landscapesHeading}
               </span>
               <button
@@ -372,10 +372,10 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                   setFocusY(autoMeta.defaultFocusY);
                 }}
                 className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold transition-colors cursor-pointer ${
-                  mode === 'auto'
-                    ? 'bg-[#EFF9F8] text-[#078C88]'
-                    : 'text-[#5B7370] hover:text-[#078C88]'
-                }`}
+ mode === 'auto'
+ ? 'tk-bg-forest-tint tk-text-forest'
+ : 'tk-text-ink2 hover:tk-text-forest'
+ }`}
               >
                 <Sparkles className="h-3 w-3" />
                 <span>{copy.autoMatchBtn}</span>
@@ -398,21 +398,21 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                       setFocusY(preset.defaultFocusY);
                     }}
                     className={`group relative rounded-xl overflow-hidden text-left transition-all cursor-pointer ring-2 ${
-                      isSelected
-                        ? 'ring-[#078C88] shadow-sm'
-                        : 'ring-transparent hover:ring-[#9ED8D5]'
-                    }`}
+ isSelected
+ ? 'tk-ring-forest shadow-sm'
+ : 'ring-transparent hover:tk-ring-forest'
+ }`}
                   >
-                    <div className="aspect-16/10 w-full overflow-hidden bg-[#E8F0EE]">
+                    <div className="aspect-16/10 w-full overflow-hidden tk-bg-forest-plate">
                       <img
                         src={preset.imageUrl}
                         alt={presetText.label}
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                    <div className="absolute inset-0 tk-grad-cover-scrim" />
                     {isSelected && (
-                      <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#078C88] text-white shadow-xs">
+                      <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full tk-bg-forest text-white shadow-xs">
                         <Check className="h-3 w-3" />
                       </span>
                     )}
@@ -432,7 +432,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
 
           {/* Tone & Contrast Mood Adjustment */}
           <div>
-            <div className="text-xs font-bold text-[#152B29] mb-2">
+            <div className="text-xs font-bold tk-text-ink mb-2">
               {copy.toneHeading}
             </div>
             <div className="grid grid-cols-5 gap-1.5">
@@ -444,10 +444,10 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
                     type="button"
                     onClick={() => setTone(tItem.id)}
                     className={`rounded-xl border py-2 px-1.5 text-[11px] font-semibold text-center transition-colors cursor-pointer truncate ${
-                      active
-                        ? 'border-[#078C88] bg-[#EFF9F8] text-[#078C88]'
-                        : 'border-[#E2ECE9] bg-[#F8FAF9] text-[#5B7370] hover:border-[#B6D6D3] hover:text-[#152B29]'
-                    }`}
+ active
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-hair hover:tk-text-ink'
+ }`}
                   >
                     {copy.tones[tItem.id]}
                   </button>
@@ -458,11 +458,11 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-5 py-3.5 border-t border-[#E8F0EE] bg-[#F9FBFB] flex items-center justify-end gap-2.5">
+        <div className="px-5 py-3.5 border-t tk-bc-hair tk-bg-paper flex items-center justify-end gap-2.5">
           <button
             type="button"
             onClick={onClose}
-            className="h-10 rounded-xl border border-[#DCE8E5] bg-white px-4 text-xs font-semibold text-[#5B7370] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="h-10 rounded-xl border tk-bc-hair bg-white px-4 text-xs font-semibold tk-text-ink2 hover:tk-text-ink transition-colors cursor-pointer"
           >
             {copy.cancelBtn}
           </button>
@@ -470,7 +470,7 @@ export const TripCoverModal: React.FC<TripCoverModalProps> = ({
             type="button"
             disabled={saving}
             onClick={handleSave}
-            className="h-10 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#152B29] hover:bg-[#078C88] px-5 text-xs font-bold text-white transition-colors disabled:opacity-50 cursor-pointer"
+            className="h-10 inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-ink hover:tk-bg-forest px-5 text-xs font-bold text-white transition-colors disabled:opacity-50 cursor-pointer"
           >
             {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             <span>{copy.applyCoverBtn}</span>

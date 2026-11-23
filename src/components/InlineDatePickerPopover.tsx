@@ -159,11 +159,11 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
     <div
       role="dialog"
       aria-label={draftStart ? pickEndLabel : pickStartLabel}
-      className="mt-3 rounded-2xl border border-[#E5E0D8] bg-[#FCFBF9] p-3.5 shadow-[0_12px_28px_-12px_rgba(15,35,33,0.16)] space-y-2.5"
+      className="mt-3 rounded-2xl border tk-bc-hair tk-bg-card p-3.5 tk-elev-card space-y-2.5"
     >
       {/* Calendar Header */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold text-[#078C88] truncate">
+        <span className="text-xs font-bold tk-text-forest truncate">
           {draftStart && !singleStartOnly ? pickEndLabel : pickStartLabel}
         </span>
         <div className="flex items-center gap-0.5 shrink-0">
@@ -171,18 +171,18 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
             type="button"
             onClick={handlePrevMonth}
             aria-label="Previous month"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#3B5552] hover:bg-[#ECE8E0] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-warning-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="min-w-[112px] text-center text-xs font-extrabold text-[#152B29] tabular-nums">
+          <span className="min-w-[112px] text-center text-xs font-extrabold tk-text-ink tabular-nums">
             {monthHeading}
           </span>
           <button
             type="button"
             onClick={handleNextMonth}
             aria-label="Next month"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#3B5552] hover:bg-[#ECE8E0] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-warning-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -190,7 +190,7 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
             type="button"
             onClick={onClose}
             aria-label="Close calendar"
-            className="ml-0.5 inline-flex h-8 w-8 items-center justify-center rounded-full text-[#647B78] hover:bg-[#ECE8E0] hover:text-[#152B29] transition-colors cursor-pointer"
+            className="ml-0.5 inline-flex h-8 w-8 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-warning-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -202,7 +202,7 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
         {weekdayLabels.map((lbl, idx) => (
           <div
             key={`${lbl}_${idx}`}
-            className="py-1 text-[11px] font-semibold text-[#7A8C88]"
+            className="py-1 text-[11px] font-semibold tk-text-ink2"
           >
             {lbl}
           </div>
@@ -234,16 +234,16 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
               disabled={isBeyondCap}
               onClick={() => handleDayClick(cell.iso)}
               className={`h-9 w-full rounded-xl text-xs font-num tabular-nums transition-colors flex items-center justify-center ${
-                isBeyondCap
-                  ? 'text-[#B8C4C1] opacity-40 cursor-not-allowed'
-                  : isStart || isEnd
-                  ? 'bg-[#078C88] font-bold text-white shadow-xs cursor-pointer'
-                  : isInRange
-                  ? 'bg-[#DFF4F1] font-semibold text-[#06625E] hover:bg-[#C9EAE6] cursor-pointer'
-                  : isToday
-                  ? 'bg-[#EFECE5] font-bold text-[#078C88] ring-1 ring-[#078C88]/35 hover:bg-[#DFF4F1] cursor-pointer'
-                  : 'text-[#1E3633] font-medium hover:bg-[#ECE8E0] cursor-pointer'
-              }`}
+ isBeyondCap
+ ? 'tk-text-ink2 opacity-40 cursor-not-allowed'
+ : isStart || isEnd
+ ? 'tk-bg-forest font-bold text-white shadow-xs cursor-pointer'
+ : isInRange
+ ? 'tk-bg-forest-tint font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer'
+ : isToday
+ ? 'tk-bg-paper font-bold tk-text-forest ring-1 tk-ring-forest-35 hover:tk-bg-forest-tint cursor-pointer'
+ : 'tk-text-forest font-medium hover:tk-bg-warning-tint cursor-pointer'
+ }`}
             >
               {cell.day}
             </button>

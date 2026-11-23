@@ -48,9 +48,9 @@ import type {
  * Used for solid avatars and as the core color DNA for 10%-opacity Lucide icon badges.
  */
 export const HERO_AVATAR_BG: Record<CrewMember['accent'], string> = {
-  peach: 'bg-[#D97E4A] text-white',
-  lavender: 'bg-[#7E63B8] text-white',
-  teal: 'bg-[#078C88] text-white',
+  peach: 'tk-accent-av-4 text-white',
+  lavender: 'tk-accent-av-2 text-white',
+  teal: 'tk-accent-av-1 text-white',
 };
 
 export type AccentKey =
@@ -75,73 +75,73 @@ export interface AccentToken {
 }
 
 /**
- * Dynamic accent color tokens anchored on `HERO_AVATAR_BG` (`#D97E4A`, `#7E63B8`, `#078C88`)
+ * Dynamic accent color tokens anchored on `HERO_AVATAR_BG` (swatch luminance steps)
  * plus extended category harmonies (`lemon`, `rose`, `mint`, `ocean`).
- * Uses 10% translucent backgrounds (`bg-[#HEX]/10` === `bg-opacity-10`) for layered hierarchy.
+ * Uses 10% translucent backgrounds (tk-accent-badge-N / tk-accent-soft-N) for layered hierarchy.
  */
 export const HERO_ACCENT_PALETTE: Record<AccentKey, AccentToken> = {
   peach: {
-    hex: '#D97E4A',
+    hex: 'var(--tk-swatch-4)',
     avatarClass: HERO_AVATAR_BG.peach,
-    badge10Class: 'bg-[#D97E4A]/10 text-[#B85E2B] ring-1 ring-inset ring-[#D97E4A]/20',
-    soft10Class: 'bg-[#D97E4A]/10 text-[#B85E2B]',
-    interactive10Class: 'bg-[#D97E4A]/10 text-[#B85E2B] ring-1 ring-inset ring-[#D97E4A]/20 hover:bg-[#D97E4A]/15',
-    textClass: 'text-[#B85E2B]',
-    dotClass: 'bg-[#D97E4A]',
+    badge10Class: 'tk-accent-badge-4',
+    soft10Class: 'tk-accent-soft-4',
+    interactive10Class: 'tk-accent-interactive-4',
+    textClass: 'tk-accent-text-4',
+    dotClass: 'tk-accent-dot-4',
   },
   lavender: {
-    hex: '#7E63B8',
+    hex: 'var(--tk-swatch-2)',
     avatarClass: HERO_AVATAR_BG.lavender,
-    badge10Class: 'bg-[#7E63B8]/10 text-[#6549A1] ring-1 ring-inset ring-[#7E63B8]/20',
-    soft10Class: 'bg-[#7E63B8]/10 text-[#6549A1]',
-    interactive10Class: 'bg-[#7E63B8]/10 text-[#6549A1] ring-1 ring-inset ring-[#7E63B8]/20 hover:bg-[#7E63B8]/15',
-    textClass: 'text-[#6549A1]',
-    dotClass: 'bg-[#7E63B8]',
+    badge10Class: 'tk-accent-badge-2',
+    soft10Class: 'tk-accent-soft-2',
+    interactive10Class: 'tk-accent-interactive-2',
+    textClass: 'tk-accent-text-2',
+    dotClass: 'tk-accent-dot-2',
   },
   teal: {
-    hex: '#078C88',
+    hex: 'var(--tk-swatch-1)',
     avatarClass: HERO_AVATAR_BG.teal,
-    badge10Class: 'bg-[#078C88]/10 text-[#067470] ring-1 ring-inset ring-[#078C88]/20',
-    soft10Class: 'bg-[#078C88]/10 text-[#067470]',
-    interactive10Class: 'bg-[#078C88]/10 text-[#067470] ring-1 ring-inset ring-[#078C88]/20 hover:bg-[#078C88]/15',
-    textClass: 'text-[#067470]',
-    dotClass: 'bg-[#078C88]',
+    badge10Class: 'tk-accent-badge-1',
+    soft10Class: 'tk-accent-soft-1',
+    interactive10Class: 'tk-accent-interactive-1',
+    textClass: 'tk-accent-text-1',
+    dotClass: 'tk-accent-dot-1',
   },
   lemon: {
-    hex: '#C99A26',
-    avatarClass: 'bg-[#C99A26] text-white',
-    badge10Class: 'bg-[#C99A26]/10 text-[#966E0E] ring-1 ring-inset ring-[#C99A26]/22',
-    soft10Class: 'bg-[#C99A26]/10 text-[#966E0E]',
-    interactive10Class: 'bg-[#C99A26]/10 text-[#966E0E] ring-1 ring-inset ring-[#C99A26]/22 hover:bg-[#C99A26]/15',
-    textClass: 'text-[#966E0E]',
-    dotClass: 'bg-[#C99A26]',
+    hex: 'var(--tk-swatch-3)',
+    avatarClass: 'tk-accent-av-3 text-white',
+    badge10Class: 'tk-accent-badge-3',
+    soft10Class: 'tk-accent-soft-3',
+    interactive10Class: 'tk-accent-interactive-3',
+    textClass: 'tk-accent-text-3',
+    dotClass: 'tk-accent-dot-3',
   },
   rose: {
-    hex: '#C9637B',
-    avatarClass: 'bg-[#C9637B] text-white',
-    badge10Class: 'bg-[#C9637B]/10 text-[#A8445C] ring-1 ring-inset ring-[#C9637B]/20',
-    soft10Class: 'bg-[#C9637B]/10 text-[#A8445C]',
-    interactive10Class: 'bg-[#C9637B]/10 text-[#A8445C] ring-1 ring-inset ring-[#C9637B]/20 hover:bg-[#C9637B]/15',
-    textClass: 'text-[#A8445C]',
-    dotClass: 'bg-[#C9637B]',
+    hex: 'var(--tk-swatch-3)',
+    avatarClass: 'tk-accent-av-3 text-white',
+    badge10Class: 'tk-accent-badge-3',
+    soft10Class: 'tk-accent-soft-3',
+    interactive10Class: 'tk-accent-interactive-3',
+    textClass: 'tk-accent-text-3',
+    dotClass: 'tk-accent-dot-3',
   },
   mint: {
-    hex: '#2E8B6E',
-    avatarClass: 'bg-[#2E8B6E] text-white',
-    badge10Class: 'bg-[#2E8B6E]/10 text-[#216E55] ring-1 ring-inset ring-[#2E8B6E]/20',
-    soft10Class: 'bg-[#2E8B6E]/10 text-[#216E55]',
-    interactive10Class: 'bg-[#2E8B6E]/10 text-[#216E55] ring-1 ring-inset ring-[#2E8B6E]/20 hover:bg-[#2E8B6E]/15',
-    textClass: 'text-[#216E55]',
-    dotClass: 'bg-[#2E8B6E]',
+    hex: 'var(--tk-swatch-2)',
+    avatarClass: 'tk-accent-av-1 text-white',
+    badge10Class: 'tk-accent-badge-2',
+    soft10Class: 'tk-accent-soft-2',
+    interactive10Class: 'tk-accent-interactive-2',
+    textClass: 'tk-accent-text-2',
+    dotClass: 'tk-accent-dot-2',
   },
   ocean: {
-    hex: '#1D6FA5',
-    avatarClass: 'bg-[#1D6FA5] text-white',
-    badge10Class: 'bg-[#1D6FA5]/10 text-[#175B88] ring-1 ring-inset ring-[#1D6FA5]/20',
-    soft10Class: 'bg-[#1D6FA5]/10 text-[#175B88]',
-    interactive10Class: 'bg-[#1D6FA5]/10 text-[#175B88] ring-1 ring-inset ring-[#1D6FA5]/20 hover:bg-[#1D6FA5]/15',
-    textClass: 'text-[#175B88]',
-    dotClass: 'bg-[#1D6FA5]',
+    hex: 'var(--tk-swatch-1)',
+    avatarClass: 'tk-accent-av-2 text-white',
+    badge10Class: 'tk-accent-badge-1',
+    soft10Class: 'tk-accent-soft-1',
+    interactive10Class: 'tk-accent-interactive-1',
+    textClass: 'tk-accent-text-1',
+    dotClass: 'tk-accent-dot-1',
   },
 };
 
