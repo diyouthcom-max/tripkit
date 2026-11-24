@@ -53,6 +53,7 @@ import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getAddStopModalCopy } from '../i18n/packs/addStopModalPack';
 import { tkColor } from '../utils/tkColor';
 import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
+import { GooglePhotoCredit } from './GooglePhotoCredit';
 
 interface AddStopModalProps {
   open: boolean;
@@ -103,6 +104,7 @@ export interface CandidateStopItem {
   userRatingCount?: number;
   photoUri?: string;
   photoAuthor?: string;
+  photoAuthorUri?: string;
   wishlistSourceItem?: string;
 }
 
@@ -221,11 +223,13 @@ function mapGooglePlaceToCandidate(
   const typeSpec = STOP_TYPE_DEFAULTS.find((s) => s.id === stopType) || STOP_TYPE_DEFAULTS[0];
   let photoUri: string | undefined;
   let photoAuthor: string | undefined;
+  let photoAuthorUri: string | undefined;
 
   if (Array.isArray(place.photos) && place.photos.length > 0) {
     try {
       photoUri = place.photos[0].getURI({ maxWidth: 320, maxHeight: 320 });
       photoAuthor = place.photos[0].authorAttributions?.[0]?.displayName || undefined;
+      photoAuthorUri = place.photos[0].authorAttributions?.[0]?.uri || undefined;
     } catch {
       // Ignore individual photo URI errors
     }
@@ -254,6 +258,7 @@ function mapGooglePlaceToCandidate(
     userRatingCount,
     photoUri,
     photoAuthor,
+    photoAuthorUri,
   };
 }
 
@@ -580,6 +585,7 @@ const PlacesDiscoveryBridge: React.FC<{
               userRatingCount: gp.userRatingCount,
               photoUri: gp.photoUri,
               photoAuthor: gp.photoAuthor,
+              photoAuthorUri: gp.photoAuthorUri,
             });
             continue;
           }
@@ -1863,6 +1869,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               </>
             ) : null}
           </div>
+
+          {item.photoUri && item.photoAuthor ? (
+            <GooglePhotoCredit
+              variant="inline"
+              displayName={item.photoAuthor}
+              uri={item.photoAuthorUri}
+            />
+          ) : null}
 
           <p className="text-xs tk-text-ink2 truncate">
             {item.reason || item.address}

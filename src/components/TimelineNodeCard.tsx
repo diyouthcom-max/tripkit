@@ -45,6 +45,7 @@ import {
 } from '../services/googlePlaceLiveStore';
 import { getItineraryUtilsCopy } from '../i18n/packs/itineraryUtilsPack';
 import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
+import { GooglePhotoCredit } from './GooglePhotoCredit';
 
 export interface QuickExpenseLogPayload {
   amountLocal: number;
@@ -821,55 +822,64 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
  } ${onOpenDetail ? 'cursor-pointer' : ''}`}
         >
           {/* Left Storefront Visual Thumbnail + Numbered Order Badge */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenDetail?.();
-            }}
-            title={nodeCopy.thumbTitle}
-            className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0 tk-bg-paper group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest"
-          >
-            {showThumbImage ? (
-              <img
-                src={thumbBlobUrl!}
-                alt={localizedTitle}
-                loading="lazy"
-                draggable={false}
-                onError={() => setThumbFailed(true)}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-              />
-            ) : (
-              <div className="h-full w-full tk-bg-forest flex flex-col items-center justify-center p-2 text-center">
-                {isPlaceLoading ? (
-                  <Loader2 className="h-5 w-5 animate-spin tk-text-card mb-1.5" />
-                ) : (
-                  <StopCategoryIcon className="h-6 w-6 tk-text-card mb-1.5" />
-                )}
-                <span className="text-[10px] font-semibold text-white/85 line-clamp-2 leading-tight">
-                  {getStopTypeLabel(node.stopType, activeLang) || displayDistrict}
-                </span>
-              </div>
-            )}
+          <div className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenDetail?.();
+              }}
+              title={nodeCopy.thumbTitle}
+              className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0 tk-bg-paper group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest"
+            >
+              {showThumbImage ? (
+                <img
+                  src={thumbBlobUrl!}
+                  alt={localizedTitle}
+                  loading="lazy"
+                  draggable={false}
+                  onError={() => setThumbFailed(true)}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                />
+              ) : (
+                <div className="h-full w-full tk-bg-forest flex flex-col items-center justify-center p-2 text-center">
+                  {isPlaceLoading ? (
+                    <Loader2 className="h-5 w-5 animate-spin tk-text-card mb-1.5" />
+                  ) : (
+                    <StopCategoryIcon className="h-6 w-6 tk-text-card mb-1.5" />
+                  )}
+                  <span className="text-[10px] font-semibold text-white/85 line-clamp-2 leading-tight">
+                    {getStopTypeLabel(node.stopType, activeLang) || displayDistrict}
+                  </span>
+                </div>
+              )}
 
-            {/* Subtle top scrim for crisp badge contrast */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-11 bg-gradient-to-b from-black/40 to-transparent" />
+              {/* Subtle top scrim for crisp badge contrast */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-11 bg-gradient-to-b from-black/40 to-transparent" />
 
-            {/* Top-left numbered order badge (Packy-inspired warm gold / visited teal) */}
-            <span
-              className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-num text-xs font-extrabold tk-text-card ring-2 ring-white shadow-xs tabular-nums ${
+              {/* Top-left numbered order badge (Packy-inspired warm gold / visited teal) */}
+              <span
+                className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-num text-xs font-extrabold tk-text-card ring-2 ring-white shadow-xs tabular-nums ${
  isVisited ? 'tk-bg-forest' : 'tk-bg-warning'
  }`}
-            >
-              {index + 1}
-            </span>
-
-            {isVisited && (
-              <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold tk-text-card text-center truncate">
-                {nodeCopy.visitedBadge}
+              >
+                {index + 1}
               </span>
-            )}
-          </button>
+
+              {isVisited && (
+                <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold tk-text-card text-center truncate">
+                  {nodeCopy.visitedBadge}
+                </span>
+              )}
+            </button>
+            {showThumbImage && livePlace?.photoAttributions?.[0] ? (
+              <GooglePhotoCredit
+                variant="overlay"
+                displayName={livePlace.photoAttributions[0].displayName}
+                uri={livePlace.photoAttributions[0].uri}
+              />
+            ) : null}
+          </div>
 
           {/* Right Stop Content Column */}
           <div className="flex-1 min-w-0 flex flex-col justify-between">

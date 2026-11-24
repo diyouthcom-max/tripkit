@@ -68,6 +68,7 @@ import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getItineraryMapCopy } from '../i18n/packs/itineraryMapPack';
 import { tkColor } from '../utils/tkColor';
 import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
+import { GooglePhotoCredit } from './GooglePhotoCredit';
 
 function usePanelLang() {
   const { i18n } = useTranslation();
@@ -764,6 +765,8 @@ const StopAdvancedMarker: React.FC<{
   isSelected: boolean;
   stopType?: StopType;
   thumbPhotoUri?: string;
+  photoAuthor?: string;
+  photoAuthorUri?: string;
   compact?: boolean;
   onSelect: () => void;
   onOpenDetail?: () => void;
@@ -773,6 +776,8 @@ const StopAdvancedMarker: React.FC<{
   isSelected,
   stopType,
   thumbPhotoUri,
+  photoAuthor,
+  photoAuthorUri,
   compact = false,
   onSelect,
   onOpenDetail,
@@ -895,6 +900,17 @@ const StopAdvancedMarker: React.FC<{
               <div className="mt-0.5 truncate text-[10.5px] font-medium leading-tight tk-text-ink2">
                 {stop.address || stop.district}
               </div>
+              {thumbPhotoUri &&
+              thumbBlobUrl &&
+              !imgFailed &&
+              !thumbBlobFailed &&
+              photoAuthor ? (
+                <GooglePhotoCredit
+                  variant="inline"
+                  displayName={photoAuthor}
+                  uri={photoAuthorUri}
+                />
+              ) : null}
             </div>
 
             {onOpenDetail ? (
@@ -953,7 +969,15 @@ const EmbeddedDayRouteCanvas: React.FC<{
   ) => void;
   onRouteNoticeChange: (notice: string | null) => void;
   onLiveCoordsResolved?: (coords: Record<string, { lat: number; lng: number }>) => void;
-  stopMetaById: Record<string, { stopType?: StopType; thumbPhotoUri?: string }>;
+  stopMetaById: Record<
+    string,
+    {
+      stopType?: StopType;
+      thumbPhotoUri?: string;
+      photoAuthor?: string;
+      photoAuthorUri?: string;
+    }
+  >;
   dayStayAnchor?: Real2DHotelStayAnchor | null;
   onOpenStopDetail?: (nodeId: string) => void;
   onHoldMapAddPlace?: (coords: { lat: number; lng: number }) => void;
@@ -1511,6 +1535,8 @@ const EmbeddedDayRouteCanvas: React.FC<{
             isSelected={isSelected}
             stopType={meta?.stopType}
             thumbPhotoUri={meta?.thumbPhotoUri}
+            photoAuthor={meta?.photoAuthor}
+            photoAuthorUri={meta?.photoAuthorUri}
             compact={!isSelected}
             onSelect={() => setSelectedStopId(stop.id)}
             onOpenDetail={
@@ -1555,7 +1581,15 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   onLiveCoordsResolved?: (coords: Record<string, { lat: number; lng: number }>) => void;
   fallbackWaypoints: Real2DStopWaypoint[];
   fallbackPrevWaypoints: Real2DStopWaypoint[];
-  stopMetaById: Record<string, { stopType?: StopType; thumbPhotoUri?: string }>;
+  stopMetaById: Record<
+    string,
+    {
+      stopType?: StopType;
+      thumbPhotoUri?: string;
+      photoAuthor?: string;
+      photoAuthorUri?: string;
+    }
+  >;
   dayStayAnchor?: Real2DHotelStayAnchor | null;
   onOpenStopDetail?: (nodeId: string) => void;
   onHoldMapAddPlace?: (coords: { lat: number; lng: number }) => void;
@@ -2035,12 +2069,24 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
   }, [safeAllNodes, nodes]);
 
   const stopMetaById = useMemo(() => {
-    const out: Record<string, { stopType?: StopType; thumbPhotoUri?: string }> = {};
+    const out: Record<
+      string,
+      {
+        stopType?: StopType;
+        thumbPhotoUri?: string;
+        photoAuthor?: string;
+        photoAuthorUri?: string;
+      }
+    > = {};
     stops.forEach((s) => {
       const raw = nodeById[s.id];
+      const place = placesByNodeId?.[s.id];
+      const attr = place?.photoAttributions?.[0];
       out[s.id] = {
         stopType: raw?.stopType,
-        thumbPhotoUri: placesByNodeId?.[s.id]?.thumbPhotoUri,
+        thumbPhotoUri: place?.thumbPhotoUri,
+        photoAuthor: attr?.displayName,
+        photoAuthorUri: attr?.uri,
       };
     });
     return out;
