@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles,
@@ -145,8 +145,6 @@ import type {
   TripTaskCategory,
 } from './types';
 import { TripSetupWizard, type WizardMode } from './components/TripSetupWizard';
-import { TripBookModal } from './components/TripBookModal';
-import { TripCoverModal } from './components/TripCoverModal';
 import {
   deleteCustomTripCover,
   duplicateCustomTripCover,
@@ -158,27 +156,58 @@ import {
   resolveActiveCoverVisual,
 } from './utils/tripCoverHelpers';
 import { PackingView } from './components/PackingView';
-import { BudgetView } from './components/BudgetView';
 import type { BudgetLimitsUpdatePayload } from './components/BudgetPlannerModal';
-import {
-  ItineraryView,
-  type FullItineraryPlanOptions,
-  type FullItineraryPlanResult,
-  type SmartReorderItineraryResult,
+import type {
+  FullItineraryPlanOptions,
+  FullItineraryPlanResult,
+  SmartReorderItineraryResult,
 } from './components/ItineraryView';
-import { MyKitView } from './components/MyKitView';
 import { type QuickExpenseLogPayload } from './components/TimelineNodeCard';
-import { AiAssistantDrawer } from './components/AiAssistantDrawer';
-import { AuthModal, type AuthModalMode } from './components/AuthModal';
-import { ExpertAuditModal } from './components/ExpertAuditModal';
-import { CrewInviteModal } from './components/CrewInviteModal';
-import { SettingsModal, type SettingsFocusSection } from './components/SettingsModal';
-import { TripKitProModal } from './components/TripKitProModal';
-import {
-  PackingListWizardModal,
-  type PackingWizardSubmitPayload,
-} from './components/PackingListWizardModal';
-import { GoModeWalletModal } from './components/GoModeWalletModal';
+import type { AuthModalMode } from './components/AuthModal';
+import type { SettingsFocusSection } from './components/SettingsModal';
+import type { PackingWizardSubmitPayload } from './components/PackingListWizardModal';
+
+const BudgetView = React.lazy(() =>
+  import('./components/BudgetView').then((m) => ({ default: m.BudgetView }))
+);
+const ItineraryView = React.lazy(() =>
+  import('./components/ItineraryView').then((m) => ({ default: m.ItineraryView }))
+);
+const MyKitView = React.lazy(() =>
+  import('./components/MyKitView').then((m) => ({ default: m.MyKitView }))
+);
+const TripBookModal = React.lazy(() =>
+  import('./components/TripBookModal').then((m) => ({ default: m.TripBookModal }))
+);
+const TripCoverModal = React.lazy(() =>
+  import('./components/TripCoverModal').then((m) => ({ default: m.TripCoverModal }))
+);
+const AiAssistantDrawer = React.lazy(() =>
+  import('./components/AiAssistantDrawer').then((m) => ({ default: m.AiAssistantDrawer }))
+);
+const AuthModal = React.lazy(() =>
+  import('./components/AuthModal').then((m) => ({ default: m.AuthModal }))
+);
+const ExpertAuditModal = React.lazy(() =>
+  import('./components/ExpertAuditModal').then((m) => ({ default: m.ExpertAuditModal }))
+);
+const CrewInviteModal = React.lazy(() =>
+  import('./components/CrewInviteModal').then((m) => ({ default: m.CrewInviteModal }))
+);
+const SettingsModal = React.lazy(() =>
+  import('./components/SettingsModal').then((m) => ({ default: m.SettingsModal }))
+);
+const TripKitProModal = React.lazy(() =>
+  import('./components/TripKitProModal').then((m) => ({ default: m.TripKitProModal }))
+);
+const PackingListWizardModal = React.lazy(() =>
+  import('./components/PackingListWizardModal').then((m) => ({
+    default: m.PackingListWizardModal,
+  }))
+);
+const GoModeWalletModal = React.lazy(() =>
+  import('./components/GoModeWalletModal').then((m) => ({ default: m.GoModeWalletModal }))
+);
 import {
   buildSmartSeededPassesFromTrip,
   inferPassCategoryFromName,
@@ -7828,24 +7857,28 @@ export default function App() {
                 />
               </button>
 
-              <TripBookModal
-                open={tripMenuSource === 'mobile_sticky'}
-                anchorRef={mobileStickyMenuAnchorRef}
-                onClose={() => setTripMenuSource(null)}
-                trips={tripBook}
-                activeTripId={activeEntry.id}
-                language={preferences.language}
-                onSelectTrip={handleSelectTripFromBook}
-                onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
-                onOpenEditCurrentSetup={() => {
-                  setTripWizardError(null);
-                  setWizardOverlayMode('edit_current');
-                }}
-                onOpenCoverModal={() => setCoverModalOpen(true)}
-                onDuplicateTrip={handleDuplicateTripInBook}
-                onDeleteTrip={handleDeleteTripFromBook}
-                onAddDemoTrip={handleLoadOrAddDemoTrip}
-              />
+              {tripMenuSource === 'mobile_sticky' && (
+                <Suspense fallback={null}>
+                  <TripBookModal
+                    open
+                    anchorRef={mobileStickyMenuAnchorRef}
+                    onClose={() => setTripMenuSource(null)}
+                    trips={tripBook}
+                    activeTripId={activeEntry.id}
+                    language={preferences.language}
+                    onSelectTrip={handleSelectTripFromBook}
+                    onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
+                    onOpenEditCurrentSetup={() => {
+                      setTripWizardError(null);
+                      setWizardOverlayMode('edit_current');
+                    }}
+                    onOpenCoverModal={() => setCoverModalOpen(true)}
+                    onDuplicateTrip={handleDuplicateTripInBook}
+                    onDeleteTrip={handleDeleteTripFromBook}
+                    onAddDemoTrip={handleLoadOrAddDemoTrip}
+                  />
+                </Suspense>
+              )}
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
@@ -7976,24 +8009,28 @@ export default function App() {
                     </span>
                   </button>
 
-                  <TripBookModal
-                    open={tripMenuSource === 'hero'}
-                    anchorRef={tripMenuAnchorRef}
-                    onClose={() => setTripMenuSource(null)}
-                    trips={tripBook}
-                    activeTripId={activeEntry.id}
-                    language={preferences.language}
-                    onSelectTrip={handleSelectTripFromBook}
-                    onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
-                    onOpenEditCurrentSetup={() => {
-                      setTripWizardError(null);
-                      setWizardOverlayMode('edit_current');
-                    }}
-                    onOpenCoverModal={() => setCoverModalOpen(true)}
-                    onDuplicateTrip={handleDuplicateTripInBook}
-                    onDeleteTrip={handleDeleteTripFromBook}
-                    onAddDemoTrip={handleLoadOrAddDemoTrip}
-                  />
+                  {tripMenuSource === 'hero' && (
+                    <Suspense fallback={null}>
+                      <TripBookModal
+                        open
+                        anchorRef={tripMenuAnchorRef}
+                        onClose={() => setTripMenuSource(null)}
+                        trips={tripBook}
+                        activeTripId={activeEntry.id}
+                        language={preferences.language}
+                        onSelectTrip={handleSelectTripFromBook}
+                        onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
+                        onOpenEditCurrentSetup={() => {
+                          setTripWizardError(null);
+                          setWizardOverlayMode('edit_current');
+                        }}
+                        onOpenCoverModal={() => setCoverModalOpen(true)}
+                        onDuplicateTrip={handleDuplicateTripInBook}
+                        onDeleteTrip={handleDeleteTripFromBook}
+                        onAddDemoTrip={handleLoadOrAddDemoTrip}
+                      />
+                    </Suspense>
+                  )}
                 </div>
 
                 {/* Clean 1-Line Travel Context (No Pro Badge, No VAT Exit Prompt) */}
@@ -8081,24 +8118,28 @@ export default function App() {
                       />
                     </button>
 
-                    <TripBookModal
-                      open={tripMenuSource === 'desktop_sticky'}
-                      anchorRef={desktopStickyMenuAnchorRef}
-                      onClose={() => setTripMenuSource(null)}
-                      trips={tripBook}
-                      activeTripId={activeEntry.id}
-                      language={preferences.language}
-                      onSelectTrip={handleSelectTripFromBook}
-                      onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
-                      onOpenEditCurrentSetup={() => {
-                        setTripWizardError(null);
-                        setWizardOverlayMode('edit_current');
-                      }}
-                      onOpenCoverModal={() => setCoverModalOpen(true)}
-                      onDuplicateTrip={handleDuplicateTripInBook}
-                      onDeleteTrip={handleDeleteTripFromBook}
-                      onAddDemoTrip={handleLoadOrAddDemoTrip}
-                    />
+                    {tripMenuSource === 'desktop_sticky' && (
+                      <Suspense fallback={null}>
+                        <TripBookModal
+                          open
+                          anchorRef={desktopStickyMenuAnchorRef}
+                          onClose={() => setTripMenuSource(null)}
+                          trips={tripBook}
+                          activeTripId={activeEntry.id}
+                          language={preferences.language}
+                          onSelectTrip={handleSelectTripFromBook}
+                          onOpenCreateNewWizard={handleRequestOpenCreateWizardFromBook}
+                          onOpenEditCurrentSetup={() => {
+                            setTripWizardError(null);
+                            setWizardOverlayMode('edit_current');
+                          }}
+                          onOpenCoverModal={() => setCoverModalOpen(true)}
+                          onDuplicateTrip={handleDuplicateTripInBook}
+                          onDeleteTrip={handleDeleteTripFromBook}
+                          onAddDemoTrip={handleLoadOrAddDemoTrip}
+                        />
+                      </Suspense>
+                    )}
                   </div>
                 )}
 
@@ -8432,35 +8473,37 @@ export default function App() {
               />
             )}
             {tab === 'budget' && (
-              <BudgetView
-                budget={trip.budget}
-                expenses={trip.expenses}
-                intel={trip.intel}
-                totalDays={trip.setup.days}
-                activeDay={activeFinanceDay}
-                cities={trip.setup.cities}
-                cityDays={trip.setup.cityDays}
-                timeline={trip.timeline}
-                travelersCount={activeTravelersCount}
-                companionName={activeCompanionName}
-                homeCurrency={preferences.homeCurrency}
-                settlementHistory={trip.settlementHistory ?? []}
-                onSelectDay={handleSelectFinanceDay}
-                onAddExpense={addExpenseAtomic}
-                onUpdateExpense={handleUpdateExpense}
-                onDeleteExpense={handleDeleteExpense}
-                onCycleVatStatus={handleCycleVatStatus}
-                onConvertExpenseToSplit={handleConvertToSplit}
-                onSettleUp={handleSettleUp}
-                onUpdateBudgetLimits={handleUpdateBudgetLimits}
-                onUpdateHomeCurrency={(code) => {
-                  handleUpdatePreferences({ homeCurrency: code });
-                  showToast(appCopy.displayCurrencySetToast(getHomeCurrencyLabel(code, activeLang)));
-                }}
-                onAdjustWalletBalance={handleAdjustWalletBalance}
-                onAiParseExpense={handleAiParseExpense}
-                onOpenAiAssistant={handleOpenAiAssistant}
-              />
+              <Suspense fallback={null}>
+                <BudgetView
+                  budget={trip.budget}
+                  expenses={trip.expenses}
+                  intel={trip.intel}
+                  totalDays={trip.setup.days}
+                  activeDay={activeFinanceDay}
+                  cities={trip.setup.cities}
+                  cityDays={trip.setup.cityDays}
+                  timeline={trip.timeline}
+                  travelersCount={activeTravelersCount}
+                  companionName={activeCompanionName}
+                  homeCurrency={preferences.homeCurrency}
+                  settlementHistory={trip.settlementHistory ?? []}
+                  onSelectDay={handleSelectFinanceDay}
+                  onAddExpense={addExpenseAtomic}
+                  onUpdateExpense={handleUpdateExpense}
+                  onDeleteExpense={handleDeleteExpense}
+                  onCycleVatStatus={handleCycleVatStatus}
+                  onConvertExpenseToSplit={handleConvertToSplit}
+                  onSettleUp={handleSettleUp}
+                  onUpdateBudgetLimits={handleUpdateBudgetLimits}
+                  onUpdateHomeCurrency={(code) => {
+                    handleUpdatePreferences({ homeCurrency: code });
+                    showToast(appCopy.displayCurrencySetToast(getHomeCurrencyLabel(code, activeLang)));
+                  }}
+                  onAdjustWalletBalance={handleAdjustWalletBalance}
+                  onAiParseExpense={handleAiParseExpense}
+                  onOpenAiAssistant={handleOpenAiAssistant}
+                />
+              </Suspense>
             )}
             {tab === 'itinerary' && (() => {
               const activeDay = Math.min(
@@ -8478,98 +8521,102 @@ export default function App() {
                 (activeDay === 2 ? trip.spatialClustered : false);
 
               return (
-                <ItineraryView
-                  timeline={trip.timeline}
-                  wishlist={trip.wishlist}
-                  cities={trip.setup.cities}
-                  cityDays={trip.setup.cityDays}
-                  totalDays={trip.setup.days}
-                  activeDay={activeDay}
-                  departureDate={trip.setup.departureDate}
-                  dayStays={trip.dayStays}
-                  travelPasses={trip.travelPasses}
-                  affiliatePartners={preferences.affiliatePartners}
-                  dailyBudgetLocal={trip.budget.dailyBudgetLocal}
-                  initialBudgetTier={trip.setup.budgetTier}
-                  crew={trip.crew}
-                  meetup={trip.meetup}
-                  companionName={activeCompanionName}
-                  timeFormat={preferences.timeFormat}
-                  intel={trip.intel}
-                  rainSwapped={dayRainSwapped}
-                  rainSwappedDays={trip.rainSwappedDays}
-                  spatialSummary={daySummary}
-                  spatialClustered={dayClustered}
-                  warningNote={itineraryWarning}
-                  onSelectDay={handleSelectFinanceDay}
-                  onToggleRainSwap={handleToggleRainSwap}
-                  onToggleVisitedNode={handleToggleVisitedNode}
-                  onQuickLogNode={handleQuickLogNode}
-                  onAddNode={handleAddTimelineNode}
-                  onUpdateNode={handleUpdateTimelineNode}
-                  onDeleteNode={handleDeleteTimelineNode}
-                  onMoveNodeOrder={handleMoveTimelineNodeOrder}
-                  onReorderDayNodes={handleReorderTimelineNodes}
-                  previousDayNodes={preReclusterByDay[activeDay]}
-                  onRestorePreviousDayOrder={handleRestorePreviousDayOrder}
-                  onMoveNodeToWishlist={handleMoveNodeToWishlist}
-                  onAddWishlistItem={handleAddWishlistItem}
-                  onRemoveWishlistItem={handleRemoveWishlistItem}
-                  onUpdateMeetup={handleUpdateMeetup}
-                  onOptimizeItinerary={handleOptimizeItinerary}
-                  onPlanFullItinerary={handlePlanFullItinerary}
-                  onSmartReorderAllUnvisited={handleSmartReorderAllUnvisited}
-                  canUndoSmartReorder={Boolean(
-                    preSmartReorderSnapshot &&
-                      preSmartReorderSnapshot.tripId === activeEntry.id
-                  )}
-                  onUndoSmartReorder={handleUndoSmartReorder}
-                  onGenerateLocalCard={handleGenerateLocalCard}
-                  onOpenAiAssistant={handleOpenAiAssistant}
-                  notificationPermission={notificationPermission}
-                  itineraryLeadMinutes={activeTripNotifState.itineraryLeadMinutes}
-                  armedStopLeads={armedStopLeadsMap}
-                  isMeetupAlertArmed={Boolean(
-                    activeTripNotifState.armedMeetupDays[activeDay]
-                  )}
-                  scheduledItineraryAlerts={scheduledItineraryAlerts}
-                  onRequestBrowserPermission={handleRequestBrowserPermission}
-                  onChangeItineraryLeadMinutes={handleChangeItineraryLeadMinutes}
-                  onToggleStopAlert={handleToggleStopAlert}
-                  onToggleDayStopsAlerts={handleToggleDayStopsAlerts}
-                  onToggleMeetupAlert={handleToggleMeetupAlert}
-                  onAddCustomItineraryAlert={handleAddCustomItineraryAlert}
-                  onRemoveScheduledAlert={handleRemoveScheduledAlert}
-                  onOpenGoModeWallet={(d) => handleOpenGoModeWallet(d)}
-                  onUpdateDayStay={handleUpdateDayStay}
-                  onUpsertTravelPass={(p) => handleUpsertTravelPass(p)}
-                  onDeleteTravelPass={handleDeleteTravelPass}
-                  onOpenPassInGoMode={handleOpenPassByIdInGoMode}
-                />
+                <Suspense fallback={null}>
+                  <ItineraryView
+                    timeline={trip.timeline}
+                    wishlist={trip.wishlist}
+                    cities={trip.setup.cities}
+                    cityDays={trip.setup.cityDays}
+                    totalDays={trip.setup.days}
+                    activeDay={activeDay}
+                    departureDate={trip.setup.departureDate}
+                    dayStays={trip.dayStays}
+                    travelPasses={trip.travelPasses}
+                    affiliatePartners={preferences.affiliatePartners}
+                    dailyBudgetLocal={trip.budget.dailyBudgetLocal}
+                    initialBudgetTier={trip.setup.budgetTier}
+                    crew={trip.crew}
+                    meetup={trip.meetup}
+                    companionName={activeCompanionName}
+                    timeFormat={preferences.timeFormat}
+                    intel={trip.intel}
+                    rainSwapped={dayRainSwapped}
+                    rainSwappedDays={trip.rainSwappedDays}
+                    spatialSummary={daySummary}
+                    spatialClustered={dayClustered}
+                    warningNote={itineraryWarning}
+                    onSelectDay={handleSelectFinanceDay}
+                    onToggleRainSwap={handleToggleRainSwap}
+                    onToggleVisitedNode={handleToggleVisitedNode}
+                    onQuickLogNode={handleQuickLogNode}
+                    onAddNode={handleAddTimelineNode}
+                    onUpdateNode={handleUpdateTimelineNode}
+                    onDeleteNode={handleDeleteTimelineNode}
+                    onMoveNodeOrder={handleMoveTimelineNodeOrder}
+                    onReorderDayNodes={handleReorderTimelineNodes}
+                    previousDayNodes={preReclusterByDay[activeDay]}
+                    onRestorePreviousDayOrder={handleRestorePreviousDayOrder}
+                    onMoveNodeToWishlist={handleMoveNodeToWishlist}
+                    onAddWishlistItem={handleAddWishlistItem}
+                    onRemoveWishlistItem={handleRemoveWishlistItem}
+                    onUpdateMeetup={handleUpdateMeetup}
+                    onOptimizeItinerary={handleOptimizeItinerary}
+                    onPlanFullItinerary={handlePlanFullItinerary}
+                    onSmartReorderAllUnvisited={handleSmartReorderAllUnvisited}
+                    canUndoSmartReorder={Boolean(
+                      preSmartReorderSnapshot &&
+                        preSmartReorderSnapshot.tripId === activeEntry.id
+                    )}
+                    onUndoSmartReorder={handleUndoSmartReorder}
+                    onGenerateLocalCard={handleGenerateLocalCard}
+                    onOpenAiAssistant={handleOpenAiAssistant}
+                    notificationPermission={notificationPermission}
+                    itineraryLeadMinutes={activeTripNotifState.itineraryLeadMinutes}
+                    armedStopLeads={armedStopLeadsMap}
+                    isMeetupAlertArmed={Boolean(
+                      activeTripNotifState.armedMeetupDays[activeDay]
+                    )}
+                    scheduledItineraryAlerts={scheduledItineraryAlerts}
+                    onRequestBrowserPermission={handleRequestBrowserPermission}
+                    onChangeItineraryLeadMinutes={handleChangeItineraryLeadMinutes}
+                    onToggleStopAlert={handleToggleStopAlert}
+                    onToggleDayStopsAlerts={handleToggleDayStopsAlerts}
+                    onToggleMeetupAlert={handleToggleMeetupAlert}
+                    onAddCustomItineraryAlert={handleAddCustomItineraryAlert}
+                    onRemoveScheduledAlert={handleRemoveScheduledAlert}
+                    onOpenGoModeWallet={(d) => handleOpenGoModeWallet(d)}
+                    onUpdateDayStay={handleUpdateDayStay}
+                    onUpsertTravelPass={(p) => handleUpsertTravelPass(p)}
+                    onDeleteTravelPass={handleDeleteTravelPass}
+                    onOpenPassInGoMode={handleOpenPassByIdInGoMode}
+                  />
+                </Suspense>
               );
             })()}
             {tab === 'memories' && (
-              <MyKitView
-                trips={tripBook}
-                activeTripId={activeEntry.id}
-                authUser={authUser}
-                preferences={preferences}
-                membershipStatus={membershipStatus}
-                isExportingPdf={isExportingPdf}
-                onExportPdf={handleExportPdf}
-                onUpdateHomeCurrency={(code) => {
-                  handleUpdatePreferences({ homeCurrency: code });
-                  showToast(appCopy.displayCurrencySetToast(getHomeCurrencyLabel(code, activeLang)));
-                }}
-                onOpenAuthModal={(mode) => openAuthModal(mode)}
-                onOpenSettings={(focusSection = 'top') => {
-                  setSettingsInitialSubView('main');
-                  setSettingsFocusSection(focusSection);
-                  setSettingsOpen(true);
-                }}
-                onOpenProModal={() => setProModalOpen(true)}
-                onToast={showToast}
-              />
+              <Suspense fallback={null}>
+                <MyKitView
+                  trips={tripBook}
+                  activeTripId={activeEntry.id}
+                  authUser={authUser}
+                  preferences={preferences}
+                  membershipStatus={membershipStatus}
+                  isExportingPdf={isExportingPdf}
+                  onExportPdf={handleExportPdf}
+                  onUpdateHomeCurrency={(code) => {
+                    handleUpdatePreferences({ homeCurrency: code });
+                    showToast(appCopy.displayCurrencySetToast(getHomeCurrencyLabel(code, activeLang)));
+                  }}
+                  onOpenAuthModal={(mode) => openAuthModal(mode)}
+                  onOpenSettings={(focusSection = 'top') => {
+                    setSettingsInitialSubView('main');
+                    setSettingsFocusSection(focusSection);
+                    setSettingsOpen(true);
+                  }}
+                  onOpenProModal={() => setProModalOpen(true)}
+                  onToast={showToast}
+                />
+              </Suspense>
             )}
           </>
         )}
@@ -8633,235 +8680,271 @@ export default function App() {
         </nav>
       )}
 
-      <AiAssistantDrawer
-        open={aiDrawerOpen}
-        onClose={() => setAiDrawerOpen(false)}
-        activeTab={tab}
-        currencySymbol={trip.intel.currencySymbol}
-        currencyCode={trip.intel.currencyCode}
-        primaryCity={trip.setup.cities[0]}
-        cities={trip.setup.cities}
-        routeTitle={formatDestinationOnlyTitle(trip, activeLang)}
-        totalDays={Math.max(1, trip.setup.days)}
-        currentDay={activeFinanceDay}
-        companionName={activeCompanionName}
-        travelersCount={activeTravelersCount}
-        carryOnLimitKg={preferences.carryOnLimitKg}
-        checkedLimitKg={preferences.checkedLimitKg}
-        initialPrompt={assistantInitialPrompt}
-        onClearInitialPrompt={() => setAssistantInitialPrompt('')}
-        onDispatchCommand={handleAssistantDispatch}
-        onApplyProposal={handleApplyAiProposal}
-        onUploadReceiptAndAdd={handleUploadReceiptInAssistant}
-        onNavigateToModule={(targetTab, targetDay) => {
-          if (typeof targetDay === 'number' && targetDay >= 1) {
-            handleSelectFinanceDay(targetDay);
-          }
-          setTab(targetTab);
-          setAiDrawerOpen(false);
-        }}
-      />
+      {aiDrawerOpen && (
+        <Suspense fallback={null}>
+          <AiAssistantDrawer
+            open={aiDrawerOpen}
+            onClose={() => setAiDrawerOpen(false)}
+            activeTab={tab}
+            currencySymbol={trip.intel.currencySymbol}
+            currencyCode={trip.intel.currencyCode}
+            primaryCity={trip.setup.cities[0]}
+            cities={trip.setup.cities}
+            routeTitle={formatDestinationOnlyTitle(trip, activeLang)}
+            totalDays={Math.max(1, trip.setup.days)}
+            currentDay={activeFinanceDay}
+            companionName={activeCompanionName}
+            travelersCount={activeTravelersCount}
+            carryOnLimitKg={preferences.carryOnLimitKg}
+            checkedLimitKg={preferences.checkedLimitKg}
+            initialPrompt={assistantInitialPrompt}
+            onClearInitialPrompt={() => setAssistantInitialPrompt('')}
+            onDispatchCommand={handleAssistantDispatch}
+            onApplyProposal={handleApplyAiProposal}
+            onUploadReceiptAndAdd={handleUploadReceiptInAssistant}
+            onNavigateToModule={(targetTab, targetDay) => {
+              if (typeof targetDay === 'number' && targetDay >= 1) {
+                handleSelectFinanceDay(targetDay);
+              }
+              setTab(targetTab);
+              setAiDrawerOpen(false);
+            }}
+          />
+        </Suspense>
+      )}
 
-      <ExpertAuditModal open={auditOpen} onClose={() => setAuditOpen(false)} />
+      {auditOpen && (
+        <Suspense fallback={null}>
+          <ExpertAuditModal open={auditOpen} onClose={() => setAuditOpen(false)} />
+        </Suspense>
+      )}
 
-      <CrewInviteModal
-        open={inviteModalOpen}
-        onClose={() => setInviteModalOpen(false)}
-        trip={trip}
-        authUser={authUser}
-        authReady={authReady}
-        activeRoomId={activeRoomId}
-        claimedSeatId={claimedSeatId}
-        syncStatus={syncStatus}
-        lastSyncedByName={lastSyncedByName}
-        initialJoinCode={pendingJoinCode}
-        onClearInitialJoinCode={() => setPendingJoinCode(null)}
-        onConnectedToRoom={handleConnectedToRoom}
-        onChangeClaimedSeatLocal={(seat) => setClaimedSeatId(seat)}
-        onDisconnectRoom={handleDisconnectRoom}
-        onUpdateCrewMember={handleUpdateCrewMember}
-        onAddCompanionSeatLocal={handleAddCompanionSeatLocal}
-        onRemoveCompanionSeatLocal={handleRemoveCompanionSeatLocal}
-        onRequireProForRoomCreation={() => {
-          if (membershipStatus.isTrialExpired && !membershipStatus.isProActive) {
-            setInviteModalOpen(false);
-            openProPaywallWithReason(appCopy.paywallCreateCloudRoom);
-            return true;
-          }
-          return false;
-        }}
-        onOpenAuthModal={() => openAuthModal('signin')}
-        onToast={showToast}
-      />
+      {inviteModalOpen && (
+        <Suspense fallback={null}>
+          <CrewInviteModal
+            open={inviteModalOpen}
+            onClose={() => setInviteModalOpen(false)}
+            trip={trip}
+            authUser={authUser}
+            authReady={authReady}
+            activeRoomId={activeRoomId}
+            claimedSeatId={claimedSeatId}
+            syncStatus={syncStatus}
+            lastSyncedByName={lastSyncedByName}
+            initialJoinCode={pendingJoinCode}
+            onClearInitialJoinCode={() => setPendingJoinCode(null)}
+            onConnectedToRoom={handleConnectedToRoom}
+            onChangeClaimedSeatLocal={(seat) => setClaimedSeatId(seat)}
+            onDisconnectRoom={handleDisconnectRoom}
+            onUpdateCrewMember={handleUpdateCrewMember}
+            onAddCompanionSeatLocal={handleAddCompanionSeatLocal}
+            onRemoveCompanionSeatLocal={handleRemoveCompanionSeatLocal}
+            onRequireProForRoomCreation={() => {
+              if (membershipStatus.isTrialExpired && !membershipStatus.isProActive) {
+                setInviteModalOpen(false);
+                openProPaywallWithReason(appCopy.paywallCreateCloudRoom);
+                return true;
+              }
+              return false;
+            }}
+            onOpenAuthModal={() => openAuthModal('signin')}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
-      <SettingsModal
-        open={settingsOpen}
-        initialSubView={settingsInitialSubView}
-        initialFocusSection={settingsFocusSection}
-        onClose={() => {
-          setSettingsOpen(false);
-          setSettingsInitialSubView('main');
-          setSettingsFocusSection('top');
-        }}
-        preferences={preferences}
-        membershipStatus={membershipStatus}
-        onUpdatePreferences={handleUpdatePreferences}
-        onSwitchLanguage={handleSwitchLanguage}
-        onFollowSystemLanguage={handleFollowSystemLanguage}
-        onOpenProModal={() => {
-          setSettingsOpen(false);
-          setSettingsInitialSubView('main');
-          setSettingsFocusSection('top');
-          openProPaywallWithReason(null);
-        }}
-        onOpenExpertAudit={() => setAuditOpen(true)}
-        groups={trip.packing}
-        learnedCategoryMap={trip.learnedCategoryMap ?? {}}
-        onAddGroup={handleAddPackGroup}
-        onUpdateGroup={handleUpdatePackGroup}
-        onDeleteGroup={handleDeletePackGroup}
-        onReorderGroups={handleReorderGroups}
-        onDeleteLearnedCategory={handleDeleteLearnedCategory}
-        onClearLearnedCategories={handleClearLearnedCategories}
-        unpackedCount={unpackedCount}
-        reminder={reminderConfig}
-        notificationPermission={notificationPermission}
-        onUpdateReminder={handleUpdateReminder}
-        onRequestBrowserPermission={handleRequestBrowserPermission}
-        onTriggerTestReminder={handleTriggerTestReminder}
-        scheduledAlerts={resolvedScheduledAlerts}
-        onRemoveScheduledAlert={handleRemoveScheduledAlert}
-        authUser={authUser}
-        activeRoomId={activeRoomId}
-        tripBook={tripBook}
-        activeTripId={activeEntry.id}
-        activeCityHint={getPrimaryCityName(
-          getCityForDay(
-            trip.setup.cities,
-            Math.min(Math.max(1, trip.setup.days), Math.max(1, trip.activeFinanceDay ?? 2)),
-            Math.max(1, trip.setup.days),
-            trip.timeline,
-            undefined,
-            trip.setup.cityDays
-          )
-        )}
-        onImportBackupData={handleImportBackupData}
-        onOpenAuthModal={(mode) => {
-          setSettingsOpen(false);
-          openAuthModal(mode);
-        }}
-        onToast={showToast}
-      />
+      {settingsOpen && (
+        <Suspense fallback={null}>
+          <SettingsModal
+            open={settingsOpen}
+            initialSubView={settingsInitialSubView}
+            initialFocusSection={settingsFocusSection}
+            onClose={() => {
+              setSettingsOpen(false);
+              setSettingsInitialSubView('main');
+              setSettingsFocusSection('top');
+            }}
+            preferences={preferences}
+            membershipStatus={membershipStatus}
+            onUpdatePreferences={handleUpdatePreferences}
+            onSwitchLanguage={handleSwitchLanguage}
+            onFollowSystemLanguage={handleFollowSystemLanguage}
+            onOpenProModal={() => {
+              setSettingsOpen(false);
+              setSettingsInitialSubView('main');
+              setSettingsFocusSection('top');
+              openProPaywallWithReason(null);
+            }}
+            onOpenExpertAudit={() => setAuditOpen(true)}
+            groups={trip.packing}
+            learnedCategoryMap={trip.learnedCategoryMap ?? {}}
+            onAddGroup={handleAddPackGroup}
+            onUpdateGroup={handleUpdatePackGroup}
+            onDeleteGroup={handleDeletePackGroup}
+            onReorderGroups={handleReorderGroups}
+            onDeleteLearnedCategory={handleDeleteLearnedCategory}
+            onClearLearnedCategories={handleClearLearnedCategories}
+            unpackedCount={unpackedCount}
+            reminder={reminderConfig}
+            notificationPermission={notificationPermission}
+            onUpdateReminder={handleUpdateReminder}
+            onRequestBrowserPermission={handleRequestBrowserPermission}
+            onTriggerTestReminder={handleTriggerTestReminder}
+            scheduledAlerts={resolvedScheduledAlerts}
+            onRemoveScheduledAlert={handleRemoveScheduledAlert}
+            authUser={authUser}
+            activeRoomId={activeRoomId}
+            tripBook={tripBook}
+            activeTripId={activeEntry.id}
+            activeCityHint={getPrimaryCityName(
+              getCityForDay(
+                trip.setup.cities,
+                Math.min(Math.max(1, trip.setup.days), Math.max(1, trip.activeFinanceDay ?? 2)),
+                Math.max(1, trip.setup.days),
+                trip.timeline,
+                undefined,
+                trip.setup.cityDays
+              )
+            )}
+            onImportBackupData={handleImportBackupData}
+            onOpenAuthModal={(mode) => {
+              setSettingsOpen(false);
+              openAuthModal(mode);
+            }}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
-      <AuthModal
-        open={authModalState.open}
-        mode={authModalState.mode}
-        authUser={authUser}
-        language={activeLang}
-        activeRoomId={activeRoomId}
-        coverImageUrl={activeCoverVisual.imageUrl}
-        onClose={() => {
-          if (authModalState.mode === 'welcome') {
-            markWelcomeAuthSeen();
-          }
-          setAuthModalState((prev) => ({ ...prev, open: false }));
-        }}
-        onSkipWelcome={markWelcomeAuthSeen}
-        onSignedIn={() => {
-          markWelcomeAuthSeen();
-        }}
-        onAccountDeleted={() => {
-          if (activeRoomId) {
-            handleDisconnectRoom();
-          }
-        }}
-        onToast={showToast}
-      />
+      {authModalState.open && (
+        <Suspense fallback={null}>
+          <AuthModal
+            open={authModalState.open}
+            mode={authModalState.mode}
+            authUser={authUser}
+            language={activeLang}
+            activeRoomId={activeRoomId}
+            coverImageUrl={activeCoverVisual.imageUrl}
+            onClose={() => {
+              if (authModalState.mode === 'welcome') {
+                markWelcomeAuthSeen();
+              }
+              setAuthModalState((prev) => ({ ...prev, open: false }));
+            }}
+            onSkipWelcome={markWelcomeAuthSeen}
+            onSignedIn={() => {
+              markWelcomeAuthSeen();
+            }}
+            onAccountDeleted={() => {
+              if (activeRoomId) {
+                handleDisconnectRoom();
+              }
+            }}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
-      <TripKitProModal
-        open={proModalOpen}
-        onClose={() => {
-          setProModalOpen(false);
-          setProTriggerReason(null);
-        }}
-        triggerReason={proTriggerReason}
-        membershipStatus={membershipStatus}
-        currentPlan={preferences.proPlan}
-        redeemedCode={preferences.redeemedCode}
-        authUser={authUser}
-        onRedeemActivated={handleRedeemProActivated}
-        onDeactivatePro={handleDeactivatePro}
-        onOpenAdminCodeGenerator={() => {
-          setProModalOpen(false);
-          setProTriggerReason(null);
-          setSettingsInitialSubView('admin_codes');
-          setSettingsOpen(true);
-        }}
-        onToast={showToast}
-      />
+      {proModalOpen && (
+        <Suspense fallback={null}>
+          <TripKitProModal
+            open={proModalOpen}
+            onClose={() => {
+              setProModalOpen(false);
+              setProTriggerReason(null);
+            }}
+            triggerReason={proTriggerReason}
+            membershipStatus={membershipStatus}
+            currentPlan={preferences.proPlan}
+            redeemedCode={preferences.redeemedCode}
+            authUser={authUser}
+            onRedeemActivated={handleRedeemProActivated}
+            onDeactivatePro={handleDeactivatePro}
+            onOpenAdminCodeGenerator={() => {
+              setProModalOpen(false);
+              setProTriggerReason(null);
+              setSettingsInitialSubView('admin_codes');
+              setSettingsOpen(true);
+            }}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
-      <PackingListWizardModal
-        isOpen={isPackingWizardOpen}
-        setup={trip.setup}
-        intel={trip.intel}
-        checkedLimitKg={preferences.checkedLimitKg}
-        existingTotalCount={trip.packing.reduce((sum, g) => sum + g.items.length, 0)}
-        existingPackedCount={trip.packing.reduce(
-          (sum, g) => sum + g.items.filter((it) => it.done).length,
-          0
-        )}
-        alwaysPackCount={alwaysPackLibrary.length}
-        neverSuggestCount={neverSuggestItems.length}
-        isGenerating={isGeneratingPackingList}
-        errorMessage={packingWizardError}
-        onClose={() => {
-          if (!isGeneratingPackingList) {
-            setIsPackingWizardOpen(false);
-            setPackingWizardError(null);
-          }
-        }}
-        onEditTripRoute={() => {
-          setWizardOverlayMode('edit_current');
-        }}
-        onSubmit={handleGenerateCustomPackingList}
-      />
+      {isPackingWizardOpen && (
+        <Suspense fallback={null}>
+          <PackingListWizardModal
+            isOpen={isPackingWizardOpen}
+            setup={trip.setup}
+            intel={trip.intel}
+            checkedLimitKg={preferences.checkedLimitKg}
+            existingTotalCount={trip.packing.reduce((sum, g) => sum + g.items.length, 0)}
+            existingPackedCount={trip.packing.reduce(
+              (sum, g) => sum + g.items.filter((it) => it.done).length,
+              0
+            )}
+            alwaysPackCount={alwaysPackLibrary.length}
+            neverSuggestCount={neverSuggestItems.length}
+            isGenerating={isGeneratingPackingList}
+            errorMessage={packingWizardError}
+            onClose={() => {
+              if (!isGeneratingPackingList) {
+                setIsPackingWizardOpen(false);
+                setPackingWizardError(null);
+              }
+            }}
+            onEditTripRoute={() => {
+              setWizardOverlayMode('edit_current');
+            }}
+            onSubmit={handleGenerateCustomPackingList}
+          />
+        </Suspense>
+      )}
 
-      <GoModeWalletModal
-        open={goModeOpen}
-        passes={trip.travelPasses || []}
-        setup={trip.setup}
-        intel={trip.intel}
-        affiliatePartners={preferences.affiliatePartners}
-        initialFocusPassId={goModeFocusPassId}
-        initialFilterDay={goModeFilterDay}
-        currentDay={Math.min(
-          Math.max(1, trip.setup.days),
-          Math.max(1, trip.activeFinanceDay ?? 1)
-        )}
-        onClose={() => {
-          setGoModeOpen(false);
-          setGoModeFocusPassId(null);
-          setGoModeFilterDay(null);
-        }}
-        onUpsertPass={handleUpsertTravelPass}
-        onDeletePass={handleDeleteTravelPass}
-        onSmartSeedFromTrip={handleSmartSeedPassesFromTrip}
-        onToast={showToast}
-      />
+      {goModeOpen && (
+        <Suspense fallback={null}>
+          <GoModeWalletModal
+            open={goModeOpen}
+            passes={trip.travelPasses || []}
+            setup={trip.setup}
+            intel={trip.intel}
+            affiliatePartners={preferences.affiliatePartners}
+            initialFocusPassId={goModeFocusPassId}
+            initialFilterDay={goModeFilterDay}
+            currentDay={Math.min(
+              Math.max(1, trip.setup.days),
+              Math.max(1, trip.activeFinanceDay ?? 1)
+            )}
+            onClose={() => {
+              setGoModeOpen(false);
+              setGoModeFocusPassId(null);
+              setGoModeFilterDay(null);
+            }}
+            onUpsertPass={handleUpsertTravelPass}
+            onDeletePass={handleDeleteTravelPass}
+            onSmartSeedFromTrip={handleSmartSeedPassesFromTrip}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
-      <TripCoverModal
-        open={coverModalOpen}
-        onClose={() => setCoverModalOpen(false)}
-        tripId={activeEntry.id}
-        destinationTitle={cleanDestinationTitle}
-        subtitlePreview={headerSubtitlePreview}
-        setup={trip.setup}
-        coverConfig={trip.coverConfig}
-        customCoverDataUrl={customCoverDataUrl}
-        language={preferences.language}
-        onSaveCover={handleSaveTripCover}
-        onToast={showToast}
-      />
+      {coverModalOpen && (
+        <Suspense fallback={null}>
+          <TripCoverModal
+            open={coverModalOpen}
+            onClose={() => setCoverModalOpen(false)}
+            tripId={activeEntry.id}
+            destinationTitle={cleanDestinationTitle}
+            subtitlePreview={headerSubtitlePreview}
+            setup={trip.setup}
+            coverConfig={trip.coverConfig}
+            customCoverDataUrl={customCoverDataUrl}
+            language={preferences.language}
+            onSaveCover={handleSaveTripCover}
+            onToast={showToast}
+          />
+        </Suspense>
+      )}
 
       {toast && (
         <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 rounded-xl tk-bg-ink px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
