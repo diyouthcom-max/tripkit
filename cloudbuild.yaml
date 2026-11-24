@@ -1,0 +1,17 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg
+      - VITE_GOOGLE_MAPS_API_KEY=${_MAPS_KEY}
+      - -t
+      - gcr.io/$PROJECT_ID/tripkit:latest
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - gcr.io/$PROJECT_ID/tripkit:latest
+images:
+  - gcr.io/$PROJECT_ID/tripkit:latest
+substitutions:
+  _MAPS_KEY: ''

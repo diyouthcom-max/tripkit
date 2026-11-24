@@ -6,7 +6,7 @@ import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
 
 dotenv.config();
 
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const MODEL = 'gemini-4-hydrogen';
 
 function getAiClient() {

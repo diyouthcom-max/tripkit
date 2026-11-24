@@ -1,0 +1,12 @@
+.git
+.gitignore
+node_modules
+dist
+.env
+.env.*
+!.env.example
+_downloads
+*.log
+coverage
+.gmp_cache
+bun.lock
