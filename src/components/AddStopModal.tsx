@@ -928,7 +928,11 @@ const LeafletFallbackLocationPicker: React.FC<{
       attributionControl: false,
     });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.control
+      .attribution({ position: 'bottomleft', prefix: false })
+      .addTo(map);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap · CARTO',
       subdomains: 'abcd',
       maxZoom: 20,
       crossOrigin: 'anonymous',
@@ -1024,7 +1028,13 @@ const LeafletFallbackLocationPicker: React.FC<{
     }
   }, [dayNodes, targetCity, pickedLocation, dragPinTitle]);
 
-  return <div ref={mountRef} className="h-full w-full min-h-[240px]" />;
+  return (
+    <div
+      ref={mountRef}
+      className="h-full w-full min-h-[272px]"
+      data-tk-map-attribution="osm"
+    />
+  );
 };
 
 export const AddStopModal: React.FC<AddStopModalProps> = ({
@@ -2185,8 +2195,8 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
           {/* TAB 2: SEARCH + COLLAPSIBLE MAP PICKER */}
           {activeTab === 'search' && (
             <div className="space-y-3.5">
-              <div className="flex items-start gap-2">
-                <div className="flex-1 min-w-0">
+              <div className="flex items-start gap-2 overflow-visible">
+                <div className="relative z-20 flex-1 min-w-0 overflow-visible">
                   <PlaceAutocompleteInput
                     value={searchInput}
                     onChange={(val) => {
@@ -2250,7 +2260,11 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                     </button>
                   </div>
 
-                  <div className="relative h-[240px] sm:h-[280px] w-full">
+                  {/* +32px vs 240/280 so Google logo + .gm-style-cc stay fully visible */}
+                  <div
+                    className="relative h-[272px] sm:h-[312px] w-full"
+                    data-tk-map-attribution="google"
+                  >
                     {apiKey ? (
                       <GoogleMap
                         mapId="DEMO_MAP_ID"

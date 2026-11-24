@@ -207,7 +207,11 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
       {previewOpen && (
         <div className="rounded-xl border tk-bc-hair bg-white overflow-hidden">
           {apiKey ? (
-            <div className="h-44 w-full tk-bg-forest-plate">
+            /* h-44(176) → h-52(208): +32px attribution safety for .gm-style-cc + logo */
+            <div
+              className="h-52 w-full tk-bg-forest-plate"
+              data-tk-map-attribution="google"
+            >
               <GoogleMap
                 mapId="DEMO_MAP_ID"
                 defaultCenter={DEFAULT_PREVIEW_COORDS}

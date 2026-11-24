@@ -25,6 +25,8 @@ export interface ItineraryUtilsCopy {
     missingApiKeyBefore: string;
     missingApiKeyAfter: string;
     searchOnMaps: (query: string) => string;
+    useTypedNameBtn: string;
+    unverifiedPlaceNote: string;
   };
   nodeCard: {
     defaultDistrict: string;
@@ -112,6 +114,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyBefore: '当前未检测到环境变量',
         missingApiKeyAfter: '，实时地址联想未开启（仍可正常手动输入并跳转 Google 地图）。',
         searchOnMaps: (q) => `在 Google 地图中搜索「${q.slice(0, 14)}」定位`,
+        useTypedNameBtn: '仍用此名称',
+        unverifiedPlaceNote: '未验证地点 · 不含地图坐标',
       },
       nodeCard: {
         defaultDistrict: '市中心',
@@ -199,6 +203,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'is not configured, so live place suggestions are off (manual input and Google Maps links still work).',
         searchOnMaps: (q) => `Search "${q.slice(0, 18)}" on Google Maps`,
+        useTypedNameBtn: 'Use this name anyway',
+        unverifiedPlaceNote: 'Unverified place · no map coordinates',
       },
       nodeCard: {
         defaultDistrict: 'City Center',
@@ -286,6 +292,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'is not configured, so live place suggestions are off (manual input and Google Maps links still work).',
         searchOnMaps: (q) => `Search "${q.slice(0, 18)}" on Google Maps`,
+        useTypedNameBtn: 'Use this name anyway',
+        unverifiedPlaceNote: 'Unverified place · no map coordinates',
       },
       nodeCard: {
         defaultDistrict: 'City Centre',
@@ -373,6 +381,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'no está configurada; las sugerencias en vivo están desactivadas (puedes escribir y abrir Google Maps).',
         searchOnMaps: (q) => `Buscar "${q.slice(0, 18)}" en Google Maps`,
+        useTypedNameBtn: 'Usar este nombre de todos modos',
+        unverifiedPlaceNote: 'Lugar sin verificar · sin coordenadas',
       },
       nodeCard: {
         defaultDistrict: 'Centro',
@@ -460,6 +470,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'n’est pas configurée ; suggestions en direct désactivées (saisie manuelle et liens Google Maps actifs).',
         searchOnMaps: (q) => `Chercher « ${q.slice(0, 18)} » sur Google Maps`,
+        useTypedNameBtn: 'Utiliser ce nom quand même',
+        unverifiedPlaceNote: 'Lieu non vérifié · sans coordonnées',
       },
       nodeCard: {
         defaultDistrict: 'Centre-ville',
@@ -547,6 +559,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'ist nicht konfiguriert – Live-Ortsvorschläge sind aus (manuelle Eingabe & Google Maps Links funktionieren weiterhin).',
         searchOnMaps: (q) => `„${q.slice(0, 18)}“ auf Google Maps suchen`,
+        useTypedNameBtn: 'Diesen Namen trotzdem verwenden',
+        unverifiedPlaceNote: 'Ungeprüfter Ort · keine Kartencoordinaten',
       },
       nodeCard: {
         defaultDistrict: 'Stadtzentrum',
@@ -634,6 +648,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'não está configurada; sugestões ao vivo desativadas (entrada manual e links do Google Maps funcionam).',
         searchOnMaps: (q) => `Buscar "${q.slice(0, 18)}" no Google Maps`,
+        useTypedNameBtn: 'Usar este nome mesmo assim',
+        unverifiedPlaceNote: 'Local não verificado · sem coordenadas',
       },
       nodeCard: {
         defaultDistrict: 'Centro',
@@ -719,6 +735,8 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         missingApiKeyAfter:
           'が未設定のためリアルタイム住所候補はオフです（手入力と Google マップリンクは利用できます）。',
         searchOnMaps: (q) => `Google マップで「${q.slice(0, 14)}」を検索`,
+        useTypedNameBtn: 'この名称のまま使う',
+        unverifiedPlaceNote: '未検証の地点 · 地図座標なし',
       },
       nodeCard: {
         defaultDistrict: '中心部',

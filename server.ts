@@ -38,18 +38,34 @@ function parseGeminiJson<T = Record<string, unknown>>(
 }
 
 async function callGeminiWithRetry<T>(operation: () => Promise<T>): Promise<T> {
-  try {
-    return await operation();
-  } catch (err: unknown) {
-    const rawMsg = err instanceof Error ? err.message : String(err);
-    const isTransient =
-      /503|UNAVAILABLE|DEADLINE_EXCEEDED|ECONNRESET|ETIMEDOUT|fetch failed/i.test(rawMsg);
-    if (!isTransient) {
-      throw err;
+  const maxAttempts = 3;
+  const backoffMs = [800, 1600];
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      return await operation();
+    } catch (err: unknown) {
+      lastErr = err;
+      const rawMsg = err instanceof Error ? err.message : String(err);
+      // Hard exclusions — never retry auth / key / argument errors.
+      if (
+        /MISSING_GEMINI_API_KEY|API_KEY_INVALID|PERMISSION_DENIED|403|INVALID_ARGUMENT/i.test(
+          rawMsg
+        )
+      ) {
+        throw err;
+      }
+      const isTransient =
+        /FAILED_PRECONDITION|User location is not supported|location is not supported|429|RESOURCE_EXHAUSTED|503|UNAVAILABLE|DEADLINE_EXCEEDED|ECONNRESET|ETIMEDOUT|fetch failed/i.test(
+          rawMsg
+        );
+      if (!isTransient || attempt === maxAttempts - 1) {
+        throw err;
+      }
+      await new Promise((resolve) => setTimeout(resolve, backoffMs[attempt]));
     }
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return await operation();
   }
+  throw lastErr;
 }
 
 type ClientLang =
@@ -248,6 +264,16 @@ function mapGeminiError(
         : 'AI 服务请求过于频繁或配额暂时受限，请稍候几秒再试。',
     };
   }
+  if (
+    /FAILED_PRECONDITION|location is not supported|User location is not supported/i.test(raw)
+  ) {
+    return {
+      status: 503,
+      error: isEn
+        ? 'The AI service is temporarily unavailable in your current region. Please try again shortly or switch networks.'
+        : 'AI 服务在当前网络地区暂不可用，请稍后重试或切换网络后重试。',
+    };
+  }
   if (err instanceof SyntaxError) {
     return {
       status: 502,
@@ -256,9 +282,16 @@ function mapGeminiError(
         : `${fallbackMessage}（AI 返回格式异常，请重试一次）`,
     };
   }
+  const looksLikeRawDump =
+    raw.includes('{') ||
+    raw.includes('"error"') ||
+    raw.includes('"status"') ||
+    raw.includes('\n') ||
+    raw.includes(' at ') ||
+    raw.length > 120;
   return {
     status: 500,
-    error: raw && raw.length < 180 ? raw : fallbackMessage,
+    error: raw && !looksLikeRawDump ? raw : fallbackMessage,
   };
 }
 

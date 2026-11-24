@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   deleteUser,
+  getRedirectResult,
   reauthenticateWithPopup,
+  reload,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   updateProfile,
   type User,
@@ -23,6 +27,8 @@ import {
   Lock,
   LogOut,
   Mail,
+  MailWarning,
+  RefreshCw,
   ShieldCheck,
   Sparkles,
   Trash2,
@@ -34,6 +40,8 @@ import type { AppLanguage } from '../types';
 import { getAuthCopy } from '../i18n/packs/authAndKitPack';
 
 export type AuthModalMode = 'welcome' | 'signin' | 'account';
+
+const GOOGLE_POPUP_TIMEOUT_MS = 20000;
 
 export interface AuthModalProps {
   open: boolean;
@@ -101,12 +109,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onToast,
 }) => {
   const copy = getAuthCopy(language);
+  const googleSignInSettledRef = useRef(false);
 
   const [busyProvider, setBusyProvider] = useState<
-    null | 'apple' | 'google' | 'email' | 'signout' | 'delete'
+    null | 'apple' | 'google' | 'email' | 'signout' | 'delete' | 'resend-verify' | 'refresh-verify'
   >(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [infoMsg, setInfoMsg] = useState<string | null>(null);
+  const [emailVerifiedLocal, setEmailVerifiedLocal] = useState<boolean>(
+    () => Boolean(authUser?.emailVerified)
+  );
 
   // Email flow state
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -135,6 +147,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   }, [open, mode]);
 
   useEffect(() => {
+    setEmailVerifiedLocal(Boolean(authUser?.emailVerified));
+  }, [authUser, authUser?.emailVerified, authUser?.uid]);
+
+  useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -151,6 +167,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, legalDoc, mode, onSkipWelcome, onClose]);
+
+  // Google redirect return (popup fallback). Latch + cancelled guard StrictMode double-mount.
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (cancelled) return;
+        if (!result?.user) return;
+        if (googleSignInSettledRef.current) return;
+        googleSignInSettledRef.current = true;
+        onToast(getAuthCopy(language).toastGoogleSignedIn);
+        onSignedIn?.(result.user);
+        onClose();
+        setBusyProvider(null);
+      } catch (err) {
+        if (cancelled) return;
+        setErrorMsg(formatAuthError(err, language));
+        setBusyProvider(null);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [language, onToast, onSignedIn, onClose]);
 
   if (!open) return null;
 
@@ -184,14 +225,72 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setBusyProvider('google');
     setErrorMsg(null);
     setInfoMsg(null);
-    try {
-      const cred = await signInWithPopup(auth, googleProvider);
+    googleSignInSettledRef.current = false;
+
+    const authErrorCode = (err: unknown): string => {
+      if (typeof err === 'object' && err !== null && 'code' in err) {
+        return String((err as { code?: unknown }).code || '');
+      }
+      return '';
+    };
+
+    const isGooglePopupTimeout = (err: unknown): boolean =>
+      err instanceof Error && err.message === 'GOOGLE_POPUP_TIMEOUT';
+
+    const shouldFallbackToRedirect = (err: unknown): boolean => {
+      if (isGooglePopupTimeout(err)) return true;
+      const code = authErrorCode(err);
+      return (
+        code === 'auth/popup-blocked' ||
+        code === 'auth/popup-closed-by-user' ||
+        code === 'auth/network-request-failed' ||
+        code === 'auth/operation-not-supported-in-this-environment'
+      );
+    };
+
+    const settleGoogleSuccess = (user: User) => {
+      if (googleSignInSettledRef.current) return;
+      googleSignInSettledRef.current = true;
       onToast(copy.toastGoogleSignedIn);
-      onSignedIn?.(cred.user);
+      onSignedIn?.(user);
       onClose();
+      setBusyProvider(null);
+    };
+
+    const startRedirectFallback = async (err: unknown) => {
+      const code = authErrorCode(err);
+      setInfoMsg(
+        code === 'auth/popup-blocked' ? copy.popupBlockedFallback : copy.redirectingToGoogle
+      );
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        // Keep busy while the browser navigates away for redirect sign-in.
+      } catch (redirectErr) {
+        setErrorMsg(formatAuthError(redirectErr, language));
+        setBusyProvider(null);
+      }
+    };
+
+    try {
+      const popupPromise = signInWithPopup(auth, googleProvider);
+      // Keep listening so a late popup success still settles once via the latch.
+      void popupPromise.then((lateCred) => settleGoogleSuccess(lateCred.user)).catch(() => {
+        /* redirect / primary catch owns UX */
+      });
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        window.setTimeout(() => {
+          reject(new Error('GOOGLE_POPUP_TIMEOUT'));
+        }, GOOGLE_POPUP_TIMEOUT_MS);
+      });
+      const cred = await Promise.race([popupPromise, timeoutPromise]);
+      settleGoogleSuccess(cred.user);
     } catch (err) {
+      if (googleSignInSettledRef.current) return;
+      if (shouldFallbackToRedirect(err)) {
+        await startRedirectFallback(err);
+        return;
+      }
       setErrorMsg(formatAuthError(err, language));
-    } finally {
       setBusyProvider(null);
     }
   };
@@ -223,6 +322,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           await updateProfile(cred.user, { displayName: nameInput.trim() });
         }
         onToast(copy.toastAccountCreated);
+        try {
+          await sendEmailVerification(cred.user);
+          onToast(copy.verificationEmailSent);
+        } catch (verifyErr) {
+          // Registration already succeeded — never roll back or block sign-in.
+          setInfoMsg(copy.verificationSendFailed);
+          onToast(formatAuthError(verifyErr, language) || copy.verificationSendFailed);
+        }
         onSignedIn?.(cred.user);
         onClose();
       } else {
@@ -235,6 +342,48 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         onToast(copy.toastEmailSignedIn);
         onSignedIn?.(cred.user);
         onClose();
+      }
+    } catch (err) {
+      setErrorMsg(formatAuthError(err, language));
+    } finally {
+      setBusyProvider(null);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!authUser) return;
+    setBusyProvider('resend-verify');
+    setErrorMsg(null);
+    setInfoMsg(null);
+    try {
+      await sendEmailVerification(authUser);
+      setInfoMsg(copy.verificationEmailSent);
+      onToast(copy.verificationEmailSent);
+    } catch (err) {
+      setErrorMsg(formatAuthError(err, language));
+    } finally {
+      setBusyProvider(null);
+    }
+  };
+
+  const handleRefreshVerification = async () => {
+    const current = auth.currentUser;
+    if (!current) return;
+    setBusyProvider('refresh-verify');
+    setErrorMsg(null);
+    setInfoMsg(null);
+    try {
+      await reload(current);
+      const verified = Boolean(auth.currentUser?.emailVerified);
+      setEmailVerifiedLocal(verified);
+      if (verified) {
+        setInfoMsg(copy.emailVerifiedNow);
+        onToast(copy.emailVerifiedNow);
+        if (auth.currentUser) {
+          onSignedIn?.(auth.currentUser);
+        }
+      } else {
+        setInfoMsg(copy.emailUnverifiedNote);
       }
     } catch (err) {
       setErrorMsg(formatAuthError(err, language));
@@ -458,6 +607,51 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </div>
                 </div>
               </div>
+
+              {(() => {
+                const providerId = authUser.providerData?.[0]?.providerId || '';
+                const needsEmailVerification =
+                  providerId === 'password' && !emailVerifiedLocal;
+                if (!needsEmailVerification) return null;
+                return (
+                  <div className="rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3 space-y-3">
+                    <div className="flex items-start gap-2.5">
+                      <MailWarning className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
+                      <p className="text-xs font-semibold tk-text-warning leading-relaxed">
+                        {copy.emailUnverifiedNote}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        type="button"
+                        disabled={isBusy}
+                        onClick={() => void handleResendVerification()}
+                        className="w-full min-h-10 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-bold tk-text-ink hover:tk-bg-paper inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
+                      >
+                        {busyProvider === 'resend-verify' ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest shrink-0" />
+                        ) : (
+                          <Mail className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
+                        )}
+                        <span>{copy.resendVerificationBtn}</span>
+                      </button>
+                      <button
+                        type="button"
+                        disabled={isBusy}
+                        onClick={() => void handleRefreshVerification()}
+                        className="w-full min-h-10 rounded-xl tk-bg-forest px-3 py-2 text-xs font-bold text-white hover:tk-bg-press inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
+                      >
+                        {busyProvider === 'refresh-verify' ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+                        ) : (
+                          <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                        )}
+                        <span>{copy.refreshVerificationBtn}</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Privacy Reassurance */}
               <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 flex items-start gap-2.5 text-xs tk-text-ink2">

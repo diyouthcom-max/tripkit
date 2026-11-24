@@ -65,6 +65,14 @@ export interface AuthModalCopy {
   legalPrefix: string;
   legalAnd: string;
   legalSuffix: string;
+  verificationEmailSent: string;
+  emailUnverifiedNote: string;
+  resendVerificationBtn: string;
+  refreshVerificationBtn: string;
+  emailVerifiedNow: string;
+  verificationSendFailed: string;
+  redirectingToGoogle: string;
+  popupBlockedFallback: string;
 }
 
 const AUTH_COPY_MAP = {
@@ -149,6 +157,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: '继续即表示你同意 ',
     legalAnd: ' 与 ',
     legalSuffix: '。',
+    verificationEmailSent: '验证邮件已发送，请查收邮箱并点击链接完成验证。',
+    emailUnverifiedNote: '邮箱尚未验证。验证后即可恢复 Pro、同步协作房间与影集下单。',
+    resendVerificationBtn: '重新发送验证邮件',
+    refreshVerificationBtn: '我已完成验证，刷新状态',
+    emailVerifiedNow: '邮箱已验证，云端权益与协作功能现已可用。',
+    verificationSendFailed: '账号已创建，但验证邮件发送失败。可稍后在账号页重试。',
+    redirectingToGoogle: '正在跳转到 Google 登录…',
+    popupBlockedFallback: '弹窗被拦截，已改用页面跳转登录',
   },
   'en-US': {
     providerEmail: 'Email',
@@ -231,6 +247,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'By continuing, you agree to our ',
     legalAnd: ' and ',
     legalSuffix: '.',
+    verificationEmailSent: 'Verification email sent. Check your inbox and tap the link.',
+    emailUnverifiedNote: 'Email not verified yet. Verify to restore Pro, crew rooms, and photobook orders.',
+    resendVerificationBtn: 'Resend verification email',
+    refreshVerificationBtn: 'I verified — refresh',
+    emailVerifiedNow: 'Email verified. Cloud benefits and collaboration are now available.',
+    verificationSendFailed: 'Account created, but the verification email failed. Retry later in Account.',
+    redirectingToGoogle: 'Redirecting to Google sign-in…',
+    popupBlockedFallback: 'Popup was blocked — switching to a full-page sign-in',
   },
   'en-GB': {
     providerEmail: 'Email',
@@ -313,6 +337,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'By continuing, you agree to our ',
     legalAnd: ' and ',
     legalSuffix: '.',
+    verificationEmailSent: 'Verification email sent. Check your inbox and tap the link.',
+    emailUnverifiedNote: 'Email not verified yet. Verify to restore Pro, crew rooms, and photobook orders.',
+    resendVerificationBtn: 'Resend verification email',
+    refreshVerificationBtn: 'I verified — refresh',
+    emailVerifiedNow: 'Email verified. Cloud benefits and collaboration are now available.',
+    verificationSendFailed: 'Account created, but the verification email failed. Retry later in Account.',
+    redirectingToGoogle: 'Redirecting to Google sign-in…',
+    popupBlockedFallback: 'Popup was blocked — switching to a full-page sign-in',
   },
   'es-MX': {
     providerEmail: 'Correo',
@@ -395,6 +427,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'Al continuar, aceptas nuestros ',
     legalAnd: ' y la ',
     legalSuffix: '.',
+    verificationEmailSent: 'Correo de verificación enviado. Revisa tu bandeja y toca el enlace.',
+    emailUnverifiedNote: 'Correo aún sin verificar. Verifica para restaurar Pro, salas y pedidos de álbum.',
+    resendVerificationBtn: 'Reenviar verificación',
+    refreshVerificationBtn: 'Ya verifiqué, actualizar',
+    emailVerifiedNow: 'Correo verificado. Beneficios en la nube y colaboración ya disponibles.',
+    verificationSendFailed: 'Cuenta creada, pero falló el correo de verificación. Reintenta en Cuenta.',
+    redirectingToGoogle: 'Redirigiendo al inicio de sesión de Google…',
+    popupBlockedFallback: 'Ventana emergente bloqueada — cambiando a inicio de sesión a página completa',
   },
   'fr-FR': {
     providerEmail: 'E-mail',
@@ -477,6 +517,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'En continuant, vous acceptez nos ',
     legalAnd: ' et notre ',
     legalSuffix: '.',
+    verificationEmailSent: 'E-mail de vérification envoyé. Consultez votre boîte et ouvrez le lien.',
+    emailUnverifiedNote: 'E-mail non vérifié. Vérifiez pour restaurer Pro, salles et commandes album.',
+    resendVerificationBtn: 'Renvoyer la vérification',
+    refreshVerificationBtn: 'Déjà vérifié, actualiser',
+    emailVerifiedNow: 'E-mail vérifié. Avantages cloud et collaboration disponibles.',
+    verificationSendFailed: 'Compte créé, mais l’e-mail de vérification a échoué. Réessayez dans Compte.',
+    redirectingToGoogle: 'Redirection vers la connexion Google…',
+    popupBlockedFallback: 'Fenêtre pop-up bloquée — bascule vers une connexion en pleine page',
   },
   'de-DE': {
     providerEmail: 'E-Mail',
@@ -559,6 +607,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'Mit dem Fortfahren akzeptierst du unsere ',
     legalAnd: ' und die ',
     legalSuffix: '.',
+    verificationEmailSent: 'Bestätigungs-E-Mail gesendet. Posteingang prüfen und Link tippen.',
+    emailUnverifiedNote: 'E-Mail noch nicht bestätigt. Bestätigen für Pro, Räume und Fotobuch-Bestellungen.',
+    resendVerificationBtn: 'Bestätigung erneut senden',
+    refreshVerificationBtn: 'Bestätigt — Status aktualisieren',
+    emailVerifiedNow: 'E-Mail bestätigt. Cloud-Vorteile und Zusammenarbeit sind verfügbar.',
+    verificationSendFailed: 'Konto erstellt, Bestätigungs-E-Mail fehlgeschlagen. Später unter Konto erneut versuchen.',
+    redirectingToGoogle: 'Weiterleitung zur Google-Anmeldung…',
+    popupBlockedFallback: 'Popup blockiert — wechsle zur ganzseitigen Anmeldung',
   },
   'pt-BR': {
     providerEmail: 'E-mail',
@@ -641,6 +697,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: 'Ao continuar, você concorda com nossos ',
     legalAnd: ' e com a ',
     legalSuffix: '.',
+    verificationEmailSent: 'E-mail de verificação enviado. Confira a caixa de entrada e toque no link.',
+    emailUnverifiedNote: 'E-mail ainda não verificado. Verifique para restaurar Pro, salas e pedidos de álbum.',
+    resendVerificationBtn: 'Reenviar verificação',
+    refreshVerificationBtn: 'Já verifiquei, atualizar',
+    emailVerifiedNow: 'E-mail verificado. Benefícios na nuvem e colaboração já disponíveis.',
+    verificationSendFailed: 'Conta criada, mas o e-mail de verificação falhou. Tente de novo em Conta.',
+    redirectingToGoogle: 'Redirecionando para o login do Google…',
+    popupBlockedFallback: 'Pop-up bloqueado — mudando para login em página inteira',
   },
   'ja-JP': {
     providerEmail: 'メール',
@@ -723,6 +787,14 @@ const AUTH_COPY_MAP = {
     legalPrefix: '続行することで、',
     legalAnd: ' および ',
     legalSuffix: ' に同意したものとみなされます。',
+    verificationEmailSent: '確認メールを送信しました。受信トレイのリンクを開いてください。',
+    emailUnverifiedNote: 'メール未確認です。Pro・ルーム同期・フォトブック注文には確認が必要です。',
+    resendVerificationBtn: '確認メールを再送信',
+    refreshVerificationBtn: '確認済み — 状態を更新',
+    emailVerifiedNow: 'メール確認完了。クラウド特典と共同編集が利用できます。',
+    verificationSendFailed: 'アカウントは作成済みですが確認メール送信に失敗しました。アカウント画面で再試行できます。',
+    redirectingToGoogle: 'Google サインインへ移動しています…',
+    popupBlockedFallback: 'ポップアップがブロックされました — ページ遷移ログインに切り替えます',
   },
 } satisfies Record<AppLanguage, AuthModalCopy>;
 

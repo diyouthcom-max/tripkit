@@ -315,18 +315,21 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
       const { primaryTypes, isCitySearch } = normalizePrimaryTypesForPlacesNew(
         includedPrimaryTypes
       );
-      const queryInput =
-        !isCitySearch &&
-        cityHint &&
-        !trimmed.toLowerCase().includes(cityHint.toLowerCase())
-          ? `${trimmed} ${cityHint}`
-          : trimmed;
-
+      // Never splice cityHint into `input` (e.g. "Tokyo Station 巴黎" → Paris bias).
+      // AutocompleteRequest supports locationBias / includedRegionCodes / locationRestriction
+      // (@types/google.maps AutocompleteRequest), but cityHint is a display city string — not
+      // LatLng / CircleLiteral / CLDR region codes. Do not invent coords or cast `any`.
+      // Degrade: typed query only; cityHint remains for the external Maps search link.
+      // isCitySearch: preserve prior "no bias" branch. Non-city also has no typed bias source.
+      const locationBias: google.maps.places.LocationBias | undefined = isCitySearch
+        ? undefined
+        : undefined;
       const baseRequest: google.maps.places.AutocompleteRequest = {
-        input: queryInput,
+        input: trimmed,
         sessionToken: sessionTokenRef.current,
         language: placesLang,
         internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
+        ...(locationBias ? { locationBias } : {}),
       };
       const typedRequest: google.maps.places.AutocompleteRequest =
         primaryTypes.length > 0
@@ -424,6 +427,24 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
     [onChange, onSelectPlace, value]
   );
 
+  const handleUseTypedName = useCallback(() => {
+    const trimmed = value.trim();
+    if (!trimmed || !hasEnoughQueryChars(trimmed)) return;
+    // Minimal safe place — never invent placeId / location / rating / types.
+    suppressNextFetchRef.current = true;
+    onChange(trimmed);
+    onSelectPlace?.({
+      name: trimmed,
+      formattedAddress: '',
+      district: '',
+    });
+    sessionTokenRef.current = null;
+    setSuggestions([]);
+    setHighlightedIdx(-1);
+    setLookupError(null);
+    setDropdownOpen(false);
+  }, [onChange, onSelectPlace, value]);
+
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const isImeEvent =
       isComposingRef.current ||
@@ -461,8 +482,13 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
     onKeyDown?.(e);
   };
 
+  // Viewport-capped width so a narrow flex column (AddStopModal) cannot squeeze the menu,
+  // while 390px screens never overflow horizontally.
+  const dropdownWidthClass =
+    'absolute left-0 z-30 mt-1 min-w-full w-[min(22rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)]';
+
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative overflow-visible">
       <div className="relative">
         {leftIcon}
         <input
@@ -509,7 +535,9 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
       </div>
 
       {dropdownOpen && suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 z-30 mt-1 rounded-xl border tk-bc-hair bg-white py-1 shadow-lg divide-y tk-divide-hair">
+        <ul
+          className={`${dropdownWidthClass} rounded-xl border tk-bc-hair tk-bg-card py-1 shadow-lg divide-y tk-divide-hair`}
+        >
           {suggestions.map((suggestion, idx) => {
             const pred = suggestion.placePrediction;
             if (!pred) return null;
@@ -523,8 +551,8 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
                   onMouseEnter={() => setHighlightedIdx(idx)}
                   onClick={() => void handleSelectSuggestion(suggestion)}
                   className={`w-full px-3 py-2 text-left transition-colors flex items-start gap-2 cursor-pointer ${
- highlightedIdx === idx ? 'tk-bg-forest-tint' : 'hover:tk-bg-forest-tint'
- }`}
+                    highlightedIdx === idx ? 'tk-bg-forest-tint' : 'hover:tk-bg-forest-tint'
+                  }`}
                 >
                   <MapPin className="h-3.5 w-3.5 tk-text-forest shrink-0 mt-0.5" />
                   <span className="min-w-0 flex-1">
@@ -532,7 +560,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
                       {mainLabel}
                     </span>
                     {subLabel && (
-                      <span className="block text-[11px] tk-text-ink2 leading-snug">
+                      <span className="block text-[11px] tk-text-ink2 leading-snug line-clamp-2">
                         {subLabel}
                       </span>
                     )}
@@ -545,9 +573,28 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
       )}
 
       {dropdownOpen && lookupError && isFocused && suggestions.length === 0 && (
-        <div className="absolute left-0 right-0 z-30 mt-1 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-[11px] tk-text-warning shadow-md flex items-start gap-1.5">
-          <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 tk-text-warning" />
-          <span>{lookupError}</span>
+        <div
+          className={`${dropdownWidthClass} rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-[11px] tk-text-warning shadow-md flex flex-col gap-2`}
+        >
+          <div className="flex items-start gap-1.5">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 tk-text-warning" />
+            <span className="leading-snug">{lookupError}</span>
+          </div>
+          {hasEnoughQueryChars(value.trim()) ? (
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleUseTypedName}
+              className="self-start inline-flex flex-col items-start gap-0.5 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-left cursor-pointer hover:tk-bg-forest-tint"
+            >
+              <span className="text-[11px] font-semibold tk-text-forest leading-snug">
+                {acCopy.useTypedNameBtn}
+              </span>
+              <span className="text-[10px] tk-text-ink2 leading-snug">
+                {acCopy.unverifiedPlaceNote}
+              </span>
+            </button>
+          ) : null}
         </div>
       )}
     </div>

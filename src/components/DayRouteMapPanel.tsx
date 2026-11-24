@@ -1672,7 +1672,11 @@ const ConfiguredInteractiveMapViewport: React.FC<{
 
   return (
     <div className="tk-bg-paper">
-      <div className="relative h-80 sm:h-96 w-full">
+      {/* +32px vs h-80/h-96 so SDK .gm-style-cc + Google logo stay inside the visible box */}
+      <div
+        className="relative h-[352px] sm:h-[420px] w-full"
+        data-tk-map-attribution="google"
+      >
         {loading && (
           <MapRouteSkeleton
             cityLabel={cityLabel}
