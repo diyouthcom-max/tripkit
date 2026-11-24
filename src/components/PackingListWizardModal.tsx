@@ -289,7 +289,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                     <div className="text-xs tk-text-ink2">
                       {copy.tripLinkedLabel}
                     </div>
-                    <div className="text-sm sm:text-base font-bold tk-text-forest leading-snug">
+                    <div className="text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
                       {routeDisplay}
                     </div>
                     <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
@@ -305,7 +305,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                 <Plane className="h-5 w-5 tk-text-forest shrink-0" />
                 <div className="min-w-0">
                   <div className="text-xs tk-text-ink2">{copy.tripCurrentLabel}</div>
-                  <div className="text-sm sm:text-base font-bold tk-text-forest leading-snug">
+                  <div className="text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
                     {routeDisplay}
                   </div>
                   <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
@@ -476,10 +476,10 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                            <span className="text-sm font-bold tk-text-forest leading-snug">
+                            <span className="text-[15px] font-bold tk-text-forest leading-snug">
                               {card.title}
                             </span>
-                            <span className="text-[11px] font-medium tk-text-ink2">
+                            <span className="text-xs font-medium tk-text-ink2">
                               {card.badge}
                             </span>
                           </div>
@@ -506,7 +506,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
               >
                 <div className="flex items-start sm:items-center justify-between gap-3">
                   <div className="min-w-0 space-y-0.5">
-                    <div className="text-sm font-bold tk-text-forest leading-snug">
+                    <div className="text-[15px] font-bold tk-text-forest leading-snug">
                       {copy.laundryTitle}
                     </div>
                     <div
@@ -615,12 +615,12 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                   value={customNote}
                   onChange={(e) => setCustomNote(e.target.value)}
                   placeholder={copy.notePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-sm tk-text-forest placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
+                  className="w-full rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-base sm:text-sm tk-text-forest placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
                 />
               </div>
 
               {(alwaysPackCount > 0 || neverSuggestCount > 0) && (
-                <p className="text-[11px] tk-text-ink2 leading-snug tabular-nums">
+                <p className="text-xs tk-text-ink2 leading-snug tabular-nums">
                   {copy.memorySummary(alwaysPackCount, neverSuggestCount)}
                 </p>
               )}

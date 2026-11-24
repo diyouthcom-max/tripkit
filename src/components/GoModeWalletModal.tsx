@@ -929,7 +929,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={walletCopy.searchPlaceholder}
-                className="w-full h-10 rounded-xl tk-bg-forest-plate border border-transparent focus:tk-bc-forest focus:bg-white pl-10 pr-9 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none transition-colors"
+                className="w-full h-10 rounded-xl tk-bg-forest-plate border border-transparent focus:tk-bc-forest focus:bg-white pl-10 pr-9 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none transition-colors"
               />
               {searchQuery && (
                 <button
@@ -1068,7 +1068,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                   value={aiRawText}
                   onChange={(e) => setAiRawText(e.target.value)}
                   placeholder={walletCopy.aiTextPlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                  className="w-full rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                 />
 
                 <div className="flex items-center justify-end gap-2">
@@ -1138,7 +1138,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <div className="sm:col-span-2">
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.titleLabel}
                     </label>
                     <input
@@ -1147,12 +1147,12 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftTitle}
                       onChange={(e) => setDraftTitle(e.target.value)}
                       placeholder={walletCopy.titlePlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                      <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                         {walletCopy.tripDayLabel}
                       </label>
                       <input
@@ -1161,11 +1161,11 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                         max={Math.max(30, setup.days)}
                         value={draftDay}
                         onChange={(e) => setDraftDay(Number(e.target.value) || 1)}
-                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-num tabular-nums text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-num tabular-nums text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                      <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                         {walletCopy.dateExpiryLabel}
                       </label>
                       <input
@@ -1173,7 +1173,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                         value={draftDateTime}
                         onChange={(e) => setDraftDateTime(e.target.value)}
                         placeholder="2026-11-14"
-                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-2.5 font-num tabular-nums text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-2.5 font-num tabular-nums text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1181,7 +1181,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {(catMetaMap[draftCategory] || catMetaMap.flight).codeHint}
                     </label>
                     <input
@@ -1189,11 +1189,11 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftCode}
                       onChange={(e) => setDraftCode(e.target.value)}
                       placeholder="e.g. K8M42P"
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-mono tabular-nums text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-mono tabular-nums text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.terminalLabel}
                     </label>
                     <input
@@ -1201,11 +1201,11 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftTerminal}
                       onChange={(e) => setDraftTerminal(e.target.value)}
                       placeholder={walletCopy.terminalPlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.seatLabel}
                     </label>
                     <input
@@ -1213,14 +1213,14 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftSeat}
                       onChange={(e) => setDraftSeat(e.target.value)}
                       placeholder={walletCopy.seatPlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.localTitleLabel}
                     </label>
                     <input
@@ -1228,11 +1228,11 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftLocalTitle}
                       onChange={(e) => setDraftLocalTitle(e.target.value)}
                       placeholder="ホテルセンチュリーサザンタワー"
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.localAddressLabel}
                     </label>
                     <input
@@ -1240,14 +1240,14 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftLocalAddress}
                       onChange={(e) => setDraftLocalAddress(e.target.value)}
                       placeholder="東京都渋谷区代々木2-2-1"
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.qrPayloadLabel}
                     </label>
                     <input
@@ -1255,11 +1255,11 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftQrPayload}
                       onChange={(e) => setDraftQrPayload(e.target.value)}
                       placeholder="https://... or raw QR string"
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-mono text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 font-mono text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-xs font-semibold tk-text-ink2 mb-1">
                       {walletCopy.noteLabel}
                     </label>
                     <input
@@ -1267,7 +1267,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       value={draftNote}
                       onChange={(e) => setDraftNote(e.target.value)}
                       placeholder={walletCopy.notePlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1392,7 +1392,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                       <div className="flex items-start gap-3 min-w-0">
                         <AccentIconBadge accent={style.accent} icon={style.icon} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink truncate">
+                          <div className="text-[15px] font-bold tk-text-ink truncate">
                             {pass.title}
                           </div>
                           {/* Clean unboxed metadata with middle dots */}
@@ -1543,7 +1543,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 border-t border-dashed tk-bc-hair">
                       {activePass.confirmationCode && (
                         <div className="col-span-2 sm:col-span-1">
-                          <div className="text-[11px] tk-text-ink2">
+                          <div className="text-xs tk-text-ink2">
                             {(catMetaMap[activePass.category] || catMetaMap.flight).codeHint}
                           </div>
                           <div className="mt-0.5 flex items-center gap-1.5">
@@ -1570,7 +1570,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
 
                       {activePass.terminalOrPlatform && (
                         <div>
-                          <div className="text-[11px] tk-text-ink2">
+                          <div className="text-xs tk-text-ink2">
                             {walletCopy.terminalLabel}
                           </div>
                           <div className="mt-0.5 font-num tabular-nums text-sm font-bold tk-text-ink">
@@ -1581,7 +1581,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
 
                       {activePass.seatOrRoom && (
                         <div>
-                          <div className="text-[11px] tk-text-ink2">
+                          <div className="text-xs tk-text-ink2">
                             {walletCopy.seatLabel}
                           </div>
                           <div className="mt-0.5 font-num tabular-nums text-sm font-bold tk-text-ink">
@@ -1603,7 +1603,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                               {activePass.offlineFileName || `${activePass.title}.pdf`}
                             </span>
                           </div>
-                          <span className="text-[11px] font-semibold tk-text-forest shrink-0">
+                          <span className="text-xs font-semibold tk-text-forest shrink-0">
                             {walletCopy.offlinePdfCached}
                           </span>
                         </div>
@@ -1620,7 +1620,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                               <QRCodeSVG value={qrStringForActive} size={84} level="M" />
                             </div>
                             <div className="text-left min-w-0">
-                              <div className="text-[11px] font-semibold tk-text-ink2">
+                              <div className="text-xs font-semibold tk-text-ink2">
                                 {walletCopy.extractedQrLabel}
                               </div>
                               <div className="font-mono text-xs font-bold tk-text-ink break-all">
@@ -1721,7 +1721,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                             includeMargin={false}
                           />
                         </div>
-                        <div className="text-[11px] tk-text-ink2 font-mono break-all max-w-sm mx-auto">
+                        <div className="text-xs tk-text-ink2 font-mono break-all max-w-sm mx-auto">
                           {qrStringForActive}
                         </div>
                         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -1908,7 +1908,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                     <Camera className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm sm:text-base font-bold tk-text-ink">
+                    <div className="text-[15px] sm:text-base font-bold tk-text-ink">
                       {walletCopy.takePhotoTitle}
                     </div>
                     <div className="text-xs tk-text-ink2 mt-0.5">
@@ -1926,7 +1926,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                     <ImageIcon className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm sm:text-base font-bold tk-text-ink">
+                    <div className="text-[15px] sm:text-base font-bold tk-text-ink">
                       {walletCopy.choosePhotosTitle}
                     </div>
                     <div className="text-xs tk-text-ink2 mt-0.5">
@@ -1944,7 +1944,7 @@ export const GoModeWalletModal: React.FC<GoModeWalletModalProps> = ({
                     <FileText className="h-5 w-5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm sm:text-base font-bold tk-text-ink">
+                    <div className="text-[15px] sm:text-base font-bold tk-text-ink">
                       {walletCopy.uploadPdfTitle}
                     </div>
                     <div className="text-xs tk-text-ink2 mt-0.5">

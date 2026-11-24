@@ -263,7 +263,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             placeholder={copy.descPlaceholder}
-            className="sm:col-span-2 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="sm:col-span-2 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <input
             type="number"
@@ -279,7 +279,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               }
             }}
             placeholder={copy.amtPlaceholder(currencyCode)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-num tabular-nums tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-num tabular-nums tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
         </div>
 
@@ -319,7 +319,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 setEditVatEligible(true);
               }
             }}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-xs font-semibold tk-text-ink"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="daily">{copy.bucketDaily}</option>
             <option value="shopping">{copy.bucketShopping}</option>
@@ -329,7 +329,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
           <select
             value={editAccount}
             onChange={(e) => setEditAccount(e.target.value as PaymentAccount)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-xs font-semibold tk-text-ink"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="card">{t('budget.walletCard')}</option>
             <option value="cash">{t('budget.walletCash')}</option>
@@ -339,7 +339,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
           <select
             value={editSplit}
             onChange={(e) => setEditSplit(e.target.value as SplitMode)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-xs font-semibold tk-text-ink"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="me">{copy.allMine100}</option>
             {!isSoloTrip && (
@@ -453,7 +453,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               <select
                 value={editVatStatus}
                 onChange={(e) => setEditVatStatus(e.target.value as VatDocStatus)}
-                className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-xs font-semibold tk-text-forest"
+                className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-base sm:text-sm font-semibold tk-text-forest"
               >
                 <option value="pending_form">{getVatStatusLabel('pending_form', activeLang)}</option>
                 <option value="form_ready">{getVatStatusLabel('form_ready', activeLang)}</option>
@@ -469,7 +469,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             value={editNote}
             onChange={(e) => setEditNote(e.target.value)}
             placeholder={copy.notePlaceholder}
-            className="flex-1 min-w-[180px] rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="flex-1 min-w-[180px] rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <div className="flex items-center gap-2 ml-auto">
             <button
@@ -608,7 +608,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold tk-text-ink truncate">
+                <span className="text-[15px] font-semibold tk-text-ink truncate">
                   {translateDemoExpenseTitle(expense.title, activeLang)}
                 </span>
                 {expense.settled && expense.split !== 'me' && (
@@ -664,12 +664,12 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                   -{sym}
                   {expense.amountLocal.toFixed(2)}
                 </span>{' '}
-                <span className="text-[11px] font-semibold tk-text-ink2">
+                <span className="text-xs font-semibold tk-text-ink2">
                   {upperTripCode}
                 </span>
               </div>
               {isCrossCurrency ? (
-                <div className="mt-0.5 font-num text-[11px] tk-text-ink2 tabular-nums whitespace-nowrap">
+                <div className="mt-0.5 font-num text-xs tk-text-ink2 tabular-nums whitespace-nowrap">
                   ≈{' '}
                   {formatHomeCurrencyEquivalent(
                     expense.amountLocal,
@@ -687,7 +687,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 </div>
               ) : (
                 expense.account === 'card' && (
-                  <div className="mt-0.5 text-[11px] tk-text-ink2 whitespace-nowrap">
+                  <div className="mt-0.5 text-xs tk-text-ink2 whitespace-nowrap">
                     {walletCopy.cardBillRefTag}
                   </div>
                 )

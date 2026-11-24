@@ -67,6 +67,7 @@ import { resolveApiUrl } from '../services/apiUrl';
 import { AiVoiceInputButton } from './AiVoiceInputButton';
 import type { QuickExpenseLogPayload } from './TimelineNodeCard';
 import { getPlaceDetailCopy } from '../i18n/packs/placeDetailPack';
+import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
 
 interface PlaceDetailSheetProps {
   open: boolean;
@@ -279,6 +280,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [open, onClose]);
+
+  // Hook must run before the early return below (Rules of Hooks).
+  const heroPhotosForBlob = livePlace?.heroPhotoUris || [];
+  const activeHeroPhotoUri =
+    open && node && !heroImgFailed && heroPhotosForBlob.length > 0
+      ? heroPhotosForBlob[Math.min(photoIdx, heroPhotosForBlob.length - 1)]
+      : null;
+  const { url: heroBlobUrl } = useGooglePhotoBlob(activeHeroPhotoUri);
 
   if (!open || !node) return null;
 
@@ -590,11 +599,10 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
         <div className="overflow-y-auto flex-1 pb-8">
           {/* Full-Bleed Storefront Photo Hero */}
           <div className="relative h-64 sm:h-72 w-full tk-bg-paper overflow-hidden select-none">
-            {activeHeroPhoto ? (
+            {activeHeroPhoto && heroBlobUrl ? (
               <img
-                src={activeHeroPhoto}
+                src={heroBlobUrl}
                 alt={localizedTitle}
-                referrerPolicy="no-referrer"
                 onError={() => setHeroImgFailed(true)}
                 className="h-full w-full object-cover"
               />
@@ -939,7 +947,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           value={spendAmount}
                           onChange={(e) => setSpendAmount(e.target.value)}
                           placeholder="0.00"
-                          className="w-full rounded-xl border tk-bc-hair tk-bg-card pl-8 pr-3 py-2 font-num text-sm font-bold tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                          className="w-full rounded-xl border tk-bc-hair tk-bg-card pl-8 pr-3 py-2 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                         />
                       </div>
                     </div>
@@ -1209,7 +1217,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     value={whyDraft}
                     onChange={(e) => setWhyDraft(e.target.value)}
                     placeholder={copy.whyPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                   />
                   <div className="flex justify-end">
                     <button
@@ -1637,14 +1645,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           value={quickPassTitle}
                           onChange={(e) => setQuickPassTitle(e.target.value)}
                           placeholder={copy.passTitlePlaceholder(localizedTitle)}
-                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                         />
                         <input
                           type="text"
                           value={quickPassCode}
                           onChange={(e) => setQuickPassCode(e.target.value)}
                           placeholder={copy.passCodePlaceholder}
-                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-mono text-xs font-bold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-mono text-base sm:text-sm font-bold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                         />
                       </div>
                       <div className="flex justify-end gap-2">
@@ -1678,7 +1686,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     value={noteDraft}
                     onChange={(e) => setNoteDraft(e.target.value)}
                     placeholder={copy.noteTextareaPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-xs sm:text-sm tk-text-ink leading-relaxed focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink leading-relaxed focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                   />
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">

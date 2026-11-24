@@ -865,7 +865,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                         matchedCity: nextTrip?.state.setup.cities[0] || activePhotoModal.matchedCity,
                       });
                     }}
-                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                   >
                     {trips.map((tr) => (
                       <option key={tr.id} value={tr.id}>
@@ -889,7 +889,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                       })
                     }
                     placeholder={activePhotoModal.matchedCity}
-                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                    className="w-full h-9 rounded-xl border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                   />
                 </div>
               </div>
@@ -908,7 +908,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                     })
                   }
                   placeholder={copy.memoryNotePlaceholder}
-                  className="w-full h-9 rounded-xl border tk-bc-hair px-3 text-xs tk-text-ink"
+                  className="w-full h-9 rounded-xl border tk-bc-hair px-3 text-base sm:text-sm tk-text-ink"
                 />
               </div>
             </div>

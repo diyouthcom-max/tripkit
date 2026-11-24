@@ -1374,14 +1374,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         value={groupEditTitle}
                         onChange={(e) => setGroupEditTitle(e.target.value)}
                         placeholder={t('packingExtra.groupNamePlaceholder')}
-                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-ink"
+                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
                       />
                       <input
                         type="text"
                         value={groupEditCube}
                         onChange={(e) => setGroupEditCube(e.target.value)}
                         placeholder={t('packingExtra.groupCubePlaceholder')}
-                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-xs tk-text-ink2"
+                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink2"
                       />
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1445,10 +1445,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         size="md"
                       />
                       <div className="min-w-0">
-                        <h3 className="text-sm sm:text-[15px] font-bold tk-text-ink truncate">
+                        <h3 className="text-[15px] font-bold tk-text-ink truncate">
                           {translateGroupTitleLabel(grp.id, grp.title, activeLang)}
                         </h3>
-                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                        <p className="text-xs tk-text-ink2 leading-snug">
                           {translateGroupCubeLabel(grp.cubeLabel, activeLang)}
                         </p>
                       </div>
@@ -1783,7 +1783,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     return (
                                       <div className="flex items-center gap-1.5 flex-wrap">
                                         <span
-                                          className={`text-sm font-semibold ${
+                                          className={`text-[15px] font-semibold ${
  item.done
  ? isShared
  ? 'tk-text-forest'
@@ -1798,7 +1798,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                             ×{itemQty}
                                           </span>
                                         )}
-                                        <span className="tabular-nums text-[11px] tk-text-ink2">
+                                        <span className="tabular-nums text-xs tk-text-ink2">
                                           {formatItemWeightByPref(item.weightGrams, unitSystem)}
                                           {itemQty > 1 &&
                                             ` (${formatItemWeightByPref(itemUnitW, unitSystem)}${t(
@@ -1824,7 +1824,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                   })()}
 
                                   {isShared && (
-                                    <p className="mt-0.5 text-[11px] tk-text-ink2 leading-snug">
+                                    <p className="mt-0.5 text-xs tk-text-ink2 leading-snug">
                                       {item.done
                                         ? t('packingExtra.sharedDone', {
                                             name: translateMemberName(
@@ -1915,10 +1915,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       >
                         <AccentIconBadge accent="teal" icon={Bookmark} size="md" />
                         <div className="min-w-0">
-                          <h3 className="text-sm sm:text-[15px] font-bold tk-text-ink truncate">
+                          <h3 className="text-[15px] font-bold tk-text-ink truncate">
                             {copy.alwaysPackLibTitle}
                           </h3>
-                          <p className="text-[11px] tk-text-ink2 leading-snug">
+                          <p className="text-xs tk-text-ink2 leading-snug">
                             {copy.alwaysPackLibDesc}
                           </p>
                         </div>
@@ -1998,7 +1998,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                         ×{tpl.quantity}
                                       </span>
                                     )}
-                                    <span className="font-num tabular-nums text-[11px] tk-text-ink2">
+                                    <span className="font-num tabular-nums text-xs tk-text-ink2">
                                       {formatItemWeightByPref(
                                         tpl.unitWeightGrams * Math.max(1, tpl.quantity || 1),
                                         unitSystem
@@ -2045,7 +2045,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <AccentIconBadge accent="peach" icon={BellRing} size="md" />
-              <h3 className="text-sm font-bold tk-text-ink truncate">
+              <h3 className="text-[15px] font-bold tk-text-ink truncate">
                 {t('packingExtra.reminderTitle')}
               </h3>
             </div>
@@ -2122,7 +2122,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       customDateTime: e.target.value,
                     })
                   }
-                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-num tk-text-ink"
+                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm font-num tk-text-ink"
                 />
               </div>
             )}
@@ -2230,10 +2230,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       value={customDeadlineTitle}
                       onChange={(e) => setCustomDeadlineTitle(e.target.value)}
                       placeholder={copy.deadlinePlaceholder}
-                      className="w-full rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                     {tasks.filter((tk) => !tk.done).length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1 text-[11px]">
+                      <div className="flex flex-wrap items-center gap-1 text-xs">
                         <span className="tk-text-ink2">
                           {copy.fromTodoLabel}
                         </span>
@@ -2260,7 +2260,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         type="datetime-local"
                         value={customDeadlineTime}
                         onChange={(e) => setCustomDeadlineTime(e.target.value)}
-                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs tk-text-ink tabular-nums"
+                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm tk-text-ink tabular-nums"
                       />
                       <button
                         type="submit"
@@ -2270,7 +2270,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         {copy.schedulePushBtn}
                       </button>
                     </div>
-                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <div className="flex flex-wrap items-center gap-1.5 text-xs">
                       <span className="tk-text-ink2">
                         {copy.quickLabel}
                       </span>
@@ -2304,10 +2304,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                           className="py-1.5 flex items-center justify-between gap-2 text-xs"
                         >
                           <div className="min-w-0">
-                            <div className="font-semibold tk-text-ink truncate">
+                            <div className="text-[15px] font-semibold tk-text-ink truncate">
                               {item.title}
                             </div>
-                            <div className="font-num text-[11px] tk-text-forest tabular-nums">
+                            <div className="font-num text-xs tk-text-forest tabular-nums">
                               {formatScheduleBadgeLabel(
                                 item.triggerAtMs,
                                 nowSnap,
@@ -2347,10 +2347,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <div className="flex items-center gap-2.5 min-w-0">
               <AccentIconBadge accent="teal" icon={ListTodo} size="md" />
               <div className="min-w-0">
-                <h3 className="text-sm font-bold tk-text-ink truncate">
+                <h3 className="text-[15px] font-bold tk-text-ink truncate">
                   {t('tasks.sidebarTitle')}
                 </h3>
-                <p className="text-[11px] tk-text-ink2 tabular-nums">
+                <p className="text-xs tk-text-ink2 tabular-nums">
                   {doneTasksCount}/{scopedTasks.length} {copy.tasksDoneSuffix}
                 </p>
               </div>
@@ -2396,7 +2396,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                     {task.done && <Check className="h-3 w-3 stroke-[2.5]" />}
                   </span>
                   <span
-                    className={`text-xs font-semibold truncate flex-1 ${
+                    className={`text-[15px] font-semibold truncate flex-1 ${
  task.done ? 'line-through tk-text-ink2' : 'tk-text-ink'
  }`}
                   >
@@ -2448,7 +2448,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   const localName = translateDemoPackItemName(c.name, activeLang);
                   return (
                     <li key={c.id} className="py-2 flex items-center justify-between gap-2 text-xs">
-                      <span className="font-medium tk-text-ink truncate">
+                      <span className="text-[15px] font-medium tk-text-ink truncate">
                         {qty > 1 ? `${localName} ×${qty}` : localName}
                       </span>
                       <span className="tabular-nums tk-text-forest shrink-0">

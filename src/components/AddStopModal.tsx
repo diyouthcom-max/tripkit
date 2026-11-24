@@ -52,6 +52,7 @@ import { AiVoiceInputButton } from './AiVoiceInputButton';
 import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getAddStopModalCopy } from '../i18n/packs/addStopModalPack';
 import { tkColor } from '../utils/tkColor';
+import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
 
 interface AddStopModalProps {
   open: boolean;
@@ -262,17 +263,17 @@ const StopCategoryAvatar: React.FC<{
   title: string;
 }> = ({ stopType, photoUri, title }) => {
   const [imgFailed, setImgFailed] = useState(false);
+  const { url: photoBlobUrl, failed: photoBlobFailed } = useGooglePhotoBlob(photoUri);
 
   useEffect(() => {
     setImgFailed(false);
   }, [photoUri]);
 
-  if (photoUri && !imgFailed) {
+  if (photoUri && photoBlobUrl && !imgFailed && !photoBlobFailed) {
     return (
       <img
-        src={photoUri}
+        src={photoBlobUrl}
         alt={title}
-        referrerPolicy="no-referrer"
         onError={() => setImgFailed(true)}
         className="h-16 w-16 rounded-xl object-cover shrink-0 tk-bg-forest-plate"
       />
@@ -2212,7 +2213,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       <Search className="h-4 w-4 tk-text-forest absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     }
                     placeholder={copy.searchPlaceholder(targetPrimaryCity)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper pl-10 pr-3 py-2.5 text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper pl-10 pr-3 py-2.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
 
@@ -2408,7 +2409,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                   value={linkOrPromptText}
                   onChange={(e) => setLinkOrPromptText(e.target.value)}
                   placeholder={copy.linkPlaceholder(targetPrimaryCity)}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
+                  className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
                 />
 
                 <div className="flex items-center justify-between gap-2">
@@ -2680,7 +2681,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
                       placeholder={copy.stopTitlePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
@@ -2693,7 +2694,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newDistrict}
                       onChange={(e) => setNewDistrict(e.target.value)}
                       placeholder={targetPrimaryCity}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
@@ -2734,7 +2735,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       type="time"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-xs tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
@@ -2746,7 +2747,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       type="time"
                       value={newCloseTime}
                       onChange={(e) => setNewCloseTime(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-xs tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
@@ -2760,7 +2761,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       step="1"
                       value={newEst}
                       onChange={(e) => setNewEst(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-xs tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
@@ -2782,7 +2783,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newAddress}
                       onChange={(e) => setNewAddress(e.target.value)}
                       placeholder={copy.streetAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
@@ -2795,7 +2796,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newTransit}
                       onChange={(e) => setNewTransit(e.target.value)}
                       placeholder={copy.transitNotePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
@@ -2830,14 +2831,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newRainTitle}
                       onChange={(e) => setNewRainTitle(e.target.value)}
                       placeholder={copy.rainVenuePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                     <input
                       type="text"
                       value={newRainAddress}
                       onChange={(e) => setNewRainAddress(e.target.value)}
                       placeholder={copy.rainAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 )}

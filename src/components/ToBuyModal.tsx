@@ -438,7 +438,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder={copy.gearNamePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
               </div>
 
@@ -450,7 +450,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                   <select
                     value={newGroupId}
                     onChange={(e) => setNewGroupId(e.target.value)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                   >
                     {groups.map((g) => (
                       <option key={g.id} value={g.id}>

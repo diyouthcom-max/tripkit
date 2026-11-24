@@ -862,7 +862,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={nameInput}
                       onChange={(e) => setNameInput(e.target.value)}
                       placeholder={copy.nicknamePlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                     />
                   )}
 
@@ -873,7 +873,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder={copy.emailPlaceholder}
-                    className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-xs tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                    className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                   />
 
                   {emailStep !== 'reset' && (
@@ -891,7 +891,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                             ? copy.passwordNewPlaceholder
                             : copy.passwordPlaceholder
                         }
-                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white pl-3 pr-9 text-xs tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white pl-3 pr-9 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                       />
                       <button
                         type="button"

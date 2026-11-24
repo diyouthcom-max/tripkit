@@ -67,6 +67,7 @@ import {
 import { HorizontalChipScroller } from './HorizontalChipScroller';
 import { getItineraryMapCopy } from '../i18n/packs/itineraryMapPack';
 import { tkColor } from '../utils/tkColor';
+import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
 
 function usePanelLang() {
   const { i18n } = useTranslation();
@@ -778,6 +779,11 @@ const StopAdvancedMarker: React.FC<{
 }) => {
   const { lang, copy } = usePanelLang();
   const [imgFailed, setImgFailed] = useState(false);
+  const { url: thumbBlobUrl, failed: thumbBlobFailed } = useGooglePhotoBlob(thumbPhotoUri);
+
+  useEffect(() => {
+    setImgFailed(false);
+  }, [thumbPhotoUri]);
 
   const badgeColor = multiDayMode
     ? getDayRouteColor(stop.dayNumber)
@@ -866,9 +872,9 @@ const StopAdvancedMarker: React.FC<{
               {stop.orderNumber}
             </span>
 
-            {thumbPhotoUri && !imgFailed ? (
+            {thumbPhotoUri && thumbBlobUrl && !imgFailed && !thumbBlobFailed ? (
               <img
-                src={thumbPhotoUri}
+                src={thumbBlobUrl}
                 alt=""
                 onError={() => setImgFailed(true)}
                 className="h-9.5 w-9.5 tk-r-plate object-cover shrink-0 tk-bg-paper"

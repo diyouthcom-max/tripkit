@@ -526,7 +526,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                         value={recipientName}
                         onChange={(e) => setRecipientName(e.target.value)}
                         placeholder={copy.recipientPlaceholder}
-                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
+                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-base sm:text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                       />
                     </div>
                     <div>
@@ -540,7 +540,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder={copy.phonePlaceholder}
-                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink tabular-nums focus:outline-none focus:tk-bc-forest"
+                        className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-base sm:text-sm tk-text-ink tabular-nums focus:outline-none focus:tk-bc-forest"
                       />
                     </div>
                   </div>
@@ -555,7 +555,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       value={shippingAddress}
                       onChange={(e) => setShippingAddress(e.target.value)}
                       placeholder={copy.addressPlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
+                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-base sm:text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                     />
                   </div>
                   <div>
@@ -568,7 +568,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                       value={customerNote}
                       onChange={(e) => setCustomerNote(e.target.value)}
                       placeholder={copy.notePlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
+                      className="w-full h-10 rounded-xl border tk-bc-hair px-3 text-base sm:text-sm tk-text-ink focus:outline-none focus:tk-bc-forest"
                     />
                   </div>
                 </div>
@@ -712,7 +712,7 @@ export const PrintOrderCheckoutModal: React.FC<PrintOrderCheckoutModalProps> = (
                                 }))
                               }
                               placeholder={copy.trackingPlaceholder}
-                              className="flex-1 h-8 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                              className="flex-1 h-8 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                             />
                             <button
                               type="button"

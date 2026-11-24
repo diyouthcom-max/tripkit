@@ -1077,7 +1077,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                 />
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <h3 className="text-sm sm:text-[15px] font-bold tk-text-ink truncate">
+                    <h3 className="text-[15px] font-bold tk-text-ink truncate">
                       {bag.title}
                     </h3>
                     <span className="font-num tabular-nums text-xs font-semibold tk-text-ink2">
@@ -1086,7 +1086,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                       {bag.defaultCarryOn ? t('smartBags.carryOnWeightTag') : t('smartBags.checkedWeightTag')}
                     </span>
                   </div>
-                  <p className="text-xs tk-text-ink2 truncate">{bag.subtitle}</p>
+                  <p className="text-xs tk-text-ink2 leading-snug break-words">{bag.subtitle}</p>
                 </div>
               </button>
 
@@ -1266,7 +1266,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                   return (
                                     <div className="flex items-center gap-1.5 flex-wrap">
                                       <span
-                                        className={`text-sm font-semibold ${
+                                        className={`text-[15px] font-semibold ${
  item.done
  ? 'line-through tk-text-ink2'
  : 'tk-text-ink'
@@ -1304,7 +1304,7 @@ export const SmartPackingInlinePanel: React.FC<SmartPackingInlinePanelProps> = (
                                     </div>
                                   );
                                 })()}
-                                <p className="mt-0.5 text-xs tk-text-ink2 truncate">
+                                <p className="mt-0.5 text-xs tk-text-ink2 leading-snug break-words">
                                   {translateDemoPackItemWhy(item.why, activeLang)}
                                 </p>
                               </button>

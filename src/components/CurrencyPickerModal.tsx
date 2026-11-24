@@ -170,7 +170,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={copy.placeholder}
-              className="flex-1 min-w-0 bg-transparent text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
+              className="flex-1 min-w-0 bg-transparent text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
             />
             {syncingRates && (
               <RefreshCw

@@ -615,7 +615,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
-                        className={`text-sm font-extrabold ${
+                        className={`text-[15px] font-extrabold ${
  isProActive ? 'tk-text-ink' : 'text-white'
  }`}
                       >
@@ -634,7 +634,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       </span>
                     </div>
                     <p
-                      className={`mt-0.5 font-num text-xs leading-snug tabular-nums ${
+                      className={`mt-0.5 font-num text-[13px] leading-snug tabular-nums ${
  isProActive ? 'tk-text-ink2' : 'text-white/85'
  }`}
                     >
@@ -672,7 +672,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <h3 className="text-xs font-extrabold tk-text-ink">
                           {copy.accountSectionTitle}
                         </h3>
-                        <p className="mt-0.5 text-[11px] leading-relaxed tk-text-ink2">
+                        <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
                           {copy.accountSectionDesc}
                         </p>
                       </div>
@@ -690,14 +690,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           <Cloud className="h-4 w-4" />
                         </span>
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink truncate">
+                          <div className="text-[15px] font-bold tk-text-ink truncate">
                             {authUser
                               ? authUser.displayName ||
                                 authUser.email ||
                                 copy.accountConnectedFallback
                               : copy.cloudAccountTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2 break-words">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2 break-words">
                             {authUser
                               ? activeRoomId
                                 ? `${authUser.email || copy.signedInWord} · ${copy.liveRoomWord(
@@ -761,10 +761,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           <KeyRound className="h-4 w-4" />
                         </span>
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.activationTitle}
                           </div>
-                          <div className="mt-0.5 font-num text-xs leading-snug tk-text-ink2 tabular-nums">
+                          <div className="mt-0.5 font-num text-[13px] leading-snug tk-text-ink2 tabular-nums">
                             {isProActive && preferences.redeemedCode
                               ? copy.activationCodeBound(preferences.redeemedCode, expiresDateLabel || '')
                               : isProActive
@@ -788,10 +788,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             <KeyRound className="h-4 w-4" />
                           </span>
                           <div className="min-w-0">
-                            <div className="text-sm font-extrabold tk-text-ink">
+                            <div className="text-[15px] font-extrabold tk-text-ink">
                               {copy.ownerConsoleTitle}
                             </div>
-                            <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                            <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                               {copy.ownerConsoleSub}
                             </div>
                           </div>
@@ -822,10 +822,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="teal" icon={Globe} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {t('settings.languageLabel')}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                             {LANGUAGE_SPECS[preferences.language || 'en-US'].regionNote}
                           </div>
                         </div>
@@ -908,7 +908,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       })}
                     </div>
 
-                    <label className="inline-flex items-center gap-2 text-[11px] font-medium tk-text-ink2 cursor-pointer">
+                    <label className="inline-flex items-center gap-2 text-xs font-medium tk-text-ink2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={syncRegionalOnLangChange}
@@ -932,10 +932,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3 min-w-0">
                         <AccentIconBadge accent="teal" icon={Luggage} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink leading-snug">
+                          <div className="text-[15px] font-bold tk-text-ink leading-snug">
                             {t('settings.baggageLabel')}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2 tabular-nums">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2 tabular-nums">
                             {`${t('settings.carryOnShort')} ${formatTotalWeightByPref(
                               preferences.carryOnLimitKg * 1000,
                               preferences.unitSystem
@@ -958,7 +958,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         handleBaggagePresetChange(e.target.value as BaggagePresetId)
                       }
-                      className="w-full h-10 rounded-xl border tk-bc-hair tk-bg-paper px-3 text-xs font-bold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none truncate cursor-pointer"
+                      className="w-full h-10 rounded-xl border tk-bc-hair tk-bg-paper px-3 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none truncate cursor-pointer"
                     >
                       <option value="lcc">
                         {getBaggagePresetLabels('lcc', activeLang, preferences.unitSystem).label}
@@ -1041,7 +1041,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={() => setCurrencyPickerOpen(true)}
                     className="w-full px-4 min-h-[50px] flex items-center justify-between gap-3 text-left hover:tk-bg-paper transition-colors cursor-pointer"
                   >
-                    <span className="text-sm font-bold tk-text-ink shrink-0">
+                    <span className="text-[15px] font-bold tk-text-ink shrink-0">
                       {t('settings.homeCurrencyLabel')}
                     </span>
                     <span className="inline-flex items-center gap-1.5 min-w-0 max-w-[62%]">
@@ -1054,7 +1054,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                   {/* Unit System */}
                   <div className="px-4 min-h-[50px] flex items-center justify-between gap-3">
-                    <span className="text-sm font-bold tk-text-ink shrink-0">
+                    <span className="text-[15px] font-bold tk-text-ink shrink-0">
                       {t('settings.unitSystemLabel')}
                     </span>
                     <select
@@ -1069,7 +1069,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             : t('settings.unitMetric')
                         );
                       }}
-                      className="min-w-0 max-w-[58%] truncate bg-transparent text-right text-sm font-semibold tk-text-ink2 focus:tk-text-forest focus:outline-none cursor-pointer"
+                      className="min-w-0 max-w-[58%] truncate bg-transparent text-right text-base sm:text-sm font-semibold tk-text-ink2 focus:tk-text-forest focus:outline-none cursor-pointer"
                     >
                       <option value="metric">{t('settings.unitMetric')}</option>
                       <option value="imperial">{t('settings.unitImperial')}</option>
@@ -1078,7 +1078,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                   {/* Time Format */}
                   <div className="px-4 min-h-[50px] flex items-center justify-between gap-3">
-                    <span className="text-sm font-bold tk-text-ink shrink-0">
+                    <span className="text-[15px] font-bold tk-text-ink shrink-0">
                       {t('settings.timeFormatLabel')}
                     </span>
                     <select
@@ -1091,7 +1091,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           nextFmt === '12h' ? t('settings.time12h') : t('settings.time24h')
                         );
                       }}
-                      className="min-w-0 max-w-[58%] truncate bg-transparent text-right text-sm font-semibold tk-text-ink2 focus:tk-text-forest focus:outline-none cursor-pointer"
+                      className="min-w-0 max-w-[58%] truncate bg-transparent text-right text-base sm:text-sm font-semibold tk-text-ink2 focus:tk-text-forest focus:outline-none cursor-pointer"
                     >
                       <option value="24h">{t('settings.time24h')}</option>
                       <option value="12h">{t('settings.time12h')}</option>
@@ -1112,10 +1112,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="peach" icon={Bell} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.departureAlertsTitle}
                           </div>
-                          <div className="mt-0.5 text-xs tk-text-ink2">
+                          <div className="mt-0.5 text-[13px] tk-text-ink2">
                             {copy.departureAlertsDesc}
                           </div>
                         </div>
@@ -1195,10 +1195,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {/* Workspace Pre-departure Banner Switch */}
                   <div className="px-4 py-3.5 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-sm font-bold tk-text-ink">
+                      <div className="text-[15px] font-bold tk-text-ink">
                         {copy.bannerTitle}
                       </div>
-                      <div className="mt-0.5 text-xs tk-text-ink2">
+                      <div className="mt-0.5 text-[13px] tk-text-ink2">
                         {copy.bannerDesc}
                       </div>
                     </div>
@@ -1226,10 +1226,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {/* Browser Tab Unpacked Count Badge */}
                   <div className="px-4 py-3.5 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-sm font-bold tk-text-ink">
+                      <div className="text-[15px] font-bold tk-text-ink">
                         {copy.tabBadgeTitle}
                       </div>
-                      <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
+                      <div className="mt-0.5 text-[13px] tk-text-ink2 tabular-nums">
                         {copy.tabBadgeDesc(unpackedCount)}
                       </div>
                     </div>
@@ -1265,7 +1265,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           <span className="font-bold tk-text-ink">
                             {copy.queueTitle(pendingQueue.length)}
                           </span>
-                          <span className="text-[11px] tk-text-ink2">
+                          <span className="text-xs tk-text-ink2">
                             {copy.queueTag}
                           </span>
                         </div>
@@ -1279,7 +1279,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 <div className="font-semibold tk-text-ink truncate">
                                   {item.title}
                                 </div>
-                                <div className="font-num text-[11px] tk-text-forest tabular-nums">
+                                <div className="font-num text-xs tk-text-forest tabular-nums">
                                   {formatScheduleBadgeLabel(
                                     item.triggerAtMs,
                                     nowSnap,
@@ -1306,7 +1306,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   })()}
                 </div>
 
-                <p className="mt-2 px-2 text-[11px] leading-relaxed tk-text-ink2">
+                <p className="mt-2 px-2 text-[13px] leading-relaxed tk-text-ink2">
                   {notificationPermission === 'granted'
                     ? copy.notifGrantedFoot
                     : copy.notifPendingFoot}
@@ -1328,7 +1328,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <h3 className="text-xs font-extrabold tk-text-ink">
                           {copy.dataTitle}
                         </h3>
-                        <p className="mt-0.5 text-[11px] leading-relaxed tk-text-ink2">
+                        <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
                           {copy.dataDesc}
                         </p>
                       </div>
@@ -1348,10 +1348,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="teal" icon={Download} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.exportTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2 tabular-nums">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2 tabular-nums">
                             {copy.exportDesc(tripBook.length)}
                           </div>
                         </div>
@@ -1368,10 +1368,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="ocean" icon={Upload} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.importTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                             {copy.importDesc}
                           </div>
                         </div>
@@ -1391,10 +1391,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="lavender" icon={RotateCcw} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.memoryTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2 tabular-nums">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2 tabular-nums">
                             {learnedEntries.length > 0
                               ? copy.memoryCountDesc(learnedEntries.length)
                               : copy.memoryEmptyDesc}
@@ -1457,7 +1457,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <h3 className="text-xs font-extrabold tk-text-ink">
                         {copy.advancedTitle}
                       </h3>
-                      <p className="mt-0.5 text-[11px] leading-relaxed tk-text-swatch-3">
+                      <p className="mt-0.5 text-[13px] leading-relaxed tk-text-swatch-3">
                         {copy.advancedDesc}
                       </p>
                     </div>
@@ -1473,10 +1473,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="teal" icon={LayoutGrid} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.categoriesTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-swatch-3 tabular-nums">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-swatch-3 tabular-nums">
                             {`${copy.categoriesCount(groups.length)}${
                               learnedEntries.length > 0
                                 ? copy.categoriesRules(learnedEntries.length)
@@ -1498,10 +1498,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <div className="flex items-center gap-3.5 min-w-0">
                           <AccentIconBadge accent="peach" icon={KeyRound} size="md" />
                           <div className="min-w-0">
-                            <div className="text-sm font-extrabold tk-text-ink">
+                            <div className="text-[15px] font-extrabold tk-text-ink">
                               {copy.adminConsoleAdvTitle}
                             </div>
-                            <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                            <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                               {copy.adminConsoleAdvSub}
                             </div>
                           </div>
@@ -1519,10 +1519,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="peach" icon={Tag} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.affiliateTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-swatch-3">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-swatch-3">
                             {copy.affiliateSub}
                           </div>
                         </div>
@@ -1536,10 +1536,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <div className="flex items-center gap-3.5 min-w-0">
                           <AccentIconBadge accent="lavender" icon={FlaskConical} size="md" />
                           <div className="min-w-0">
-                            <div className="text-sm font-bold tk-text-ink">
+                            <div className="text-[15px] font-bold tk-text-ink">
                               {copy.trialPreviewTitle}
                             </div>
-                            <div className="mt-0.5 text-xs leading-snug tk-text-swatch-3">
+                            <div className="mt-0.5 text-[13px] leading-snug tk-text-swatch-3">
                               {preferences.trialSimulationMode === 'expired'
                                 ? copy.trialSimActive
                                 : copy.trialSimNormal}
@@ -1582,10 +1582,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-3.5 min-w-0">
                         <AccentIconBadge accent="peach" icon={FileText} size="md" />
                         <div className="min-w-0">
-                          <div className="text-sm font-bold tk-text-ink">
+                          <div className="text-[15px] font-bold tk-text-ink">
                             {copy.expertAuditTitle}
                           </div>
-                          <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                          <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                             {copy.expertAuditSub}
                           </div>
                         </div>
@@ -1610,7 +1610,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <h3 className="text-xs font-extrabold tk-text-ink">
                         {copy.routeMapTitle}
                       </h3>
-                      <p className="mt-0.5 text-[11px] leading-relaxed tk-text-ink2">
+                      <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
                         {copy.routeMapDesc}
                       </p>
                     </div>
@@ -1638,10 +1638,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <Sparkles className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <div className="text-sm font-bold tk-text-ink">
+                        <div className="text-[15px] font-bold tk-text-ink">
                           {copy.whatsNewTitle}
                         </div>
-                        <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                        <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                           {copy.whatsNewSub}
                         </div>
                       </div>
@@ -1659,10 +1659,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <Heart className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <div className="text-sm font-bold tk-text-ink">
+                        <div className="text-[15px] font-bold tk-text-ink">
                           {copy.feedbackTitle}
                         </div>
-                        <div className="mt-0.5 text-xs leading-snug tk-text-ink2">
+                        <div className="mt-0.5 text-[13px] leading-snug tk-text-ink2">
                           {copy.feedbackSub}
                         </div>
                       </div>
@@ -1695,7 +1695,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <p className="text-xs font-semibold tk-text-ink2">
                   {copy.footerTagline}
                 </p>
-                <p className="font-num text-[11px] tk-text-ink2 tabular-nums">
+                <p className="font-num text-xs tk-text-ink2 tabular-nums">
                   Trip Kit v2.5.0
                 </p>
               </div>
@@ -1711,7 +1711,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <h3 className="text-sm font-extrabold tk-text-ink">
                       {copy.mintTitle}
                     </h3>
-                    <p className="mt-0.5 text-xs tk-text-ink2">
+                    <p className="mt-0.5 text-[13px] tk-text-ink2">
                       {copy.mintDesc}
                     </p>
                   </div>
@@ -1763,7 +1763,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={adminNote}
                     onChange={(e) => setAdminNote(e.target.value)}
                     placeholder={copy.channelMemoPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                 </div>
 
@@ -1854,7 +1854,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                   · {isUsed ? copy.redeemedTag : copy.unusedTag}
                                 </span>
                               </div>
-                              <div className="mt-0.5 font-num text-[11px] tk-text-ink2 truncate tabular-nums">
+                              <div className="mt-0.5 font-num text-xs tk-text-ink2 leading-snug break-words tabular-nums">
                                 {dateStr}
                                 {item.note ? ` · ${item.note}` : ''}
                               </div>
@@ -1924,14 +1924,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={newCatTitle}
                     onChange={(e) => setNewCatTitle(e.target.value)}
                     placeholder={copy.catNamePlaceholder}
-                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                   <input
                     type="text"
                     value={newCatCube}
                     onChange={(e) => setNewCatCube(e.target.value)}
                     placeholder={copy.catCubePlaceholder}
-                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1982,13 +1982,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               type="text"
                               value={editCatTitle}
                               onChange={(e) => setEditCatTitle(e.target.value)}
-                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-bold tk-text-ink"
+                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm font-bold tk-text-ink"
                             />
                             <input
                               type="text"
                               value={editCatCube}
                               onChange={(e) => setEditCatCube(e.target.value)}
-                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink"
+                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink"
                             />
                           </div>
                           <div className="flex items-center justify-between gap-2">
@@ -2040,10 +2040,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             size="md"
                           />
                           <div className="min-w-0">
-                            <div className="text-sm font-bold tk-text-ink truncate">
+                            <div className="text-[15px] font-bold tk-text-ink truncate">
                               {translateGroupTitleLabel(grp.id, grp.title, activeLang)}
                             </div>
-                            <div className="font-num text-xs tk-text-ink2 truncate tabular-nums">
+                            <div className="font-num text-xs tk-text-ink2 leading-snug break-words tabular-nums">
                               {copy.itemsCount(grp.items.length)} ·{' '}
                               {translateGroupCubeLabel(grp.cubeLabel, activeLang)}
                             </div>
@@ -2167,7 +2167,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <h3 className="text-sm font-extrabold tk-text-ink">
                     {copy.affHeading}
                   </h3>
-                  <p className="mt-0.5 text-xs tk-text-ink2">
+                  <p className="mt-0.5 text-[13px] tk-text-ink2">
                     {copy.affSub}
                   </p>
                 </div>
@@ -2219,7 +2219,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           }))
                         }
                         placeholder={field.placeholder}
-                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-xs tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                       />
                     </label>
                   ))}
@@ -2230,7 +2230,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <div className="font-bold tk-text-ink">
                       {copy.affDisclosureTitle}
                     </div>
-                    <div className="text-[11px] tk-text-ink2">
+                    <div className="text-xs tk-text-ink2">
                       {copy.affDisclosureDesc}
                     </div>
                   </div>
@@ -2334,7 +2334,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   }}
                   className="space-y-3"
                 >
-                  <h3 className="text-sm font-bold tk-text-ink">
+                  <h3 className="text-[15px] font-bold tk-text-ink">
                     {copy.fbHeading}
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
@@ -2363,7 +2363,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
                     placeholder={copy.fbPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-xs tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                   <button
                     type="submit"

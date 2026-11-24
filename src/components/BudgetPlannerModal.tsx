@@ -739,7 +739,7 @@ export const BudgetPlannerModal: React.FC<BudgetPlannerModalProps> = ({
                       step="any"
                       value={customFxDraft}
                       onChange={(e) => setCustomFxDraft(e.target.value)}
-                      className="w-28 rounded-lg border tk-bc-forest tk-bg-paper px-2.5 py-1 font-num text-xs font-bold tk-text-ink tabular-nums focus:outline-none"
+                      className="w-28 rounded-lg border tk-bc-forest tk-bg-paper px-2.5 py-1 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:outline-none"
                     />
                     <span className="text-xs font-semibold tk-text-ink2 font-num">
                       {homeCurrency}

@@ -619,7 +619,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                       if (redeemError) setRedeemError(null);
                     }}
                     placeholder={copy.codePlaceholder}
-                    className="min-h-[44px] flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 font-num text-sm font-extrabold tracking-wider uppercase tk-text-ink tabular-nums placeholder:font-normal placeholder:tracking-normal placeholder:text-xs focus:tk-bc-forest focus:bg-white focus:outline-none"
+                    className="min-h-[44px] flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 font-num text-base sm:text-sm font-extrabold tracking-wider uppercase tk-text-ink tabular-nums placeholder:font-normal placeholder:tracking-normal placeholder:text-xs focus:tk-bc-forest focus:bg-white focus:outline-none"
                   />
                   <button
                     type="submit"

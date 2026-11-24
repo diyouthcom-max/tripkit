@@ -742,7 +742,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           updatedAt: Date.now(),
                         })
                       }
-                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs font-semibold tk-text-ink"
+                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm font-semibold tk-text-ink"
                     />
                   </div>
                   <div>
@@ -760,7 +760,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           updatedAt: Date.now(),
                         })
                       }
-                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                      className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                     />
                   </div>
                 </div>
@@ -781,7 +781,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         updatedAt: Date.now(),
                       })
                     }
-                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                   />
                 </div>
               )}
@@ -803,7 +803,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                       );
                       onUpdateDraft({ ...draft, chapters: nextCh, updatedAt: Date.now() });
                     }}
-                    className="w-full rounded-lg border tk-bc-hair p-2 text-xs tk-text-ink"
+                    className="w-full rounded-lg border tk-bc-hair p-2 text-base sm:text-sm tk-text-ink"
                   />
                 </div>
               )}
@@ -835,7 +835,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                             updatedAt: Date.now(),
                           })
                         }
-                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs font-semibold tk-text-ink"
+                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm font-semibold tk-text-ink"
                       />
                     </div>
                     <div className="sm:col-span-2">
@@ -856,7 +856,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                           })
                         }
                         placeholder={copy.storyCaptionPlaceholder}
-                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                        className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                       />
                     </div>
                   </div>
@@ -878,7 +878,7 @@ export const PhotobookStudioModal: React.FC<PhotobookStudioModalProps> = ({
                         updatedAt: Date.now(),
                       })
                     }
-                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-xs tk-text-ink"
+                    className="w-full h-9 rounded-lg border tk-bc-hair px-2.5 text-base sm:text-sm tk-text-ink"
                   />
                 </div>
               )}

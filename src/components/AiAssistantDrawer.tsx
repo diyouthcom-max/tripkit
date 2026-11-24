@@ -993,7 +993,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   }
                 }}
                 placeholder={copy.inputPlaceholder(cityLabel)}
-                className="flex-1 max-h-24 bg-transparent py-1.5 pl-1 text-[14px] tk-text-ink placeholder:tk-text-ink2 focus:outline-none resize-none leading-snug"
+                className="flex-1 max-h-24 bg-transparent py-1.5 pl-1 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none resize-none leading-snug"
               />
 
               <div className="flex items-center gap-1 shrink-0 pb-0.5">

@@ -730,7 +730,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             value={voiceExpenseText}
             onChange={(e) => setVoiceExpenseText(e.target.value)}
             placeholder={t('budget.voiceBarPlaceholder')}
-            className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
+            className="flex-1 min-w-0 bg-transparent py-1 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
           />
           <AiVoiceInputButton
             iconOnly
@@ -975,7 +975,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                               size="sm"
                             />
                             <div className="min-w-0">
-                              <div className="font-semibold tk-text-ink truncate">
+                              <div className="text-[15px] font-semibold tk-text-ink truncate">
                                 {translateDemoExpenseTitle(ex.title, activeLang)}
                               </div>
                               <div className="tk-text-ink2 mt-0.5 tabular-nums">
@@ -1164,7 +1164,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                             size="sm"
                           />
                           <div className="min-w-0 flex-1">
-                            <div className="font-semibold tk-text-ink truncate">
+                            <div className="text-[15px] font-semibold tk-text-ink truncate">
                               {translateDemoExpenseTitle(ex.title, activeLang)}
                             </div>
                             <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 tk-text-ink2 tabular-nums">
@@ -1210,7 +1210,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                                   : copy.evenLabel}
                               </div>
                             )}
-                            <div className="text-[11px] tk-text-ink2">
+                            <div className="text-xs tk-text-ink2">
                               Day {ex.day ?? 1} · {ex.time}
                             </div>
                           </div>
@@ -1297,13 +1297,13 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     })}{' '}
                     {homeCurrency}
                   </span>
-                  <span className="text-[11px] tk-text-ink2">
+                  <span className="text-xs tk-text-ink2">
                     ({walletCopy.fixedPrepaidSub})
                   </span>
                 </button>
 
                 {!sameCurrency && (
-                  <span className="font-num text-[11px] font-medium tk-text-ink2 tabular-nums whitespace-nowrap">
+                  <span className="font-num text-xs font-medium tk-text-ink2 tabular-nums whitespace-nowrap">
                     1 {tripCode} ={' '}
                     {fxSummary.rate >= 100
                       ? fxSummary.rate.toFixed(2)
@@ -1355,7 +1355,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                         setBudgetPlannerFocus('daily');
                         setBudgetPlannerOpen(true);
                       }}
-                      className="text-[11px] font-semibold tk-text-ink2 hover:tk-text-forest underline decoration-dotted underline-offset-2 cursor-pointer tabular-nums"
+                      className="text-xs font-semibold tk-text-ink2 hover:tk-text-forest underline decoration-dotted underline-offset-2 cursor-pointer tabular-nums"
                     >
                       {copy.dailyRateAdjust(sym, budget.dailyBudgetLocal)}
                     </button>
@@ -1720,7 +1720,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                     </p>
                   </div>
                 </div>
-                <span className="text-[11px] tk-text-ink2 sm:hidden whitespace-nowrap">
+                <span className="text-xs tk-text-ink2 sm:hidden whitespace-nowrap">
                   {copy.swipeEditHint}
                 </span>
               </div>
@@ -1791,7 +1791,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   onChange={(e) =>
                     setLedgerBucketFilter(e.target.value as 'all' | 'daily' | 'shopping' | 'vat')
                   }
-                  className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-xs font-semibold focus:outline-none cursor-pointer truncate ${
+                  className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-base sm:text-sm font-semibold focus:outline-none cursor-pointer truncate ${
  ledgerBucketFilter !== 'all'
  ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2'
@@ -1811,7 +1811,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                   onChange={(e) =>
                     setLedgerAccountFilter(e.target.value as 'all' | 'card' | 'cash' | 'transit')
                   }
-                  className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-xs font-semibold focus:outline-none cursor-pointer truncate ${
+                  className={`h-8 w-full sm:w-auto rounded-lg border px-2.5 text-base sm:text-sm font-semibold focus:outline-none cursor-pointer truncate ${
  ledgerAccountFilter !== 'all'
  ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2'
@@ -2092,11 +2092,11 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
                       <MailCheck className="h-4 w-4" />
                     </span>
                     <div className="min-w-0">
-                      <h3 className="text-sm font-bold tk-text-ink truncate">
+                      <h3 className="text-[15px] font-bold tk-text-ink truncate">
                         {walletCopy.vatPoolCardTitle}
                       </h3>
                       {vatMeta.supportsVat && (
-                        <p className="text-[11px] font-semibold tk-text-warning">
+                        <p className="text-xs font-semibold tk-text-warning">
                           {vatMeta.programName} · {walletCopy.vatRefundablePct(vatMeta.refundPct)}
                         </p>
                       )}

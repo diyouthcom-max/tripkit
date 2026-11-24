@@ -772,7 +772,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={newSeatName}
                         onChange={(e) => setNewSeatName(e.target.value)}
                         placeholder={copy.nicknamePlaceholder}
-                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                       <input
                         type="text"
@@ -780,7 +780,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={newSeatRole}
                         onChange={(e) => setNewSeatRole(e.target.value)}
                         placeholder={copy.rolePlaceholder}
-                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                     <div className="flex items-center justify-end gap-2">
@@ -845,7 +845,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                 value={editNameDraft}
                                 onChange={(e) => setEditNameDraft(e.target.value)}
                                 placeholder={copy.editNicknamePlaceholder}
-                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                               />
                               <input
                                 type="text"
@@ -853,7 +853,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                                 value={editRoleDraft}
                                 onChange={(e) => setEditRoleDraft(e.target.value)}
                                 placeholder={copy.editRolePlaceholder}
-                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                                className="rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                               />
                             </div>
                             <div className="flex justify-end gap-2">
@@ -1107,7 +1107,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={claimNickname}
                         onChange={(e) => setClaimNickname(e.target.value)}
                         placeholder={copy.nicknameEgPlaceholder}
-                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                     <div>
@@ -1120,7 +1120,7 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
                         value={claimRole}
                         onChange={(e) => setClaimRole(e.target.value)}
                         placeholder={copy.roleEgPlaceholder}
-                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                       />
                     </div>
                   </div>

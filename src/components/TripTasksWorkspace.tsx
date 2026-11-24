@@ -399,7 +399,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
             value={aiTaskInput}
             onChange={(e) => setAiTaskInput(e.target.value)}
             placeholder={t('tasks.aiBarPlaceholder')}
-            className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
+            className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
           />
           <div className="flex items-center gap-2 shrink-0">
             <AiVoiceInputButton
@@ -485,7 +485,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                           setEditDraft({ ...editDraft, title: e.target.value })
                         }
                         placeholder={t('tasks.taskNamePlaceholder')}
-                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink"
                       />
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <select
@@ -496,7 +496,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                               category: e.target.value as TripTaskCategory,
                             })
                           }
-                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs font-semibold tk-text-ink"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
                         >
                           {TASK_CATEGORIES.map((cat) => (
                             <option key={cat} value={cat}>
@@ -512,14 +512,14 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                             setEditDraft({ ...editDraft, timing: e.target.value })
                           }
                           placeholder={t('tasks.timingPlaceholder')}
-                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs tk-text-ink"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-base sm:text-sm tk-text-ink"
                         />
                         <select
                           value={editDraft.ownerId}
                           onChange={(e) =>
                             setEditDraft({ ...editDraft, ownerId: e.target.value })
                           }
-                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-xs font-semibold tk-text-ink"
+                          className="rounded-xl border tk-bc-hair bg-white px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
                         >
                           {crew.map((m) => (
                             <option key={m.id} value={m.id}>
@@ -536,7 +536,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                           setEditDraft({ ...editDraft, note: e.target.value })
                         }
                         placeholder={t('tasks.notePlaceholder')}
-                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs tk-text-ink2"
+                        className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-2 text-base sm:text-sm tk-text-ink2"
                       />
                       <div className="flex items-center justify-end gap-2 pt-0.5 text-xs">
                         <button
@@ -807,7 +807,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                   value={quickTitle}
                   onChange={(e) => setQuickTitle(e.target.value)}
                   placeholder={t('tasks.taskNamePlaceholder')}
-                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
+                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
                 <AiVoiceInputButton
                   compact
@@ -822,7 +822,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as TripTaskCategory)}
-                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink"
                 >
                   {TASK_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -836,12 +836,12 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                   value={newTiming}
                   onChange={(e) => setNewTiming(e.target.value)}
                   placeholder={t('tasks.timingPlaceholder')}
-                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
                 <select
                   value={newOwnerId}
                   onChange={(e) => setNewOwnerId(e.target.value)}
-                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink"
+                  className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink"
                 >
                   {crew.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -857,7 +857,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder={t('tasks.notePlaceholder')}
-                className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink2 placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
+                className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink2 placeholder:tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
               />
 
               <div className="flex items-center justify-end gap-2 pt-0.5">

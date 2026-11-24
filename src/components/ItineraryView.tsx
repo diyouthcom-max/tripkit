@@ -1122,7 +1122,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     value={planDailyBudgetInput}
                     onChange={(e) => setPlanDailyBudgetInput(e.target.value)}
                     placeholder={dailyBudgetLocal.toFixed(0)}
-                    className="w-28 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                    className="w-28 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                   />
                 </label>
 
@@ -1475,14 +1475,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                         setStayCoordsDraft(place.location);
                       }}
                       placeholder={copy.staySearchPlaceholder(displayPrimaryCity)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                     />
                     <input
                       type="text"
                       value={stayAddressDraft}
                       onChange={(e) => setStayAddressDraft(e.target.value)}
                       placeholder={copy.stayAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
@@ -1977,7 +1977,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       type="time"
                       value={meetupTimeDraft}
                       onChange={(e) => setMeetupTimeDraft(e.target.value)}
-                      className="rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-xs font-bold tabular-nums"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tabular-nums"
                     />
                     <div className="col-span-2">
                       <PlaceAutocompleteInput
@@ -1989,7 +1989,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                           if (place.formattedAddress) setMeetupAddrDraft(place.formattedAddress);
                         }}
                         placeholder={railCopy.meetupPlacePlaceholder}
-                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-semibold tk-text-ink"
+                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
                       />
                     </div>
                   </div>
@@ -1998,14 +1998,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     value={meetupAddrDraft}
                     onChange={(e) => setMeetupAddrDraft(e.target.value)}
                     placeholder={railCopy.meetupAddrPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink"
                   />
                   <input
                     type="text"
                     value={meetupNoteDraft}
                     onChange={(e) => setMeetupNoteDraft(e.target.value)}
                     placeholder={railCopy.meetupNotePlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink"
                   />
                   <div className="flex justify-end gap-2">
                     <button
@@ -2284,14 +2284,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       value={customAlertTitle}
                       onChange={(e) => setCustomAlertTitle(e.target.value)}
                       placeholder={railCopy.customAlertPlaceholder}
-                      className="w-full rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                     <div className="flex items-center gap-1.5">
                       <input
                         type="datetime-local"
                         value={customAlertTime}
                         onChange={(e) => setCustomAlertTime(e.target.value)}
-                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs tk-text-ink tabular-nums"
+                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm tk-text-ink tabular-nums"
                       />
                       <button
                         type="submit"
@@ -2438,7 +2438,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   setWishlistDraft('');
                 }}
                 placeholder={railCopy.wishlistPlaceholder}
-                className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
               />
               <button
                 type="submit"
@@ -2567,7 +2567,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 value={customScenario}
                 onChange={(e) => setCustomScenario(e.target.value)}
                 placeholder={railCopy.customScenarioPlaceholder(displayPrimaryCity)}
-                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
               />
               <button
                 type="submit"

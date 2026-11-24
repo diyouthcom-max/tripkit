@@ -314,7 +314,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={renameText}
                     onChange={(e) => setRenameText(e.target.value)}
                     placeholder={copy.itemNamePlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-sm font-bold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div>
@@ -326,7 +326,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={subCategoryText}
                     onChange={(e) => setSubCategoryText(e.target.value)}
                     placeholder={copy.subCategoryPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div>
@@ -338,7 +338,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
                     placeholder={copy.notePlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div className="flex items-center justify-end gap-2 pt-0.5">

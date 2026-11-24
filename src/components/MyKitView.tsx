@@ -189,7 +189,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             <span>{copy.backToMyKit}</span>
           </button>
 
-          <span className="text-xs font-semibold tk-text-ink2 truncate">
+          <span className="text-xs font-semibold tk-text-ink2 leading-snug break-words">
             {copy.memoriesStudioHeader}
           </span>
         </div>
@@ -232,14 +232,14 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
               )}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-extrabold tk-text-ink truncate">
+                  <span className="text-[15px] font-extrabold tk-text-ink truncate">
                     {authUser.displayName || copy.defaultTraveler}
                   </span>
                   <span className="rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-bold tk-text-forest shrink-0">
                     {resolveAuthProviderLabel(authUser, activeLang)}
                   </span>
                 </div>
-                <p className="text-xs tk-text-ink2 truncate">
+                <p className="text-[13px] tk-text-ink2 leading-snug break-words">
                   {authUser.email || copy.cloudSyncReady}
                 </p>
               </div>
@@ -256,10 +256,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <LogIn className="h-4 w-4" />
               </span>
               <div className="min-w-0">
-                <div className="text-sm font-extrabold tk-text-ink leading-snug">
+                <div className="text-[15px] font-extrabold tk-text-ink leading-snug">
                   {copy.signInTitle}
                 </div>
-                <p className="mt-0.5 text-xs tk-text-ink2 leading-snug">
+                <p className="mt-0.5 text-[13px] tk-text-ink2 leading-snug">
                   {copy.signInSub}
                 </p>
               </div>
@@ -300,7 +300,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                     {copy.photobookBadge}
                   </span>
                 </div>
-                <p className="mt-1 text-xs tk-text-ink2 leading-relaxed">
+                <p className="mt-1 text-[13px] tk-text-ink2 leading-relaxed">
                   {memoryPhotos.length > 0
                     ? copy.photobookStats(
                         memoryPhotos.length,
@@ -371,10 +371,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
               <FileDown className="h-5 w-5" />
             </span>
             <div className="min-w-0">
-              <div className="text-sm font-extrabold tk-text-ink leading-snug">
+              <div className="text-[15px] font-extrabold tk-text-ink leading-snug">
                 {copy.exportPdfTitle}
               </div>
-              <p className="mt-0.5 text-xs tk-text-ink2 leading-snug">
+              <p className="mt-0.5 text-[13px] tk-text-ink2 leading-snug">
                 {copy.exportPdfSub}
               </p>
             </div>
@@ -418,10 +418,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <Crown className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold tk-text-ink">
+                <span className="block text-[15px] font-bold tk-text-ink">
                   {copy.proRowTitle}
                 </span>
-                <span className="block mt-0.5 text-xs tk-text-ink2 leading-snug">
+                <span className="block mt-0.5 text-[13px] tk-text-ink2 leading-snug">
                   {copy.proRowSub}
                 </span>
               </span>
@@ -447,10 +447,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <Wallet className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold tk-text-ink">
+                <span className="block text-[15px] font-bold tk-text-ink">
                   {copy.currencyRowTitle}
                 </span>
-                <span className="block mt-0.5 font-num text-xs font-medium tk-text-ink2 truncate">
+                <span className="block mt-0.5 font-num text-[13px] font-medium tk-text-ink2 leading-snug break-words">
                   {getHomeCurrencyLabel(preferences.homeCurrency, activeLang)}
                 </span>
               </span>
@@ -469,10 +469,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <Luggage className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold tk-text-ink">
+                <span className="block text-[15px] font-bold tk-text-ink">
                   {copy.baggageRowTitle}
                 </span>
-                <span className="block mt-0.5 font-num text-xs font-medium tk-text-ink2 tabular-nums">
+                <span className="block mt-0.5 font-num text-[13px] font-medium tk-text-ink2 tabular-nums">
                   {baggageDisplay}
                 </span>
               </span>
@@ -491,10 +491,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <Globe className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold tk-text-ink">
+                <span className="block text-[15px] font-bold tk-text-ink">
                   {copy.langRowTitle}
                 </span>
-                <span className="block mt-0.5 text-xs font-medium tk-text-ink2">
+                <span className="block mt-0.5 text-[13px] font-medium tk-text-ink2 leading-snug break-words">
                   {languageDisplay}
                 </span>
               </span>
@@ -513,10 +513,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <Settings className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold tk-text-ink">
+                <span className="block text-[15px] font-bold tk-text-ink">
                   {copy.allSettingsRowTitle}
                 </span>
-                <span className="block mt-0.5 text-xs tk-text-ink2 leading-snug">
+                <span className="block mt-0.5 text-[13px] tk-text-ink2 leading-snug">
                   {copy.allSettingsRowSub}
                 </span>
               </span>

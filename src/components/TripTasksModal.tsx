@@ -398,13 +398,13 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                             type="text"
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
-                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-ink"
+                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
                           />
                           <div className="grid grid-cols-2 gap-2">
                             <select
                               value={editCategory}
                               onChange={(e) => setEditCategory(e.target.value as TripTaskCategory)}
-                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-ink"
+                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
                             >
                               {TASK_CATEGORIES.map((cat) => (
                                 <option key={cat} value={cat}>
@@ -417,7 +417,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                               value={editTiming}
                               onChange={(e) => setEditTiming(e.target.value)}
                               placeholder={t('tasks.timingPlaceholder')}
-                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs tk-text-ink"
+                              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
                             />
                           </div>
                           <input
@@ -425,7 +425,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                             value={editNote}
                             onChange={(e) => setEditNote(e.target.value)}
                             placeholder={t('tasks.notePlaceholder')}
-                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs tk-text-ink2"
+                            className="w-full rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink2"
                           />
                           <div className="flex items-center justify-end gap-2">
                             <button
@@ -681,7 +681,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder={t('tasks.desktopPlaceholder')}
-                    className="flex-1 min-w-0 bg-transparent py-1 text-xs sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
+                    className="flex-1 min-w-0 bg-transparent py-1 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
                   />
                   <AiVoiceInputButton
                     iconOnly
@@ -721,7 +721,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       value={manualTitle}
                       onChange={(e) => setManualTitle(e.target.value)}
                       placeholder={t('tasks.taskNamePlaceholder')}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     />
                   </div>
 
@@ -729,7 +729,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     <select
                       value={manualCategory}
                       onChange={(e) => setManualCategory(e.target.value as TripTaskCategory)}
-                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     >
                       {TASK_CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
@@ -742,7 +742,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                       value={manualTiming}
                       onChange={(e) => setManualTiming(e.target.value)}
                       placeholder={t('tasks.timingPlaceholder')}
-                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                     />
                   </div>
 
@@ -751,7 +751,7 @@ export const TripTasksModal: React.FC<TripTasksModalProps> = ({
                     value={manualNote}
                     onChange={(e) => setManualNote(e.target.value)}
                     placeholder={t('tasks.notePlaceholder')}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-xs tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:bg-white focus:outline-none"
                   />
 
                   {crew.length > 1 && (

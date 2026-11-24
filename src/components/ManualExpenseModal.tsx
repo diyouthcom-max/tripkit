@@ -530,7 +530,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                 value={manualTitle}
                 onChange={(e) => setManualTitle(e.target.value)}
                 placeholder={t('budget.itemPlaceholder')}
-                className="flex-1 min-w-0 bg-transparent py-1 text-sm font-semibold tk-text-ink placeholder:font-normal placeholder:tk-text-ink2 focus:outline-none"
+                className="flex-1 min-w-0 bg-transparent py-1 text-base sm:text-sm font-semibold tk-text-ink placeholder:font-normal placeholder:tk-text-ink2 focus:outline-none"
               />
               <AiVoiceInputButton
                 compact

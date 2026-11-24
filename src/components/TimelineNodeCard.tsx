@@ -44,6 +44,7 @@ import {
   type LiveGooglePlaceInfo,
 } from '../services/googlePlaceLiveStore';
 import { getItineraryUtilsCopy } from '../i18n/packs/itineraryUtilsPack';
+import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
 
 export interface QuickExpenseLogPayload {
   amountLocal: number;
@@ -142,6 +143,10 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   useEffect(() => {
     setThumbFailed(false);
   }, [livePlace?.thumbPhotoUri, node.id]);
+  const {
+    url: thumbBlobUrl,
+    failed: thumbBlobFailed,
+  } = useGooglePhotoBlob(livePlace?.thumbPhotoUri);
 
   const [voiceNoteError, setVoiceNoteError] = useState<string | null>(null);
 
@@ -460,24 +465,24 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
           <div>
-            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
               {nodeCopy.arrivalLabel}
             </label>
             <input
               type="time"
               value={editTime}
               onChange={(e) => setEditTime(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stayDurationLabel}
             </label>
             <select
               value={editDurationMinutes}
               onChange={(e) => setEditDurationMinutes(Number(e.target.value) || 60)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 font-num text-xs font-semibold tk-text-ink tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 font-num text-base sm:text-sm font-semibold tk-text-ink tabular-nums"
             >
               {[30, 45, 60, 90, 120, 180, 240].map((m) => (
                 <option key={m} value={m}>
@@ -487,24 +492,24 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
               {nodeCopy.closesAtLabel}
             </label>
             <input
               type="time"
               value={editCloseTime}
               onChange={(e) => setEditCloseTime(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stopTypeLabel}
             </label>
             <select
               value={editStopType}
               onChange={(e) => setEditStopType(e.target.value as StopType)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-xs font-semibold tk-text-ink"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
             >
               <option value="attraction">{getStopTypeLabel('attraction', activeLang)}</option>
               <option value="hotel">{getStopTypeLabel('hotel', activeLang)}</option>
@@ -514,7 +519,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
               {nodeCopy.estSpendLabel(currencyCode)}
             </label>
             <input
@@ -523,7 +528,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               min="0"
               value={editEst}
               onChange={(e) => setEditEst(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 font-num text-xs font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
         </div>
@@ -548,14 +553,14 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               }
             }}
             placeholder={nodeCopy.stopNamePlaceholder}
-            className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <input
             type="text"
             value={editDistrict}
             onChange={(e) => setEditDistrict(e.target.value)}
             placeholder={nodeCopy.districtPlaceholder}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
         </div>
 
@@ -565,7 +570,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             value={editAddress}
             onChange={(e) => setEditAddress(e.target.value)}
             placeholder={nodeCopy.streetAddressPlaceholder}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
@@ -574,7 +579,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 value={editTransit}
                 onChange={(e) => setEditTransit(e.target.value)}
                 placeholder={nodeCopy.transitNotePlaceholder}
-                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
               />
               <AiVoiceInputButton
                 compact
@@ -595,7 +600,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               />
             </div>
             {voiceNoteError && (
-              <p className="text-[11px] font-semibold tk-text-warning">{voiceNoteError}</p>
+              <p className="text-xs font-semibold tk-text-warning">{voiceNoteError}</p>
             )}
           </div>
         </div>
@@ -628,21 +633,21 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               value={editRainTitle}
               onChange={(e) => setEditRainTitle(e.target.value)}
               placeholder={nodeCopy.rainTitlePlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
             <input
               type="text"
               value={editRainDistrict}
               onChange={(e) => setEditRainDistrict(e.target.value)}
               placeholder={nodeCopy.rainDistrictPlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
             <input
               type="text"
               value={editRainAddress}
               onChange={(e) => setEditRainAddress(e.target.value)}
               placeholder={nodeCopy.rainAddressPlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink"
+              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
           </div>
         )}
@@ -677,7 +682,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     activeLang
   );
   const hasRealGoogleRating = typeof livePlace?.rating === 'number' && livePlace.rating > 0;
-  const showThumbImage = Boolean(livePlace?.thumbPhotoUri && !thumbFailed);
+  const showThumbImage = Boolean(
+    livePlace?.thumbPhotoUri && thumbBlobUrl && !thumbFailed && !thumbBlobFailed
+  );
 
   return (
     <div data-timeline-index={index}>
@@ -825,11 +832,10 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
           >
             {showThumbImage ? (
               <img
-                src={livePlace!.thumbPhotoUri}
+                src={thumbBlobUrl!}
                 alt={localizedTitle}
                 loading="lazy"
                 draggable={false}
-                referrerPolicy="no-referrer"
                 onError={() => setThumbFailed(true)}
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
               />
@@ -946,19 +952,19 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   </span>
 
                   {previousOrderIndex !== undefined && previousOrderIndex !== index && (
-                    <span className="text-[11px] font-semibold tk-text-warning tabular-nums">
+                    <span className="text-xs font-semibold tk-text-warning tabular-nums">
                       {nodeCopy.wasOrder(previousOrderIndex + 1)}
                     </span>
                   )}
 
                   {isSwappedActive && (
-                    <span className="text-[11px] font-semibold tk-text-warning">
+                    <span className="text-xs font-semibold tk-text-warning">
                       {nodeCopy.rainBackupBadge}
                     </span>
                   )}
 
                   {!isVisited && Boolean(scheduledLeadMinutes) && (
-                    <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold tk-text-forest tabular-nums">
+                    <span className="inline-flex items-center gap-0.5 text-xs font-semibold tk-text-forest tabular-nums">
                       <BellRing className="h-3 w-3 tk-text-forest" />
                       <span>-{scheduledLeadMinutes}m</span>
                     </span>
@@ -1035,7 +1041,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   {localizedTitle}
                 </button>
                 {node.isAnchor && (
-                  <span className="text-[11px] font-semibold tk-text-forest">
+                  <span className="text-xs font-semibold tk-text-forest">
                     {nodeCopy.meetupAnchorBadge}
                   </span>
                 )}

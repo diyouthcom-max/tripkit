@@ -783,14 +783,14 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     value={newCategoryTitle}
                     onChange={(e) => setNewCategoryTitle(e.target.value)}
                     placeholder={copy.newCategoryNamePlaceholder}
-                    className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                    className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                   />
                   <input
                     type="text"
                     value={newCategoryCube}
                     onChange={(e) => setNewCategoryCube(e.target.value)}
                     placeholder={copy.newCategoryCubePlaceholder}
-                    className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs tk-text-ink focus:tk-bc-forest focus:outline-none"
+                    className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                   />
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1408,7 +1408,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder={t('packing.quickAddPlaceholder')}
-                    className="flex-1 min-w-0 bg-transparent py-1.5 text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
+                    className="flex-1 min-w-0 bg-transparent py-1.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:outline-none"
                   />
                   <AiVoiceInputButton
                     iconOnly
@@ -1534,7 +1534,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   value={detailName}
                   onChange={(e) => setDetailName(e.target.value)}
                   placeholder={copy.itemNamePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                 />
               </div>
 
@@ -1546,7 +1546,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   <select
                     value={detailGroupId}
                     onChange={(e) => setDetailGroupId(e.target.value)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-xs font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   >
                     {groups.map((g) => (
                       <option key={g.id} value={g.id}>
@@ -1598,7 +1598,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           e.target.value === '' || !Number.isFinite(val) ? null : Math.max(5, val)
                         );
                       }}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-sm font-semibold tk-text-ink tabular-nums focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-base sm:text-sm font-semibold tk-text-ink tabular-nums focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1613,7 +1613,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   value={detailWhy}
                   onChange={(e) => setDetailWhy(e.target.value)}
                   placeholder={copy.notePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-xs tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                 />
               </div>
 
