@@ -995,6 +995,314 @@ MANDATORY COVERAGE & REAL-WORLD PACING RULES:
     }
   });
 
+  // 4b. AI Nearby Hotels Recommendation (Places API fallback)
+  app.post('/api/ai/recommend-nearby-hotels', async (req, res) => {
+    const lang = resolveClientLang(req.body?.language);
+    try {
+      const city = String(req.body?.city || '').trim();
+      if (!city) {
+        res.status(400).json({
+          error:
+            lang === 'zh-CN'
+              ? '缺少目的地城市，无法推荐附近酒店'
+              : 'Missing destination city for nearby hotel recommendations',
+        });
+        return;
+      }
+
+      const day = Math.max(1, Math.round(Number(req.body?.day) || 1));
+      const budgetTier = String(req.body?.budgetTier || 'comfort');
+      const currencyCode = String(req.body?.currencyCode || 'EUR');
+      const currencySymbol = String(req.body?.currencySymbol || '€');
+      const tripStyle = String(req.body?.tripStyle || '').trim();
+      const rawStops = Array.isArray(req.body?.stops) ? req.body.stops : [];
+      type NearbyStop = {
+        title: string;
+        district: string;
+        address: string;
+        lat?: number;
+        lng?: number;
+      };
+      const stops: NearbyStop[] = rawStops
+        .map((s: Record<string, unknown>) => ({
+          title: String(s?.title || '').trim(),
+          district: String(s?.district || '').trim(),
+          address: String(s?.address || '').trim(),
+          lat: typeof s?.lat === 'number' ? s.lat : undefined,
+          lng: typeof s?.lng === 'number' ? s.lng : undefined,
+        }))
+        .filter((s: NearbyStop) => Boolean(s.title));
+
+      const stopTitles = stops.map((s) => s.title);
+      const fallbackNearest = stopTitles[0] || city;
+
+      const stopLines =
+        stops.length > 0
+          ? stops
+              .map(
+                (s, idx) =>
+                  `${idx + 1}. ${s.title}${s.district ? ` · ${s.district}` : ''}${
+                    s.address ? ` · ${s.address}` : ''
+                  }${
+                    typeof s.lat === 'number' && typeof s.lng === 'number'
+                      ? ` · (~${s.lat.toFixed(4)},${s.lng.toFixed(4)})`
+                      : ''
+                  }`
+              )
+              .join('\n')
+          : '(No stop list provided — recommend well-located hotels near the city center for this day.)';
+
+      const budgetGuide =
+        budgetTier === 'budget'
+          ? 'budget / value stays (clean mid-range or well-reviewed hostels/boutique value)'
+          : budgetTier === 'luxury'
+          ? 'upscale / luxury boutique or 5-star stays in prime districts'
+          : 'comfort / quality 3–4 star boutique stays with strong location';
+
+      const scrubNearestTitleJunk = (raw: string): string => {
+        let t = String(raw || '').trim();
+        t = t.replace(/\?\s*No,\s*exact title:\s*/gi, ' ');
+        t = t.replace(/\bexact title:\s*/gi, ' ');
+        t = t.replace(/\s*\?\s*$/g, '');
+        t = t.replace(/\s{2,}/g, ' ').trim();
+        return t;
+      };
+
+      const matchNearestStopTitle = (raw: string): string => {
+        const cleaned = scrubNearestTitleJunk(raw);
+        if (!cleaned) return fallbackNearest;
+        const exact = stopTitles.find((title) => title === cleaned);
+        if (exact) return exact;
+        if (cleaned.length >= 4) {
+          const includesHit = stopTitles.find(
+            (title) =>
+              (title.length >= 4 && cleaned.includes(title)) ||
+              (cleaned.length >= 4 && title.includes(cleaned))
+          );
+          if (includesHit) return includesHit;
+        }
+        return fallbackNearest;
+      };
+
+      const haversineWalkMinutes = (
+        hotelLat?: number,
+        hotelLng?: number
+      ): number | null => {
+        if (
+          typeof hotelLat !== 'number' ||
+          typeof hotelLng !== 'number' ||
+          !Number.isFinite(hotelLat) ||
+          !Number.isFinite(hotelLng)
+        ) {
+          return null;
+        }
+        const withCoords = stops.filter(
+          (s) =>
+            typeof s.lat === 'number' &&
+            typeof s.lng === 'number' &&
+            Number.isFinite(s.lat) &&
+            Number.isFinite(s.lng)
+        );
+        if (withCoords.length === 0) return null;
+        const toRad = (deg: number) => (deg * Math.PI) / 180;
+        const R = 6371000;
+        let best = Infinity;
+        for (const s of withCoords) {
+          const dLat = toRad((s.lat as number) - hotelLat);
+          const dLng = toRad((s.lng as number) - hotelLng);
+          const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(hotelLat)) *
+              Math.cos(toRad(s.lat as number)) *
+              Math.sin(dLng / 2) ** 2;
+          const meters = 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          if (meters < best) best = meters;
+        }
+        if (!Number.isFinite(best)) return null;
+        return Math.max(1, Math.min(60, Math.round(best / 80)));
+      };
+
+      type CleanHotel = {
+        name: string;
+        district: string;
+        address: string;
+        lat: number;
+        lng: number;
+        walkMinutes: number;
+        nearestStopTitle: string;
+        estNightlyLocal: number;
+        reason: string;
+      };
+
+      const sanitizeNearbyHotels = (raw: unknown): CleanHotel[] => {
+        const root =
+          raw && typeof raw === 'object' ? (raw as { hotels?: unknown }) : {};
+        const list = Array.isArray(root.hotels) ? root.hotels : [];
+        const seen = new Set<string>();
+        const out: CleanHotel[] = [];
+
+        for (const item of list) {
+          if (!item || typeof item !== 'object') continue;
+          const row = item as Record<string, unknown>;
+          const name = String(row.name || '').trim();
+          if (!name) continue;
+          const key = name.toLowerCase();
+          if (seen.has(key)) continue;
+          seen.add(key);
+
+          const latNum = Number(row.lat);
+          const lngNum = Number(row.lng);
+          const lat = Number.isFinite(latNum) ? latNum : 0;
+          const lng = Number.isFinite(lngNum) ? lngNum : 0;
+
+          let walkMinutes: number;
+          const rawWalk = Number(row.walkMinutes);
+          if (Number.isFinite(rawWalk)) {
+            walkMinutes = Math.max(1, Math.min(60, Math.round(rawWalk)));
+          } else {
+            walkMinutes = haversineWalkMinutes(lat, lng) ?? 10;
+          }
+
+          const estRaw = Number(row.estNightlyLocal);
+          const estNightlyLocal =
+            Number.isFinite(estRaw) && estRaw >= 0 ? estRaw : 0;
+
+          const reason = String(row.reason || '')
+            .trim()
+            .slice(0, 140);
+
+          out.push({
+            name,
+            district: String(row.district || '').trim(),
+            address: String(row.address || '').trim(),
+            lat,
+            lng,
+            walkMinutes,
+            nearestStopTitle: matchNearestStopTitle(
+              String(row.nearestStopTitle || '')
+            ),
+            estNightlyLocal,
+            reason,
+          });
+          if (out.length >= 4) break;
+        }
+        return out;
+      };
+
+      const buildContents = (strictFill: boolean) =>
+        `${
+          strictFill
+            ? 'CRITICAL RETRY: previous response had fewer than 4 hotels. You MUST return EXACTLY 4 distinct real hotels now.\n'
+            : ''
+        }Recommend exactly 4 real hotels for overnight stay.
+City: ${city}
+Day: ${day}
+Budget tier: ${budgetTier} (${budgetGuide})
+Trip style: ${tripStyle || 'general leisure'}
+Local currency: ${currencySymbol} (${currencyCode})
+Allowed nearestStopTitle values (copy EXACTLY one of these strings, never invent or annotate):
+${stopTitles.length > 0 ? stopTitles.map((t, i) => `${i + 1}. ${t}`).join('\n') : `(use "${city}")`}
+Today's attraction / dining stops (prefer hotels walkable to these districts):
+${stopLines}`;
+
+      const systemInstruction = `You are a local hotel scout for travelers. ${getAiLangDirective(lang)}
+CRITICAL RULES:
+1. Recommend ONLY real, currently operating hotels that exist in ${city}. Never invent fake hotel names.
+2. Pick 4 hotels covering a sensible spread for the budget tier (${budgetGuide}), prioritizing walkability to the listed stop neighborhoods/districts.
+3. NEVER invent star ratings, guest review scores, or review counts. Do not mention fabricated ratings in "reason".
+4. "estNightlyLocal" is an approximate nightly rate in ${currencyCode} (${currencySymbol}) for the budget tier — a realistic estimate, not a live quote.
+5. "reason" must be one short sentence in the traveler's language explaining why the hotel fits TODAY's route / districts.
+6. "walkMinutes" is an approximate walking time in minutes from the hotel to the nearest listed stop (integer ≥ 1 when estimable).
+7. "nearestStopTitle" MUST be copied EXACTLY from the provided stop title list — never append translations, questions marks, "exact title:", or commentary.
+8. "lat"/"lng" are approximate WGS84 coordinates near the hotel — never claim precise pin-level accuracy.
+9. You MUST output an array containing EXACTLY 4 hotel objects. Returning 1, 2, 3 or 5+ is a validation failure.`;
+
+      const hotelsSchema = {
+        type: Type.OBJECT,
+        properties: {
+          hotels: {
+            type: Type.ARRAY,
+            minItems: '4',
+            maxItems: '4',
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                name: { type: Type.STRING },
+                district: { type: Type.STRING },
+                address: { type: Type.STRING },
+                lat: { type: Type.NUMBER },
+                lng: { type: Type.NUMBER },
+                walkMinutes: { type: Type.NUMBER },
+                nearestStopTitle: { type: Type.STRING },
+                estNightlyLocal: { type: Type.NUMBER },
+                reason: { type: Type.STRING },
+              },
+              required: [
+                'name',
+                'district',
+                'address',
+                'lat',
+                'lng',
+                'walkMinutes',
+                'nearestStopTitle',
+                'estNightlyLocal',
+                'reason',
+              ],
+            },
+          },
+        },
+        required: ['hotels'],
+      };
+
+      const ai = getAiClient();
+      const callOnce = async (strictFill: boolean) => {
+        const response = await callGeminiWithRetry(() =>
+          ai.models.generateContent({
+            model: MODEL,
+            contents: buildContents(strictFill),
+            config: {
+              systemInstruction,
+              thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+              responseMimeType: 'application/json',
+              responseSchema: hotelsSchema,
+            },
+          })
+        );
+        return sanitizeNearbyHotels(
+          parseGeminiJson(response.text, { hotels: [] })
+        );
+      };
+
+      let hotels = await callOnce(false);
+
+      if (hotels.length < 4) {
+        try {
+          const refill = await callOnce(true);
+          const seen = new Set(hotels.map((h) => h.name.toLowerCase()));
+          for (const h of refill) {
+            if (seen.has(h.name.toLowerCase())) continue;
+            seen.add(h.name.toLowerCase());
+            hotels.push(h);
+            if (hotels.length >= 4) break;
+          }
+        } catch {
+          // Keep first sanitized result — never 500 on refill failure.
+        }
+      }
+
+      hotels = hotels.slice(0, 4);
+      res.json({ hotels });
+    } catch (err: unknown) {
+      const mapped = mapGeminiError(
+        err,
+        'AI 附近酒店推荐失败',
+        lang,
+        'Failed to recommend nearby hotels'
+      );
+      res.status(mapped.status).json({ error: mapped.error });
+    }
+  });
+
   // 5. AI Packing Item Auto-Classifier, New Group Creator & Duplicate Detector
   app.post('/api/ai/classify-pack-item', async (req, res) => {
     const lang = resolveClientLang(req.body?.language);

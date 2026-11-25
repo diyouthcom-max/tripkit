@@ -53,6 +53,7 @@ export interface ItineraryViewCopy {
   hotelPassTitleSuffix: string;
   addToWalletBtn: string;
   addWhereStayingBtn: string;
+  nearbyHotelsHint: string;
   emptyDayTitle: (day: number, cityLabel: string) => string;
   emptyDayDesc: (cityLabel: string) => string;
   aiGenerateDayBtn: (day: number) => string;
@@ -117,6 +118,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: '入住凭证',
     addToWalletBtn: '+ 存入票夹',
     addWhereStayingBtn: '添加今日入住酒店（解锁出发通勤导航）',
+    nearbyHotelsHint: '附近酒店推荐',
     emptyDayTitle: (day, cityLabel) => `Day ${day}（${cityLabel}）暂未编排站点`,
     emptyDayDesc: (cityLabel) => `可由 AI 结合「${cityLabel}」街区分布与天气自动生成顺路日程，或手动添加站点。`,
     aiGenerateDayBtn: (day) => `AI 生成 Day ${day} 顺路行程`,
@@ -179,6 +181,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Wallet',
     addWhereStayingBtn: "Add where you're staying",
+    nearbyHotelsHint: 'Nearby hotel picks',
     emptyDayTitle: (day, cityLabel) => `No stops planned yet for Day ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Let AI build an optimized day route for ${cityLabel} based on neighborhood clusters and weather, or add a stop manually.`,
     aiGenerateDayBtn: (day) => `AI Generate Day ${day} Route`,
@@ -241,6 +244,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Wallet',
     addWhereStayingBtn: "Add where you're staying",
+    nearbyHotelsHint: 'Nearby hotel picks',
     emptyDayTitle: (day, cityLabel) => `No stops planned yet for Day ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Let AI build an optimised day route for ${cityLabel} based on neighbourhood clusters and weather, or add a stop manually.`,
     aiGenerateDayBtn: (day) => `AI Generate Day ${day} Route`,
@@ -303,6 +307,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Billetera',
     addWhereStayingBtn: 'Agregar dónde te hospedas',
+    nearbyHotelsHint: 'Hoteles cercanos',
     emptyDayTitle: (day, cityLabel) => `Sin paradas aún en el Día ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Deja que la IA arme una ruta optimizada para ${cityLabel} o agrega una parada manualmente.`,
     aiGenerateDayBtn: (day) => `Generar Día ${day} con IA`,
@@ -365,6 +370,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Portefeuille',
     addWhereStayingBtn: 'Ajouter votre hébergement',
+    nearbyHotelsHint: 'Hôtels à proximité',
     emptyDayTitle: (day, cityLabel) => `Aucune étape prévue le Jour ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Laissez l’IA créer un parcours optimal à ${cityLabel} ou ajoutez un lieu manuellement.`,
     aiGenerateDayBtn: (day) => `Générer le Jour ${day} via IA`,
@@ -427,6 +433,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Wallet',
     addWhereStayingBtn: 'Unterkunft hinzufügen',
+    nearbyHotelsHint: 'Hotels in der Nähe',
     emptyDayTitle: (day, cityLabel) => `Noch keine Stopps für Tag ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Lass die KI eine Route für ${cityLabel} erstellen oder füge manuell einen Stopp hinzu.`,
     aiGenerateDayBtn: (day) => `Tag ${day} per KI planen`,
@@ -489,6 +496,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'Check-in',
     addToWalletBtn: '+ Carteira',
     addWhereStayingBtn: 'Adicionar hospedagem',
+    nearbyHotelsHint: 'Hotéis próximos',
     emptyDayTitle: (day, cityLabel) => `Nenhuma parada no Dia ${day} (${cityLabel})`,
     emptyDayDesc: (cityLabel) => `Deixe a IA montar uma rota otimizada para ${cityLabel} ou adicione manualmente.`,
     aiGenerateDayBtn: (day) => `Gerar Dia ${day} com IA`,
@@ -551,6 +559,7 @@ const ITINERARY_VIEW_PACK = {
     hotelPassTitleSuffix: 'チェックイン',
     addToWalletBtn: '+ パス保存',
     addWhereStayingBtn: '宿泊先を追加（出発ルートを表示）',
+    nearbyHotelsHint: '近くのホテル',
     emptyDayTitle: (day, cityLabel) => `Day ${day}（${cityLabel}）の予定はまだありません`,
     emptyDayDesc: (cityLabel) => `AIが ${cityLabel} のエリアと天気に合わせてルートを提案します。手動追加も可能です。`,
     aiGenerateDayBtn: (day) => `AIで Day ${day} を自動生成`,
@@ -566,3 +575,183 @@ const ITINERARY_VIEW_PACK = {
 export function getItineraryViewCopy(lang: AppLanguage | string | undefined | null): ItineraryViewCopy {
   return pickLang(lang, ITINERARY_VIEW_PACK);
 }
+
+export interface NearbyHotelsCopy {
+  title: (stopTitle: string) => string;
+  subtitle: string;
+  googleLive: string;
+  aiEstimate: string;
+  refresh: string;
+  loading: string;
+  empty: string;
+  errorWithRetry: string;
+  retry: string;
+  setAsStay: string;
+  checkRates: string;
+  map: string;
+  walkTo: (minutes: number, stopTitle: string) => string;
+  walkUnknown: string;
+  perNight: (price: string) => string;
+  reasonLabel: string;
+  googleLiveNote: string;
+}
+
+const NEARBY_HOTELS_PACK = {
+  'zh-CN': {
+    title: (s) => `「${s}」附近推荐酒店`,
+    subtitle: '围绕今日行程站点聚合 · 点一张卡片即可设为下榻',
+    googleLive: 'Google 实时',
+    aiEstimate: 'AI 估算',
+    refresh: '刷新',
+    loading: '正在查找附近酒店…',
+    empty: '暂时没找到附近酒店，试试刷新',
+    errorWithRetry: '酒店推荐加载失败，请重试',
+    retry: '重试',
+    setAsStay: '设为今日下榻',
+    checkRates: '查房价预订',
+    map: '地图',
+    walkTo: (m, s) => `步行 ${m} 分钟到 ${s}`,
+    walkUnknown: '距离待定',
+    perNight: (p) => `≈ ${p} / 晚`,
+    reasonLabel: '推荐理由',
+    googleLiveNote: '评分与评价数来自 Google Places 实时数据',
+  },
+  'en-US': {
+    title: (s) => `Recommended Hotels Near "${s}"`,
+    subtitle: "Clustered around today's itinerary · Tap one to set your stay",
+    googleLive: 'Google Live',
+    aiEstimate: 'AI Estimate',
+    refresh: 'Refresh',
+    loading: 'Finding nearby hotels…',
+    empty: 'No nearby hotels found. Try Refresh.',
+    errorWithRetry: 'Could not load hotel picks. Please retry.',
+    retry: 'Retry',
+    setAsStay: 'Set as Stay',
+    checkRates: 'Check Rates',
+    map: 'Map',
+    walkTo: (m, s) => `${m} min walk to ${s}`,
+    walkUnknown: 'Distance unavailable',
+    perNight: (p) => `≈ ${p} / night`,
+    reasonLabel: 'Why it fits',
+    googleLiveNote: 'Ratings and review counts come from live Google Places data',
+  },
+  'en-GB': {
+    title: (s) => `Recommended Hotels Near "${s}"`,
+    subtitle: "Clustered around today's itinerary · Tap one to set your stay",
+    googleLive: 'Google Live',
+    aiEstimate: 'AI Estimate',
+    refresh: 'Refresh',
+    loading: 'Finding nearby hotels…',
+    empty: 'No nearby hotels found. Try Refresh.',
+    errorWithRetry: 'Could not load hotel picks. Please retry.',
+    retry: 'Retry',
+    setAsStay: 'Set as Stay',
+    checkRates: 'Check Rates',
+    map: 'Map',
+    walkTo: (m, s) => `${m} min walk to ${s}`,
+    walkUnknown: 'Distance unavailable',
+    perNight: (p) => `≈ ${p} / night`,
+    reasonLabel: 'Why it fits',
+    googleLiveNote: 'Ratings and review counts come from live Google Places data',
+  },
+  'es-MX': {
+    title: (s) => `Hoteles recomendados cerca de "${s}"`,
+    subtitle: 'Agrupados alrededor del itinerario de hoy · Toca una tarjeta para fijar tu hospedaje',
+    googleLive: 'Google en vivo',
+    aiEstimate: 'Estimación IA',
+    refresh: 'Actualizar',
+    loading: 'Buscando hoteles cercanos…',
+    empty: 'No se encontraron hoteles cercanos. Prueba Actualizar.',
+    errorWithRetry: 'No se pudieron cargar las sugerencias. Intenta de nuevo.',
+    retry: 'Reintentar',
+    setAsStay: 'Usar como hospedaje',
+    checkRates: 'Ver tarifas',
+    map: 'Mapa',
+    walkTo: (m, s) => `${m} min a pie hasta ${s}`,
+    walkUnknown: 'Distancia no disponible',
+    perNight: (p) => `≈ ${p} / noche`,
+    reasonLabel: 'Por qué encaja',
+    googleLiveNote: 'Las calificaciones y reseñas vienen de Google Places en vivo',
+  },
+  'fr-FR': {
+    title: (s) => `Hôtels recommandés près de « ${s} »`,
+    subtitle: "Regroupés autour de l'itinéraire du jour · Touchez une carte pour fixer le séjour",
+    googleLive: 'Google Live',
+    aiEstimate: 'Estimation IA',
+    refresh: 'Actualiser',
+    loading: 'Recherche d’hôtels à proximité…',
+    empty: 'Aucun hôtel trouvé à proximité. Essayez Actualiser.',
+    errorWithRetry: 'Échec du chargement des hôtels. Réessayez.',
+    retry: 'Réessayer',
+    setAsStay: 'Définir comme hébergement',
+    checkRates: 'Voir les tarifs',
+    map: 'Carte',
+    walkTo: (m, s) => `${m} min à pied jusqu’à ${s}`,
+    walkUnknown: 'Distance indisponible',
+    perNight: (p) => `≈ ${p} / nuit`,
+    reasonLabel: 'Pourquoi ça convient',
+    googleLiveNote: 'Notes et avis issus des données Google Places en direct',
+  },
+  'de-DE': {
+    title: (s) => `Empfohlene Hotels nahe „${s}“`,
+    subtitle: 'Gebündelt um die heutige Route · Tippe eine Karte, um die Unterkunft festzulegen',
+    googleLive: 'Google Live',
+    aiEstimate: 'KI-Schätzung',
+    refresh: 'Aktualisieren',
+    loading: 'Suche nach Hotels in der Nähe…',
+    empty: 'Keine Hotels in der Nähe gefunden. Bitte aktualisieren.',
+    errorWithRetry: 'Hotelvorschläge konnten nicht geladen werden. Bitte erneut versuchen.',
+    retry: 'Erneut versuchen',
+    setAsStay: 'Als Unterkunft festlegen',
+    checkRates: 'Preise prüfen',
+    map: 'Karte',
+    walkTo: (m, s) => `${m} Min. Fußweg zu ${s}`,
+    walkUnknown: 'Entfernung unbekannt',
+    perNight: (p) => `≈ ${p} / Nacht`,
+    reasonLabel: 'Warum es passt',
+    googleLiveNote: 'Bewertungen stammen aus Live-Daten von Google Places',
+  },
+  'pt-BR': {
+    title: (s) => `Hotéis recomendados perto de "${s}"`,
+    subtitle: 'Agrupados em torno do roteiro de hoje · Toque em um cartão para definir a hospedagem',
+    googleLive: 'Google ao vivo',
+    aiEstimate: 'Estimativa IA',
+    refresh: 'Atualizar',
+    loading: 'Procurando hotéis próximos…',
+    empty: 'Nenhum hotel próximo encontrado. Tente Atualizar.',
+    errorWithRetry: 'Falha ao carregar sugestões de hotel. Tente de novo.',
+    retry: 'Tentar de novo',
+    setAsStay: 'Definir como hospedagem',
+    checkRates: 'Ver tarifas',
+    map: 'Mapa',
+    walkTo: (m, s) => `${m} min a pé até ${s}`,
+    walkUnknown: 'Distância indisponível',
+    perNight: (p) => `≈ ${p} / noite`,
+    reasonLabel: 'Por que combina',
+    googleLiveNote: 'Notas e avaliações vêm do Google Places em tempo real',
+  },
+  'ja-JP': {
+    title: (s) => `「${s}」近くのおすすめホテル`,
+    subtitle: '今日の行程周辺でまとめ · カードをタップして宿泊先に設定',
+    googleLive: 'Google リアルタイム',
+    aiEstimate: 'AI 推定',
+    refresh: '更新',
+    loading: '近くのホテルを検索中…',
+    empty: '近くのホテルが見つかりません。更新してみてください',
+    errorWithRetry: 'ホテル提案の読み込みに失敗しました。再試行してください',
+    retry: '再試行',
+    setAsStay: '今日の宿泊先に設定',
+    checkRates: '料金を確認',
+    map: '地図',
+    walkTo: (m, s) => `徒歩 ${m} 分で ${s}`,
+    walkUnknown: '距離未定',
+    perNight: (p) => `≈ ${p} / 泊`,
+    reasonLabel: 'おすすめ理由',
+    googleLiveNote: '評価と口コミ数は Google Places のリアルタイムデータです',
+  },
+} satisfies Record<AppLanguage, NearbyHotelsCopy>;
+
+export function getNearbyHotelsCopy(lang: AppLanguage | string | undefined | null): NearbyHotelsCopy {
+  return pickLang(lang, NEARBY_HOTELS_PACK);
+}
+

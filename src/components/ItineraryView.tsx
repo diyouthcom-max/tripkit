@@ -90,6 +90,7 @@ import {
 } from '../utils/googleMapsHelpers';
 import { DayRouteMapPanel, type DayRouteLegsSummary } from './DayRouteMapPanel';
 import { PlaceAutocompleteInput } from './PlaceAutocompleteInput';
+import { NearbyHotelsPanel } from './NearbyHotelsPanel';
 import { AddStopModal } from './AddStopModal';
 import { PlaceDetailSheet } from './PlaceDetailSheet';
 import {
@@ -209,6 +210,7 @@ interface ItineraryViewProps {
   affiliatePartners?: AffiliatePartnerConfig;
   dailyBudgetLocal: number;
   initialBudgetTier?: BudgetTier;
+  tripStyle?: string;
   crew: CrewMember[];
   meetup: MeetupPlan;
   companionName?: string;
@@ -299,6 +301,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
   affiliatePartners,
   dailyBudgetLocal,
   initialBudgetTier = 'comfort',
+  tripStyle,
   crew,
   meetup,
   companionName = 'Emma',
@@ -1423,105 +1426,124 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           {onUpdateDayStay && (
             <div ref={staySectionRef}>
               {editingStay ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const cleanName = stayNameDraft.trim();
-                    if (!cleanName) return;
-                    onUpdateDayStay(
-                      currentDay,
-                      {
-                        placeName: cleanName,
-                        address: stayAddressDraft.trim() || `${cleanName}, ${primaryCity}`,
-                        placeId: stayPlaceIdDraft,
-                        lat: stayCoordsDraft?.lat,
-                        lng: stayCoordsDraft?.lng,
-                      },
-                      applyStayToCityDays
-                    );
-                    setEditingStay(false);
-                  }}
-                  className="rounded-2xl border tk-bc-forest tk-bg-card p-4 space-y-3 shadow-2xs"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-bold tk-text-forest">
-                      <Home className="h-4 w-4 tk-text-forest" />
-                      <span>
-                        {copy.stayHeading(currentDay, displayPrimaryCity)}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setEditingStay(false)}
-                      className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
-                    >
-                      {t('common.cancel')}
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-start">
-                    <PlaceAutocompleteInput
-                      value={stayNameDraft}
-                      onChange={(val) => {
-                        setStayNameDraft(val);
-                        setStayPlaceIdDraft(undefined);
-                      }}
-                      cityHint={primaryCity}
-                      includedPrimaryTypes={['lodging']}
-                      onSelectPlace={(place) => {
-                        setStayNameDraft(place.name);
-                        if (place.formattedAddress) setStayAddressDraft(place.formattedAddress);
-                        setStayPlaceIdDraft(place.placeId);
-                        setStayCoordsDraft(place.location);
-                      }}
-                      placeholder={copy.staySearchPlaceholder(displayPrimaryCity)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      value={stayAddressDraft}
-                      onChange={(e) => setStayAddressDraft(e.target.value)}
-                      placeholder={copy.stayAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                    <label className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-ink2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={applyStayToCityDays}
-                        onChange={(e) => setApplyStayToCityDays(e.target.checked)}
-                        className="rounded tk-bc-hair tk-accent-forest"
-                      />
-                      <span>
-                        {copy.stayApplyAllDays(displayPrimaryCity)}
-                      </span>
-                    </label>
-
-                    <div className="flex items-center gap-2 ml-auto">
-                      {currentDayStay && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onUpdateDayStay(currentDay, null, false);
-                            setEditingStay(false);
-                          }}
-                          className="rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
-                        >
-                          {copy.clearBtn}
-                        </button>
-                      )}
+                <>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const cleanName = stayNameDraft.trim();
+                      if (!cleanName) return;
+                      onUpdateDayStay(
+                        currentDay,
+                        {
+                          placeName: cleanName,
+                          address: stayAddressDraft.trim() || `${cleanName}, ${primaryCity}`,
+                          placeId: stayPlaceIdDraft,
+                          lat: stayCoordsDraft?.lat,
+                          lng: stayCoordsDraft?.lng,
+                        },
+                        applyStayToCityDays
+                      );
+                      setEditingStay(false);
+                    }}
+                    className="rounded-2xl border tk-bc-forest tk-bg-card p-4 space-y-3 shadow-2xs"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-bold tk-text-forest">
+                        <Home className="h-4 w-4 tk-text-forest" />
+                        <span>
+                          {copy.stayHeading(currentDay, displayPrimaryCity)}
+                        </span>
+                      </div>
                       <button
-                        type="submit"
-                        disabled={!stayNameDraft.trim()}
-                        className="rounded-xl tk-bg-forest px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 cursor-pointer"
+                        type="button"
+                        onClick={() => setEditingStay(false)}
+                        className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                       >
-                        {copy.saveStayBtn}
+                        {t('common.cancel')}
                       </button>
                     </div>
-                  </div>
-                </form>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-start">
+                      <PlaceAutocompleteInput
+                        value={stayNameDraft}
+                        onChange={(val) => {
+                          setStayNameDraft(val);
+                          setStayPlaceIdDraft(undefined);
+                        }}
+                        cityHint={primaryCity}
+                        includedPrimaryTypes={['lodging']}
+                        onSelectPlace={(place) => {
+                          setStayNameDraft(place.name);
+                          if (place.formattedAddress) setStayAddressDraft(place.formattedAddress);
+                          setStayPlaceIdDraft(place.placeId);
+                          setStayCoordsDraft(place.location);
+                        }}
+                        placeholder={copy.staySearchPlaceholder(displayPrimaryCity)}
+                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                      />
+                      <input
+                        type="text"
+                        value={stayAddressDraft}
+                        onChange={(e) => setStayAddressDraft(e.target.value)}
+                        placeholder={copy.stayAddressPlaceholder}
+                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                      <label className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-ink2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={applyStayToCityDays}
+                          onChange={(e) => setApplyStayToCityDays(e.target.checked)}
+                          className="rounded tk-bc-hair tk-accent-forest"
+                        />
+                        <span>
+                          {copy.stayApplyAllDays(displayPrimaryCity)}
+                        </span>
+                      </label>
+
+                      <div className="flex items-center gap-2 ml-auto">
+                        {currentDayStay && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onUpdateDayStay(currentDay, null, false);
+                              setEditingStay(false);
+                            }}
+                            className="rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
+                          >
+                            {copy.clearBtn}
+                          </button>
+                        )}
+                        <button
+                          type="submit"
+                          disabled={!stayNameDraft.trim()}
+                          className="rounded-xl tk-bg-forest px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 cursor-pointer"
+                        >
+                          {copy.saveStayBtn}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <div className="border-t tk-bc-hair my-4" />
+                  <NearbyHotelsPanel
+                    day={currentDay}
+                    city={primaryCity}
+                    displayCity={displayPrimaryCity}
+                    dayNodes={dayNodes}
+                    language={activeLang}
+                    budgetTier={initialBudgetTier}
+                    currencyCode={intel.currencyCode}
+                    currencySymbol={intel.currencySymbol}
+                    tripStyle={tripStyle}
+                    affiliatePartners={affiliatePartners}
+                    onSetStay={(stay) => {
+                      onUpdateDayStay(currentDay, stay, applyStayToCityDays);
+                      setEditingStay(false);
+                    }}
+                  />
+                </>
               ) : currentDayStay ? (
                 <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2.5 min-w-0">
@@ -1646,6 +1668,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 >
                   <Home className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest transition-colors" />
                   <span>{copy.addWhereStayingBtn}</span>
+                  <span className="tk-t-cap tk-text-ink2 font-normal">· {copy.nearbyHotelsHint}</span>
                   <ChevronRight className="h-4 w-4 tk-text-ink2 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               )}

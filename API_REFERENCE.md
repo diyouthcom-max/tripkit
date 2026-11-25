@@ -24,7 +24,7 @@
 
 ---
 
-## 2. Express AI Backend Endpoints (17 `POST` Routes)
+## 2. Express AI Backend Endpoints (18 `POST` Routes)
 
 ### A. Trip Setup & Itinerary Planning
 | # | Method & Path | Request Body Fields | Purpose |
@@ -36,6 +36,7 @@
 | 5 | `POST /api/ai/parse-stop` | `inputText`, `activeDay`, `totalDays`, `cities`, `currencyCode`, `existingStops`, `language` | Parse a single natural-language stop description into a structured timeline stop. |
 | 6 | `POST /api/ai/extract-stops` | `mode`, `inputText`, `imageBase64`, `mimeType`, `forYouCategory`, `activeDay`, `totalDays`, `targetCity`, `cities`, `currencyCode`, `existingStops`, `language` | Batch-extract candidate places/stops from pasted text, screenshots/images, or curated "For You" recommendations. |
 | 7 | `POST /api/ai/local-card` | `city`, `scenario`, `targetName`, `targetAddress`, `language` | Generate local-language taxi / restaurant / dietary / emergency communication cards. |
+| 18 | `POST /api/ai/recommend-nearby-hotels` | `city`, `day`, `budgetTier`, `currencyCode`, `currencySymbol`, `tripStyle`, `stops`, `language` | AI fallback: recommend 4 real nearby hotels for the day's stop cluster when Maps Places is unavailable or returns no lodging results. |
 
 ### B. Smart Packing & Luggage
 | # | Method & Path | Request Body Fields | Purpose |
@@ -58,6 +59,25 @@
 | 15 | `POST /api/ai/transcribe-audio` | `audioBase64`, `mimeType`, `contextHint`, `language` | Transcribe voice dictation audio (`{ transcript }`). |
 | 16 | `POST /api/ai/assistant-dispatch` | `inputText`, `activeTab`, `tripSnapshot`, `conversationHistory`, `language` | Context-aware AI travel concierge that answers questions or dispatches structured workspace actions. |
 | 17 | `POST /api/ai/generate-photobook` | `templateId`, `allowPhotoVision`, `tripsContext`, `photosContext`, `language` | Generate editorial photobook title, chapters, epigraph, and per-photo story captions & layout hints. |
+
+### Nearby Hotels AI Fallback (`POST /api/ai/recommend-nearby-hotels`)
+
+Used only when the client has no Google Maps API key, Places `searchNearby` / `searchByText` errors, or returns zero lodging results. Primary UX still prefers live Places data (ratings + review counts from Google).
+
+**Response shape** (`{ hotels: [...] }`, exactly 4 items when successful):
+
+| Field | Type | Notes |
+|---|---|---|
+| `name` | string | Real operating hotel name in the destination city |
+| `district` | string | Neighborhood / district label |
+| `address` | string | Street-level address string |
+| `lat` / `lng` | number | Approximate WGS84 coords (not a precision pin) |
+| `walkMinutes` | number | Approx walk time to nearest listed day stop |
+| `nearestStopTitle` | string | Title of the nearest itinerary stop (when provided) |
+| `estNightlyLocal` | number | Estimated nightly rate in the trip's local currency |
+| `reason` | string | One short localized sentence: why it fits today's route |
+
+**Hard rule**: this endpoint must **never invent star ratings, review scores, or review counts** — those fields are intentionally absent from the schema. Live ratings come only from Google Places on the client.
 
 ---
 
@@ -92,7 +112,7 @@ All client Firestore operations are enforced by `firestore.rules` (default-deny 
 
 1. **Wrap Remaining `fetch('/api/ai/...')` Calls for Capacitor**:
    - Currently `PhotobookStudioModal.tsx` uses `resolveApiUrl('/api/ai/generate-photobook')`.
-   - Before compiling iOS/Android via Capacitor, update the other 16 `fetch('/api/ai/...')` calls in `src/App.tsx`, `AddStopModal.tsx`, `AiVoiceInputButton.tsx`, `GoModeWalletModal.tsx`, `PlaceDetailSheet.tsx`, and `SmartPackingInlinePanel.tsx` to use `resolveApiUrl(...)`.
+   - Before compiling iOS/Android via Capacitor, update the other 17 `fetch('/api/ai/...')` calls in `src/App.tsx`, `AddStopModal.tsx`, `AiVoiceInputButton.tsx`, `GoModeWalletModal.tsx`, `PlaceDetailSheet.tsx`, and `SmartPackingInlinePanel.tsx` to use `resolveApiUrl(...)`.
 2. **Add CORS & Dynamic Port/Model in `server.ts`**:
    - Allow origins for your production domain + `capacitor://localhost` + `http://localhost` (Android WebView).
    - Change `const PORT = Number(process.env.PORT) || 3000;` and `const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';` for standalone cloud deployment.

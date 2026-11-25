@@ -8923,6 +8923,7 @@ export default function App() {
                     affiliatePartners={preferences.affiliatePartners}
                     dailyBudgetLocal={trip.budget.dailyBudgetLocal}
                     initialBudgetTier={trip.setup.budgetTier}
+                    tripStyle={trip.setup.tripStyle}
                     crew={trip.crew}
                     meetup={trip.meetup}
                     companionName={activeCompanionName}
