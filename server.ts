@@ -37,8 +37,11 @@ function parseGeminiJson<T = Record<string, unknown>>(
   return JSON.parse(unfenced) as T;
 }
 
-async function callGeminiWithRetry<T>(operation: () => Promise<T>): Promise<T> {
-  const maxAttempts = 3;
+async function callGeminiWithRetry<T>(
+  operation: () => Promise<T>,
+  options?: { maxAttempts?: number }
+): Promise<T> {
+  const maxAttempts = options?.maxAttempts ?? 3;
   const backoffMs = [800, 1600];
   let lastErr: unknown;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -408,12 +411,13 @@ Preferences: rewear=${Boolean(setup?.rewear)}, midTripLaundry=${Boolean(setup?.l
         ? 'from Day 1 through Day N (where N is the returned "days" field, 1..30; 3-4 stops/day if N<=10, 2-3 key stops/day if N>10 — NEVER leave middle or final days empty)'
         : `from Day 1 through Day ${plannedDays} (${stopsPerDayGuide} realistic stops per day — NEVER leave middle or final days empty, and set "days": ${plannedDays})`;
 
-      const response = await callGeminiWithRetry(() =>
-        ai.models.generateContent({
-          model: MODEL,
-          contents: prompt,
-          config: {
-            systemInstruction: `You are an elite travel architect, budget strategist & aviation-savvy packing optimizer. ${getAiLangDirective(lang)} Keep accurate local street addresses and ISO currency codes.
+      const response = await callGeminiWithRetry(
+        () =>
+          ai.models.generateContent({
+            model: MODEL,
+            contents: prompt,
+            config: {
+              systemInstruction: `You are an elite travel architect, budget strategist & aviation-savvy packing optimizer. ${getAiLangDirective(lang)} Keep accurate local street addresses and ISO currency codes.
 CRITICAL DOMAIN & INSIDER TRAVELER RULES:
 1. CAPSULE WARDROBE & AIRLINE LIMITS: If midTripLaundry is true or days > 7, cap clothing quantities to a 5-7 day capsule cycle and mention laundry strategy in "why". Strictly respect the airline baggage allowance (${carryOnLimitKg}kg carry-on / ${checkedLimitKg}kg checked).
 2. DESTINATION-ACCURATE TAX REFUND (VAT) INTELLIGENCE:
@@ -437,8 +441,9 @@ ${getPackingGroupSchemaGuide(lang)}
    - Map each item's "smartBagId" among: "cube_xl" | "cube_l" | "cube_m" | "cube_s" | "shoe_bag" | "toiletry_bag" | "doc_pouch" | "pill_box" | "edc_bag", set "morningOfDeparture" boolean, and set "ownership" ("shared" or "personal").
    - Set item "tag" strictly to one of these canonical enum values: "必需" | "核心" | "天气" | "保暖" | "备用" (the UI translates canonical tags automatically).
 7. Generate 4-5 non-packing travel tasks in "tasks" (e.g., timed museum tickets that book out early, intercity rail seat reservation, eSIM/transit card setup, VAT customs prep) with category strictly among "门票预约" | "交通接送" | "住宿餐饮" | "通讯金融" | "其他事务", concise timing, and practical note.`,
-            thinkingConfig: { thinkingLevel: ThinkingLevel.MEDIUM },
-          responseMimeType: 'application/json',
+              thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+              httpOptions: { timeout: 90_000 },
+              responseMimeType: 'application/json',
           responseSchema: {
             type: Type.OBJECT,
             properties: {
@@ -570,7 +575,9 @@ ${getPackingGroupSchemaGuide(lang)}
             required: ['cities', 'days', 'intel', 'dailyBudgetLocal', 'packing', 'timeline', 'wishlist', 'tasks', 'spatialSummary'],
           },
         },
-        })
+          })
+      ,
+        { maxAttempts: 2 }
       );
 
       const parsed = parseGeminiJson(response.text, {});

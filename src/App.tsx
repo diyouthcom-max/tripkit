@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, formatCloudSyncError } from './firebase';
-import { resolveApiUrl } from './services/apiUrl';
+import { AiRequestError, fetchAiJsonWithRetry, resolveApiUrl } from './services/apiUrl';
 import {
   isValidRoomCode,
   isValidSeatId,
@@ -3457,10 +3457,9 @@ export default function App() {
     setTripWizardError(null);
     setIsGeneratingTrip(true);
     try {
-      const res = await fetch(resolveApiUrl('/api/ai/plan-trip'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const data = (await fetchAiJsonWithRetry(
+        '/api/ai/plan-trip',
+        {
           naturalPrompt,
           setup: draftSetup,
           baggageLimits: {
@@ -3470,12 +3469,11 @@ export default function App() {
           },
           blockedItems: neverSuggestItems,
           language: activeLang,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || appCopy.aiPlanTripFailed);
-      }
+        },
+        {
+          onRetry: () => showToast(appCopy.aiRetryingToast),
+        }
+      )) as Record<string, unknown>;
 
       const nextTripState = composeTripStateFromAiResponse(
         data,
@@ -3511,7 +3509,13 @@ export default function App() {
       showToast(appCopy.generatedSavedTripToast(nextTripState.intel.routeTitle));
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : appCopy.generationFailedKeyHint;
+        err instanceof AiRequestError
+          ? err.kind === 'timeout'
+            ? appCopy.aiGenerationTimeout
+            : err.kind === 'network'
+            ? appCopy.aiNetworkInterrupted
+            : err.message || appCopy.aiPlanTripFailed
+          : appCopy.generationFailedKeyHint;
       setTripWizardError(msg);
       showToast(msg);
     } finally {
@@ -3531,10 +3535,9 @@ export default function App() {
     setTripWizardError(null);
     setIsGeneratingTrip(true);
     try {
-      const res = await fetch(resolveApiUrl('/api/ai/plan-trip'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const data = (await fetchAiJsonWithRetry(
+        '/api/ai/plan-trip',
+        {
           naturalPrompt,
           setup: draftSetup,
           baggageLimits: {
@@ -3544,12 +3547,11 @@ export default function App() {
           },
           blockedItems: neverSuggestItems,
           language: activeLang,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || appCopy.aiPlanTripFailed);
-      }
+        },
+        {
+          onRetry: () => showToast(appCopy.aiRetryingToast),
+        }
+      )) as Record<string, unknown>;
 
       const regenerated = composeTripStateFromAiResponse(
         data,
@@ -3568,7 +3570,13 @@ export default function App() {
       showToast(appCopy.regeneratedTripToast(regenerated.intel.routeTitle));
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : appCopy.generationFailedKeyHint;
+        err instanceof AiRequestError
+          ? err.kind === 'timeout'
+            ? appCopy.aiGenerationTimeout
+            : err.kind === 'network'
+            ? appCopy.aiNetworkInterrupted
+            : err.message || appCopy.aiPlanTripFailed
+          : appCopy.generationFailedKeyHint;
       setTripWizardError(msg);
       showToast(msg);
     } finally {
@@ -3637,10 +3645,9 @@ export default function App() {
         nextSetup.cityDays
       );
 
-      const res = await fetch(resolveApiUrl('/api/ai/generate-packing-list'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const data = (await fetchAiJsonWithRetry(
+        '/api/ai/generate-packing-list',
+        {
           setup: nextSetup,
           intel: trip.intel,
           perStopForecasts,
@@ -3651,12 +3658,11 @@ export default function App() {
           },
           blockedItems: neverSuggestItems,
           language: activeLang,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || appCopy.aiPackingListFailed);
-      }
+        },
+        {
+          onRetry: () => showToast(appCopy.aiRetryingToast),
+        }
+      )) as { packing?: PackingGroup[] };
 
       const validColors: PackingGroup['colorKey'][] = [
         'teal',
@@ -3736,7 +3742,17 @@ export default function App() {
       );
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : appCopy.aiPackingFailedKeyHint;
+        err instanceof AiRequestError
+          ? err.kind === 'timeout'
+            ? appCopy.aiGenerationTimeout
+            : err.kind === 'network'
+            ? appCopy.aiNetworkInterrupted
+            : err.message || appCopy.aiPackingListFailed
+          : err instanceof Error &&
+            err.message &&
+            !/Load failed|Failed to fetch|AbortError|NetworkError/i.test(err.message)
+          ? err.message
+          : appCopy.aiPackingFailedKeyHint;
       setPackingWizardError(msg);
     } finally {
       setIsGeneratingPackingList(false);

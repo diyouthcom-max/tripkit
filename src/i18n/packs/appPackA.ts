@@ -47,6 +47,9 @@ export interface AppPackACopy {
   fallbackDayClustered: (day: number) => string;
   paywallAiPlanTrip: string;
   aiPlanTripFailed: string;
+  aiGenerationTimeout: string;
+  aiNetworkInterrupted: string;
+  aiRetryingToast: string;
   generatedSavedTripToast: (title: string) => string;
   generationFailedKeyHint: string;
   paywallAiRegenTrip: string;
@@ -177,6 +180,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         '30 天免费体验期已满：添加主理人 WhatsApp 或 Facebook 免费申领 1 年授权码，即可继续使用 AI 智能生成行程。',
       aiPlanTripFailed: 'AI 生成行程失败',
+      aiGenerationTimeout:
+        '生成耗时过长，已停止等待。请检查网络后重试，或点「离线秒建基础行程」立即建档。',
+      aiNetworkInterrupted:
+        '网络连接中断，已自动重试一次。请保持页面在前台、连接稳定 Wi-Fi 后再试，或点「离线秒建基础行程」。',
+      aiRetryingToast: '网络不稳，正在自动重试…',
       generatedSavedTripToast: (title) => `已生成「${title}」专属方案并保存至行程簿`,
       generationFailedKeyHint: '生成失败，请检查服务端密钥',
       paywallAiRegenTrip:
@@ -324,6 +332,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         'Your 30-day free trial has ended. Message the creator on WhatsApp or Facebook for a free 1-year Pro code to keep generating AI trips.',
       aiPlanTripFailed: 'Failed to generate AI trip plan',
+      aiGenerationTimeout:
+        'Generation took too long and was stopped. Check your connection and retry, or tap Start Offline to create a starter trip now.',
+      aiNetworkInterrupted:
+        'Network interrupted; one automatic retry already ran. Keep this page in the foreground on stable Wi-Fi, then retry—or tap Start Offline.',
+      aiRetryingToast: 'Unstable network — retrying automatically…',
       generatedSavedTripToast: (title) => `Generated "${title}" and saved to Trip Book`,
       generationFailedKeyHint: 'Generation failed — please check server API key',
       paywallAiRegenTrip:
@@ -489,6 +502,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         'Your 30-day free trial has ended. Message the creator on WhatsApp or Facebook for a free 1-year Pro code to keep generating AI trips.',
       aiPlanTripFailed: 'Failed to generate AI trip plan',
+      aiGenerationTimeout:
+        'Generation took too long and was stopped. Check your connection and retry, or tap Start Offline to create a starter trip now.',
+      aiNetworkInterrupted:
+        'Network interrupted; one automatic retry already ran. Keep this page in the foreground on stable Wi-Fi, then retry—or tap Start Offline.',
+      aiRetryingToast: 'Unstable network — retrying automatically…',
       generatedSavedTripToast: (title) => `Generated "${title}" and saved to Trip Book`,
       generationFailedKeyHint: 'Generation failed — please check server API key',
       paywallAiRegenTrip:
@@ -654,6 +672,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         'Tu prueba de 30 días terminó. Pide al creador por WhatsApp o Facebook un código Pro de 1 año para seguir generando viajes con IA.',
       aiPlanTripFailed: 'Error al generar el plan con IA',
+      aiGenerationTimeout:
+        'La generación tardó demasiado y se detuvo. Revisa tu red e inténtalo de nuevo, o toca Iniciar sin conexión para crear un viaje básico ahora.',
+      aiNetworkInterrupted:
+        'La conexión se interrumpió; ya se reintentó una vez. Mantén la página en primer plano con Wi-Fi estable y vuelve a intentar, o toca Iniciar sin conexión.',
+      aiRetryingToast: 'Red inestable — reintentando automáticamente…',
       generatedSavedTripToast: (title) => `Se generó «${title}» y se guardó en tu cuaderno`,
       generationFailedKeyHint: 'Error al generar — revisa la clave API del servidor',
       paywallAiRegenTrip:
@@ -821,6 +844,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         'Essai gratuit de 30 jours terminé. Contactez le créateur sur WhatsApp ou Facebook pour un code Pro 1 an gratuit.',
       aiPlanTripFailed: 'Échec de génération du voyage par l’IA',
+      aiGenerationTimeout:
+        'La génération a pris trop de temps et a été arrêtée. Vérifiez le réseau puis réessayez, ou appuyez sur Démarrer hors ligne pour créer un voyage de base.',
+      aiNetworkInterrupted:
+        'Connexion interrompue ; une nouvelle tentative a déjà eu lieu. Gardez la page au premier plan en Wi-Fi stable, puis réessayez—ou démarrez hors ligne.',
+      aiRetryingToast: 'Réseau instable — nouvelle tentative…',
       generatedSavedTripToast: (title) => `« ${title} » généré et enregistré`,
       generationFailedKeyHint: 'Échec — vérifiez la clé API serveur',
       paywallAiRegenTrip:
@@ -986,6 +1014,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         '30-Tage-Testphase beendet. Frag per WhatsApp oder Facebook nach einem kostenlosen 1-Jahres-Pro-Code für KI-Reiseplanung.',
       aiPlanTripFailed: 'KI-Reiseplanung fehlgeschlagen',
+      aiGenerationTimeout:
+        'Die Generierung dauerte zu lange und wurde gestoppt. Prüfe die Verbindung und versuche es erneut, oder tippe auf Offline starten für eine Basisreise.',
+      aiNetworkInterrupted:
+        'Netzwerk unterbrochen; ein automatischer Retry lief bereits. Seite im Vordergrund lassen, stabiles WLAN nutzen und erneut versuchen—oder Offline starten.',
+      aiRetryingToast: 'Netz instabil — automatischer Retry…',
       generatedSavedTripToast: (title) => `„${title}“ generiert und gespeichert`,
       generationFailedKeyHint: 'Generierung fehlgeschlagen — Server-API-Key prüfen',
       paywallAiRegenTrip:
@@ -1152,6 +1185,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         'Seu teste de 30 dias terminou. Peça ao criador no WhatsApp ou Facebook um código Pro de 1 ano para continuar gerando viagens com IA.',
       aiPlanTripFailed: 'Falha ao gerar plano com IA',
+      aiGenerationTimeout:
+        'A geração demorou demais e foi interrompida. Verifique a rede e tente de novo, ou toque em Iniciar offline para criar uma viagem básica agora.',
+      aiNetworkInterrupted:
+        'A conexão caiu; já houve uma nova tentativa automática. Mantenha a página em primeiro plano no Wi-Fi estável e tente novamente—ou inicie offline.',
+      aiRetryingToast: 'Rede instável — tentando novamente…',
       generatedSavedTripToast: (title) => `“${title}” gerado e salvo no caderno`,
       generationFailedKeyHint: 'Falha ao gerar — verifique a chave API do servidor',
       paywallAiRegenTrip:
@@ -1316,6 +1354,11 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       paywallAiPlanTrip:
         '30 日間の無料トライアルが終了しました。WhatsApp または Facebook で 1 年無料 Pro コードを取得すると AI 旅行生成を続けられます。',
       aiPlanTripFailed: 'AI 旅行プランの生成に失敗しました',
+      aiGenerationTimeout:
+        '生成に時間がかかりすぎたため待機を停止しました。通信を確認して再試行するか、「オフラインで即時作成」で基礎プランを作成してください。',
+      aiNetworkInterrupted:
+        '通信が途切れました（自動再試行は1回済み）。ページを前面に保ち、安定した Wi-Fi で再試行するか、「オフラインで即時作成」をご利用ください。',
+      aiRetryingToast: '通信が不安定です。自動で再試行中…',
       generatedSavedTripToast: (title) =>
         `「${title}」を生成して旅行ブックに保存しました`,
       generationFailedKeyHint: '生成に失敗しました — サーバー API キーを確認してください',

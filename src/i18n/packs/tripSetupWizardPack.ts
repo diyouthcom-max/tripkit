@@ -355,6 +355,7 @@ export interface TripSetupWizardCopy {
   regenAiWarning: string;
   confirmOverwriteBtn: string;
   generatingTripBtn: string;
+  aiProgressStages: [string, string, string];
   generateTripWithAiBtn: string;
   startOfflineBtn: string;
   footerCreateHint: string;
@@ -552,6 +553,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: '重新生成将重置当前行程的打包进度、动线与账单（若不想覆盖，建议点击顶栏「新建行程」）。',
     confirmOverwriteBtn: '确认重新生成',
     generatingTripBtn: '正在生成专属行程与清单...',
+    aiProgressStages: [
+      '正在规划每日路线与站点…',
+      '正在按场景整理多分类打包清单…',
+      '正在做最后校对，请保持页面在前台…',
+    ],
     generateTripWithAiBtn: 'AI 智能生成行程与清单',
     startOfflineBtn: '离线秒建',
     footerCreateHint: 'AI 将结合微气候、场景与退税规则生成日程与多维清单；也可免等待离线秒建。',
@@ -749,6 +755,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'Regenerating resets current packing progress, stops, and expenses. Use "New Trip" in the top bar to keep this trip untouched.',
     confirmOverwriteBtn: 'Confirm Overwrite',
     generatingTripBtn: 'Generating Trip...',
+    aiProgressStages: [
+      'Planning daily routes and stops…',
+      'Building multi-category packing lists by scenario…',
+      'Final polish — please keep this page in the foreground…',
+    ],
     generateTripWithAiBtn: 'Generate Trip with AI',
     startOfflineBtn: 'Start Offline',
     footerCreateHint: 'Matches climate, plug adapters & exit tax-free rules — or start offline in 1s.',
@@ -946,6 +957,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'Regenerating resets current packing progress, stops, and expenses. Use "New Trip" in the top bar to keep this journey untouched.',
     confirmOverwriteBtn: 'Confirm Overwrite',
     generatingTripBtn: 'Generating Journey...',
+    aiProgressStages: [
+      'Planning daily routes and stops…',
+      'Building multi-category packing lists by scenario…',
+      'Final polish — please keep this page in the foreground…',
+    ],
     generateTripWithAiBtn: 'Generate Journey with AI',
     startOfflineBtn: 'Start Offline',
     footerCreateHint: 'Matches climate, plug adaptors & exit VAT rules — or start offline in 1s.',
@@ -1141,6 +1157,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'Regenerar reinicia el progreso de maleta, paradas y gastos. Usa "Nuevo viaje" para no perder este.',
     confirmOverwriteBtn: 'Confirmar sobrescritura',
     generatingTripBtn: 'Generando viaje...',
+    aiProgressStages: [
+      'Planificando rutas y paradas diarias…',
+      'Organizando la lista de equipaje por escenarios…',
+      'Última revisión — mantén la página en primer plano…',
+    ],
     generateTripWithAiBtn: 'Generar viaje con IA',
     startOfflineBtn: 'Iniciar sin conexión',
     footerCreateHint: 'Ajusta clima, adaptadores y reglas Tax-Free — o empieza sin conexión en 1s.',
@@ -1336,6 +1357,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'La régénération réinitialise la valise, les étapes et les dépenses. Utilisez « Nouveau voyage » pour garder celui-ci.',
     confirmOverwriteBtn: 'Confirmer le remplacement',
     generatingTripBtn: 'Création du voyage...',
+    aiProgressStages: [
+      'Planification des itinéraires et arrêts…',
+      'Organisation des listes de bagages par scénario…',
+      'Dernière vérification — gardez la page au premier plan…',
+    ],
     generateTripWithAiBtn: 'Générer le voyage avec l’IA',
     startOfflineBtn: 'Démarrer hors ligne',
     footerCreateHint: 'Adapte météo, adaptateurs et détaxe — ou démarrez hors ligne en 1s.',
@@ -1531,6 +1557,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'Neu generieren setzt Packfortschritt, Stopps und Ausgaben zurück. Nutze „Neue Reise“, um diese zu behalten.',
     confirmOverwriteBtn: 'Überschreiben bestätigen',
     generatingTripBtn: 'Reise wird erstellt...',
+    aiProgressStages: [
+      'Tagesrouten und Stopps werden geplant…',
+      'Szenario-Packlisten werden zusammengestellt…',
+      'Letzte Prüfung — bitte Seite im Vordergrund lassen…',
+    ],
     generateTripWithAiBtn: 'Reise mit KI generieren',
     startOfflineBtn: 'Offline starten',
     footerCreateHint: 'Passt Klima, Adapter & Tax-Free an — oder startet offline in 1s.',
@@ -1726,6 +1757,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: 'Regenerar zera o progresso da mala, paradas e gastos. Use "Nova viagem" para preservar esta.',
     confirmOverwriteBtn: 'Confirmar substituição',
     generatingTripBtn: 'Gerando viagem...',
+    aiProgressStages: [
+      'Planejando rotas e paradas do dia…',
+      'Montando listas de mala por cenário…',
+      'Revisão final — mantenha a página em primeiro plano…',
+    ],
     generateTripWithAiBtn: 'Gerar viagem com IA',
     startOfflineBtn: 'Iniciar offline',
     footerCreateHint: 'Ajusta clima, adaptadores e Tax-Free — ou comece offline em 1s.',
@@ -1921,6 +1957,11 @@ const TRIP_SETUP_WIZARD_MAP: Record<AppLanguage, TripSetupWizardCopy> = {
     regenAiWarning: '再生成すると現在のパッキング進捗・日程・出費がリセットされます。新しく作る場合は上部の「新しい旅」をご利用ください。',
     confirmOverwriteBtn: '上書きして再生成',
     generatingTripBtn: '専用プランを作成中...',
+    aiProgressStages: [
+      '日ごとのルートとスポットを計画中…',
+      'シーン別にパッキングリストを整理中…',
+      '最終確認中です。ページを前面に保ってください…',
+    ],
     generateTripWithAiBtn: 'AI でプラン＆リストを生成',
     startOfflineBtn: 'オフライン作成',
     footerCreateHint: '気候・変換プラグ・免税ルールを自動反映 — または1秒でオフライン開始。',

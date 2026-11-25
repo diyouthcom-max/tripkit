@@ -353,6 +353,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [aiProgressStageIdx, setAiProgressStageIdx] = useState(0);
   const [confirmOverwriteAi, setConfirmOverwriteAi] = useState(false);
 
   const workingPacking = useMemo<PackingGroup[]>(() => {
@@ -366,6 +367,20 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
 
   const wizardRootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isGenerating) {
+      setAiProgressStageIdx(0);
+      return;
+    }
+    setAiProgressStageIdx(0);
+    const t15 = window.setTimeout(() => setAiProgressStageIdx(1), 15_000);
+    const t35 = window.setTimeout(() => setAiProgressStageIdx(2), 35_000);
+    return () => {
+      window.clearTimeout(t15);
+      window.clearTimeout(t35);
+    };
+  }, [isGenerating]);
 
   const updateSetup = (patch: Partial<TripSetup>) => {
     const nextCities = patch.cities !== undefined ? patch.cities : setup.cities;
@@ -1978,6 +1993,16 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
               )}
             </section>
           </div>
+        </div>
+      )}
+
+      {/* AI generation staged progress (shown only while waiting, never over CTA) */}
+      {isGenerating && !validationError && !errorMessage && (
+        <div className="flex items-start gap-2 min-w-0 px-0.5">
+          <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0 mt-0.5 tk-text-ink2" />
+          <p className="tk-t-cap tk-text-ink2 leading-snug min-w-0">
+            {copy.aiProgressStages[aiProgressStageIdx] || copy.aiProgressStages[0]}
+          </p>
         </div>
       )}
 
