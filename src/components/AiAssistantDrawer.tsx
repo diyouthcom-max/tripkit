@@ -72,7 +72,13 @@ interface AiAssistantDrawerProps {
   onNavigateToModule?: (targetTab: AppTab, targetDay?: number) => void;
 }
 
-type PromptCategory = 'featured' | 'tips' | 'inspiration' | 'actions';
+type PromptCategory =
+  | 'featured'
+  | 'tips'
+  | 'inspiration'
+  | 'itinerary'
+  | 'expense'
+  | 'packing';
 type ProposalStatus = 'pending' | 'applied' | 'dismissed';
 
 interface FeedEntry {
@@ -154,6 +160,15 @@ function getProposalTargetModule(proposal: AiAssistantProposal): {
   ) {
     return { tab: 'packing' };
   }
+  if (proposal.itineraryRebuild || proposal.destinationChange) {
+    return { tab: 'packing' };
+  }
+  if (proposal.packingTemplate) {
+    return { tab: 'packing' };
+  }
+  if (proposal.dateChange) {
+    return { tab: 'itinerary' };
+  }
   return { tab: 'budget', day: proposal.expenses?.[0]?.day };
 }
 
@@ -196,6 +211,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [feed, setFeed] = useState<FeedEntry[]>([]);
+  const [overwriteConfirmed, setOverwriteConfirmed] = useState<
+    Record<string, boolean>
+  >({});
 
   const receiptInputRef = useRef<HTMLInputElement>(null);
   const feedEndRef = useRef<HTMLDivElement>(null);
@@ -288,6 +306,11 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   };
 
   const handleDismissEntryProposal = (entryId: string) => {
+    setOverwriteConfirmed((prev) => {
+      const next = { ...prev };
+      delete next[entryId];
+      return next;
+    });
     setFeed((prev) =>
       prev.map((item) =>
         item.id === entryId ? { ...item, proposalStatus: 'dismissed' } : item
@@ -349,7 +372,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
     { id: 'featured', label: copy.tabFeatured, icon: Sparkles },
     { id: 'tips', label: copy.tabTips, icon: Compass },
     { id: 'inspiration', label: copy.tabInspiration, icon: Utensils },
-    { id: 'actions', label: copy.tabActions, icon: Zap },
+    { id: 'itinerary', label: copy.tabItinerary, icon: Zap },
+    { id: 'expense', label: copy.tabExpense, icon: Wallet },
+    { id: 'packing', label: copy.tabPacking, icon: Luggage },
   ];
 
   const isEmptyState = feed.length === 0 && !loading;
@@ -394,6 +419,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   type="button"
                   onClick={() => {
                     setFeed([]);
+                    setOverwriteConfirmed({});
                     setShowInspirationShelf(false);
                     setErrorMsg(null);
                   }}
@@ -434,25 +460,32 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 </div>
               )}
 
-              {/* 4 Clean Category Tabs */}
+              {/* 6 Category Tabs · Q&A group | execute group */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
-                {categoryTabs.map((cat) => {
+                {categoryTabs.map((cat, idx) => {
                   const Icon = cat.icon;
                   const active = activeCategory === cat.id;
                   return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setActiveCategory(cat.id)}
-                      className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
- active
- ? 'tk-bg-forest text-white shadow-2xs'
- : 'bg-white tk-text-ink2 border tk-bc-hair hover:tk-bc-hair hover:tk-text-ink'
- }`}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                      <span>{cat.label}</span>
-                    </button>
+                    <React.Fragment key={cat.id}>
+                      {idx === 3 && (
+                        <div
+                          aria-hidden="true"
+                          className="shrink-0 self-center h-4 border-l tk-bc-hair"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setActiveCategory(cat.id)}
+                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                          active
+                            ? 'tk-bg-forest text-white shadow-2xs'
+                            : 'bg-white tk-text-ink2 border tk-bc-hair hover:tk-bc-hair hover:tk-text-ink'
+                        }`}
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                        <span>{cat.label}</span>
+                      </button>
+                    </React.Fragment>
                   );
                 })}
               </div>
@@ -771,35 +804,229 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   </span>
                                 </div>
                               )}
+
+                              {/* Proposed Date Change */}
+                              {result.proposal.dateChange && (
+                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                    {copy.dateChangeSummary(
+                                      result.proposal.dateChange.departureDate,
+                                      result.proposal.dateChange.returnDate,
+                                      result.proposal.dateChange.days
+                                    )}
+                                  </p>
+                                  {result.proposal.dateChange.note ? (
+                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                      {result.proposal.dateChange.note}
+                                    </p>
+                                  ) : null}
+                                  <p className="text-[11px] tk-text-warning leading-snug">
+                                    {copy.dateChangeRisk}
+                                  </p>
+                                </div>
+                              )}
+
+                              {/* Proposed Destination Change */}
+                              {result.proposal.destinationChange && (
+                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                    {copy.destinationChangeSummary(
+                                      result.proposal.destinationChange.cities.join(' · ')
+                                    )}
+                                  </p>
+                                  {result.proposal.destinationChange.note ? (
+                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                      {result.proposal.destinationChange.note}
+                                    </p>
+                                  ) : null}
+                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                    {copy.destinationChangeNote}
+                                  </p>
+                                </div>
+                              )}
+
+                              {/* Proposed Itinerary Rebuild */}
+                              {result.proposal.itineraryRebuild && (
+                                <div
+                                  className={`rounded-xl border tk-bc-hair px-3 py-2.5 space-y-1.5 ${
+                                    result.proposal.itineraryRebuild.targetMode === 'overwrite'
+                                      ? 'tk-bg-warning-tint'
+                                      : 'tk-bg-paper'
+                                  }`}
+                                >
+                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                    {copy.rebuildPromptSummary(
+                                      result.proposal.itineraryRebuild.naturalPrompt
+                                    )}
+                                  </p>
+                                  {result.proposal.itineraryRebuild.note ? (
+                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                      {result.proposal.itineraryRebuild.note}
+                                    </p>
+                                  ) : null}
+                                  <p
+                                    className={`text-[11px] leading-snug ${
+                                      result.proposal.itineraryRebuild.targetMode === 'overwrite'
+                                        ? 'tk-text-warning font-semibold'
+                                        : 'tk-text-ink2'
+                                    }`}
+                                  >
+                                    {result.proposal.itineraryRebuild.targetMode === 'overwrite'
+                                      ? copy.rebuildOverwriteWarning
+                                      : copy.rebuildSaveAsNew}
+                                  </p>
+                                  {result.proposal.itineraryRebuild.targetMode === 'overwrite' &&
+                                    proposalStatus === 'pending' && (
+                                      <div className="pt-1.5 space-y-2 border-t tk-bc-hair">
+                                        <p className="text-xs font-bold tk-text-ink leading-snug">
+                                          {copy.overwriteConfirmTitle}
+                                        </p>
+                                        <p className="text-[11px] tk-text-warning leading-snug">
+                                          {copy.overwriteConfirmRisk}
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setOverwriteConfirmed((prev) => ({
+                                                ...prev,
+                                                [entry.id]: true,
+                                              }))
+                                            }
+                                            className={`rounded-xl px-3 py-1.5 text-xs font-semibold border transition-colors cursor-pointer ${
+                                              overwriteConfirmed[entry.id]
+                                                ? 'tk-bg-forest text-white border-transparent'
+                                                : 'bg-white tk-text-forest tk-bc-hair hover:tk-bg-forest-tint'
+                                            }`}
+                                          >
+                                            {copy.overwriteConfirmYes}
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              if (!result.proposal?.itineraryRebuild) return;
+                                              handleApplyEntryProposal(entry.id, {
+                                                ...result.proposal,
+                                                itineraryRebuild: {
+                                                  ...result.proposal.itineraryRebuild,
+                                                  targetMode: 'new',
+                                                  confirmOverwrite: false,
+                                                },
+                                              });
+                                              setOverwriteConfirmed((prev) => {
+                                                const next = { ...prev };
+                                                delete next[entry.id];
+                                                return next;
+                                              });
+                                            }}
+                                            className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-white tk-text-forest border tk-bc-hair hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                                          >
+                                            {copy.overwriteSaveAsNew}
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setOverwriteConfirmed((prev) => {
+                                                const next = { ...prev };
+                                                delete next[entry.id];
+                                                return next;
+                                              })
+                                            }
+                                            className="rounded-xl px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
+                                          >
+                                            {copy.overwriteCancel}
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )}
+                                </div>
+                              )}
+
+                              {/* Proposed Packing Template */}
+                              {result.proposal.packingTemplate && (
+                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                    {copy.packingTemplateSummary(
+                                      result.proposal.packingTemplate.note ||
+                                        result.proposal.packingTemplate.scenarioIds.join(' · ')
+                                    )}
+                                  </p>
+                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                    {copy.packingTemplateMerge}
+                                  </p>
+                                </div>
+                              )}
                             </div>
 
                             {/* Proposal Action Footer */}
-                            <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 tk-bg-card border-t tk-bc-hair">
+                            <div className="flex flex-col gap-1.5 px-3.5 py-2.5 tk-bg-card border-t tk-bc-hair">
                               {proposalStatus === 'pending' ? (
                                 <>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDismissEntryProposal(entry.id)}
-                                    className="rounded-xl px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
-                                  >
-                                    {copy.skipBtn}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleApplyEntryProposal(entry.id, result.proposal!)
-                                    }
-                                    className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-forest transition-colors shadow-2xs cursor-pointer"
-                                  >
-                                    <Check className="h-3.5 w-3.5" />
-                                    <span>{copy.applyBtn}</span>
-                                  </button>
+                                  {result.proposal.itineraryRebuild?.targetMode ===
+                                    'overwrite' &&
+                                    !overwriteConfirmed[entry.id] && (
+                                      <p className="text-[11px] tk-text-warning leading-snug">
+                                        {copy.overwriteNeedConfirm}
+                                      </p>
+                                    )}
+                                  <div className="flex items-center justify-between gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDismissEntryProposal(entry.id)}
+                                      className="rounded-xl px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
+                                    >
+                                      {copy.skipBtn}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      disabled={
+                                        result.proposal.itineraryRebuild?.targetMode ===
+                                          'overwrite' && !overwriteConfirmed[entry.id]
+                                      }
+                                      onClick={() => {
+                                        const proposal = result.proposal!;
+                                        if (
+                                          proposal.itineraryRebuild?.targetMode === 'overwrite'
+                                        ) {
+                                          if (!overwriteConfirmed[entry.id]) return;
+                                          handleApplyEntryProposal(entry.id, {
+                                            ...proposal,
+                                            itineraryRebuild: {
+                                              ...proposal.itineraryRebuild,
+                                              confirmOverwrite: true,
+                                            },
+                                          });
+                                          setOverwriteConfirmed((prev) => {
+                                            const next = { ...prev };
+                                            delete next[entry.id];
+                                            return next;
+                                          });
+                                          return;
+                                        }
+                                        handleApplyEntryProposal(entry.id, proposal);
+                                      }}
+                                      className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-forest transition-colors shadow-2xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <Check className="h-3.5 w-3.5" />
+                                      <span>{copy.applyBtn}</span>
+                                    </button>
+                                  </div>
                                 </>
                               ) : proposalStatus === 'applied' ? (
-                                <>
-                                  <span className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest">
-                                    <Check className="h-3.5 w-3.5" />
-                                    <span>{copy.savedToTrip}</span>
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest leading-snug">
+                                    <Check className="h-3.5 w-3.5 shrink-0" />
+                                    <span>
+                                      {result.proposal.dateChange
+                                        ? copy.resultDateApplied
+                                        : result.proposal.destinationChange
+                                        ? copy.resultDestinationApplied
+                                        : result.proposal.itineraryRebuild
+                                        ? copy.resultRebuildApplied
+                                        : result.proposal.packingTemplate
+                                        ? copy.resultPackingApplied
+                                        : copy.savedToTrip}
+                                    </span>
                                   </span>
                                   {onNavigateToModule && proposalTarget && (
                                     <button
@@ -823,7 +1050,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                       <ArrowUpRight className="h-3 w-3" />
                                     </button>
                                   )}
-                                </>
+                                </div>
                               ) : (
                                 <span className="text-xs tk-text-ink2">
                                   {copy.noChangesApplied}

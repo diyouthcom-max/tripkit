@@ -297,7 +297,11 @@ export type AiAssistantIntent =
   | 'toggle_rain_swap'
   | 'local_card'
   | 'travel_tips'
-  | 'qa_advice';
+  | 'qa_advice'
+  | 'change_trip_date'
+  | 'change_destination'
+  | 'rebuild_itinerary'
+  | 'change_packing_template';
 
 export interface AiAssistantHistoryTurn {
   userPrompt: string;
@@ -387,6 +391,34 @@ export interface AiProposedRainSwap {
   day: number;
 }
 
+export interface AiProposedDateChange {
+  departureDate: string;
+  returnDate: string;
+  days: number;
+  note: string;
+}
+
+export interface AiProposedDestinationChange {
+  cities: string[];
+  cityDays?: number[];
+  note: string;
+}
+
+export interface AiProposedItineraryRebuild {
+  naturalPrompt: string;
+  targetMode: 'new' | 'overwrite';
+  setupPatch?: Partial<TripSetup>;
+  confirmOverwrite: boolean;
+  note: string;
+}
+
+export interface AiProposedPackingTemplate {
+  scenarioIds: PackingScenarioId[];
+  tripPurpose?: PackingTripPurpose;
+  customNote?: string;
+  note: string;
+}
+
 export interface AiAssistantProposal {
   summary?: string;
   expenses?: AiProposedExpense[];
@@ -395,6 +427,10 @@ export interface AiAssistantProposal {
   stops?: AiProposedStop[];
   removeStops?: AiProposedRemoveStop[];
   rainSwap?: AiProposedRainSwap;
+  dateChange?: AiProposedDateChange;
+  destinationChange?: AiProposedDestinationChange;
+  itineraryRebuild?: AiProposedItineraryRebuild;
+  packingTemplate?: AiProposedPackingTemplate;
 }
 
 export interface AiAssistantDispatchResult {

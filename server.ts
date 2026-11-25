@@ -1432,6 +1432,7 @@ User spoken/typed input: "${trimmed}"`,
 
 CRITICAL PROPOSAL-FIRST RULE ("Nothing changes until you tap Apply"):
 - Whenever you propose adding/removing itinerary stops, adding packing items, adding tasks, logging expenses, or toggling rainy-day mode, NEVER claim the change is already saved! Instead, phrase "reply" cleanly as a ready-to-apply proposal (e.g. in Chinese: "已为你准备好调整提案，点击下方「一键应用」即可写入行程。" / in English: "I've drafted this update for you—tap Apply below whenever you're ready to save it."), and provide a crisp 1-line "proposalSummary".
+- The same proposal-first rule applies to date / destination / full-itinerary rebuild / packing-template changes: never claim they are already saved; clearly tell the user the update only writes after they tap Apply.
 
 INTENT CLASSIFICATION & EXECUTION RULES:
 1. "add_expense": Choose when the user logs 1 or more real expenses/purchases/meals/tickets.
@@ -1481,9 +1482,26 @@ INTENT CLASSIFICATION & EXECUTION RULES:
 9. "qa_advice": Choose when the user asks a question about their specific trip data: pre-departure readiness, remaining budget, VAT tax-refund threshold gap, AA split balance, airline carry-on / checked luggage weight margin (use exact carryOnLimitGrams and checkedLimitGrams from tripSnapshot.packing!), multi-day schedule overview, or pending checklist items.
    - Leave mutation arrays empty and "rainSwapAction": "none".
    - Cite 100% EXACT figures from Live Trip Snapshot in a concise 2–4 sentence "reply". You may also include 1–3 structured "travelTips" cards if helpful.
+10. "change_trip_date": Choose when the user wants to change departure/return dates, delay or advance the trip, or change trip length (e.g. "延后 3 天", "改成 7 天", "push departure one week").
+   - Read current values from tripSnapshot.departureDate / returnDate / days.
+   - For relative requests, compute absolute YYYY-MM-DD dates. Populate "dateChange" with departureDate, returnDate (YYYY-MM-DD), days (integer 1..30), and a one-line "note".
+   - If the user only changes days, keep departureDate and sync returnDate by adding (days - 1) in UTC.
+   - In "reply", warn that date changes affect weekdays, closing hours, weather and daily budgets—ask them to review after Apply. Never claim dates are already updated.
+11. "change_destination": Choose when the user wants to swap cities/countries or redirect a day to another city.
+   - Populate "destinationChange" with "cities" (1..6 trimmed city strings), optional "cityDays" (same length as cities), and "note".
+   - ALSO populate "itineraryRebuild" (targetMode default "new", naturalPrompt = the user's original request) because city swaps make existing stop addresses/coords/weather inconsistent—full regenerations must go through the existing plan-trip pipeline.
+   - In "reply", state clearly that a NEW trip copy will be saved and the current trip stays unchanged, unless the user explicitly asked to overwrite the current trip.
+12. "rebuild_itinerary": Choose when the user wants a full replan / brand-new itinerary / cross-province rethink.
+   - Populate "itineraryRebuild" with naturalPrompt (verbatim user text—must not be empty), targetMode ("new" | "overwrite"; DEFAULT "new"; only use "overwrite" when the user explicitly says overwrite/replace current/don't create a new copy), optional setupPatch (only existing TripSetup keys like cities/days/departureDate/tripStyle/specialScenarios), confirmOverwrite fixed false, and note.
+   - Do NOT invent per-day stops, lat/lng, or addresses here—rebuild always reuses /api/ai/plan-trip.
+   - In "reply", explain default save-as-new behavior, and that overwrite resets packing checks / expenses / visited marks.
+13. "change_packing_template": Choose when the user wants to switch packing scenarios/templates (ski, kids, business, beach, etc.) or regenerate the packing list for a new purpose.
+   - Populate "packingTemplate" with scenarioIds (ONLY valid PACKING_SCENARIO_SPECS ids such as baby/kids/hiking/beach/swimming/onsen/ski_snow/theme_park/camping/fitness/photography/remote_work/formal_event/shopping_taxfree/medication/sensitive_skin/cabin_only), optional tripPurpose (leisure|business|both), optional customNote, and note.
+   - In "reply", explain the list will smart_merge so already-checked packing progress is preserved.
 
 FOLLOW-UP SUGGESTIONS:
-- Always populate "followUpSuggestions" with 2–3 short, natural, clickable next questions/actions relevant to the user's trip and this turn (max ~18 Chinese characters or ~8 English words each). Examples: "把 Day 2 排得更轻松一点", "机场进城最省钱路线？", "给 Day 1 加一家本地晚餐".`,
+- Always populate "followUpSuggestions" with 2–3 short, natural, clickable next questions/actions relevant to the user's trip and this turn (max ~18 Chinese characters or ~8 English words each). Examples: "把 Day 2 排得更轻松一点", "机场进城最省钱路线？", "给 Day 1 加一家本地晚餐".
+- When this turn involves dates, cities, or packing templates, include related next-step suggestions.`,
             thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
             responseMimeType: 'application/json',
             responseSchema: {
@@ -1642,6 +1660,70 @@ FOLLOW-UP SUGGESTIONS:
                 followUpSuggestions: {
                   type: Type.ARRAY,
                   items: { type: Type.STRING },
+                },
+                dateChange: {
+                  type: Type.OBJECT,
+                  properties: {
+                    departureDate: { type: Type.STRING },
+                    returnDate: { type: Type.STRING },
+                    days: { type: Type.INTEGER },
+                    note: { type: Type.STRING },
+                  },
+                  required: ['departureDate', 'returnDate', 'days', 'note'],
+                },
+                destinationChange: {
+                  type: Type.OBJECT,
+                  properties: {
+                    cities: {
+                      type: Type.ARRAY,
+                      items: { type: Type.STRING },
+                    },
+                    cityDays: {
+                      type: Type.ARRAY,
+                      items: { type: Type.INTEGER },
+                    },
+                    note: { type: Type.STRING },
+                  },
+                  required: ['cities', 'note'],
+                },
+                itineraryRebuild: {
+                  type: Type.OBJECT,
+                  properties: {
+                    naturalPrompt: { type: Type.STRING },
+                    targetMode: { type: Type.STRING },
+                    setupPatch: {
+                      type: Type.OBJECT,
+                      properties: {
+                        cities: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING },
+                        },
+                        days: { type: Type.INTEGER },
+                        departureDate: { type: Type.STRING },
+                        tripStyle: { type: Type.STRING },
+                        specialScenarios: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING },
+                        },
+                      },
+                    },
+                    confirmOverwrite: { type: Type.BOOLEAN },
+                    note: { type: Type.STRING },
+                  },
+                  required: ['naturalPrompt', 'targetMode', 'confirmOverwrite', 'note'],
+                },
+                packingTemplate: {
+                  type: Type.OBJECT,
+                  properties: {
+                    scenarioIds: {
+                      type: Type.ARRAY,
+                      items: { type: Type.STRING },
+                    },
+                    tripPurpose: { type: Type.STRING },
+                    customNote: { type: Type.STRING },
+                    note: { type: Type.STRING },
+                  },
+                  required: ['scenarioIds', 'note'],
                 },
               },
               required: [

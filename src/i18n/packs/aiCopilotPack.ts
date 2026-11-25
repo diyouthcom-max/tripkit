@@ -11,7 +11,9 @@ export interface CopilotUiCopy {
   tabFeatured: string;
   tabTips: string;
   tabInspiration: string;
-  tabActions: string;
+  tabItinerary: string;
+  tabExpense: string;
+  tabPacking: string;
   errorUnavailable: string;
   errorReceiptScan: string;
   walletCash: string;
@@ -43,6 +45,25 @@ export interface CopilotUiCopy {
   thinkingText: string;
   inputPlaceholder: (city: string) => string;
   voiceLabel: string;
+  dateChangeSummary: (departure: string, returnDate: string, days: number) => string;
+  dateChangeRisk: string;
+  destinationChangeSummary: (cities: string) => string;
+  destinationChangeNote: string;
+  rebuildPromptSummary: (prompt: string) => string;
+  rebuildSaveAsNew: string;
+  rebuildOverwriteWarning: string;
+  packingTemplateSummary: (scene: string) => string;
+  packingTemplateMerge: string;
+  overwriteConfirmTitle: string;
+  overwriteConfirmRisk: string;
+  overwriteConfirmYes: string;
+  overwriteCancel: string;
+  overwriteSaveAsNew: string;
+  overwriteNeedConfirm: string;
+  resultDateApplied: string;
+  resultDestinationApplied: string;
+  resultRebuildApplied: string;
+  resultPackingApplied: string;
 }
 
 const COPILOT_UI_MAP = {
@@ -53,11 +74,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: '开启新对话',
     welcomeTitle: '关于这趟行程，随时问我。',
     welcomeDesc:
-      '获取目的地旅行提示、寻找本地美食与机位灵感，或让我调整行程。在你点击「一键应用」前，原行程不会有任何改动。',
+      '支持直接用自然语言改出发日期、增删城市、重排行程或联动 9 袋打包模板。在你点击「一键应用」前，原行程不会有任何改动。',
     tabFeatured: '精选',
     tabTips: '旅行提示',
     tabInspiration: '本地灵感',
-    tabActions: '调行程与记账',
+    tabItinerary: '调行程',
+    tabExpense: '记账',
+    tabPacking: '打包',
     errorUnavailable: 'AI 助手暂时无法响应，请稍后重试',
     errorReceiptScan: '小票图片识别失败，请重试',
     walletCash: '现金钱包',
@@ -88,8 +111,30 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: '发音提示：',
     tipPrefix: '礼仪贴士：',
     thinkingText: '正在结合你的行程整理建议...',
-    inputPlaceholder: (city: string) => `问任何关于${city}行程的问题，或让我帮你调整...`,
+    inputPlaceholder: (city: string) =>
+      `问任何关于${city}行程的问题，或让我直接修改日期/路线/9袋清单...`,
     voiceLabel: '语音',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `改期：${departure} → ${returnDate}（${days} 天）`,
+    dateChangeRisk: '改期后请复核：星期几开闭馆、天气、逐日预算是否仍匹配。',
+    destinationChangeSummary: (cities) => `换城市：${cities}`,
+    destinationChangeNote: '会同步逐日城市字段，但已有站点地址/坐标需复核。',
+    rebuildPromptSummary: (prompt) => `重建行程：${prompt}`,
+    rebuildSaveAsNew: '将另存一份新行程，当前行程不变。',
+    rebuildOverwriteWarning: '覆盖将重置：打包勾选状态、记账流水、已到访标记。',
+    packingTemplateSummary: (scene) => `打包模板：${scene}`,
+    packingTemplateMerge: '智能合并，保留已勾选进度。',
+    overwriteConfirmTitle: '确认覆盖当前行程？',
+    overwriteConfirmRisk:
+      '覆盖会重置打包勾选状态、记账流水与已到访标记，且不可撤销。',
+    overwriteConfirmYes: '我确认覆盖',
+    overwriteCancel: '取消',
+    overwriteSaveAsNew: '改为另存新行程',
+    overwriteNeedConfirm: '请先确认覆盖后再点「一键应用」',
+    resultDateApplied: '出发日期已更新',
+    resultDestinationApplied: '目的地城市已更新',
+    resultRebuildApplied: '行程重建已应用',
+    resultPackingApplied: '打包模板已更新',
   },
   'en-US': {
     headerTitle: 'Ask Trip Kit',
@@ -98,11 +143,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Start new conversation',
     welcomeTitle: 'Ask about this trip.',
     welcomeDesc:
-      'Ask for travel tips, local inspiration, or itinerary tweaks. Nothing changes until you tap Apply.',
+      'Change departure dates, add or remove cities, replan days, or sync 9-bag packing templates in plain language. Nothing changes until you tap Apply.',
     tabFeatured: 'Featured',
     tabTips: 'Travel Tips',
     tabInspiration: 'Inspiration',
-    tabActions: 'Edit & Log',
+    tabItinerary: 'Itinerary',
+    tabExpense: 'Expenses',
+    tabPacking: 'Packing',
     errorUnavailable: 'AI Copilot is temporarily unavailable. Please try again.',
     errorReceiptScan: 'Failed to scan receipt image. Please try again.',
     walletCash: 'cash wallet',
@@ -133,8 +180,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Pronunciation: ',
     tipPrefix: 'Tip: ',
     thinkingText: 'Thinking through your trip...',
-    inputPlaceholder: () => 'Ask about this trip...',
+    inputPlaceholder: (city: string) =>
+      `Ask anything about your ${city} trip, or have me edit dates / route / 9-bag list...`,
     voiceLabel: 'Voice',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Reschedule: ${departure} → ${returnDate} (${days} days)`,
+    dateChangeRisk:
+      'After rescheduling, recheck weekday openings, weather, and daily budgets.',
+    destinationChangeSummary: (cities) => `Cities: ${cities}`,
+    destinationChangeNote:
+      'Daily city fields will sync, but existing stop addresses/coords need a review.',
+    rebuildPromptSummary: (prompt) => `Rebuild: ${prompt}`,
+    rebuildSaveAsNew: 'Will save as a new trip; your current trip stays unchanged.',
+    rebuildOverwriteWarning:
+      'Overwrite resets packing checkmarks, expense history, and visited marks.',
+    packingTemplateSummary: (scene) => `Packing template: ${scene}`,
+    packingTemplateMerge: 'Smart merge keeps your checked progress.',
+    overwriteConfirmTitle: 'Overwrite this trip?',
+    overwriteConfirmRisk:
+      'Overwrite resets packing checkmarks, expense history, and visited marks. This cannot be undone.',
+    overwriteConfirmYes: 'I confirm overwrite',
+    overwriteCancel: 'Cancel',
+    overwriteSaveAsNew: 'Save as a new trip instead',
+    overwriteNeedConfirm: 'Confirm overwrite before tapping Apply',
+    resultDateApplied: 'Trip dates updated',
+    resultDestinationApplied: 'Destination cities updated',
+    resultRebuildApplied: 'Itinerary rebuild applied',
+    resultPackingApplied: 'Packing template updated',
   },
   'en-GB': {
     headerTitle: 'Ask Trip Kit',
@@ -143,11 +215,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Start new conversation',
     welcomeTitle: 'Ask about this journey.',
     welcomeDesc:
-      'Ask for travel tips, local inspiration, or programme tweaks. Nothing changes until you tap Apply.',
+      'Change departure dates, add or remove cities, replan days, or sync 9-bag packing templates in plain language. Nothing changes until you tap Apply.',
     tabFeatured: 'Featured',
     tabTips: 'Travel Tips',
     tabInspiration: 'Inspiration',
-    tabActions: 'Edit & Log',
+    tabItinerary: 'Itinerary',
+    tabExpense: 'Expenses',
+    tabPacking: 'Packing',
     errorUnavailable: 'AI Assistant is temporarily unavailable. Please try again.',
     errorReceiptScan: 'Failed to scan receipt image. Please try again.',
     walletCash: 'cash wallet',
@@ -178,8 +252,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Pronunciation: ',
     tipPrefix: 'Tip: ',
     thinkingText: 'Thinking through your journey...',
-    inputPlaceholder: () => 'Ask about this journey...',
+    inputPlaceholder: (city: string) =>
+      `Ask anything about your ${city} journey, or have me edit dates / route / 9-bag list...`,
     voiceLabel: 'Voice',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Reschedule: ${departure} → ${returnDate} (${days} days)`,
+    dateChangeRisk:
+      'After rescheduling, recheck weekday openings, weather, and daily budgets.',
+    destinationChangeSummary: (cities) => `Cities: ${cities}`,
+    destinationChangeNote:
+      'Daily city fields will sync, but existing stop addresses/coords need a review.',
+    rebuildPromptSummary: (prompt) => `Rebuild: ${prompt}`,
+    rebuildSaveAsNew: 'Will save as a new journey; your current journey stays unchanged.',
+    rebuildOverwriteWarning:
+      'Overwrite resets packing checkmarks, expense history, and visited marks.',
+    packingTemplateSummary: (scene) => `Packing template: ${scene}`,
+    packingTemplateMerge: 'Smart merge keeps your checked progress.',
+    overwriteConfirmTitle: 'Overwrite this journey?',
+    overwriteConfirmRisk:
+      'Overwrite resets packing checkmarks, expense history, and visited marks. This cannot be undone.',
+    overwriteConfirmYes: 'I confirm overwrite',
+    overwriteCancel: 'Cancel',
+    overwriteSaveAsNew: 'Save as a new journey instead',
+    overwriteNeedConfirm: 'Confirm overwrite before tapping Apply',
+    resultDateApplied: 'Journey dates updated',
+    resultDestinationApplied: 'Destination cities updated',
+    resultRebuildApplied: 'Itinerary rebuild applied',
+    resultPackingApplied: 'Packing template updated',
   },
   'es-MX': {
     headerTitle: 'Asistente IA',
@@ -188,11 +287,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Nueva conversación',
     welcomeTitle: 'Pregunta lo que sea de este viaje.',
     welcomeDesc:
-      'Pide consejos locales, inspiración o ajustes al itinerario. Nada cambia hasta que toques Aplicar.',
+      'Cambia fechas de salida, agrega o quita ciudades, reordena el itinerario o sincroniza plantillas de 9 bolsas en lenguaje natural. Nada cambia hasta que toques Aplicar.',
     tabFeatured: 'Destacados',
     tabTips: 'Consejos',
     tabInspiration: 'Inspiración',
-    tabActions: 'Editar y registrar',
+    tabItinerary: 'Itinerario',
+    tabExpense: 'Gastos',
+    tabPacking: 'Equipaje',
     errorUnavailable: 'El asistente no está disponible en este momento. Intenta de nuevo.',
     errorReceiptScan: 'No se pudo leer la imagen del recibo. Intenta otra vez.',
     walletCash: 'efectivo',
@@ -223,8 +324,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Pronunciación: ',
     tipPrefix: 'Consejo: ',
     thinkingText: 'Analizando tu viaje...',
-    inputPlaceholder: (city: string) => `Pregunta sobre tu viaje a ${city}...`,
+    inputPlaceholder: (city: string) =>
+      `Pregunta sobre tu viaje a ${city}, o pídeme editar fechas / ruta / lista de 9 bolsas...`,
     voiceLabel: 'Voz',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Reprogramar: ${departure} → ${returnDate} (${days} días)`,
+    dateChangeRisk:
+      'Tras cambiar fechas, revisa aperturas por día, clima y presupuestos diarios.',
+    destinationChangeSummary: (cities) => `Ciudades: ${cities}`,
+    destinationChangeNote:
+      'Se sincronizan las ciudades por día, pero las direcciones/coordenadas existentes requieren revisión.',
+    rebuildPromptSummary: (prompt) => `Reconstruir: ${prompt}`,
+    rebuildSaveAsNew: 'Se guardará como un viaje nuevo; el actual no cambia.',
+    rebuildOverwriteWarning:
+      'Sobrescribir reinicia marcas de equipaje, gastos y lugares visitados.',
+    packingTemplateSummary: (scene) => `Plantilla de equipaje: ${scene}`,
+    packingTemplateMerge: 'Fusión inteligente: conserva lo ya marcado.',
+    overwriteConfirmTitle: '¿Sobrescribir este viaje?',
+    overwriteConfirmRisk:
+      'Sobrescribir reinicia marcas de equipaje, historial de gastos y lugares visitados. No se puede deshacer.',
+    overwriteConfirmYes: 'Confirmo sobrescribir',
+    overwriteCancel: 'Cancelar',
+    overwriteSaveAsNew: 'Guardar como viaje nuevo',
+    overwriteNeedConfirm: 'Confirma sobrescribir antes de tocar Aplicar',
+    resultDateApplied: 'Fechas del viaje actualizadas',
+    resultDestinationApplied: 'Ciudades destino actualizadas',
+    resultRebuildApplied: 'Itinerario reconstruido',
+    resultPackingApplied: 'Plantilla de equipaje actualizada',
   },
   'fr-FR': {
     headerTitle: 'Assistant IA',
@@ -233,11 +359,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Nouvelle conversation',
     welcomeTitle: 'Posez vos questions sur ce voyage.',
     welcomeDesc:
-      'Obtenez des conseils pratiques, des idées locales ou ajustez votre programme. Rien ne change avant d’appuyer sur Appliquer.',
+      'Modifiez les dates de départ, ajoutez ou retirez des villes, réorganisez le programme ou synchronisez les modèles de 9 sacs en langage naturel. Rien ne change avant d’appuyer sur Appliquer.',
     tabFeatured: 'Sélection',
     tabTips: 'Conseils',
     tabInspiration: 'Inspiration',
-    tabActions: 'Modifier & noter',
+    tabItinerary: 'Itinéraire',
+    tabExpense: 'Dépenses',
+    tabPacking: 'Bagages',
     errorUnavailable: 'L’assistant IA est momentanément indisponible. Réessayez.',
     errorReceiptScan: 'Échec de l’analyse du reçu. Veuillez réessayer.',
     walletCash: 'espèces',
@@ -268,8 +396,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Prononciation : ',
     tipPrefix: 'Astuce : ',
     thinkingText: 'Analyse de votre voyage en cours...',
-    inputPlaceholder: (city: string) => `Posez une question sur ${city}...`,
+    inputPlaceholder: (city: string) =>
+      `Posez une question sur ${city}, ou demandez-moi de modifier dates / itinéraire / liste 9 sacs...`,
     voiceLabel: 'Voix',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Replanifier : ${departure} → ${returnDate} (${days} j)`,
+    dateChangeRisk:
+      'Après changement de dates, revérifiez ouvertures, météo et budgets journaliers.',
+    destinationChangeSummary: (cities) => `Villes : ${cities}`,
+    destinationChangeNote:
+      'Les villes par jour seront synchronisées, mais adresses/coordonnées existantes à revoir.',
+    rebuildPromptSummary: (prompt) => `Reconstruction : ${prompt}`,
+    rebuildSaveAsNew: 'Sera enregistré comme un nouveau voyage ; l’actuel reste inchangé.',
+    rebuildOverwriteWarning:
+      'L’écrasement réinitialise cases bagages, dépenses et lieux visités.',
+    packingTemplateSummary: (scene) => `Modèle bagages : ${scene}`,
+    packingTemplateMerge: 'Fusion intelligente : conserve les cases cochées.',
+    overwriteConfirmTitle: 'Écraser ce voyage ?',
+    overwriteConfirmRisk:
+      'L’écrasement réinitialise cases bagages, historique de dépenses et lieux visités. Irréversible.',
+    overwriteConfirmYes: 'Je confirme l’écrasement',
+    overwriteCancel: 'Annuler',
+    overwriteSaveAsNew: 'Enregistrer comme nouveau voyage',
+    overwriteNeedConfirm: 'Confirmez l’écrasement avant d’appuyer sur Appliquer',
+    resultDateApplied: 'Dates du voyage mises à jour',
+    resultDestinationApplied: 'Villes destination mises à jour',
+    resultRebuildApplied: 'Itinéraire reconstruit',
+    resultPackingApplied: 'Modèle bagages mis à jour',
   },
   'de-DE': {
     headerTitle: 'KI-Reiseassistent',
@@ -278,11 +431,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Neues Gespräch starten',
     welcomeTitle: 'Frag alles zu dieser Reise.',
     welcomeDesc:
-      'Hol dir Reisetipps, lokale Inspiration oder passe deinen Plan an. Nichts ändert sich, bevor du auf Übernehmen tippst.',
+      'Ändere Abflugdaten, füge Städte hinzu oder entferne sie, plane neu oder synchronisiere 9-Taschen-Vorlagen in natürlicher Sprache. Nichts ändert sich, bevor du auf Übernehmen tippst.',
     tabFeatured: 'Empfohlen',
     tabTips: 'Reisetipps',
     tabInspiration: 'Inspiration',
-    tabActions: 'Plan & Ausgaben',
+    tabItinerary: 'Route',
+    tabExpense: 'Ausgaben',
+    tabPacking: 'Packen',
     errorUnavailable: 'Der KI-Assistent ist vorübergehend nicht erreichbar.',
     errorReceiptScan: 'Beleg konnte nicht erkannt werden. Bitte erneut versuchen.',
     walletCash: 'Bargeld',
@@ -313,8 +468,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Aussprache: ',
     tipPrefix: 'Tipp: ',
     thinkingText: 'Plane passende Vorschläge...',
-    inputPlaceholder: (city: string) => `Frag etwas zu deiner Reise nach ${city}...`,
+    inputPlaceholder: (city: string) =>
+      `Frag etwas zu deiner Reise nach ${city}, oder lass mich Daten / Route / 9-Taschen-Liste ändern...`,
     voiceLabel: 'Sprache',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Umplanen: ${departure} → ${returnDate} (${days} Tage)`,
+    dateChangeRisk:
+      'Nach Datumsänderung Öffnungstage, Wetter und Tagesbudgets prüfen.',
+    destinationChangeSummary: (cities) => `Städte: ${cities}`,
+    destinationChangeNote:
+      'Tagesstädte werden synchronisiert, bestehende Adressen/Koordinaten bitte prüfen.',
+    rebuildPromptSummary: (prompt) => `Neu planen: ${prompt}`,
+    rebuildSaveAsNew: 'Wird als neue Reise gespeichert; die aktuelle bleibt unverändert.',
+    rebuildOverwriteWarning:
+      'Überschreiben setzt Pack-Häkchen, Ausgaben und Besuchsmarkierungen zurück.',
+    packingTemplateSummary: (scene) => `Packvorlage: ${scene}`,
+    packingTemplateMerge: 'Intelligentes Mergen behält abgehakte Fortschritte.',
+    overwriteConfirmTitle: 'Diese Reise überschreiben?',
+    overwriteConfirmRisk:
+      'Überschreiben setzt Pack-Häkchen, Ausgabenhistorie und Besuchsmarkierungen zurück. Nicht rückgängig.',
+    overwriteConfirmYes: 'Überschreiben bestätigen',
+    overwriteCancel: 'Abbrechen',
+    overwriteSaveAsNew: 'Stattdessen als neue Reise speichern',
+    overwriteNeedConfirm: 'Bitte überschreiben bestätigen, bevor du auf Übernehmen tippst',
+    resultDateApplied: 'Reisedaten aktualisiert',
+    resultDestinationApplied: 'Zielstädte aktualisiert',
+    resultRebuildApplied: 'Reiseplan neu erstellt',
+    resultPackingApplied: 'Packvorlage aktualisiert',
   },
   'pt-BR': {
     headerTitle: 'Assistente IA',
@@ -323,11 +503,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: 'Nova conversa',
     welcomeTitle: 'Pergunte sobre esta viagem.',
     welcomeDesc:
-      'Peça dicas locais, inspiração ou ajustes no roteiro. Nada muda até você tocar em Aplicar.',
+      'Altere datas de partida, adicione ou remova cidades, reordene o roteiro ou sincronize modelos de 9 bolsas em linguagem natural. Nada muda até você tocar em Aplicar.',
     tabFeatured: 'Destaques',
     tabTips: 'Dicas',
     tabInspiration: 'Inspiração',
-    tabActions: 'Editar e lançar',
+    tabItinerary: 'Roteiro',
+    tabExpense: 'Gastos',
+    tabPacking: 'Mala',
     errorUnavailable: 'O assistente de IA está indisponível no momento. Tente novamente.',
     errorReceiptScan: 'Falha ao ler o recibo. Tente novamente.',
     walletCash: 'dinheiro',
@@ -358,8 +540,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: 'Pronúncia: ',
     tipPrefix: 'Dica: ',
     thinkingText: 'Analisando seu roteiro...',
-    inputPlaceholder: (city: string) => `Pergunte algo sobre ${city}...`,
+    inputPlaceholder: (city: string) =>
+      `Pergunte algo sobre ${city}, ou peça para editar datas / rota / lista de 9 bolsas...`,
     voiceLabel: 'Voz',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `Reagendar: ${departure} → ${returnDate} (${days} dias)`,
+    dateChangeRisk:
+      'Após mudar datas, revise aberturas por dia, clima e orçamentos diários.',
+    destinationChangeSummary: (cities) => `Cidades: ${cities}`,
+    destinationChangeNote:
+      'Cidades por dia serão sincronizadas, mas endereços/coordenadas existentes precisam de revisão.',
+    rebuildPromptSummary: (prompt) => `Reconstruir: ${prompt}`,
+    rebuildSaveAsNew: 'Será salvo como uma nova viagem; a atual não muda.',
+    rebuildOverwriteWarning:
+      'Sobrescrever zera marcas da mala, gastos e locais visitados.',
+    packingTemplateSummary: (scene) => `Modelo de mala: ${scene}`,
+    packingTemplateMerge: 'Mesclagem inteligente: mantém o progresso marcado.',
+    overwriteConfirmTitle: 'Sobrescrever esta viagem?',
+    overwriteConfirmRisk:
+      'Sobrescrever zera marcas da mala, histórico de gastos e locais visitados. Não pode ser desfeito.',
+    overwriteConfirmYes: 'Confirmo sobrescrever',
+    overwriteCancel: 'Cancelar',
+    overwriteSaveAsNew: 'Salvar como nova viagem',
+    overwriteNeedConfirm: 'Confirme sobrescrever antes de tocar em Aplicar',
+    resultDateApplied: 'Datas da viagem atualizadas',
+    resultDestinationApplied: 'Cidades de destino atualizadas',
+    resultRebuildApplied: 'Roteiro reconstruído',
+    resultPackingApplied: 'Modelo de mala atualizado',
   },
   'ja-JP': {
     headerTitle: 'AI トラベルアシスタント',
@@ -368,11 +575,13 @@ const COPILOT_UI_MAP = {
     newChatTitle: '新しい会話を始める',
     welcomeTitle: 'この旅のこと、なんでも相談。',
     welcomeDesc:
-      '現地のヒントやおすすめスポット、日程の調整などを提案します。「適用」を押すまで旅程は変更されません。',
+      '出発日の変更、都市の追加・削除、行程の再編成、9袋パッキングテンプレートの連動を自然言語で依頼できます。「適用する」を押すまで旅程は変更されません。',
     tabFeatured: 'おすすめ',
     tabTips: '旅のヒント',
     tabInspiration: '現地アイデア',
-    tabActions: '調整・記録',
+    tabItinerary: '行程調整',
+    tabExpense: '家計',
+    tabPacking: 'パッキング',
     errorUnavailable: '現在 AI アシスタントが応答できません。しばらくして再試行してください。',
     errorReceiptScan: 'レシート画像の読み取りに失敗しました。再試行してください。',
     walletCash: '現金ウォレット',
@@ -403,8 +612,33 @@ const COPILOT_UI_MAP = {
     pronunciationPrefix: '発音ヒント：',
     tipPrefix: 'マナーメモ：',
     thinkingText: '旅程に合わせて提案を作成中...',
-    inputPlaceholder: (city: string) => `${city}の旅について質問・調整を依頼...`,
+    inputPlaceholder: (city: string) =>
+      `${city}の旅について質問するか、日付・ルート・9袋リストの変更を依頼...`,
     voiceLabel: '音声',
+    dateChangeSummary: (departure, returnDate, days) =>
+      `日程変更：${departure} → ${returnDate}（${days}日間）`,
+    dateChangeRisk:
+      '日程変更後は、休館曜日・天候・日別予算を再確認してください。',
+    destinationChangeSummary: (cities) => `都市変更：${cities}`,
+    destinationChangeNote:
+      '日別の都市フィールドは同期されますが、既存スポットの住所・座標は要確認です。',
+    rebuildPromptSummary: (prompt) => `行程再構築：${prompt}`,
+    rebuildSaveAsNew: '新しい旅程として保存し、現在の旅程は変更しません。',
+    rebuildOverwriteWarning:
+      '上書きすると、パッキングのチェック状態・支出履歴・訪問済みマークがリセットされます。',
+    packingTemplateSummary: (scene) => `パッキングテンプレート：${scene}`,
+    packingTemplateMerge: 'スマート結合でチェック済みの進捗を保持します。',
+    overwriteConfirmTitle: '現在の旅程を上書きしますか？',
+    overwriteConfirmRisk:
+      '上書きすると、パッキングのチェック状態・支出履歴・訪問済みマークがリセットされ、元に戻せません。',
+    overwriteConfirmYes: '上書きを確認する',
+    overwriteCancel: 'キャンセル',
+    overwriteSaveAsNew: '新しい旅程として保存する',
+    overwriteNeedConfirm: '「適用する」の前に上書きを確認してください',
+    resultDateApplied: '出発日を更新しました',
+    resultDestinationApplied: '目的地の都市を更新しました',
+    resultRebuildApplied: '行程の再構築を適用しました',
+    resultPackingApplied: 'パッキングテンプレートを更新しました',
   },
 } satisfies Record<AppLanguage, CopilotUiCopy>;
 
@@ -642,7 +876,13 @@ export interface CopilotPromptCard {
 }
 
 export function buildLocalizedPromptCards(params: {
-  category: 'featured' | 'tips' | 'inspiration' | 'actions';
+  category:
+    | 'featured'
+    | 'tips'
+    | 'inspiration'
+    | 'itinerary'
+    | 'expense'
+    | 'packing';
   cityLabel: string;
   countryLabel: string;
   totalDays: number;
@@ -768,13 +1008,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `给 Day ${rDay} 行程减负，留出喘息时间`,
+          prompt: `帮我审视一下 Day ${rDay} 的动线，提议去掉偏赶的站点让节奏更从容`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: '改出发日期或行程天数',
+          prompt: '帮我把这次行程的出发日期改成……，返程日期改成……，一共……天',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: '增删城市或换目的地',
+          prompt: '帮我把行程城市调整为……（可增删或替换城市，并说明各城停留几天）',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: '按新想法重排整套行程',
+          prompt: '按我的新偏好重新规划整套行程：……（说明节奏、必去点或想避开的内容）',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: '今天预算还剩多少？退税还差多少？',
+          prompt: '帮我汇总一下今天日常预算余额、整体花销节奏，以及购物池离退税门槛还差多少？',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `生成${cityLabel}餐厅点单/退税外语沟通卡`
+            : `记一笔和 ${buddy} AA 的咖啡账单`,
+          prompt: isSolo
+            ? `帮我生成一张在${cityLabel}餐厅点餐或商场办退税的外语沟通卡（含发音和礼仪提示）`
+            : `刚才在${cityLabel}喝了两杯咖啡花了 ${currencySymbol}14，刷信用卡，和 ${buddy} 均摊`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: '记一笔今日消费',
+          prompt: `刚才在${cityLabel}花了 ${currencySymbol}……，刷信用卡，记入今天账本`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: '退税差额还差多少？',
+          prompt: '帮我查一下购物退税池离退税门槛还差多少，以及已累计多少可退税额',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `给 Day ${rDay} 行程减负，留出喘息时间`,
-        prompt: `帮我审视一下 Day ${rDay} 的动线，提议去掉偏赶的站点让节奏更从容`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `查登机 (${carryOnLimitKg}kg) 与托运重量余量`,
@@ -782,20 +1076,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: '今天预算还剩多少？退税还差多少？',
-        prompt: '帮我汇总一下今天日常预算余额、整体花销节奏，以及购物池离退税门槛还差多少？',
+        id: 'act_template',
+        label: '换一套场景打包模板',
+        prompt: '帮我切换到滑雪/亲子/商务等场景打包模板，并智能合并保留已勾选项',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: '按新行程重生成 9 袋清单',
+        prompt: '根据当前最新行程与目的地，重新生成 9 袋打包清单，智能合并保留已勾选进度',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `生成${cityLabel}餐厅点单/退税外语沟通卡`
-          : `记一笔和 ${buddy} AA 的咖啡账单`,
-        prompt: isSolo
-          ? `帮我生成一张在${cityLabel}餐厅点餐或商场办退税的外语沟通卡（含发音和礼仪提示）`
-          : `刚才在${cityLabel}喝了两杯咖啡花了 ${currencySymbol}14，刷信用卡，和 ${buddy} 均摊`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: '查 9 袋配重与分组余量',
+        prompt: '帮我查看目前 9 袋各分组的重量分布，以及登机与托运分别还剩多少额度',
+        mode: 'instant',
       },
     ];
   }
@@ -885,13 +1181,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `Aligerar el ritmo del Día ${rDay}`,
+          prompt: `Revisa el Día ${rDay} y propón quitar 1 o 2 paradas apresuradas para ir con más calma`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: 'Cambiar fecha de salida o duración',
+          prompt: 'Cambia la fecha de salida a …, la de regreso a …, con un total de … días',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: 'Agregar, quitar o cambiar ciudades',
+          prompt: 'Ajusta las ciudades del viaje a … (puedes agregar, quitar o reemplazar, e indica días por ciudad)',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: 'Replanificar todo el itinerario',
+          prompt: 'Replanifica todo el itinerario según mis nuevas preferencias: … (ritmo, imprescindibles o qué evitar)',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: 'Saldo de presupuesto de hoy y meta Tax-Free',
+          prompt: '¿Cuánto presupuesto diario me queda hoy y cuánto falta para el mínimo de Tax-Free?',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `Crear tarjeta de frases locales para ${cityLabel}`
+            : `Registrar café dividido 50/50 con ${buddy}`,
+          prompt: isSolo
+            ? `Crea una tarjeta de frases locales para pedir comida o formulario Tax-Free en ${cityLabel}`
+            : `Dos cafés en ${cityLabel} ${currencySymbol}14 con tarjeta, dividido 50/50 con ${buddy}`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: 'Registrar un gasto de hoy',
+          prompt: `Acabo de gastar ${currencySymbol}… en ${cityLabel} con tarjeta; regístralo en el gasto de hoy`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: '¿Cuánto falta para Tax-Free?',
+          prompt: '¿Cuánto falta en el fondo Tax-Free para el umbral de reembolso y cuánto acumulé?',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `Aligerar el ritmo del Día ${rDay}`,
-        prompt: `Revisa el Día ${rDay} y propón quitar 1 o 2 paradas apresuradas para ir con más calma`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `Revisar peso cabina (${carryOnLimitKg}kg) y documentado`,
@@ -899,20 +1249,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: 'Saldo de presupuesto de hoy y meta Tax-Free',
-        prompt: '¿Cuánto presupuesto diario me queda hoy y cuánto falta para el mínimo de Tax-Free?',
+        id: 'act_template',
+        label: 'Cambiar plantilla de escenario',
+        prompt: 'Cambia a una plantilla de equipaje (esquí / familia / negocios, etc.) y fusiona conservando lo ya marcado',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: 'Regenerar lista de 9 bolsas',
+        prompt: 'Según el itinerario y destino actuales, regenera la lista de 9 bolsas y conserva el progreso marcado',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `Crear tarjeta de frases locales para ${cityLabel}`
-          : `Registrar café dividido 50/50 con ${buddy}`,
-        prompt: isSolo
-          ? `Crea una tarjeta de frases locales para pedir comida o formulario Tax-Free en ${cityLabel}`
-          : `Dos cafés en ${cityLabel} ${currencySymbol}14 con tarjeta, dividido 50/50 con ${buddy}`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: 'Ver peso por las 9 bolsas',
+        prompt: 'Muéstrame el peso por cada una de las 9 bolsas y cuánto queda de cabina y documentado',
+        mode: 'instant',
       },
     ];
   }
@@ -1002,13 +1354,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `Rendre le Jour ${rDay} plus fluide`,
+          prompt: `Analyse le Jour ${rDay} et propose de retirer 1 ou 2 étapes pour un rythme plus serein`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: 'Modifier la date de départ ou la durée',
+          prompt: 'Change la date de départ en …, le retour en …, pour un total de … jours',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: 'Ajouter, retirer ou changer de villes',
+          prompt: 'Ajuste les villes du voyage à … (ajoute, retire ou remplace, et précise les jours par ville)',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: 'Replanifier tout le programme',
+          prompt: 'Replanifie tout le programme selon mes nouvelles préférences : … (rythme, incontournables ou à éviter)',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: 'Budget restant du jour et seuil détaxe',
+          prompt: 'Combien reste-t-il sur mon budget du jour et où en suis-je du seuil de détaxe ?',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `Créer une carte de phrases pour ${cityLabel}`
+            : `Noter un café partagé 50/50 avec ${buddy}`,
+          prompt: isSolo
+            ? `Crée une carte de phrases utiles pour commander ou demander une détaxe à ${cityLabel}`
+            : `Deux cafés à ${cityLabel} ${currencySymbol}14 par carte, partagé 50/50 avec ${buddy}`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: 'Noter une dépense du jour',
+          prompt: `Je viens de dépenser ${currencySymbol}… à ${cityLabel} par carte ; note-la dans le budget du jour`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: 'Combien manque pour la détaxe ?',
+          prompt: 'Combien manque au seuil de détaxe et quel montant ai-je déjà cumulé ?',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `Rendre le Jour ${rDay} plus fluide`,
-        prompt: `Analyse le Jour ${rDay} et propose de retirer 1 ou 2 étapes pour un rythme plus serein`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `Vérifier poids cabine (${carryOnLimitKg}kg) & soute`,
@@ -1016,20 +1422,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: 'Budget restant du jour et seuil détaxe',
-        prompt: 'Combien reste-t-il sur mon budget du jour et où en suis-je du seuil de détaxe ?',
+        id: 'act_template',
+        label: 'Changer de modèle de scénario',
+        prompt: 'Passe à un modèle bagages (ski / famille / business, etc.) et fusionne en gardant les cases cochées',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: 'Régénérer la liste des 9 sacs',
+        prompt: 'Selon le programme et la destination actuels, régénère la liste des 9 sacs en gardant la progression cochée',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `Créer une carte de phrases pour ${cityLabel}`
-          : `Noter un café partagé 50/50 avec ${buddy}`,
-        prompt: isSolo
-          ? `Crée une carte de phrases utiles pour commander ou demander une détaxe à ${cityLabel}`
-          : `Deux cafés à ${cityLabel} ${currencySymbol}14 par carte, partagé 50/50 avec ${buddy}`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: 'Voir le poids des 9 sacs',
+        prompt: 'Montre-moi le poids par sac parmi les 9, et le reste disponible en cabine et en soute',
+        mode: 'instant',
       },
     ];
   }
@@ -1119,13 +1527,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `Tag ${rDay} etwas ruhiger takten`,
+          prompt: `Prüfe Tag ${rDay} und schlage vor, 1–2 gehetzte Stopps für ein ruhigeres Tempo zu kürzen`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: 'Abflugdatum oder Reisedauer ändern',
+          prompt: 'Ändere das Abflugdatum auf …, die Rückreise auf …, insgesamt … Tage',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: 'Städte hinzufügen, entfernen oder tauschen',
+          prompt: 'Passe die Städteliste an auf … (hinzufügen, entfernen oder ersetzen, mit Tagen pro Stadt)',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: 'Gesamten Reiseplan neu erstellen',
+          prompt: 'Plane die gesamte Reise neu nach meinen Vorlieben: … (Tempo, Must-sees oder Vermeidungen)',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: 'Heutiges Budget & Tax-Free-Status prüfen',
+          prompt: 'Wie viel Tagesbudget ist heute noch übrig und wie weit bin ich von der Tax-Free-Grenze entfernt?',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `Sprachkarte für ${cityLabel} erstellen`
+            : `Kaffee 50/50 mit ${buddy} erfassen`,
+          prompt: isSolo
+            ? `Erstelle eine Sprachkarte für Restaurant-Bestellungen oder Tax-Free in ${cityLabel}`
+            : `Zwei Kaffee in ${cityLabel} ${currencySymbol}14 per Karte, 50/50 mit ${buddy} geteilt`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: 'Eine Ausgabe von heute erfassen',
+          prompt: `Ich habe gerade ${currencySymbol}… in ${cityLabel} per Karte ausgegeben; bitte im heutigen Budget erfassen`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: 'Wie viel fehlt bis Tax-Free?',
+          prompt: 'Wie weit bin ich von der Tax-Free-Grenze entfernt und wie viel habe ich schon angesammelt?',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `Tag ${rDay} etwas ruhiger takten`,
-        prompt: `Prüfe Tag ${rDay} und schlage vor, 1–2 gehetzte Stopps für ein ruhigeres Tempo zu kürzen`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `Handgepäck (${carryOnLimitKg}kg) & Aufgabe prüfen`,
@@ -1133,20 +1595,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: 'Heutiges Budget & Tax-Free-Status prüfen',
-        prompt: 'Wie viel Tagesbudget ist heute noch übrig und wie weit bin ich von der Tax-Free-Grenze entfernt?',
+        id: 'act_template',
+        label: 'Packvorlage wechseln',
+        prompt: 'Wechsle zu einer Szenario-Packvorlage (Ski / Familie / Business usw.) und merge mit behaltenen Häkchen',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: '9-Taschen-Liste neu erzeugen',
+        prompt: 'Erzeuge anhand des aktuellen Plans und Zielorts die 9-Taschen-Liste neu und behalte abgehakte Fortschritte',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `Sprachkarte für ${cityLabel} erstellen`
-          : `Kaffee 50/50 mit ${buddy} erfassen`,
-        prompt: isSolo
-          ? `Erstelle eine Sprachkarte für Restaurant-Bestellungen oder Tax-Free in ${cityLabel}`
-          : `Zwei Kaffee in ${cityLabel} ${currencySymbol}14 per Karte, 50/50 mit ${buddy} geteilt`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: 'Gewicht der 9 Taschen prüfen',
+        prompt: 'Zeig mir die Gewichtsverteilung der 9 Taschen und wie viel Handgepäck-/Aufgabe-Kontingent übrig ist',
+        mode: 'instant',
       },
     ];
   }
@@ -1236,13 +1700,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `Deixar o Dia ${rDay} menos corrido`,
+          prompt: `Revise o Dia ${rDay} e proponha enxugar 1 ou 2 paradas corridas`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: 'Alterar data de partida ou duração',
+          prompt: 'Altere a data de partida para …, a de retorno para …, total de … dias',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: 'Adicionar, remover ou trocar cidades',
+          prompt: 'Ajuste as cidades da viagem para … (adicione, remova ou substitua, com dias por cidade)',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: 'Replanejar todo o roteiro',
+          prompt: 'Replaneje todo o roteiro com minhas novas preferências: … (ritmo, obrigatórios ou o que evitar)',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: 'Ver saldo do orçamento hoje e Tax-Free',
+          prompt: 'Quanto resta do orçamento diário hoje e quanto falta para o mínimo de Tax-Free?',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `Criar cartão de frases locais para ${cityLabel}`
+            : `Lançar café dividido 50/50 com ${buddy}`,
+          prompt: isSolo
+            ? `Crie um cartão de frases locais para pedir comida ou Tax-Free em ${cityLabel}`
+            : `Dois cafés em ${cityLabel} ${currencySymbol}14 no cartão, dividido 50/50 com ${buddy}`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: 'Lançar um gasto de hoje',
+          prompt: `Acabei de gastar ${currencySymbol}… em ${cityLabel} no cartão; lance no orçamento de hoje`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: 'Quanto falta para o Tax-Free?',
+          prompt: 'Quanto falta para o mínimo de Tax-Free e quanto já acumulei?',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `Deixar o Dia ${rDay} menos corrido`,
-        prompt: `Revise o Dia ${rDay} e proponha enxugar 1 ou 2 paradas corridas`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `Auditar mala de bordo (${carryOnLimitKg}kg) e despachada`,
@@ -1250,20 +1768,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: 'Ver saldo do orçamento hoje e Tax-Free',
-        prompt: 'Quanto resta do orçamento diário hoje e quanto falta para o mínimo de Tax-Free?',
+        id: 'act_template',
+        label: 'Trocar modelo de cenário',
+        prompt: 'Troque para um modelo de mala (esqui / família / negócios etc.) e mescle mantendo o marcado',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: 'Regenerar lista de 9 bolsas',
+        prompt: 'Com base no roteiro e destino atuais, regenere a lista de 9 bolsas mantendo o progresso marcado',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `Criar cartão de frases locais para ${cityLabel}`
-          : `Lançar café dividido 50/50 com ${buddy}`,
-        prompt: isSolo
-          ? `Crie um cartão de frases locais para pedir comida ou Tax-Free em ${cityLabel}`
-          : `Dois cafés em ${cityLabel} ${currencySymbol}14 no cartão, dividido 50/50 com ${buddy}`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: 'Ver peso das 9 bolsas',
+        prompt: 'Mostre o peso de cada uma das 9 bolsas e quanto resta de bordo e despachada',
+        mode: 'instant',
       },
     ];
   }
@@ -1353,13 +1873,67 @@ export function buildLocalizedPromptCards(params: {
         },
       ];
     }
+    if (category === 'itinerary') {
+      return [
+        {
+          id: 'act_relax',
+          label: `Day ${rDay} のスケジュールを少し軽くする`,
+          prompt: `Day ${rDay} の流れを見直し、急ぎ足の予定を1〜2件減らして余裕を作る提案をしてください`,
+          mode: 'instant',
+        },
+        {
+          id: 'act_date',
+          label: '出発日や旅行日数を変更',
+          prompt: '出発日を……、帰国日を……に変更し、合計……日間にしてください',
+          mode: 'fill',
+        },
+        {
+          id: 'act_city',
+          label: '都市の追加・削除・入れ替え',
+          prompt: '旅程の都市を……に調整してください（追加・削除・入れ替え可、各都市の滞在日数も）',
+          mode: 'fill',
+        },
+        {
+          id: 'act_replan',
+          label: '行程全体を再プランする',
+          prompt: '新しい希望に合わせて行程全体を再計画してください：……（ペース、必訪スポット、避けたい内容）',
+          mode: 'fill',
+        },
+      ];
+    }
+    if (category === 'expense') {
+      return [
+        {
+          id: 'act_budget',
+          label: '今日の残り予算と免税ラインまでの差額',
+          prompt: '本日の日別予算の残りと、免税(Tax-Free)基準額までの進捗を教えてください',
+          mode: 'instant',
+        },
+        {
+          id: 'act_phrase',
+          label: isSolo
+            ? `${cityLabel}用の現地フレーズカードを作成`
+            : `${buddy}と割り勘のコーヒー代を記録`,
+          prompt: isSolo
+            ? `${cityLabel}のレストラン注文や免税手続きでそのまま見せられる現地語フレーズカードを作ってください`
+            : `${cityLabel}でコーヒー2杯 ${currencySymbol}14、クレジットカード払い、${buddy}と50/50で割り勘`,
+          mode: isSolo ? 'instant' : 'fill',
+        },
+        {
+          id: 'act_expense',
+          label: '今日の支出を1件記録',
+          prompt: `${cityLabel}で ${currencySymbol}……をクレジットカードで支払ったので、今日の家計に記録してください`,
+          mode: 'fill',
+        },
+        {
+          id: 'act_vat',
+          label: '免税ラインまでいくら不足？',
+          prompt: '免税(Tax-Free)基準額までの不足額と、これまでに累計した対象額を教えてください',
+          mode: 'instant',
+        },
+      ];
+    }
     return [
-      {
-        id: 'act_relax',
-        label: `Day ${rDay} のスケジュールを少し軽くする`,
-        prompt: `Day ${rDay} の流れを見直し、急ぎ足の予定を1〜2件減らして余裕を作る提案をしてください`,
-        mode: 'instant',
-      },
       {
         id: 'act_weight',
         label: `機内 (${carryOnLimitKg}kg)・預け手荷物の重量確認`,
@@ -1367,20 +1941,22 @@ export function buildLocalizedPromptCards(params: {
         mode: 'instant',
       },
       {
-        id: 'act_budget',
-        label: '今日の残り予算と免税ラインまでの差額',
-        prompt: '本日の日別予算の残りと、免税(Tax-Free)基準額までの進捗を教えてください',
+        id: 'act_template',
+        label: 'シーン別パッキングテンプレートに切替',
+        prompt: 'スキー／家族／ビジネスなどのシーン別パッキングテンプレートに切り替え、チェック済み項目を残して結合してください',
+        mode: 'fill',
+      },
+      {
+        id: 'act_repack',
+        label: '新しい行程で9袋リストを再生成',
+        prompt: '現在の行程と目的地に合わせて9袋パッキングリストを再生成し、チェック済みの進捗を保持してください',
         mode: 'instant',
       },
       {
-        id: 'act_phrase',
-        label: isSolo
-          ? `${cityLabel}用の現地フレーズカードを作成`
-          : `${buddy}と割り勘のコーヒー代を記録`,
-        prompt: isSolo
-          ? `${cityLabel}のレストラン注文や免税手続きでそのまま見せられる現地語フレーズカードを作ってください`
-          : `${cityLabel}でコーヒー2杯 ${currencySymbol}14、クレジットカード払い、${buddy}と50/50で割り勘`,
-        mode: isSolo ? 'instant' : 'fill',
+        id: 'act_bag',
+        label: '9袋の配重を確認',
+        prompt: '9袋それぞれの重量配分と、機内持込・預けの残り枠を教えてください',
+        mode: 'instant',
       },
     ];
   }
@@ -1475,13 +2051,67 @@ export function buildLocalizedPromptCards(params: {
       },
     ];
   }
+  if (category === 'itinerary') {
+    return [
+      {
+        id: 'act_relax',
+        label: `Make day ${rDay} calmer and less rushed`,
+        prompt: `Review day ${rDay} and propose trimming 1–2 rushed stops for a calmer pace`,
+        mode: 'instant',
+      },
+      {
+        id: 'act_date',
+        label: 'Change departure date or trip length',
+        prompt: 'Change my departure date to …, return date to …, for a total of … days',
+        mode: 'fill',
+      },
+      {
+        id: 'act_city',
+        label: 'Add, remove, or swap cities',
+        prompt: 'Adjust my trip cities to … (add, remove, or replace cities, and note days per city)',
+        mode: 'fill',
+      },
+      {
+        id: 'act_replan',
+        label: 'Rebuild the full itinerary',
+        prompt: 'Rebuild my full itinerary with these new preferences: … (pace, must-sees, or what to skip)',
+        mode: 'fill',
+      },
+    ];
+  }
+  if (category === 'expense') {
+    return [
+      {
+        id: 'act_budget',
+        label: `Check today's budget & ${taxTerm} progress`,
+        prompt: `How much daily budget do I have left today, and how far am I from the ${taxTerm} threshold?`,
+        mode: 'instant',
+      },
+      {
+        id: 'act_phrase',
+        label: isSolo
+          ? `Create a local phrase card for ${cityLabel}`
+          : `Log coffee split 50/50 with ${buddy}`,
+        prompt: isSolo
+          ? `Create a local-language phrase card for ordering food or asking for a ${taxTerm} form in ${cityLabel}`
+          : `Two coffees in ${cityLabel} ${currencySymbol}14 by credit card, split 50/50 with ${buddy}`,
+        mode: isSolo ? 'instant' : 'fill',
+      },
+      {
+        id: 'act_expense',
+        label: 'Log an expense for today',
+        prompt: `I just spent ${currencySymbol}… in ${cityLabel} by credit card; log it to today's budget`,
+        mode: 'fill',
+      },
+      {
+        id: 'act_vat',
+        label: `How far to the ${taxTerm} threshold?`,
+        prompt: `How far am I from the ${taxTerm} threshold, and how much have I accumulated so far?`,
+        mode: 'instant',
+      },
+    ];
+  }
   return [
-    {
-      id: 'act_relax',
-      label: `Make day ${rDay} calmer and less rushed`,
-      prompt: `Review day ${rDay} and propose trimming 1–2 rushed stops for a calmer pace`,
-      mode: 'instant',
-    },
     {
       id: 'act_weight',
       label: `Audit ${carryTerm} (${carryOnLimitKg}kg) & ${holdTerm} weight`,
@@ -1489,20 +2119,22 @@ export function buildLocalizedPromptCards(params: {
       mode: 'instant',
     },
     {
-      id: 'act_budget',
-      label: `Check today's budget & ${taxTerm} progress`,
-      prompt: `How much daily budget do I have left today, and how far am I from the ${taxTerm} threshold?`,
+      id: 'act_template',
+      label: 'Switch packing scenario template',
+      prompt: 'Switch to a packing scenario template (ski / family / business, etc.) and smart-merge while keeping checked items',
+      mode: 'fill',
+    },
+    {
+      id: 'act_repack',
+      label: 'Regenerate the 9-bag packing list',
+      prompt: 'Based on my latest itinerary and destination, regenerate the 9-bag packing list and keep checked progress',
       mode: 'instant',
     },
     {
-      id: 'act_phrase',
-      label: isSolo
-        ? `Create a local phrase card for ${cityLabel}`
-        : `Log coffee split 50/50 with ${buddy}`,
-      prompt: isSolo
-        ? `Create a local-language phrase card for ordering food or asking for a ${taxTerm} form in ${cityLabel}`
-        : `Two coffees in ${cityLabel} ${currencySymbol}14 by credit card, split 50/50 with ${buddy}`,
-      mode: isSolo ? 'instant' : 'fill',
+      id: 'act_bag',
+      label: 'Check 9-bag weight distribution',
+      prompt: `Show the weight distribution across my 9 bags, plus remaining ${carryTerm} and ${holdTerm} allowance`,
+      mode: 'instant',
     },
   ];
 }

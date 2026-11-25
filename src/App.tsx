@@ -109,8 +109,12 @@ import type {
   AiAssistantIntent,
   AiAssistantProposal,
   AiMissingItemSuggestion,
+  AiProposedDateChange,
+  AiProposedDestinationChange,
   AiProposedExpense,
+  AiProposedItineraryRebuild,
   AiProposedPackingItem,
+  AiProposedPackingTemplate,
   AiProposedRemoveStop,
   AiProposedStop,
   AiProposedTask,
@@ -129,6 +133,8 @@ import type {
   PackingItem,
   PackingLayer,
   PackingReminderSettings,
+  PackingScenarioId,
+  PackingTripPurpose,
   PaymentAccount,
   SavedTripEntry,
   SeatId,
@@ -141,6 +147,7 @@ import type {
   TripIntelligence,
   TripSetup,
   TripState,
+  TripStyle,
   TripTask,
   TripTaskCategory,
 } from './types';
@@ -217,6 +224,7 @@ import {
   buildOfflineDeepPackingGroups,
   buildPerStopWeatherForecasts,
   mergeRegeneratedPackingGroups,
+  PACKING_SCENARIO_SPECS,
 } from './utils/packingWizardHelpers';
 import {
   AccentIconBadge,
@@ -5847,6 +5855,7 @@ export default function App() {
       cities: trip.setup.cities,
       cityDays: trip.setup.cityDays,
       departureDate: trip.setup.departureDate,
+      returnDate: trip.setup.returnDate,
       weekdaySchedule: buildTripWeekdaySchedule(
         trip.setup.departureDate,
         totalDaysCap,
@@ -5854,6 +5863,12 @@ export default function App() {
       ),
       travelersCount: activeTravelersCount,
       days: totalDaysCap,
+      tripStyle: trip.setup.tripStyle,
+      packingTripPurpose: trip.setup.packingTripPurpose,
+      specialScenarios: trip.setup.specialScenarios,
+      packingCustomNote: trip.setup.packingCustomNote,
+      activities: trip.setup.activities,
+      currentPackingGroupCount: trip.packing.length,
       totalDays: totalDaysCap,
       currentDay,
       currentCity: getCityForDay(
@@ -5967,7 +5982,12 @@ export default function App() {
       rawIntent === 'local_card' ||
       rawIntent === 'travel_tips'
         ? rawIntent
-        : 'qa_advice';
+        : rawIntent === 'change_trip_date' ||
+            rawIntent === 'change_destination' ||
+            rawIntent === 'rebuild_itinerary' ||
+            rawIntent === 'change_packing_template'
+          ? rawIntent
+          : 'qa_advice';
 
     // 1. Parse Proposed Expenses (do NOT mutate until user taps Apply)
     const proposedExpenses: AiProposedExpense[] = [];
@@ -6259,6 +6279,222 @@ export default function App() {
       .filter((s: string) => s.length >= 2)
       .slice(0, 3);
 
+    // 8b. Parse Proposed Date Change
+    const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+    let proposedDateChange: AiProposedDateChange | undefined;
+    const rawDateChange =
+      data.dateChange && typeof data.dateChange === 'object'
+        ? (data.dateChange as Record<string, unknown>)
+        : null;
+    if (rawDateChange) {
+      const departureDate = String(rawDateChange.departureDate || '').trim();
+      const returnDate = String(rawDateChange.returnDate || '').trim();
+      const days = Math.min(
+        30,
+        Math.max(1, Math.round(Number(rawDateChange.days) || 0))
+      );
+      if (
+        dateRe.test(departureDate) &&
+        dateRe.test(returnDate) &&
+        returnDate >= departureDate &&
+        days >= 1
+      ) {
+        proposedDateChange = {
+          departureDate,
+          returnDate,
+          days,
+          note: String(rawDateChange.note || '').trim(),
+        };
+      }
+    }
+
+    // 8c. Parse Proposed Destination Change
+    let proposedDestinationChange: AiProposedDestinationChange | undefined;
+    const rawDestChange =
+      data.destinationChange && typeof data.destinationChange === 'object'
+        ? (data.destinationChange as Record<string, unknown>)
+        : null;
+    if (rawDestChange) {
+      const cities = (Array.isArray(rawDestChange.cities) ? rawDestChange.cities : [])
+        .map((c: unknown) => String(c || '').trim())
+        .filter((c: string) => c.length > 0)
+        .slice(0, 6);
+      if (cities.length >= 1) {
+        const rawCityDays = Array.isArray(rawDestChange.cityDays)
+          ? rawDestChange.cityDays.map((d: unknown) => Math.round(Number(d)))
+          : undefined;
+        const cityDays =
+          rawCityDays &&
+          rawCityDays.length === cities.length &&
+          rawCityDays.every((d: number) => Number.isFinite(d) && d > 0)
+            ? rawCityDays
+            : undefined;
+        proposedDestinationChange = {
+          cities,
+          ...(cityDays ? { cityDays } : {}),
+          note: String(rawDestChange.note || '').trim(),
+        };
+      }
+    }
+
+    // 8d. Parse Proposed Itinerary Rebuild
+    let proposedItineraryRebuild: AiProposedItineraryRebuild | undefined;
+    const rawRebuild =
+      data.itineraryRebuild && typeof data.itineraryRebuild === 'object'
+        ? (data.itineraryRebuild as Record<string, unknown>)
+        : null;
+    if (rawRebuild) {
+      const naturalPrompt = String(rawRebuild.naturalPrompt || '').trim();
+      if (naturalPrompt) {
+        const targetMode: 'new' | 'overwrite' =
+          rawRebuild.targetMode === 'overwrite' ? 'overwrite' : 'new';
+        const validTripStyles: TripStyle[] = [
+          '休闲度假',
+          '商务出差',
+          '浪漫蜜月',
+          '亲子出行',
+          '长期数字游民',
+        ];
+        let setupPatch: Partial<TripSetup> | undefined;
+        const rawPatch =
+          rawRebuild.setupPatch && typeof rawRebuild.setupPatch === 'object'
+            ? (rawRebuild.setupPatch as Record<string, unknown>)
+            : null;
+        if (rawPatch) {
+          const patch: Partial<TripSetup> = {};
+          if (Array.isArray(rawPatch.cities)) {
+            const cities = rawPatch.cities
+              .map((c: unknown) => String(c || '').trim())
+              .filter((c: string) => c.length > 0)
+              .slice(0, 6);
+            if (cities.length > 0) patch.cities = cities;
+          }
+          if (rawPatch.days != null) {
+            const days = Math.round(Number(rawPatch.days));
+            if (Number.isFinite(days) && days >= 1 && days <= 30) patch.days = days;
+          }
+          if (
+            typeof rawPatch.departureDate === 'string' &&
+            dateRe.test(rawPatch.departureDate.trim())
+          ) {
+            patch.departureDate = rawPatch.departureDate.trim();
+          }
+          if (
+            typeof rawPatch.returnDate === 'string' &&
+            dateRe.test(rawPatch.returnDate.trim())
+          ) {
+            patch.returnDate = rawPatch.returnDate.trim();
+          }
+          if (
+            typeof rawPatch.tripStyle === 'string' &&
+            validTripStyles.includes(rawPatch.tripStyle as TripStyle)
+          ) {
+            patch.tripStyle = rawPatch.tripStyle as TripStyle;
+          }
+          if (Array.isArray(rawPatch.specialScenarios)) {
+            const scenarioIdSet = new Set(
+              PACKING_SCENARIO_SPECS.map((s) => s.id as string)
+            );
+            const specialScenarios = rawPatch.specialScenarios
+              .map((id: unknown) => String(id || '').trim())
+              .filter((id: string) => scenarioIdSet.has(id)) as PackingScenarioId[];
+            if (specialScenarios.length > 0) patch.specialScenarios = specialScenarios;
+          }
+          if (Array.isArray(rawPatch.activities)) {
+            const activities = rawPatch.activities
+              .map((a: unknown) => String(a || '').trim())
+              .filter((a: string) => a.length > 0)
+              .slice(0, 20);
+            if (activities.length > 0) patch.activities = activities;
+          }
+          if (
+            rawPatch.packingTripPurpose === 'leisure' ||
+            rawPatch.packingTripPurpose === 'business' ||
+            rawPatch.packingTripPurpose === 'both'
+          ) {
+            patch.packingTripPurpose = rawPatch.packingTripPurpose;
+          }
+          if (typeof rawPatch.packingCustomNote === 'string') {
+            const note = rawPatch.packingCustomNote.trim().slice(0, 200);
+            if (note) patch.packingCustomNote = note;
+          }
+          if (Object.keys(patch).length > 0) setupPatch = patch;
+        }
+        proposedItineraryRebuild = {
+          naturalPrompt,
+          targetMode,
+          ...(setupPatch ? { setupPatch } : {}),
+          confirmOverwrite: false,
+          note: String(rawRebuild.note || '').trim(),
+        };
+      }
+    }
+
+    // 8e. Parse Proposed Packing Template
+    let proposedPackingTemplate: AiProposedPackingTemplate | undefined;
+    const rawPackingTpl =
+      data.packingTemplate && typeof data.packingTemplate === 'object'
+        ? (data.packingTemplate as Record<string, unknown>)
+        : null;
+    if (rawPackingTpl) {
+      const scenarioIdSet = new Set(PACKING_SCENARIO_SPECS.map((s) => s.id as string));
+      const scenarioIds = (
+        Array.isArray(rawPackingTpl.scenarioIds) ? rawPackingTpl.scenarioIds : []
+      )
+        .map((id: unknown) => String(id || '').trim())
+        .filter((id: string) => scenarioIdSet.has(id)) as PackingScenarioId[];
+      const tripPurpose: PackingTripPurpose | undefined =
+        rawPackingTpl.tripPurpose === 'leisure' ||
+        rawPackingTpl.tripPurpose === 'business' ||
+        rawPackingTpl.tripPurpose === 'both'
+          ? rawPackingTpl.tripPurpose
+          : undefined;
+      const customNoteRaw =
+        typeof rawPackingTpl.customNote === 'string'
+          ? rawPackingTpl.customNote.trim().slice(0, 200)
+          : '';
+      if (scenarioIds.length > 0 || tripPurpose || customNoteRaw) {
+        proposedPackingTemplate = {
+          scenarioIds,
+          ...(tripPurpose ? { tripPurpose } : {}),
+          ...(customNoteRaw ? { customNote: customNoteRaw } : {}),
+          note: String(rawPackingTpl.note || '').trim(),
+        };
+      }
+    }
+
+    const hasExtendedProposal =
+      hasProposal ||
+      Boolean(proposedDateChange) ||
+      Boolean(proposedDestinationChange) ||
+      Boolean(proposedItineraryRebuild) ||
+      Boolean(proposedPackingTemplate);
+
+    const extendedProposal: AiAssistantProposal | undefined = hasExtendedProposal
+      ? {
+          summary:
+            proposal?.summary ||
+            String(data.proposalSummary || '').trim() ||
+            undefined,
+          expenses: proposal?.expenses,
+          packingItems: proposal?.packingItems,
+          tasks: proposal?.tasks,
+          stops: proposal?.stops,
+          removeStops: proposal?.removeStops,
+          rainSwap: proposal?.rainSwap,
+          ...(proposedDateChange ? { dateChange: proposedDateChange } : {}),
+          ...(proposedDestinationChange
+            ? { destinationChange: proposedDestinationChange }
+            : {}),
+          ...(proposedItineraryRebuild
+            ? { itineraryRebuild: proposedItineraryRebuild }
+            : {}),
+          ...(proposedPackingTemplate
+            ? { packingTemplate: proposedPackingTemplate }
+            : {}),
+        }
+      : undefined;
+
     // 9. Extract Local Communication Card if generated
     const rawCards = Array.isArray(data.localCards) ? data.localCards : [];
     const localCard: LocalCardResult | undefined =
@@ -6277,7 +6513,7 @@ export default function App() {
     return {
       intent: validIntent,
       reply: String(data.reply || appCopy.aiCopilotReplyFallback),
-      proposal,
+      proposal: extendedProposal,
       travelTips: travelTips.length > 0 ? travelTips : undefined,
       followUpSuggestions:
         followUpSuggestions.length > 0 ? followUpSuggestions : undefined,
@@ -6468,6 +6704,142 @@ export default function App() {
         targetVal
           ? appCopy.appliedPartRainPlan(rainDay)
           : appCopy.appliedPartSunnyRoute(rainDay)
+      );
+    }
+
+    // 6. Apply Date Change
+    if (proposal.dateChange) {
+      const { departureDate, returnDate, days } = proposal.dateChange;
+      const computeSyncedReturnDate = (
+        depStr: string,
+        dayCount: number,
+        fallbackRet: string
+      ) => {
+        if (!depStr || !/^\d{4}-\d{2}-\d{2}$/.test(depStr)) return fallbackRet;
+        const parts = depStr.split('-').map(Number);
+        const dt = new Date(
+          Date.UTC(parts[0], parts[1] - 1, parts[2] + Math.max(0, dayCount - 1))
+        );
+        if (Number.isNaN(dt.getTime())) return fallbackRet;
+        return dt.toISOString().slice(0, 10);
+      };
+      setTrip((prev) => {
+        const nextDays = Math.min(30, Math.max(1, Math.round(days)));
+        const nextDeparture = /^\d{4}-\d{2}-\d{2}$/.test(departureDate)
+          ? departureDate
+          : prev.setup.departureDate;
+        let nextReturn = /^\d{4}-\d{2}-\d{2}$/.test(returnDate)
+          ? returnDate
+          : prev.setup.returnDate;
+        if (nextDays !== prev.setup.days) {
+          nextReturn = computeSyncedReturnDate(
+            nextDeparture,
+            nextDays,
+            nextReturn
+          );
+        }
+        const nextCityDays = resolveCityDaysAllocation(
+          prev.setup.cities,
+          nextDays,
+          prev.setup.cityDays
+        );
+        return {
+          ...prev,
+          setup: {
+            ...prev.setup,
+            departureDate: nextDeparture,
+            returnDate: nextReturn,
+            days: nextDays,
+            cityDays: nextCityDays,
+          },
+        };
+      });
+      appliedParts.push(
+        days !== trip.setup.days
+          ? appCopy.savedSetupWithScalingToast(trip.intel.routeTitle, days)
+          : appCopy.savedSetupPreservedToast(trip.intel.routeTitle)
+      );
+    }
+
+    // 7. Apply Destination Change
+    if (proposal.destinationChange) {
+      const nextCities = proposal.destinationChange.cities
+        .map((c) => c.trim())
+        .filter(Boolean)
+        .slice(0, 6);
+      if (nextCities.length > 0) {
+        setTrip((prev) => {
+          const nextCityDays = resolveCityDaysAllocation(
+            nextCities,
+            prev.setup.days,
+            proposal.destinationChange?.cityDays
+          );
+          return {
+            ...prev,
+            setup: {
+              ...prev.setup,
+              cities: nextCities,
+              cityDays: nextCityDays,
+            },
+            timeline: prev.timeline.map((n) => ({
+              ...n,
+              city: getCityForDay(
+                nextCities,
+                n.day ?? 1,
+                prev.setup.days,
+                undefined,
+                activeLang,
+                nextCityDays
+              ),
+            })),
+          };
+        });
+        appliedParts.push(appCopy.savedSetupPreservedToast(trip.intel.routeTitle));
+      }
+    }
+
+    // 8. Apply Itinerary Rebuild
+    if (proposal.itineraryRebuild) {
+      const rebuild = proposal.itineraryRebuild;
+      const patchedSetup: TripSetup = {
+        ...trip.setup,
+        ...(rebuild.setupPatch ?? {}),
+      };
+      const shouldOverwrite =
+        rebuild.confirmOverwrite === true && rebuild.targetMode === 'overwrite';
+      if (shouldOverwrite) {
+        void handleRegenerateCurrentWithAi(
+          patchedSetup,
+          trip.crew,
+          rebuild.naturalPrompt
+        );
+        appliedParts.push(appCopy.regeneratedTripToast(trip.intel.routeTitle));
+      } else {
+        void handleCreateNewWithAi(patchedSetup, trip.crew, rebuild.naturalPrompt);
+        appliedParts.push(appCopy.generatedSavedTripToast(trip.intel.routeTitle));
+      }
+    }
+
+    // 9. Apply Packing Template
+    if (proposal.packingTemplate) {
+      const tpl = proposal.packingTemplate;
+      const updatedSetupPatch: Partial<TripSetup> = {};
+      if (tpl.scenarioIds.length > 0) {
+        updatedSetupPatch.specialScenarios = tpl.scenarioIds;
+      }
+      if (tpl.tripPurpose) {
+        updatedSetupPatch.packingTripPurpose = tpl.tripPurpose;
+      }
+      if (tpl.customNote) {
+        updatedSetupPatch.packingCustomNote = tpl.customNote;
+      }
+      void handleGenerateCustomPackingList({
+        updatedSetupPatch,
+        mergeMode: 'smart_merge',
+        useInstantOffline: false,
+      });
+      appliedParts.push(
+        appCopy.appliedPartPacking(Math.max(1, tpl.scenarioIds.length || 1))
       );
     }
 

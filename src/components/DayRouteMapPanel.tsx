@@ -70,6 +70,9 @@ import { tkColor } from '../utils/tkColor';
 import { useGooglePhotoBlob } from '../hooks/useGooglePhotoBlob';
 import { GooglePhotoCredit } from './GooglePhotoCredit';
 
+/** Guard window: marker select just fired → ignore bubbled map click. */
+let lastMarkerSelectAt = 0;
+
 function usePanelLang() {
   const { i18n } = useTranslation();
   const lang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
@@ -784,6 +787,7 @@ const StopAdvancedMarker: React.FC<{
 }) => {
   const { lang, copy } = usePanelLang();
   const [imgFailed, setImgFailed] = useState(false);
+  const lastFiredRef = useRef(0);
   const { url: thumbBlobUrl, failed: thumbBlobFailed } = useGooglePhotoBlob(thumbPhotoUri);
 
   useEffect(() => {
@@ -820,7 +824,11 @@ const StopAdvancedMarker: React.FC<{
       : 'tk-bg-paper tk-text-forest';
 
 
-  const handleCardClick = () => {
+  const triggerSelect = () => {
+    const now = performance.now();
+    if (now - lastFiredRef.current < 250) return;
+    lastFiredRef.current = now;
+    lastMarkerSelectAt = now;
     if (isSelected && onOpenDetail) {
       onOpenDetail();
       return;
@@ -837,10 +845,13 @@ const StopAdvancedMarker: React.FC<{
           ? `D${stop.dayNumber} · ${stop.orderNumber}. ${displayTitle}`
           : `${stop.orderNumber}. ${displayTitle}`
       }
-      onClick={handleCardClick}
+      onClick={triggerSelect}
     >
       {compact ? (
-        <div className="flex flex-col items-center cursor-pointer select-none">
+        <div
+          className="flex flex-col items-center cursor-pointer select-none"
+          onClick={() => triggerSelect()}
+        >
           <div
             className={`inline-flex items-center gap-1.5 rounded-full tk-bg-card pl-1 pr-2.5 py-0.5 tk-elev-card border ${
  isSelected ? 'tk-bc-forest ring-2 tk-rc-forest' : 'tk-bc-hair'
@@ -864,7 +875,10 @@ const StopAdvancedMarker: React.FC<{
           />
         </div>
       ) : (
-        <div className="flex flex-col items-center pt-1 cursor-pointer select-none">
+        <div
+          className="flex flex-col items-center pt-1 cursor-pointer select-none"
+          onClick={() => triggerSelect()}
+        >
           <div
             className={`relative flex w-[208px] items-center gap-2 rounded-2xl tk-bg-card p-1.5 pr-2 tk-elev-card border ${
  isSelected ? 'tk-bc-forest ring-2 tk-rc-forest' : 'tk-bc-hair'
@@ -1476,6 +1490,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
   useEffect(() => {
     if (!map) return;
     const clickListener = map.addListener('click', () => {
+      if (performance.now() - lastMarkerSelectAt < 350) return;
       setSelectedStopId(null);
     });
     return () => {
