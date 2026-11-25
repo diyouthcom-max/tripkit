@@ -183,7 +183,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   // Track pointer press on the dnd-kit drag handle so card whileTap stays still during drag
   const [handlePressed, setHandlePressed] = useState(false);
 
-  // Horizontal swipe gesture state (Touch + Desktop Mouse: Right-swipe = toggle visited, Left-swipe = edit/delete)
+  // Horizontal swipe gesture state (Touch + Desktop Mouse: Right-swipe = toggle visited, Left-swipe = lock/edit/delete)
+  /** Mobile left-swipe tray: 3×66=198 with lock, else 2×66=132 (edit/delete). */
+  const SWIPE_ACTION_TRAY_PX = onToggleLock ? 198 : 132;
   const [dragDeltaX, setDragDeltaX] = useState<number | null>(null);
   const articleRef = useRef<HTMLElement | null>(null);
   const didSwipeRef = useRef(false);
@@ -214,7 +216,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     if (dragDeltaX !== null) {
       el.style.transform = `translate3d(${dragDeltaX}px, 0, 0)`;
     } else if (isSwipedOpen) {
-      el.style.transform = 'translate3d(-132px, 0, 0)';
+      el.style.transform = `translate3d(-${SWIPE_ACTION_TRAY_PX}px, 0, 0)`;
     } else {
       el.style.transform = 'translate3d(0px, 0, 0)';
     }
@@ -269,8 +271,11 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   };
 
   const clampSwipeOffset = (rawOffset: number): number => {
-    if (rawOffset < -132) {
-      return -132 - (Math.abs(rawOffset + 132) * 0.22);
+    if (rawOffset < -SWIPE_ACTION_TRAY_PX) {
+      return (
+        -SWIPE_ACTION_TRAY_PX -
+        Math.abs(rawOffset + SWIPE_ACTION_TRAY_PX) * 0.22
+      );
     }
     if (rawOffset > 88) {
       return 88 + (rawOffset - 88) * 0.22;
@@ -296,7 +301,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     swipeGestureRef.current = {
       startX: clientX,
       startY: clientY,
-      baseOffset: isSwipedOpen ? -132 : 0,
+      baseOffset: isSwipedOpen ? -SWIPE_ACTION_TRAY_PX : 0,
       locked: null,
       pointerId,
     };
@@ -335,7 +340,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     if (!st || st.locked !== 'h' || finalOffset === null) return;
 
     if (isSwipedOpen) {
-      if (finalOffset > -92) {
+      // ~70% of tray width: snap closed when dragged back past this point
+      const closeThreshold = onToggleLock ? -140 : -92;
+      if (finalOffset > closeThreshold) {
         onSwipeOpenChange(false);
       }
       return;
@@ -343,7 +350,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
     if (finalOffset >= 54) {
       onToggleVisited();
-    } else if (finalOffset <= -48) {
+    } else if (finalOffset <= (onToggleLock ? -66 : -48)) {
       onSwipeOpenChange(true);
     }
   };
@@ -755,15 +762,54 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
           <span>{isVisited ? nodeCopy.swipeUndo : nodeCopy.swipeDone}</span>
         </div>
 
-        {/* Right-side Swipe Action Tray (Left-Swipe = Edit / Delete) */}
+        {/* Right-side Swipe Action Tray (Left-Swipe = Lock / Edit / Delete) */}
         <div
-          className={`absolute inset-y-0 right-0 w-[132px] flex items-stretch transition-opacity ${
- isSwipedOpen || (dragDeltaX !== null && dragDeltaX < -10)
- ? 'opacity-100'
- : 'opacity-0 pointer-events-none'
- }`}
+          className={`absolute inset-y-0 right-0 flex items-stretch transition-opacity ${
+            onToggleLock ? 'w-[198px]' : 'w-[132px]'
+          } ${
+            isSwipedOpen || (dragDeltaX !== null && dragDeltaX < -10)
+              ? 'opacity-100'
+              : 'opacity-0 pointer-events-none'
+          }`}
           aria-hidden={!isSwipedOpen && dragDeltaX === null}
         >
+          {onToggleLock ? (
+            <button
+              type="button"
+              onClick={() => {
+                onToggleLock();
+                onSwipeOpenChange(false);
+              }}
+              title={
+                isPassProtected
+                  ? nodeCopy.passLockedTip
+                  : node.locked
+                    ? nodeCopy.unlockStop
+                    : nodeCopy.lockStop
+              }
+              aria-label={
+                isPassProtected
+                  ? nodeCopy.passLockedTip
+                  : node.locked
+                    ? nodeCopy.unlockStop
+                    : nodeCopy.lockStop
+              }
+              className="w-[66px] tk-bg-press hover:tk-bg-forest tk-text-card text-[10px] font-semibold flex flex-col items-center justify-center gap-0.5 px-0.5 leading-tight text-center cursor-pointer"
+            >
+              {node.locked || isPassProtected ? (
+                <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              ) : (
+                <LockOpen className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              )}
+              <span>
+                {isPassProtected
+                  ? nodeCopy.passLockedTip
+                  : node.locked
+                    ? nodeCopy.unlockStop
+                    : nodeCopy.lockStop}
+              </span>
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={handleBeginEdit}
