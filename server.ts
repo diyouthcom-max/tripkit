@@ -709,6 +709,7 @@ Full trip route: ${(cities || ['巴黎']).join(' -> ')}. Style: ${tripStyle || '
 Current Day ${targetDay} timeline JSON: ${JSON.stringify(timeline || [])}`,
           config: {
             systemInstruction: `You are a spatial route, weekday-closure & dwell-time optimizer for travelers focusing ONLY on Day ${targetDay} (${targetCity}).
+- NEVER remove nodes whose locked is true, whose isAnchor is true, or whose id appears in any travelPass.linkedTimelineNodeId; if a date or city conflict makes this impossible, return a conflict warning instead of deleting.
 - Every returned timeline node MUST have day=${targetDay}, city="${targetCity}", accurate real-world WGS84 decimal coordinates ("lat", "lng"), and stopType strictly among "attraction" | "hotel" | "transit" | "dining" | "shopping" (preserving existing stopType/lat/lng on existing IDs).
 - WEEKDAY CLOSURE & DWELL-TIME DISCIPLINE: Check Day ${targetDay}'s exact weekday in Trip Calendar (${weekdayCalendar})! Never add or move a museum/shop onto its weekly closed day (e.g., Louvre closed Tue, Orsay/Versailles closed Mon, EU shops closed Sun); if an existing stop falls on a closed weekday or leaves <90 minutes visit buffer before closeTime (or hits the 30-min museum last-entry cutoff), flag it clearly in warningNote!
 - WALK-IN RAIN BACKUPS: Whenever providing indoor rainSwapTitle/rainSwapDistrict/rainSwapAddress for outdoor stops, pick walk-in friendly indoor spots in the same neighborhood (covered arcades, free/walk-in permanent collections, indoor food halls) — NEVER venues that sell out weeks ahead!
@@ -856,6 +857,7 @@ Wishlist places to weave into appropriate days if feasible: ${JSON.stringify(wis
           config: {
             systemInstruction: `You are an expert multi-city travel architect specializing in budget-calibrated, weekday-aware, zero-backtracking itineraries.
 ${getAiLangDirective(lang)} Keep accurate real-world street addresses.
+NEVER remove nodes whose locked is true, whose isAnchor is true, or whose id appears in any travelPass.linkedTimelineNodeId; if a date or city conflict makes this impossible, return a conflict warning instead of deleting.
 
 MANDATORY COVERAGE & REAL-WORLD PACING RULES:
 1. You MUST output nodes for EVERY SINGLE DAY from day=1 through day=${plannedDays} (${stopsPerDayGuide} worthwhile stops per day — NEVER omit any day between 1 and ${plannedDays}).
@@ -1744,6 +1746,7 @@ ${JSON.stringify(tripSnapshot || {})}
 User spoken/typed input: "${trimmed}"`,
           config: {
             systemInstruction: `You are Trip Kit's world-class travel concierge and trip-editing assistant. Analyze the user's natural language input (along with recent conversation history if this is a follow-up) against the Live Trip Snapshot and return a helpful, concrete response. ${getAiLangDirective(lang)}
+NEVER remove nodes whose locked is true, whose isAnchor is true, or whose id appears in any travelPass.linkedTimelineNodeId; if a date or city conflict makes this impossible, return a conflict warning instead of deleting.
 
 CRITICAL PROPOSAL-FIRST RULE ("Nothing changes until you tap Apply"):
 - Whenever you propose adding/removing itinerary stops, adding packing items, adding tasks, logging expenses, or toggling rainy-day mode, NEVER claim the change is already saved! Instead, phrase "reply" cleanly as a ready-to-apply proposal (e.g. in Chinese: "已为你准备好调整提案，点击下方「一键应用」即可写入行程。" / in English: "I've drafted this update for you—tap Apply below whenever you're ready to save it."), and provide a crisp 1-line "proposalSummary".
@@ -2818,6 +2821,7 @@ ${JSON.stringify(rawStops)}`,
           config: {
             systemInstruction: `You are an expert travel operations & TSP route scheduler optimizing an existing multi-day itinerary across Day 1 to Day ${safeTotalDays}.
 STRICT RULES:
+0. NEVER remove nodes whose locked is true, whose isAnchor is true, or whose id appears in any travelPass.linkedTimelineNodeId; if a date or city conflict makes this impossible, return a conflict warning instead of deleting. Keep their exact id/day/time unchanged.
 1. LOCKED VISITED STOPS: Any stop with "visited": true has ALREADY been visited by the traveler. You MUST keep its exact "id", "day", and "time" completely unchanged! Schedule unvisited ("visited": false) stops on that day cleanly around the locked visited stop(s) without time collisions.
 2. COMPLETE ID PRESERVATION: "reorderedStops" MUST include EVERY SINGLE input stop "id" (both visited and unvisited) — never drop, duplicate, or invent stop IDs.
 3. GEOGRAPHIC DISTANCE + OPENING HOURS + TICKET WINDOWS (Core Optimization):

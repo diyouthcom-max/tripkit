@@ -249,6 +249,8 @@ export interface TimelineNode {
   logged: boolean;
   linkedExpenseId?: string;
   isAnchor?: boolean;
+  /** Hard lock: protected from AI rebuild/reorder deletion. */
+  locked?: boolean;
   isOutdoor?: boolean;
   transitNote: string;
   mustVisitReason?: string;

@@ -50,6 +50,7 @@ import {
   CarTaxiFront,
   ArrowUpDown,
   RotateCcw,
+  History,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -253,6 +254,8 @@ interface ItineraryViewProps {
   onSmartReorderAllUnvisited?: () => Promise<SmartReorderItineraryResult | null>;
   canUndoSmartReorder?: boolean;
   onUndoSmartReorder?: () => void;
+  snapshotEntries?: Array<{ id: string; at: number; label: string }>;
+  onRestoreSnapshot?: (snapshotId: string) => void;
   onGenerateLocalCard: (
     scenario: string,
     targetName: string,
@@ -332,6 +335,8 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
   onSmartReorderAllUnvisited,
   canUndoSmartReorder = false,
   onUndoSmartReorder,
+  snapshotEntries = [],
+  onRestoreSnapshot,
   onGenerateLocalCard,
   onOpenAiAssistant,
   notificationPermission = 'default',
@@ -373,6 +378,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
   );
   const [smartReorderResult, setSmartReorderResult] =
     useState<SmartReorderItineraryResult | null>(null);
+  const [showSnapshotPanel, setShowSnapshotPanel] = useState(false);
 
   // Immersive Add Stop Modal state
   const [showAddStop, setShowAddStop] = useState(false);
@@ -1009,6 +1015,19 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     <span>{t('itinerary.smartReorderUndo')}</span>
                   </button>
                 )}
+                {onRestoreSnapshot && (
+                  <button
+                    type="button"
+                    onClick={() => setShowSnapshotPanel((v) => !v)}
+                    className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
+                  >
+                    <History className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                    <span>
+                      {copy.snapshotHistoryBtn}
+                      {snapshotEntries.length > 0 ? ` (${snapshotEntries.length})` : ''}
+                    </span>
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setSmartReorderResult(null)}
@@ -1018,6 +1037,51 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 </button>
               </div>
             </div>
+
+            {showSnapshotPanel && onRestoreSnapshot && (
+              <div className="rounded-lg border tk-bc-hair tk-bg-card p-2.5 space-y-1.5">
+                <p className="text-[11px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
+                {snapshotEntries.length === 0 ? (
+                  <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+                ) : (
+                  <ul className="space-y-1.5">
+                    {snapshotEntries.slice(0, 12).map((entry) => {
+                      const ageMin = Math.max(
+                        0,
+                        Math.round((Date.now() - entry.at) / 60000)
+                      );
+                      const ageLabel =
+                        ageMin < 1
+                          ? copy.snapshotJustNow
+                          : ageMin < 60
+                            ? `${ageMin}m`
+                            : `${Math.round(ageMin / 60)}h`;
+                      return (
+                        <li
+                          key={entry.id}
+                          className="flex items-center justify-between gap-2 text-[11px]"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="font-semibold tk-text-ink truncate">{entry.label}</div>
+                            <div className="tk-text-ink2 tabular-nums">{ageLabel}</div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onRestoreSnapshot(entry.id);
+                              setShowSnapshotPanel(false);
+                            }}
+                            className="shrink-0 rounded-lg border tk-bc-hair px-2 py-1 font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
+                          >
+                            {copy.snapshotRestoreBtn}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            )}
 
             <p className="tk-text-ink2 leading-relaxed">
               {smartReorderResult.overallSummary}
@@ -1049,6 +1113,81 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               <div className="pt-2 border-t tk-bc-hair flex items-start gap-1.5 tk-text-ink2">
                 <AlertTriangle className="h-3.5 w-3.5 tk-text-warning shrink-0 mt-0.5" />
                 <span>{smartReorderResult.warningNote}</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Minimal snapshot entry when undo strip is collapsed but history exists */}
+        {!smartReorderResult && onRestoreSnapshot && (snapshotEntries.length > 0 || canUndoSmartReorder) && (
+          <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 space-y-2 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                {canUndoSmartReorder && onUndoSmartReorder && (
+                  <button
+                    type="button"
+                    onClick={() => onUndoSmartReorder()}
+                    className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5 shrink-0" />
+                    <span>{t('itinerary.smartReorderUndo')}</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowSnapshotPanel((v) => !v)}
+                  className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
+                >
+                  <History className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                  <span>
+                    {copy.snapshotHistoryBtn}
+                    {snapshotEntries.length > 0 ? ` (${snapshotEntries.length})` : ''}
+                  </span>
+                </button>
+              </div>
+            </div>
+            {showSnapshotPanel && (
+              <div className="rounded-lg border tk-bc-hair tk-bg-paper p-2.5 space-y-1.5">
+                <p className="text-[11px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
+                {snapshotEntries.length === 0 ? (
+                  <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+                ) : (
+                  <ul className="space-y-1.5">
+                    {snapshotEntries.slice(0, 12).map((entry) => {
+                      const ageMin = Math.max(
+                        0,
+                        Math.round((Date.now() - entry.at) / 60000)
+                      );
+                      const ageLabel =
+                        ageMin < 1
+                          ? copy.snapshotJustNow
+                          : ageMin < 60
+                            ? `${ageMin}m`
+                            : `${Math.round(ageMin / 60)}h`;
+                      return (
+                        <li
+                          key={entry.id}
+                          className="flex items-center justify-between gap-2 text-[11px]"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="font-semibold tk-text-ink truncate">{entry.label}</div>
+                            <div className="tk-text-ink2 tabular-nums">{ageLabel}</div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onRestoreSnapshot(entry.id);
+                              setShowSnapshotPanel(false);
+                            }}
+                            className="shrink-0 rounded-lg border tk-bc-hair px-2 py-1 font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
+                          >
+                            {copy.snapshotRestoreBtn}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
             )}
           </div>
@@ -1808,6 +1947,9 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                               livePlace={placesByNodeId[node.id] ?? null}
                               isPlaceLoading={Boolean(loadingByNodeId[node.id])}
                               linkedPassCount={linkedPassCount}
+                              isPassProtected={Boolean(
+                                travelPasses.some((p) => p.linkedTimelineNodeId === node.id)
+                              )}
                               isEditing={isNodeEditing}
                               isSwipedOpen={swipedNodeId === node.id}
                               isDragging={isDragging}
@@ -1838,6 +1980,13 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                                 onDeleteNode(node.id);
                               }}
                               onMoveOrder={(dir) => onMoveNodeOrder(node.id, dir)}
+                              onToggleLock={() =>
+                                onUpdateNode(
+                                  node.id,
+                                  { locked: !node.locked },
+                                  { silent: true }
+                                )
+                              }
                               scheduledLeadMinutes={armedStopLeads[node.id]}
                             />
                           )}
@@ -1910,6 +2059,11 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     linkedPassCount={
                       linkedPassesByNodeId[activeDraggedEntry.node.id]?.length || 0
                     }
+                    isPassProtected={Boolean(
+                      travelPasses.some(
+                        (p) => p.linkedTimelineNodeId === activeDraggedEntry.node.id
+                      )
+                    )}
                     isEditing={false}
                     isSwipedOpen={false}
                     isDragOverlay

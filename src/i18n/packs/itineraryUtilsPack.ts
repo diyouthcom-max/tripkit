@@ -65,6 +65,10 @@ export interface ItineraryUtilsCopy {
     moveDown: string;
     editStop: string;
     deleteStopTip: string;
+    lockStop: string;
+    unlockStop: string;
+    lockedBadge: string;
+    passLockedTip: string;
     details: string;
     meetupAnchorBadge: string;
     loggedAmount: (sym: string, amount: string) => string;
@@ -154,6 +158,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: '下移一站',
         editStop: '编辑此站',
         deleteStopTip: '删除此站',
+        lockStop: '锁定站点',
+        unlockStop: '解锁站点',
+        lockedBadge: '已锁定',
+        passLockedTip: '关联凭证，自动保护',
         details: '详情',
         meetupAnchorBadge: '· 晚间汇合点',
         loggedAmount: (s, a) => `已入账 ${s}${a}`,
@@ -243,6 +251,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Move down',
         editStop: 'Edit stop',
         deleteStopTip: 'Delete stop',
+        lockStop: 'Lock stop',
+        unlockStop: 'Unlock stop',
+        lockedBadge: 'Locked',
+        passLockedTip: 'Linked pass — auto-protected',
         details: 'Details',
         meetupAnchorBadge: '· Meetup Anchor',
         loggedAmount: (s, a) => `Logged ${s}${a}`,
@@ -332,6 +344,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Move down',
         editStop: 'Edit stop',
         deleteStopTip: 'Delete stop',
+        lockStop: 'Lock stop',
+        unlockStop: 'Unlock stop',
+        lockedBadge: 'Locked',
+        passLockedTip: 'Linked pass — auto-protected',
         details: 'Details',
         meetupAnchorBadge: '· Meetup Anchor',
         loggedAmount: (s, a) => `Logged ${s}${a}`,
@@ -421,6 +437,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Bajar',
         editStop: 'Editar parada',
         deleteStopTip: 'Eliminar parada',
+        lockStop: 'Bloquear',
+        unlockStop: 'Desbloquear',
+        lockedBadge: 'Bloqueado',
+        passLockedTip: 'Pase vinculado — protección automática',
         details: 'Detalles',
         meetupAnchorBadge: '· Punto de encuentro',
         loggedAmount: (s, a) => `Registrado ${s}${a}`,
@@ -510,6 +530,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Descendre',
         editStop: 'Modifier l’étape',
         deleteStopTip: 'Supprimer l’étape',
+        lockStop: 'Verrouiller',
+        unlockStop: 'Déverrouiller',
+        lockedBadge: 'Verrouillé',
+        passLockedTip: 'Pass lié — protection auto',
         details: 'Détails',
         meetupAnchorBadge: '· Point de RDV',
         loggedAmount: (s, a) => `Saisi ${s}${a}`,
@@ -599,6 +623,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Nach unten',
         editStop: 'Stopp bearbeiten',
         deleteStopTip: 'Stopp löschen',
+        lockStop: 'Sperren',
+        unlockStop: 'Entsperren',
+        lockedBadge: 'Gesperrt',
+        passLockedTip: 'Mit Pass verknüpft — auto-geschützt',
         details: 'Details',
         meetupAnchorBadge: '· Treffpunkt',
         loggedAmount: (s, a) => `Gebucht ${s}${a}`,
@@ -688,6 +716,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: 'Descer',
         editStop: 'Editar parada',
         deleteStopTip: 'Excluir parada',
+        lockStop: 'Travar',
+        unlockStop: 'Destravar',
+        lockedBadge: 'Travado',
+        passLockedTip: 'Passe vinculado — proteção automática',
         details: 'Detalhes',
         meetupAnchorBadge: '· Ponto de encontro',
         loggedAmount: (s, a) => `Lançado ${s}${a}`,
@@ -775,6 +807,10 @@ export function getItineraryUtilsCopy(lang: AppLanguage | string): ItineraryUtil
         moveDown: '下へ',
         editStop: '編集',
         deleteStopTip: '削除',
+        lockStop: 'ロック',
+        unlockStop: '解除',
+        lockedBadge: 'ロック中',
+        passLockedTip: '証憑連携・自動保護',
         details: '詳細',
         meetupAnchorBadge: '· 集合場所',
         loggedAmount: (s, a) => `記録済 ${s}${a}`,

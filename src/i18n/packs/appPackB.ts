@@ -79,6 +79,15 @@ export interface AppPackBCopy {
   smartReorderOverallSummary: (count: number, totalDays: number) => string;
   smartReorderedToast: (count: number, totalDays: number) => string;
   undidSmartReorderToast: string;
+  snapshotLabelAiFullPlan: string;
+  snapshotLabelAiOptimize: string;
+  snapshotLabelAiSmartReorder: string;
+  snapshotLabelAiProposal: string;
+  snapshotLabelPackingRegen: string;
+  snapshotLabelSmartBags: string;
+  snapshotRestoredToast: string;
+  nodeLockedToast: (title: string) => string;
+  nodeUnlockedToast: (title: string) => string;
   paywallLocalCard: string;
   localCardFailed: string;
   updatedExpenseReopenedToast: (title: string) => string;
@@ -196,6 +205,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
       smartReorderedToast: (cnt, days) =>
         `已完成 D1–D${days} 共 ${cnt} 个未到访站点的最优路线重排`,
       undidSmartReorderToast: '已恢复至智能重排前的全部站点顺序与时间轴',
+      snapshotLabelAiFullPlan: 'AI 全程行程规划',
+      snapshotLabelAiOptimize: 'AI 单日行程优化',
+      snapshotLabelAiSmartReorder: 'AI 智能重排',
+      snapshotLabelAiProposal: 'AI 助手批量应用',
+      snapshotLabelPackingRegen: '清单重生成',
+      snapshotLabelSmartBags: '一键分袋',
+      snapshotRestoredToast: '已从历史快照回滚业务数据',
+      nodeLockedToast: (t) => `已锁定「${t}」`,
+      nodeUnlockedToast: (t) => `已解锁「${t}」`,
       paywallLocalCard:
         '30 天免费体验期已满：添加主理人 WhatsApp 或 Facebook 免费申领 1 年授权码，即可继续生成当地语言问路与沟通卡。',
       localCardFailed: '生成沟通卡失败',
@@ -325,6 +343,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
         `Smart-reordered ${cnt} unvisited stops across D1–D${days}`,
       undidSmartReorderToast:
         'Restored D1–DX itinerary to its order before Smart Reorder',
+      snapshotLabelAiFullPlan: 'AI full itinerary plan',
+      snapshotLabelAiOptimize: 'AI day optimize',
+      snapshotLabelAiSmartReorder: 'AI smart reorder',
+      snapshotLabelAiProposal: 'AI assistant batch apply',
+      snapshotLabelPackingRegen: 'Packing list regenerate',
+      snapshotLabelSmartBags: 'Smart bag assign',
+      snapshotRestoredToast: 'Restored business data from snapshot',
+      nodeLockedToast: (t) => `Locked "${t}"`,
+      nodeUnlockedToast: (t) => `Unlocked "${t}"`,
       paywallLocalCard:
         'Your 30-day free trial has ended. Message the creator on WhatsApp or Facebook for a free 1-year Pro code to generate local phrase & taxi cards.',
       localCardFailed: 'Failed to generate phrase card',
@@ -457,6 +484,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
         `Smart-reordered ${cnt} unvisited stops across D1–D${days}`,
       undidSmartReorderToast:
         'Restored D1–DX itinerary to its order before Smart Reorder',
+      snapshotLabelAiFullPlan: 'AI full itinerary plan',
+      snapshotLabelAiOptimize: 'AI day optimize',
+      snapshotLabelAiSmartReorder: 'AI smart reorder',
+      snapshotLabelAiProposal: 'AI assistant batch apply',
+      snapshotLabelPackingRegen: 'Packing list regenerate',
+      snapshotLabelSmartBags: 'Smart bag assign',
+      snapshotRestoredToast: 'Restored business data from snapshot',
+      nodeLockedToast: (t) => `Locked "${t}"`,
+      nodeUnlockedToast: (t) => `Unlocked "${t}"`,
       paywallLocalCard:
         'Your 30-day free trial has ended. Message the creator on WhatsApp or Facebook for a free 1-year Pro code to generate local phrase & taxi cards.',
       localCardFailed: 'Failed to generate phrase card',
@@ -583,6 +619,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
       smartReorderedToast: (cnt, days) =>
         `${cnt} paradas reordenadas en D1–D${days}`,
       undidSmartReorderToast: 'Itinerario D1–DX restaurado al orden anterior',
+      snapshotLabelAiFullPlan: 'Plan AI de itinerario completo',
+      snapshotLabelAiOptimize: 'Optimización AI del día',
+      snapshotLabelAiSmartReorder: 'Reorden AI inteligente',
+      snapshotLabelAiProposal: 'Aplicar propuesta AI',
+      snapshotLabelPackingRegen: 'Regenerar lista de equipaje',
+      snapshotLabelSmartBags: 'Asignar bolsas',
+      snapshotRestoredToast: 'Datos restaurados desde instantánea',
+      nodeLockedToast: (t) => `Bloqueado «${t}»`,
+      nodeUnlockedToast: (t) => `Desbloqueado «${t}»`,
       paywallLocalCard:
         'Tu prueba de 30 días terminó. Pide 1 año Pro por WhatsApp o Facebook para crear tarjetas de frases locales y taxi.',
       localCardFailed: 'Error al generar tarjeta de frases',
@@ -705,6 +750,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
         `${cnt} étapes non visitées réorganisées sur J1–J${days} selon proximité et horaires.`,
       smartReorderedToast: (cnt, days) => `${cnt} étapes réorganisées sur J1–J${days}`,
       undidSmartReorderToast: 'Ordre J1–JX restauré avant réorganisation',
+      snapshotLabelAiFullPlan: 'Plan AI d’itinéraire complet',
+      snapshotLabelAiOptimize: 'Optimisation AI du jour',
+      snapshotLabelAiSmartReorder: 'Réorganisation AI',
+      snapshotLabelAiProposal: 'Appliquer proposition AI',
+      snapshotLabelPackingRegen: 'Régénérer la liste',
+      snapshotLabelSmartBags: 'Répartir les sacs',
+      snapshotRestoredToast: 'Données restaurées depuis un instantané',
+      nodeLockedToast: (t) => `Verrouillé « ${t} »`,
+      nodeUnlockedToast: (t) => `Déverrouillé « ${t} »`,
       paywallLocalCard:
         'Essai de 30 jours terminé. Demandez 1 an Pro sur WhatsApp ou Facebook pour créer des cartes de langue locale.',
       localCardFailed: 'Échec de création de la carte',
@@ -830,6 +884,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
       smartReorderedToast: (cnt, days) =>
         `${cnt} Stopps über D1–D${days} neu geordnet`,
       undidSmartReorderToast: 'D1–DX-Route auf Stand vor Sortierung zurückgesetzt',
+      snapshotLabelAiFullPlan: 'KI-Gesamtplan',
+      snapshotLabelAiOptimize: 'KI-Tagesoptimierung',
+      snapshotLabelAiSmartReorder: 'KI-Neusortierung',
+      snapshotLabelAiProposal: 'KI-Vorschlag anwenden',
+      snapshotLabelPackingRegen: 'Packliste neu erzeugen',
+      snapshotLabelSmartBags: 'Taschen zuweisen',
+      snapshotRestoredToast: 'Geschäftsdaten aus Snapshot wiederhergestellt',
+      nodeLockedToast: (t) => `„${t}“ gesperrt`,
+      nodeUnlockedToast: (t) => `„${t}“ entsperrt`,
       paywallLocalCard:
         '30-Tage-Testphase beendet. Hol dir per WhatsApp/Facebook 1 Jahr Pro für lokale Sprachkarten.',
       localCardFailed: 'Sprachkarte konnte nicht erstellt werden',
@@ -952,6 +1015,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
         `${cnt} paradas pendentes ordenadas de D1 a D${days} por distância e horários.`,
       smartReorderedToast: (cnt, days) => `${cnt} paradas reordenadas em D1–D${days}`,
       undidSmartReorderToast: 'Roteiro D1–DX restaurado à ordem anterior',
+      snapshotLabelAiFullPlan: 'Plano AI completo',
+      snapshotLabelAiOptimize: 'Otimização AI do dia',
+      snapshotLabelAiSmartReorder: 'Reordenação AI',
+      snapshotLabelAiProposal: 'Aplicar proposta AI',
+      snapshotLabelPackingRegen: 'Regenerar lista',
+      snapshotLabelSmartBags: 'Distribuir malas',
+      snapshotRestoredToast: 'Dados restaurados do snapshot',
+      nodeLockedToast: (t) => `Travado «${t}»`,
+      nodeUnlockedToast: (t) => `Destravado «${t}»`,
       paywallLocalCard:
         'Seu teste de 30 dias terminou. Peça 1 ano Pro no WhatsApp ou Facebook para gerar cartões de frases locais.',
       localCardFailed: 'Falha ao gerar cartão de frases',
@@ -1075,6 +1147,15 @@ export function getAppPackBCopy(lang: AppLanguage): AppPackBCopy {
       smartReorderedToast: (cnt, days) =>
         `D1–D${days} の未訪問 ${cnt} スポットを最適順に並べ替えました`,
       undidSmartReorderToast: '並び替え前の全日程順序に復元しました',
+      snapshotLabelAiFullPlan: 'AI 全日程プラン',
+      snapshotLabelAiOptimize: 'AI 当日最適化',
+      snapshotLabelAiSmartReorder: 'AI スマート再配列',
+      snapshotLabelAiProposal: 'AI 提案の一括適用',
+      snapshotLabelPackingRegen: 'パッキング再生成',
+      snapshotLabelSmartBags: 'バッグ一括割当',
+      snapshotRestoredToast: 'スナップショットから業務データを復元しました',
+      nodeLockedToast: (t) => `「${t}」をロックしました`,
+      nodeUnlockedToast: (t) => `「${t}」のロックを解除しました`,
       paywallLocalCard:
         '30 日間の無料トライアルが終了しました。WhatsApp / Facebook で 1 年無料 Pro コードを取得すると現地語フレーズカードを作成できます。',
       localCardFailed: 'フレーズカードの生成に失敗しました',

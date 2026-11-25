@@ -60,7 +60,20 @@ import {
   resolveCityDaysAllocation,
   sortNodesChronologically,
 } from './utils/itineraryHelpers';
+import {
+  detectProtectedConflicts,
+  formatProtectedConflictWarning,
+  isNodeProtected,
+  restoreMissingProtectedNodes,
+} from './utils/timelineProtection';
+import {
+  applyTripSnapshotSlice,
+  getTripSnapshot,
+  listTripSnapshots,
+  pushTripSnapshot,
+} from './utils/snapshotStack';
 import { getConfiguredGoogleMapsApiKey } from './utils/googleMapsHelpers';
+import { getItineraryViewCopy } from './i18n/packs/itineraryViewPack';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import {
   BAGGAGE_PRESET_SPECS,
@@ -1843,6 +1856,7 @@ export default function App() {
     spatialClusteredByDay?: Record<number, boolean>;
     meetup: TripState['meetup'];
   } | null>(null);
+  const [snapshotStackTick, setSnapshotStackTick] = useState(0);
   const [activeReminderBanner, setActiveReminderBanner] = useState<{
     headline: string;
     items: string[];
@@ -2090,6 +2104,35 @@ export default function App() {
       setToast((curr) => (curr === msg ? null : curr));
     }, 3200);
   }, []);
+
+  const pushBusinessSnapshot = useCallback(
+    (label: string, sourceTrip?: TripState) => {
+      pushTripSnapshot(activeEntry.id, label, sourceTrip ?? trip);
+      setSnapshotStackTick((n) => n + 1);
+    },
+    [activeEntry.id, trip]
+  );
+
+  const snapshotEntriesForUi = useMemo(() => {
+    void snapshotStackTick;
+    return listTripSnapshots(activeEntry.id).map((e) => ({
+      id: e.id,
+      at: e.at,
+      label: e.label,
+    }));
+  }, [activeEntry.id, snapshotStackTick]);
+
+  const handleRestoreSnapshot = useCallback(
+    (snapshotId: string) => {
+      const entry = getTripSnapshot(activeEntry.id, snapshotId);
+      if (!entry) return;
+      setTrip((prev) => applyTripSnapshotSlice(prev, entry.state));
+      setPreReclusterByDay({});
+      setItineraryWarning(null);
+      showToast(appCopy.snapshotRestoredToast);
+    },
+    [activeEntry.id, appCopy.snapshotRestoredToast, showToast]
+  );
 
   const handleUpdatePreferences = useCallback((updates: Partial<AppPreferences>) => {
     setPreferences((prev) => sanitizePreferences({ ...prev, ...updates }));
@@ -3363,9 +3406,12 @@ export default function App() {
       { ...draftSetup, cities: nextCities, cityDays: nextCityDays, days: nextDays },
       normalizedCrew
     );
-    const nextTimeline = formattedTimeline.length
-      ? formattedTimeline
-      : fallbackOffline.timeline;
+    const nextTimeline = restoreMissingProtectedNodes(
+      baseState.timeline,
+      formattedTimeline.length ? formattedTimeline : fallbackOffline.timeline,
+      baseState.travelPasses,
+      { maxDay: nextDays }
+    );
     const day1Nodes = nextTimeline.filter((n) => (n.day ?? 1) === 1);
     const spatialSummaryStr =
       typeof data.spatialSummary === 'string' ? data.spatialSummary : '';
@@ -3553,6 +3599,7 @@ export default function App() {
         }
       )) as Record<string, unknown>;
 
+      pushBusinessSnapshot(appCopy.snapshotLabelAiFullPlan, trip);
       const regenerated = composeTripStateFromAiResponse(
         data,
         trip,
@@ -3611,6 +3658,7 @@ export default function App() {
       const merged = mergeRegeneratedPackingGroups(trip.packing, offlineGroups, mergeMode);
       const totalItems = merged.groups.reduce((sum, g) => sum + g.items.length, 0);
 
+      pushBusinessSnapshot(appCopy.snapshotLabelPackingRegen);
       setTrip((prev) => ({
         ...prev,
         setup: nextSetup,
@@ -3724,6 +3772,7 @@ export default function App() {
       const merged = mergeRegeneratedPackingGroups(trip.packing, withAlwaysPack, mergeMode);
       const totalItems = merged.groups.reduce((sum, g) => sum + g.items.length, 0);
 
+      pushBusinessSnapshot(appCopy.snapshotLabelPackingRegen);
       setTrip((prev) => ({
         ...prev,
         setup: nextSetup,
@@ -5358,6 +5407,7 @@ export default function App() {
     overrides: Record<string, SmartBagId>,
     summaryTip: string
   ) => {
+    pushBusinessSnapshot(appCopy.snapshotLabelSmartBags);
     setTrip((prev) => {
       const normalized = normalizeSmartBagOverrides(overrides, prev.packing);
       return {
@@ -5418,6 +5468,7 @@ export default function App() {
   };
 
   const handleResetSmartBagOverrides = () => {
+    pushBusinessSnapshot(appCopy.snapshotLabelSmartBags);
     setTrip((prev) => ({
       ...prev,
       smartBagOverrides: {},
@@ -6539,6 +6590,17 @@ export default function App() {
 
   const handleApplyAiProposal = (proposal: AiAssistantProposal) => {
     const appliedParts: string[] = [];
+    const isBulkDestructive = Boolean(
+      (proposal.removeStops && proposal.removeStops.length > 0) ||
+        (proposal.stops && proposal.stops.length > 0) ||
+        proposal.itineraryRebuild ||
+        proposal.packingTemplate ||
+        proposal.destinationChange ||
+        proposal.dateChange
+    );
+    if (isBulkDestructive) {
+      pushBusinessSnapshot(appCopy.snapshotLabelAiProposal);
+    }
 
     // 1. Apply Expenses
     if (proposal.expenses && proposal.expenses.length > 0) {
@@ -6625,7 +6687,14 @@ export default function App() {
     }
 
     // 4. Apply Stop Removals & Stop Additions atomically
-    const removeIds = new Set((proposal.removeStops ?? []).map((r) => r.id));
+    const removeIds = new Set(
+      (proposal.removeStops ?? [])
+        .map((r) => r.id)
+        .filter((id) => {
+          const node = trip.timeline.find((n) => n.id === id);
+          return node ? !isNodeProtected(node, trip.travelPasses) : true;
+        })
+    );
     const hasStopAdds = Boolean(proposal.stops && proposal.stops.length > 0);
     if (removeIds.size > 0 || hasStopAdds) {
       const newNodes: TimelineNode[] = (proposal.stops ?? []).map((st, idx) => ({
@@ -6683,12 +6752,19 @@ export default function App() {
           }
         });
 
+        const merged = restoreMissingProtectedNodes(
+          prev.timeline,
+          [...otherNodes, ...rebuiltDays].sort(
+            (a, b) => (a.day ?? 1) - (b.day ?? 1)
+          ),
+          prev.travelPasses,
+          { maxDay: prev.setup.days }
+        );
+
         return {
           ...prev,
           activeFinanceDay: primaryTouchedDay,
-          timeline: [...otherNodes, ...rebuiltDays].sort(
-            (a, b) => (a.day ?? 1) - (b.day ?? 1)
-          ),
+          timeline: merged,
           meetup: nextMeetup,
         };
       });
@@ -6739,6 +6815,7 @@ export default function App() {
         if (Number.isNaN(dt.getTime())) return fallbackRet;
         return dt.toISOString().slice(0, 10);
       };
+      let dateConflictWarning: string | null = null;
       setTrip((prev) => {
         const nextDays = Math.min(30, Math.max(1, Math.round(days)));
         const nextDeparture = /^\d{4}-\d{2}-\d{2}$/.test(departureDate)
@@ -6759,6 +6836,38 @@ export default function App() {
           nextDays,
           prev.setup.cityDays
         );
+        const protectedNodes = prev.timeline.filter((n) =>
+          isNodeProtected(n, prev.travelPasses)
+        );
+        const viewCopy = getItineraryViewCopy(activeLang);
+        if (nextDays < prev.setup.days) {
+          dateConflictWarning = formatProtectedConflictWarning(
+            detectProtectedConflicts(protectedNodes, {
+              maxDay: nextDays,
+              resolveCityForDay: (d) =>
+                getCityForDay(
+                  prev.setup.cities,
+                  d,
+                  nextDays,
+                  undefined,
+                  activeLang,
+                  nextCityDays
+                ),
+            }).filter((r) => r.kind === 'day_out_of_range'),
+            {
+              dayOutOfRange: viewCopy.lockedConflictDayShrink,
+              cityMismatch: viewCopy.lockedConflictCity,
+            }
+          );
+        }
+        const nextTimeline = restoreMissingProtectedNodes(
+          prev.timeline,
+          prev.timeline.map((n) =>
+            (n.day ?? 1) > nextDays ? { ...n, day: nextDays } : n
+          ),
+          prev.travelPasses,
+          { maxDay: nextDays }
+        );
         return {
           ...prev,
           setup: {
@@ -6768,8 +6877,10 @@ export default function App() {
             days: nextDays,
             cityDays: nextCityDays,
           },
+          timeline: nextTimeline,
         };
       });
+      if (dateConflictWarning) setItineraryWarning(dateConflictWarning);
       appliedParts.push(
         days !== trip.setup.days
           ? appCopy.savedSetupWithScalingToast(trip.intel.routeTitle, days)
@@ -6784,11 +6895,34 @@ export default function App() {
         .filter(Boolean)
         .slice(0, 6);
       if (nextCities.length > 0) {
+        let cityConflictWarning: string | null = null;
         setTrip((prev) => {
           const nextCityDays = resolveCityDaysAllocation(
             nextCities,
             prev.setup.days,
             proposal.destinationChange?.cityDays
+          );
+          const protectedNodes = prev.timeline.filter((n) =>
+            isNodeProtected(n, prev.travelPasses)
+          );
+          const viewCopy = getItineraryViewCopy(activeLang);
+          cityConflictWarning = formatProtectedConflictWarning(
+            detectProtectedConflicts(protectedNodes, {
+              maxDay: prev.setup.days,
+              resolveCityForDay: (d) =>
+                getCityForDay(
+                  nextCities,
+                  d,
+                  prev.setup.days,
+                  undefined,
+                  activeLang,
+                  nextCityDays
+                ),
+            }).filter((r) => r.kind === 'city_mismatch'),
+            {
+              dayOutOfRange: viewCopy.lockedConflictDayShrink,
+              cityMismatch: viewCopy.lockedConflictCity,
+            }
           );
           return {
             ...prev,
@@ -6797,19 +6931,24 @@ export default function App() {
               cities: nextCities,
               cityDays: nextCityDays,
             },
-            timeline: prev.timeline.map((n) => ({
-              ...n,
-              city: getCityForDay(
-                nextCities,
-                n.day ?? 1,
-                prev.setup.days,
-                undefined,
-                activeLang,
-                nextCityDays
-              ),
-            })),
+            timeline: prev.timeline.map((n) =>
+              isNodeProtected(n, prev.travelPasses)
+                ? n
+                : {
+                    ...n,
+                    city: getCityForDay(
+                      nextCities,
+                      n.day ?? 1,
+                      prev.setup.days,
+                      undefined,
+                      activeLang,
+                      nextCityDays
+                    ),
+                  }
+            ),
           };
         });
+        if (cityConflictWarning) setItineraryWarning(cityConflictWarning);
         appliedParts.push(appCopy.savedSetupPreservedToast(trip.intel.routeTitle));
       }
     }
@@ -6996,14 +7135,22 @@ export default function App() {
     options?: { silent?: boolean }
   ) => {
     let toastMsg = '';
+    const lockOnlyUpdate =
+      Object.keys(updates).length === 1 && Object.prototype.hasOwnProperty.call(updates, 'locked');
     setTrip((prev) => {
       const existing = prev.timeline.find((n) => n.id === nodeId);
       if (!existing) return prev;
       const targetDay = existing.day ?? 1;
       const updatedNode: TimelineNode = { ...existing, ...updates };
-      toastMsg = updatedNode.isAnchor
-        ? appCopy.updatedAnchorStopToast(updatedNode.title)
-        : appCopy.updatedStopToast(updatedNode.title);
+      if (lockOnlyUpdate) {
+        toastMsg = updatedNode.locked
+          ? appCopy.nodeLockedToast(updatedNode.title)
+          : appCopy.nodeUnlockedToast(updatedNode.title);
+      } else {
+        toastMsg = updatedNode.isAnchor
+          ? appCopy.updatedAnchorStopToast(updatedNode.title)
+          : appCopy.updatedStopToast(updatedNode.title);
+      }
 
       const nextTimeline = prev.timeline.map((n) => {
         if (n.id === nodeId) return updatedNode;
@@ -7030,7 +7177,7 @@ export default function App() {
         meetup: nextMeetup,
       };
     });
-    if (toastMsg && !options?.silent) showToast(toastMsg);
+    if (toastMsg && (!options?.silent || lockOnlyUpdate)) showToast(toastMsg);
   };
 
   const handleDeleteTimelineNode = (nodeId: string) => {
@@ -7289,6 +7436,8 @@ export default function App() {
         throw new Error(data.error || appCopy.optimizeFailed);
       }
 
+      pushBusinessSnapshot(appCopy.snapshotLabelAiOptimize);
+
       if (actionType === 'recluster' && currentDayNodes.length >= 2) {
         setPreReclusterByDay((prev) => ({
           ...prev,
@@ -7341,6 +7490,8 @@ export default function App() {
                 visited: existing ? existing.visited : Boolean(raw.visited),
                 logged: existing ? existing.logged : Boolean(raw.logged),
                 linkedExpenseId: existing?.linkedExpenseId,
+                locked: existing?.locked ?? raw.locked,
+                isAnchor: existing?.isAnchor ?? raw.isAnchor,
                 rainSwapTitle: raw.rainSwapTitle || existing?.rainSwapTitle,
                 rainSwapDistrict: raw.rainSwapDistrict || existing?.rainSwapDistrict,
                 rainSwapAddress: raw.rainSwapAddress || existing?.rainSwapAddress,
@@ -7351,9 +7502,15 @@ export default function App() {
         const otherDaysNodes = prev.timeline.filter(
           (n) => (n.day ?? 1) !== activeDay
         );
-        const mergedTimeline = [...otherDaysNodes, ...incomingDayNodes].sort(
-          (a, b) => (a.day ?? 1) - (b.day ?? 1)
+        const mergedTimeline = restoreMissingProtectedNodes(
+          prev.timeline,
+          [...otherDaysNodes, ...incomingDayNodes].sort(
+            (a, b) => (a.day ?? 1) - (b.day ?? 1)
+          ),
+          prev.travelPasses,
+          { maxDay: prev.setup.days }
         );
+        const dayNodesAfter = mergedTimeline.filter((n) => (n.day ?? 1) === activeDay);
         const nextSummary =
           data.spatialSummary ||
           prev.spatialSummariesByDay?.[activeDay] ||
@@ -7366,7 +7523,7 @@ export default function App() {
         return {
           ...prev,
           timeline: incomingDayNodes.length ? mergedTimeline : prev.timeline,
-          meetup: syncMeetupFromDayNodes(incomingDayNodes, prev.meetup),
+          meetup: syncMeetupFromDayNodes(dayNodesAfter, prev.meetup),
           spatialSummary: nextSummary,
           spatialClustered: nextClustered,
           spatialSummariesByDay: {
@@ -7487,7 +7644,6 @@ export default function App() {
       }
 
       const activeDay = Math.min(totalDays, Math.max(1, trip.activeFinanceDay ?? 1));
-      const activeDayNodes = formattedTimeline.filter((n) => (n.day ?? 1) === activeDay);
       const nextDailyBudget =
         Number(data.recommendedDailyBudgetLocal) > 0
           ? Math.round(Number(data.recommendedDailyBudgetLocal))
@@ -7495,28 +7651,62 @@ export default function App() {
           ? Math.round(options.targetDailyBudgetLocal)
           : trip.budget.dailyBudgetLocal;
 
-      setTrip((prev) => ({
-        ...prev,
-        setup: {
-          ...prev.setup,
-          budgetTier: options.budgetTier,
-        },
-        budget: {
-          ...prev.budget,
-          dailyBudgetLocal: nextDailyBudget,
-        },
-        timeline: formattedTimeline,
-        meetup: syncMeetupFromDayNodes(activeDayNodes, prev.meetup),
-        spatialSummary: summariesByDay[activeDay] || prev.spatialSummary,
-        spatialClustered: true,
-        spatialSummariesByDay: summariesByDay,
-        spatialClusteredByDay: clusteredByDay,
-        rainSwapped: false,
-        rainSwappedDays: {},
-      }));
+      pushBusinessSnapshot(appCopy.snapshotLabelAiFullPlan);
+
+      let fullPlanConflictWarning: string | null = null;
+      setTrip((prev) => {
+        const mergedTimeline = restoreMissingProtectedNodes(
+          prev.timeline,
+          formattedTimeline,
+          prev.travelPasses,
+          { maxDay: totalDays }
+        );
+        const activeDayNodes = mergedTimeline.filter((n) => (n.day ?? 1) === activeDay);
+        const viewCopy = getItineraryViewCopy(activeLang);
+        fullPlanConflictWarning = formatProtectedConflictWarning(
+          detectProtectedConflicts(
+            prev.timeline.filter((n) => isNodeProtected(n, prev.travelPasses)),
+            {
+              maxDay: totalDays,
+              resolveCityForDay: (d) =>
+                getCityForDay(
+                  prev.setup.cities,
+                  d,
+                  totalDays,
+                  undefined,
+                  activeLang,
+                  prev.setup.cityDays
+                ),
+            }
+          ),
+          {
+            dayOutOfRange: viewCopy.lockedConflictDayShrink,
+            cityMismatch: viewCopy.lockedConflictCity,
+          }
+        );
+        return {
+          ...prev,
+          setup: {
+            ...prev.setup,
+            budgetTier: options.budgetTier,
+          },
+          budget: {
+            ...prev.budget,
+            dailyBudgetLocal: nextDailyBudget,
+          },
+          timeline: mergedTimeline,
+          meetup: syncMeetupFromDayNodes(activeDayNodes, prev.meetup),
+          spatialSummary: summariesByDay[activeDay] || prev.spatialSummary,
+          spatialClustered: true,
+          spatialSummariesByDay: summariesByDay,
+          spatialClusteredByDay: clusteredByDay,
+          rainSwapped: false,
+          rainSwappedDays: {},
+        };
+      });
       setPreReclusterByDay({});
       setPreSmartReorderSnapshot(null);
-      setItineraryWarning(null);
+      setItineraryWarning(fullPlanConflictWarning);
       showToast(appCopy.plannedFullItineraryToast(totalDays));
 
       return {
@@ -7549,7 +7739,9 @@ export default function App() {
       });
       const isNodeVisited = (n: TimelineNode) =>
         n.visited !== undefined ? Boolean(n.visited) : Boolean(n.logged);
-      const unvisitedNodes = inRangeNodes.filter((n) => !isNodeVisited(n));
+      const isReorderLocked = (n: TimelineNode) =>
+        isNodeVisited(n) || isNodeProtected(n, trip.travelPasses);
+      const unvisitedNodes = inRangeNodes.filter((n) => !isReorderLocked(n));
       const preservedVisitedCount = inRangeNodes.length - unvisitedNodes.length;
 
       if (unvisitedNodes.length < 2) {
@@ -7617,6 +7809,7 @@ export default function App() {
         lng: n.lng,
         visited: isNodeVisited(n),
         isAnchor: Boolean(n.isAnchor),
+        locked: Boolean(n.locked) || isNodeProtected(n, trip.travelPasses),
         transitNote: n.transitNote,
       }));
 
@@ -7660,10 +7853,10 @@ export default function App() {
           }
         }
 
-        // Compute merged timeline preserving all stops & locking visited stops
+        // Compute merged timeline preserving all stops & locking visited/protected stops
         const rebuiltNodes = trip.timeline.map((orig) => {
           const origDay = orig.day ?? 1;
-          if (origDay < 1 || origDay > totalDays || isNodeVisited(orig)) {
+          if (origDay < 1 || origDay > totalDays || isReorderLocked(orig)) {
             return orig;
           }
           const aiPatch = aiStopMap.get(orig.id);
@@ -7751,6 +7944,7 @@ export default function App() {
           spatialClusteredByDay: trip.spatialClusteredByDay,
           meetup: trip.meetup,
         });
+        pushBusinessSnapshot(appCopy.snapshotLabelAiSmartReorder);
         if (Object.keys(baselineByDayPatch).length > 0) {
           setPreReclusterByDay((prev) => ({
             ...prev,
@@ -7764,6 +7958,12 @@ export default function App() {
         const warningNote = String(data.warningNote || '').trim();
 
         setTrip((prev) => {
+          const guardedTimeline = restoreMissingProtectedNodes(
+            prev.timeline,
+            sortedTimeline,
+            prev.travelPasses,
+            { maxDay: totalDays }
+          );
           const nextSummariesByDay: Record<number, string> = {
             ...(prev.spatialSummariesByDay ?? {}),
           };
@@ -7771,7 +7971,7 @@ export default function App() {
             ...(prev.spatialClusteredByDay ?? {}),
           };
           for (let d = 1; d <= totalDays; d++) {
-            const hasStops = sortedTimeline.some((n) => (n.day ?? 1) === d);
+            const hasStops = guardedTimeline.some((n) => (n.day ?? 1) === d);
             if (hasStops) {
               nextClusteredByDay[d] = true;
               const sumForD = daySummaryMap.get(d);
@@ -7780,13 +7980,13 @@ export default function App() {
               }
             }
           }
-          const activeAfterNodes = sortedTimeline.filter(
+          const activeAfterNodes = guardedTimeline.filter(
             (n) => (n.day ?? 1) === activeDay
           );
 
           return {
             ...prev,
-            timeline: sortedTimeline,
+            timeline: guardedTimeline,
             meetup: syncMeetupFromDayNodes(activeAfterNodes, prev.meetup),
             spatialSummary:
               nextSummariesByDay[activeDay] || overallSummary || prev.spatialSummary,
@@ -8957,6 +9157,8 @@ export default function App() {
                         preSmartReorderSnapshot.tripId === activeEntry.id
                     )}
                     onUndoSmartReorder={handleUndoSmartReorder}
+                    snapshotEntries={snapshotEntriesForUi}
+                    onRestoreSnapshot={handleRestoreSnapshot}
                     onGenerateLocalCard={handleGenerateLocalCard}
                     onOpenAiAssistant={handleOpenAiAssistant}
                     notificationPermission={notificationPermission}

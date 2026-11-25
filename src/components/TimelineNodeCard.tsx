@@ -17,6 +17,8 @@ import {
   ChevronRight,
   QrCode,
   Clock,
+  Lock,
+  LockOpen,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -69,6 +71,8 @@ interface TimelineNodeCardProps {
   livePlace?: LiveGooglePlaceInfo | null;
   isPlaceLoading?: boolean;
   linkedPassCount?: number;
+  /** True when a travel pass links to this node — auto-protected. */
+  isPassProtected?: boolean;
   isEditing: boolean;
   isSwipedOpen: boolean;
   isDragging?: boolean;
@@ -85,6 +89,8 @@ interface TimelineNodeCardProps {
   onSaveEdit: (updates: Partial<TimelineNode>) => void;
   onDelete: () => void;
   onMoveOrder: (direction: 'up' | 'down') => void;
+  /** Toggle manual locked flag only — never toggles visited. */
+  onToggleLock?: () => void;
   scheduledLeadMinutes?: number;
 }
 
@@ -102,6 +108,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   livePlace,
   isPlaceLoading = false,
   linkedPassCount = 0,
+  isPassProtected = false,
   isEditing,
   isSwipedOpen,
   isDragging = false,
@@ -118,6 +125,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   onSaveEdit,
   onDelete,
   onMoveOrder,
+  onToggleLock,
   scheduledLeadMinutes,
 }) => {
   const isSwappedActive = Boolean(rainSwapped && node.isOutdoor && node.rainSwapTitle);
@@ -1010,6 +1018,40 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
+                    {onToggleLock ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleLock();
+                        }}
+                        title={
+                          isPassProtected
+                            ? nodeCopy.passLockedTip
+                            : node.locked
+                              ? nodeCopy.unlockStop
+                              : nodeCopy.lockStop
+                        }
+                        aria-label={
+                          isPassProtected
+                            ? nodeCopy.passLockedTip
+                            : node.locked
+                              ? nodeCopy.unlockStop
+                              : nodeCopy.lockStop
+                        }
+                        className={`h-7 w-7 rounded-lg flex items-center justify-center cursor-pointer ${
+                          node.locked || isPassProtected
+                            ? 'tk-text-forest hover:tk-bg-forest-tint'
+                            : 'tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink'
+                        }`}
+                      >
+                        {node.locked || isPassProtected ? (
+                          <Lock className="h-3.5 w-3.5" strokeWidth={1.5} />
+                        ) : (
+                          <LockOpen className="h-3.5 w-3.5" strokeWidth={1.5} />
+                        )}
+                      </button>
+                    ) : null}
                     <button
                       type="button"
                       onClick={onDelete}
@@ -1053,6 +1095,17 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 {node.isAnchor && (
                   <span className="text-xs font-semibold tk-text-forest">
                     {nodeCopy.meetupAnchorBadge}
+                  </span>
+                )}
+                {(node.locked || isPassProtected) && (
+                  <span
+                    className="inline-flex items-center gap-0.5 text-xs font-semibold tk-text-forest"
+                    title={isPassProtected ? nodeCopy.passLockedTip : nodeCopy.lockedBadge}
+                  >
+                    <Lock className="h-3 w-3 shrink-0" strokeWidth={1.5} />
+                    <span>
+                      {isPassProtected ? nodeCopy.passLockedTip : nodeCopy.lockedBadge}
+                    </span>
                   </span>
                 )}
               </div>
