@@ -32,13 +32,16 @@ import type {
   AiAssistantDispatchResult,
   AiAssistantHistoryTurn,
   AiAssistantProposal,
+  AiProposedItineraryRebuild,
   AiTravelTipCategory,
   AppLanguage,
   AppTab,
+  DraftDiffBaseline,
   ExpenseRecord,
 } from '../types';
 import { resolveExpenseSplitDetails } from '../utils/splitHelpers';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
+import { buildTripWeekdaySchedule, getCityForDay } from '../utils/itineraryHelpers';
 import { translateTaskCategory, translateTaskTiming } from '../i18n';
 import {
   buildLocalizedPromptCards,
@@ -80,6 +83,76 @@ interface AiAssistantDrawerProps {
   onToggleWriteDomain: (domain: AiWriteDomain, enabled: boolean) => void;
   snapshotEntries?: Array<{ id: string; at: number; label: string }>;
   onRestoreSnapshot?: (snapshotId: string) => void;
+  diffBaseline?: DraftDiffBaseline;
+}
+
+interface DraftDiffProjection {
+  days: number | null;
+  cities: string[] | null;
+  departureDate: string | null;
+  stopsPerDay: number | null;
+}
+
+/** Deterministic frontend-only projection — never invents stop names. */
+function parseStopsPerDayFromPrompt(prompt: string): number | null {
+  const text = String(prompt || '');
+  const patterns: RegExp[] = [
+    /每天\s*(\d+)\s*(?:个|处|站)?(?:景点|站点|打卡|地方)?/,
+    /每日\s*(\d+)\s*(?:个|处|站)?(?:景点|站点|打卡|地方)?/,
+    /(\d+)\s*景点/,
+    /(\d+)\s*stops?\s*(?:per\s*day|\/\s*day|a\s*day|each\s*day)/i,
+    /(\d+)\s*attractions?\s*(?:per\s*day|\/\s*day|a\s*day|each\s*day)/i,
+    /(?:per\s*day|each\s*day|daily)\s*[:\-]?\s*(\d+)\s*(?:stops?|attractions?|sights?)?/i,
+    // Appended: gap words between 每天/每日 and the number (e.g. 每天只安排 2 个景点)
+    /(?:每天|每日|每站)\s*[^\d\n]{0,6}(\d+)\s*(?:个|处|站)?\s*(?:核心)?(?:景点|站点|打卡(?:点)?|地方)/,
+    // Appended: measure word between number and noun (e.g. 2 个景点 / 3处景点)
+    /(\d+)\s*(?:个|处|站)\s*(?:核心)?(?:景点|站点|打卡(?:点)?|地方)/,
+    // Appended: English sights / only N attractions a day
+    /(?:only\s+)?(\d+)\s*sights?\s*(?:per\s*day|\/\s*day|a\s*day|each\s*day)/i,
+    /(?:only\s+)?(\d+)\s*attractions?\s*(?:per\s*day|\/\s*day|a\s*day|each\s*day)/i,
+  ];
+  for (const re of patterns) {
+    const m = text.match(re);
+    if (!m) continue;
+    const n = Number(m[1]);
+    if (Number.isFinite(n) && n >= 1 && n <= 20) return Math.round(n);
+  }
+  return null;
+}
+
+function projectRebuildDiff(rebuild: AiProposedItineraryRebuild): DraftDiffProjection {
+  const patch = rebuild.setupPatch ?? {};
+  let days: number | null = null;
+  if (typeof patch.days === 'number' && Number.isFinite(patch.days) && patch.days >= 1) {
+    days = Math.min(30, Math.max(1, Math.round(patch.days)));
+  }
+  let cities: string[] | null = null;
+  if (Array.isArray(patch.cities)) {
+    const cleaned = patch.cities
+      .map((c) => String(c || '').trim())
+      .filter(Boolean)
+      .slice(0, 6);
+    if (cleaned.length > 0) cities = cleaned;
+  }
+  let departureDate: string | null = null;
+  if (
+    typeof patch.departureDate === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(patch.departureDate.trim())
+  ) {
+    departureDate = patch.departureDate.trim();
+  }
+  const stopsPerDay = parseStopsPerDayFromPrompt(rebuild.naturalPrompt);
+  // Unresolved fields stay null — UI shows preview note; never invent stop names.
+  return { days, cities, departureDate, stopsPerDay };
+}
+
+function cityChainIncludes(cities: string[], city: string | undefined): boolean {
+  if (!city || !city.trim()) return true;
+  const needle = city.trim().toLowerCase();
+  return cities.some((c) => {
+    const hay = c.trim().toLowerCase();
+    return hay === needle || hay.includes(needle) || needle.includes(hay);
+  });
 }
 
 type PromptCategory =
@@ -212,6 +285,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   onToggleWriteDomain,
   snapshotEntries = [],
   onRestoreSnapshot,
+  diffBaseline,
 }) => {
   const { t, i18n } = useTranslation();
   const activeLang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
@@ -1045,6 +1119,311 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                       ? copy.rebuildOverwriteWarning
                                       : copy.rebuildSaveAsNew}
                                   </p>
+
+                                  {/* Draft Diff preview (append-only; hidden without baseline) */}
+                                  {proposalStatus === 'pending' && diffBaseline && (
+                                    <div className="pt-2 space-y-2.5 border-t tk-bc-hair">
+                                      {(() => {
+                                        const rebuild =
+                                          result.proposal!.itineraryRebuild!;
+                                        const projection =
+                                          projectRebuildDiff(rebuild);
+                                        const afterDays =
+                                          projection.days ?? diffBaseline.days;
+                                        const afterCities =
+                                          projection.cities ?? null;
+                                        const afterDeparture =
+                                          projection.departureDate ??
+                                          diffBaseline.departureDate;
+                                        const afterSchedule = afterDeparture
+                                          ? buildTripWeekdaySchedule(
+                                              afterDeparture,
+                                              afterDays,
+                                              activeLang
+                                            )
+                                          : [];
+                                        const maxDay = Math.max(
+                                          diffBaseline.days,
+                                          afterDays
+                                        );
+                                        const conflicts: Array<{
+                                          day: number;
+                                          name: string;
+                                        }> = [];
+                                        diffBaseline.perDay.forEach((row) => {
+                                          if (
+                                            !row.protectedTitles ||
+                                            row.protectedTitles.length === 0
+                                          ) {
+                                            return;
+                                          }
+                                          const daysShrink =
+                                            projection.days != null &&
+                                            projection.days < diffBaseline.days;
+                                          const cityMissing =
+                                            afterCities != null &&
+                                            !cityChainIncludes(
+                                              afterCities,
+                                              row.city
+                                            );
+                                          const stopsShrink =
+                                            projection.stopsPerDay != null &&
+                                            projection.stopsPerDay <
+                                              row.stopCount;
+                                          const dayOutOfRange =
+                                            projection.days != null &&
+                                            row.day > projection.days;
+                                          if (
+                                            !(
+                                              daysShrink ||
+                                              cityMissing ||
+                                              stopsShrink ||
+                                              dayOutOfRange
+                                            )
+                                          ) {
+                                            return;
+                                          }
+                                          row.protectedTitles.forEach((name) => {
+                                            conflicts.push({
+                                              day: row.day,
+                                              name,
+                                            });
+                                          });
+                                        });
+
+                                        return (
+                                          <>
+                                            <p className="text-[11px] tk-text-ink2 leading-snug">
+                                              {copy.diffPreviewNote}
+                                            </p>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                              <div className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
+                                                <p className="text-[11px] font-bold tk-text-ink">
+                                                  {copy.diffBefore}
+                                                </p>
+                                                {diffBaseline.perDay.map(
+                                                  (row) => (
+                                                    <div
+                                                      key={`before-${row.day}`}
+                                                      className="space-y-0.5 border-t tk-bc-hair pt-1.5 first:border-0 first:pt-0"
+                                                    >
+                                                      <div className="flex items-baseline justify-between gap-2 text-[11px]">
+                                                        <span className="font-semibold tk-text-ink tk-num">
+                                                          {copy.diffDayLabel(
+                                                            row.day
+                                                          )}
+                                                          {row.date
+                                                            ? ` · ${row.date}`
+                                                            : ''}
+                                                        </span>
+                                                        <span className="tk-text-ink2 shrink-0 tk-num">
+                                                          {row.stopCount}
+                                                          {copy.diffStopsUnit}
+                                                        </span>
+                                                      </div>
+                                                      {row.city ? (
+                                                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                          {row.city}
+                                                        </p>
+                                                      ) : null}
+                                                      {row.protectedTitles
+                                                        .length > 0 ? (
+                                                        <div className="flex flex-wrap gap-1">
+                                                          {row.protectedTitles.map(
+                                                            (title) => (
+                                                              <span
+                                                                key={`${row.day}-${title}`}
+                                                                className="inline-flex items-center rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-semibold tk-text-forest leading-snug"
+                                                              >
+                                                                {copy.diffProtectedBadge}
+                                                                ·{title}
+                                                              </span>
+                                                            )
+                                                          )}
+                                                        </div>
+                                                      ) : null}
+                                                    </div>
+                                                  )
+                                                )}
+                                              </div>
+                                              <div className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
+                                                <p className="text-[11px] font-bold tk-text-ink">
+                                                  {copy.diffAfter}
+                                                </p>
+                                                {projection.days == null &&
+                                                projection.cities == null &&
+                                                projection.stopsPerDay ==
+                                                  null &&
+                                                projection.departureDate ==
+                                                  null ? (
+                                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                    {copy.diffPreviewNote}
+                                                  </p>
+                                                ) : null}
+                                                {Array.from(
+                                                  { length: maxDay },
+                                                  (_, i) => {
+                                                    const day = i + 1;
+                                                    const inAfter =
+                                                      day <= afterDays;
+                                                    const dateIso =
+                                                      afterSchedule[i]
+                                                        ?.dateIso;
+                                                    const city =
+                                                      inAfter && afterCities
+                                                        ? getCityForDay(
+                                                            afterCities,
+                                                            day,
+                                                            afterDays,
+                                                            undefined,
+                                                            activeLang
+                                                          )
+                                                        : null;
+                                                    const stopsLabel =
+                                                      inAfter
+                                                        ? projection.stopsPerDay !=
+                                                          null
+                                                          ? `${projection.stopsPerDay}${copy.diffStopsUnit}`
+                                                          : '—'
+                                                        : '—';
+                                                    return (
+                                                      <div
+                                                        key={`after-${day}`}
+                                                        className="space-y-0.5 border-t tk-bc-hair pt-1.5 first:border-0 first:pt-0"
+                                                      >
+                                                        <div className="flex items-baseline justify-between gap-2 text-[11px]">
+                                                          <span className="font-semibold tk-text-ink tk-num">
+                                                            {copy.diffDayLabel(
+                                                              day
+                                                            )}
+                                                            {dateIso
+                                                              ? ` · ${dateIso}`
+                                                              : ''}
+                                                          </span>
+                                                          <span className="tk-text-ink2 shrink-0 tk-num">
+                                                            {stopsLabel}
+                                                          </span>
+                                                        </div>
+                                                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                          {inAfter
+                                                            ? city || '—'
+                                                            : '—'}
+                                                        </p>
+                                                      </div>
+                                                    );
+                                                  }
+                                                )}
+                                              </div>
+                                            </div>
+
+                                            <div className="space-y-1.5">
+                                              <p className="text-[11px] font-bold tk-text-ink">
+                                                {copy.diffConflictHeading}
+                                              </p>
+                                              {conflicts.length === 0 ? (
+                                                <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                  {copy.diffConflictOk}
+                                                </p>
+                                              ) : (
+                                                <ul className="space-y-1">
+                                                  {conflicts.map((c) => (
+                                                    <li key={`${c.day}-${c.name}`}>
+                                                      <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                          onNavigateToModule?.(
+                                                            'itinerary',
+                                                            c.day
+                                                          )
+                                                        }
+                                                        className="w-full text-left rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-2.5 py-1.5 text-[11px] font-semibold tk-text-danger leading-snug cursor-pointer"
+                                                      >
+                                                        {copy.diffConflictRemove(
+                                                          c.name
+                                                        )}
+                                                      </button>
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              )}
+                                            </div>
+
+                                            <div className="flex flex-col sm:flex-row gap-2 pt-0.5">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  if (
+                                                    !result.proposal
+                                                      ?.itineraryRebuild
+                                                  )
+                                                    return;
+                                                  handleApplyEntryProposal(
+                                                    entry.id,
+                                                    {
+                                                      ...result.proposal,
+                                                      itineraryRebuild: {
+                                                        ...result.proposal
+                                                          .itineraryRebuild,
+                                                        targetMode: 'overwrite',
+                                                        confirmOverwrite: true,
+                                                      },
+                                                    }
+                                                  );
+                                                  setOverwriteConfirmed(
+                                                    (prev) => {
+                                                      const next = {
+                                                        ...prev,
+                                                      };
+                                                      delete next[entry.id];
+                                                      return next;
+                                                    }
+                                                  );
+                                                }}
+                                                className="flex-1 rounded-xl tk-bg-forest px-3 py-2 text-xs font-bold text-white hover:tk-bg-press transition-colors cursor-pointer"
+                                              >
+                                                {copy.diffReplaceCurrent}
+                                              </button>
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  if (
+                                                    !result.proposal
+                                                      ?.itineraryRebuild
+                                                  )
+                                                    return;
+                                                  handleApplyEntryProposal(
+                                                    entry.id,
+                                                    {
+                                                      ...result.proposal,
+                                                      itineraryRebuild: {
+                                                        ...result.proposal
+                                                          .itineraryRebuild,
+                                                        targetMode: 'new',
+                                                        confirmOverwrite: false,
+                                                      },
+                                                    }
+                                                  );
+                                                  setOverwriteConfirmed(
+                                                    (prev) => {
+                                                      const next = {
+                                                        ...prev,
+                                                      };
+                                                      delete next[entry.id];
+                                                      return next;
+                                                    }
+                                                  );
+                                                }}
+                                                className="flex-1 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                                              >
+                                                {copy.diffSaveAsNewOpen}
+                                              </button>
+                                            </div>
+                                          </>
+                                        );
+                                      })()}
+                                    </div>
+                                  )}
+
                                   {result.proposal.itineraryRebuild.targetMode === 'overwrite' &&
                                     proposalStatus === 'pending' && (
                                       <div className="pt-1.5 space-y-2 border-t tk-bc-hair">

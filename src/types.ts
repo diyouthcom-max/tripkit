@@ -414,6 +414,20 @@ export interface AiProposedItineraryRebuild {
   note: string;
 }
 
+/** Read-only baseline for Draft Diff preview cards (display only — never persisted). */
+export interface DraftDiffBaseline {
+  departureDate?: string;
+  days: number;
+  perDay: Array<{
+    day: number;
+    date?: string;
+    city?: string;
+    stopCount: number;
+    stopTitles: string[];
+    protectedTitles: string[];
+  }>;
+}
+
 export interface AiProposedPackingTemplate {
   scenarioIds: PackingScenarioId[];
   tripPurpose?: PackingTripPurpose;

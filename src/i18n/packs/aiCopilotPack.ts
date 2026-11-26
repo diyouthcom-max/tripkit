@@ -83,6 +83,17 @@ export interface CopilotUiCopy {
   snapshotRestoreBtn: string;
   snapshotRelative: (minutes: number) => string;
   domainBlockedInline: (count: number) => string;
+  diffBefore: string;
+  diffAfter: string;
+  diffPreviewNote: string;
+  diffDayLabel: (d: number) => string;
+  diffStopsUnit: string;
+  diffConflictHeading: string;
+  diffConflictOk: string;
+  diffConflictRemove: (name: string) => string;
+  diffReplaceCurrent: string;
+  diffSaveAsNewOpen: string;
+  diffProtectedBadge: string;
 }
 
 const COPILOT_UI_MAP = {
@@ -173,6 +184,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: '回滚到此',
     snapshotRelative: (m) => (m < 1 ? '刚刚' : m < 60 ? `${m} 分钟前` : `${Math.round(m / 60)} 小时前`),
     domainBlockedInline: (count) => `已跳过 ${count} 个关闭的权限域`,
+    diffBefore: '变更前',
+    diffAfter: '变更后',
+    diffPreviewNote: '预览推演 · 实际应用时由 AI 完整重排',
+    diffDayLabel: (d) => `第 ${d} 天`,
+    diffStopsUnit: '站',
+    diffConflictHeading: '受保护锚点冲突',
+    diffConflictOk: '未检测到受保护锚点冲突',
+    diffConflictRemove: (name) => `已锁定：${name} 可能被移除或需改期`,
+    diffReplaceCurrent: '一键替换当前行程',
+    diffSaveAsNewOpen: '存为新行程并打开',
+    diffProtectedBadge: '已锁定',
   },
   'en-US': {
     headerTitle: 'Ask Trip Kit',
@@ -264,6 +286,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Restore',
     snapshotRelative: (m) => (m < 1 ? 'Just now' : m < 60 ? `${m}m ago` : `${Math.round(m / 60)}h ago`),
     domainBlockedInline: (count) => `Skipped ${count} disabled permission domain(s)`,
+    diffBefore: 'Before',
+    diffAfter: 'After',
+    diffPreviewNote: 'Preview only · AI will fully replan on apply',
+    diffDayLabel: (d) => `Day ${d}`,
+    diffStopsUnit: ' stops',
+    diffConflictHeading: 'Protected anchor conflicts',
+    diffConflictOk: 'No protected-anchor conflicts detected',
+    diffConflictRemove: (name) => `Locked: ${name} may be removed or need rescheduling`,
+    diffReplaceCurrent: 'Replace current trip',
+    diffSaveAsNewOpen: 'Save as new trip & open',
+    diffProtectedBadge: 'Locked',
   },
   'en-GB': {
     headerTitle: 'Ask Trip Kit',
@@ -355,6 +388,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Restore',
     snapshotRelative: (m) => (m < 1 ? 'Just now' : m < 60 ? `${m}m ago` : `${Math.round(m / 60)}h ago`),
     domainBlockedInline: (count) => `Skipped ${count} disabled permission domain(s)`,
+    diffBefore: 'Before',
+    diffAfter: 'After',
+    diffPreviewNote: 'Preview only · AI will fully replan on apply',
+    diffDayLabel: (d) => `Day ${d}`,
+    diffStopsUnit: ' stops',
+    diffConflictHeading: 'Protected anchor conflicts',
+    diffConflictOk: 'No protected-anchor conflicts detected',
+    diffConflictRemove: (name) => `Locked: ${name} may be removed or need rescheduling`,
+    diffReplaceCurrent: 'Replace current journey',
+    diffSaveAsNewOpen: 'Save as new journey & open',
+    diffProtectedBadge: 'Locked',
   },
   'es-MX': {
     headerTitle: 'Asistente IA',
@@ -446,6 +490,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Restaurar',
     snapshotRelative: (m) => (m < 1 ? 'Ahora' : m < 60 ? `Hace ${m} min` : `Hace ${Math.round(m / 60)} h`),
     domainBlockedInline: (count) => `Se omitieron ${count} dominio(s) desactivado(s)`,
+    diffBefore: 'Antes',
+    diffAfter: 'Después',
+    diffPreviewNote: 'Vista previa · Al aplicar, la IA replanifica por completo',
+    diffDayLabel: (d) => `Día ${d}`,
+    diffStopsUnit: ' paradas',
+    diffConflictHeading: 'Conflictos de anclas protegidas',
+    diffConflictOk: 'No se detectaron conflictos de anclas protegidas',
+    diffConflictRemove: (name) => `Bloqueado: ${name} podría eliminarse o requerir cambio de fecha`,
+    diffReplaceCurrent: 'Reemplazar viaje actual',
+    diffSaveAsNewOpen: 'Guardar como nuevo y abrir',
+    diffProtectedBadge: 'Bloqueado',
   },
   'fr-FR': {
     headerTitle: 'Assistant IA',
@@ -537,6 +592,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Restaurer',
     snapshotRelative: (m) => (m < 1 ? 'À l’instant' : m < 60 ? `Il y a ${m} min` : `Il y a ${Math.round(m / 60)} h`),
     domainBlockedInline: (count) => `${count} domaine(s) désactivé(s) ignoré(s)`,
+    diffBefore: 'Avant',
+    diffAfter: 'Après',
+    diffPreviewNote: 'Aperçu · À l’application, l’IA replanifie entièrement',
+    diffDayLabel: (d) => `Jour ${d}`,
+    diffStopsUnit: ' arrêts',
+    diffConflictHeading: 'Conflits d’ancres protégées',
+    diffConflictOk: 'Aucun conflit d’ancre protégée détecté',
+    diffConflictRemove: (name) => `Verrouillé : ${name} pourrait être retiré ou reporté`,
+    diffReplaceCurrent: 'Remplacer le voyage actuel',
+    diffSaveAsNewOpen: 'Enregistrer comme nouveau et ouvrir',
+    diffProtectedBadge: 'Verrouillé',
   },
   'de-DE': {
     headerTitle: 'KI-Reiseassistent',
@@ -628,6 +694,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Wiederherstellen',
     snapshotRelative: (m) => (m < 1 ? 'Gerade eben' : m < 60 ? `Vor ${m} Min.` : `Vor ${Math.round(m / 60)} Std.`),
     domainBlockedInline: (count) => `${count} deaktivierte Domäne(n) übersprungen`,
+    diffBefore: 'Vorher',
+    diffAfter: 'Nachher',
+    diffPreviewNote: 'Vorschau · Bei Übernahme plant die KI vollständig neu',
+    diffDayLabel: (d) => `Tag ${d}`,
+    diffStopsUnit: ' Stops',
+    diffConflictHeading: 'Konflikte geschützter Anker',
+    diffConflictOk: 'Keine Konflikte bei geschützten Ankern erkannt',
+    diffConflictRemove: (name) => `Gesperrt: ${name} könnte entfernt oder verschoben werden`,
+    diffReplaceCurrent: 'Aktuelle Reise ersetzen',
+    diffSaveAsNewOpen: 'Als neue Reise speichern & öffnen',
+    diffProtectedBadge: 'Gesperrt',
   },
   'pt-BR': {
     headerTitle: 'Assistente IA',
@@ -719,6 +796,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'Restaurar',
     snapshotRelative: (m) => (m < 1 ? 'Agora' : m < 60 ? `Há ${m} min` : `Há ${Math.round(m / 60)} h`),
     domainBlockedInline: (count) => `${count} domínio(s) desativado(s) ignorado(s)`,
+    diffBefore: 'Antes',
+    diffAfter: 'Depois',
+    diffPreviewNote: 'Prévia · Ao aplicar, a IA replaneja por completo',
+    diffDayLabel: (d) => `Dia ${d}`,
+    diffStopsUnit: ' paradas',
+    diffConflictHeading: 'Conflitos de âncoras protegidas',
+    diffConflictOk: 'Nenhum conflito de âncora protegida detectado',
+    diffConflictRemove: (name) => `Bloqueado: ${name} pode ser removido ou precisar de remarcação`,
+    diffReplaceCurrent: 'Substituir viagem atual',
+    diffSaveAsNewOpen: 'Salvar como nova e abrir',
+    diffProtectedBadge: 'Bloqueado',
   },
   'ja-JP': {
     headerTitle: 'AI トラベルアシスタント',
@@ -810,6 +898,17 @@ const COPILOT_UI_MAP = {
     snapshotRestoreBtn: 'ここに戻す',
     snapshotRelative: (m) => (m < 1 ? 'たった今' : m < 60 ? `${m}分前` : `${Math.round(m / 60)}時間前`),
     domainBlockedInline: (count) => `無効な権限ドメイン ${count} 件をスキップ`,
+    diffBefore: '変更前',
+    diffAfter: '変更後',
+    diffPreviewNote: 'プレビュー · 適用時に AI が完全に再計画します',
+    diffDayLabel: (d) => `${d}日目`,
+    diffStopsUnit: '件',
+    diffConflictHeading: '保護アンカーの競合',
+    diffConflictOk: '保護アンカーの競合は検出されませんでした',
+    diffConflictRemove: (name) => `ロック済み：${name} が削除または日程変更される可能性`,
+    diffReplaceCurrent: '現在の旅程を置き換え',
+    diffSaveAsNewOpen: '新規旅程として保存して開く',
+    diffProtectedBadge: 'ロック',
   },
 } satisfies Record<AppLanguage, CopilotUiCopy>;
 

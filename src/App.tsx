@@ -144,6 +144,7 @@ import type {
   AiTravelTipCategory,
   AlwaysPackTemplateItem,
   AppLanguage,
+  DraftDiffBaseline,
   AppPreferences,
   AppTab,
   CrewMember,
@@ -2133,6 +2134,54 @@ export default function App() {
       label: e.label,
     }));
   }, [activeEntry.id, snapshotStackTick]);
+
+  const assistantDiffBaseline = useMemo((): DraftDiffBaseline => {
+    const days = Math.max(1, Math.round(trip.setup.days) || 1);
+    const schedule = buildTripWeekdaySchedule(
+      trip.setup.departureDate,
+      days,
+      activeLang
+    );
+    const perDay = Array.from({ length: days }, (_, idx) => {
+      const day = idx + 1;
+      const nodes = trip.timeline.filter((x) => (x.day ?? 1) === day);
+      const protectedTitles = nodes
+        .filter((n) => isNodeProtected(n, trip.travelPasses))
+        .map((n) => String(n.title || '').trim())
+        .filter(Boolean);
+      const stopTitles = nodes
+        .map((n) => String(n.title || '').trim())
+        .filter(Boolean);
+      return {
+        day,
+        date: schedule[idx]?.dateIso,
+        city: getCityForDay(
+          trip.setup.cities,
+          day,
+          days,
+          nodes,
+          activeLang,
+          trip.setup.cityDays
+        ),
+        stopCount: nodes.length,
+        stopTitles,
+        protectedTitles,
+      };
+    });
+    return {
+      departureDate: trip.setup.departureDate,
+      days,
+      perDay,
+    };
+  }, [
+    trip.timeline,
+    trip.setup.days,
+    trip.setup.departureDate,
+    trip.setup.cities,
+    trip.setup.cityDays,
+    trip.travelPasses,
+    activeLang,
+  ]);
 
   const handleRestoreSnapshot = useCallback(
     (snapshotId: string) => {
@@ -9341,6 +9390,7 @@ export default function App() {
             onToggleWriteDomain={handleToggleAiWriteDomain}
             snapshotEntries={snapshotEntriesForUi}
             onRestoreSnapshot={handleRestoreSnapshot}
+            diffBaseline={assistantDiffBaseline}
             onNavigateToModule={(targetTab, targetDay) => {
               if (typeof targetDay === 'number' && targetDay >= 1) {
                 handleSelectFinanceDay(targetDay);
