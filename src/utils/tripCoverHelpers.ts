@@ -139,7 +139,11 @@ const TONE_MAP: Record<CoverToneId, CoverToneMeta> = Object.fromEntries(
 /**
  * Automatically selects the best scenic preset based on the trip's destination cities and style.
  */
-export function resolveAutoCoverPresetId(cities: string[], tripStyle?: string): CoverPresetId {
+export function resolveAutoCoverPresetId(
+  cities: string[],
+  tripStyle?: string,
+  tripStyles?: string[]
+): CoverPresetId {
   const joined = (cities || []).join(' ').toLowerCase();
 
   if (
@@ -186,8 +190,14 @@ export function resolveAutoCoverPresetId(cities: string[], tripStyle?: string): 
     return 'modern_metropolis';
   }
 
-  if (tripStyle === '商务出差') return 'modern_metropolis';
-  if (tripStyle === '浪漫蜜月') return 'tropical_coast';
+  // Optional multi-select fallback (cities still win above); legacy single tripStyle unchanged.
+  if (Array.isArray(tripStyles) && tripStyles.length > 0) {
+    if (tripStyles.includes('商务出差')) return 'modern_metropolis';
+    if (tripStyles.includes('浪漫蜜月')) return 'tropical_coast';
+  } else {
+    if (tripStyle === '商务出差') return 'modern_metropolis';
+    if (tripStyle === '浪漫蜜月') return 'tropical_coast';
+  }
   return 'europe_classic';
 }
 
@@ -202,7 +212,11 @@ export function resolveActiveCoverVisual(
   isCustom: boolean;
 } {
   const cfg: TripCoverConfig | undefined = trip.coverConfig;
-  const autoPresetId = resolveAutoCoverPresetId(trip.setup?.cities ?? [], trip.setup?.tripStyle);
+  const autoPresetId = resolveAutoCoverPresetId(
+    trip.setup?.cities ?? [],
+    trip.setup?.tripStyle,
+    trip.setup?.tripStyles
+  );
   const presetId: CoverPresetId =
     cfg?.mode === 'preset' && cfg.presetId && PRESET_MAP[cfg.presetId]
       ? cfg.presetId

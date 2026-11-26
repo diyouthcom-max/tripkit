@@ -3517,6 +3517,17 @@ export default function App() {
             Math.round(aiPrepaidUsd + dailyBudget * fx * nextDays * 1.25)
           );
 
+    const nextAiTripStyle =
+      (data.tripStyle as TripSetup['tripStyle'] | undefined) || draftSetup.tripStyle;
+    const nextAiTripStyles: NonNullable<TripSetup['tripStyles']> =
+      nextAiTripStyle !== draftSetup.tripStyle &&
+      Array.isArray(draftSetup.tripStyles) &&
+      draftSetup.tripStyles.length > 0
+        ? [nextAiTripStyle]
+        : Array.isArray(draftSetup.tripStyles) && draftSetup.tripStyles.length > 0
+        ? [...draftSetup.tripStyles]
+        : [nextAiTripStyle];
+
     return {
       ...baseState,
       setup: {
@@ -3526,8 +3537,8 @@ export default function App() {
         days: nextDays,
         returnDate: nextReturnDate,
         travelers: normalizedCrew.length,
-        tripStyle:
-          (data.tripStyle as TripSetup['tripStyle']) || draftSetup.tripStyle,
+        tripStyle: nextAiTripStyle,
+        tripStyles: nextAiTripStyles,
       },
       crew: normalizedCrew,
       intel: (data.intel as TripIntelligence) || fallbackOffline.intel,

@@ -178,8 +178,12 @@ export function inferDefaultScenariosFromSetup(
   const note = (setup.packingCustomNote || '').toLowerCase();
   const combined = `${joinedActs} ${joinedCities} ${note}`;
 
-  if (setup.tripStyle === '亲子出行') inferred.add('kids');
-  if (setup.tripStyle === '长期数字游民' || /远程办公|remote/i.test(joinedActs)) {
+  const styleSet =
+    Array.isArray(setup.tripStyles) && setup.tripStyles.length > 0
+      ? setup.tripStyles
+      : [setup.tripStyle];
+  if (styleSet.includes('亲子出行')) inferred.add('kids');
+  if (styleSet.includes('长期数字游民') || /远程办公|remote/i.test(joinedActs)) {
     inferred.add('remote_work');
   }
   if (/摄影|航拍|无人机|photo|drone/i.test(combined)) inferred.add('photography');

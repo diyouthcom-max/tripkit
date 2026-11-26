@@ -60,6 +60,8 @@ export interface TripSetup {
   returnDate: string;
   days: number;
   tripStyle: TripStyle;
+  /** Multi-select vibes; tripStyle remains primary (= tripStyles[0] when set). */
+  tripStyles?: TripStyle[];
   budgetTier?: BudgetTier;
   targetTotalBudgetUsd?: number;
   activities: string[];

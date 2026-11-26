@@ -490,7 +490,17 @@ Parse all destinations, exact trip duration ("days" between 1 and 30; use the du
 Destinations (in travel order): ${setupCities.join(' -> ')}${perCityScheduleLine ? `\nEXACT Per-City Day Allocation (MUST FOLLOW STRICTLY): ${perCityScheduleLine}` : ''}
 Dates: ${setup?.departureDate || '2026-11-14'} to ${setup?.returnDate || '2026-11-18'} (strictly ${plannedDays} days; output "days": ${plannedDays})
 Exact Calendar & Weekdays: ${weekdayCalendar}
-Travel Style: ${setup?.tripStyle || '休闲度假'}
+Travel Style: ${(() => {
+          const styles = Array.isArray(setup?.tripStyles)
+            ? setup.tripStyles.filter(Boolean)
+            : [];
+          const primary = setup?.tripStyle || styles[0] || '休闲度假';
+          if (styles.length > 1) {
+            const also = styles.filter((s: string) => s !== primary).join(', ');
+            return also ? `${primary} (also: ${also})` : primary;
+          }
+          return primary;
+        })()}
 Budget Tier: ${budgetTierDesc}
 ${targetBudgetNote}
 ${baggageConstraintNote}

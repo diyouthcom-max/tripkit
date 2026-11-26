@@ -405,20 +405,40 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
   };
 
   const handleSelectTripStyle = (styleKey: TripStyle) => {
-    const patch: Partial<TripSetup> = { tripStyle: styleKey };
+    const currentStyles: TripStyle[] =
+      Array.isArray(setup.tripStyles) && setup.tripStyles.length > 0
+        ? [...setup.tripStyles]
+        : [setup.tripStyle];
+    const alreadySelected = currentStyles.includes(styleKey);
+    let nextStyles: TripStyle[];
+    if (alreadySelected) {
+      // Multi-select toggle off — keep at least one vibe.
+      if (currentStyles.length <= 1) return;
+      nextStyles = currentStyles.filter((s) => s !== styleKey);
+    } else {
+      nextStyles = [...currentStyles, styleKey];
+    }
+
+    const patch: Partial<TripSetup> = {
+      tripStyles: nextStyles,
+      tripStyle: nextStyles[0],
+    };
     const curScenarios = setup.specialScenarios || [];
     const curActs = setup.activities || [];
 
-    if (styleKey === '亲子出行' && !curScenarios.includes('kids')) {
-      patch.specialScenarios = [...curScenarios, 'kids'];
-    } else if (styleKey === '长期数字游民') {
-      if (!curActs.includes('远程办公')) {
-        patch.activities = [...curActs, '远程办公'];
+    // Side effects only when newly joining a style (not on deselect).
+    if (!alreadySelected) {
+      if (styleKey === '亲子出行' && !curScenarios.includes('kids')) {
+        patch.specialScenarios = [...curScenarios, 'kids'];
+      } else if (styleKey === '长期数字游民') {
+        if (!curActs.includes('远程办公')) {
+          patch.activities = [...curActs, '远程办公'];
+        }
+        if (!curScenarios.includes('remote_work')) {
+          patch.specialScenarios = [...curScenarios, 'remote_work'];
+        }
+        patch.laundry = true;
       }
-      if (!curScenarios.includes('remote_work')) {
-        patch.specialScenarios = [...curScenarios, 'remote_work'];
-      }
-      patch.laundry = true;
     }
 
     updateSetup(patch);
@@ -1371,7 +1391,11 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
               <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
                 {TRIP_STYLE_KEYS.map((styleKey) => {
-                  const active = setup.tripStyle === styleKey;
+                  const selectedStyles: TripStyle[] =
+                    Array.isArray(setup.tripStyles) && setup.tripStyles.length > 0
+                      ? setup.tripStyles
+                      : [setup.tripStyle];
+                  const active = selectedStyles.includes(styleKey);
                   const StyleIcon = TRIP_STYLE_ICON_MAP[styleKey];
                   return (
                     <button

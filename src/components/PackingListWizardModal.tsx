@@ -191,8 +191,18 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
         ? '长期数字游民'
         : setup.tripStyle;
 
+    // 用户在弹窗改了"出行性质" → 主风格变化，多选跟随为单项；
+    // 没改（沿用主向导风格）→ 保留主向导里的多选，不误删。
+    const nextTripStyles: NonNullable<TripSetup['tripStyles']> =
+      nextTripStyle === setup.tripStyle &&
+      Array.isArray(setup.tripStyles) &&
+      setup.tripStyles.length > 0
+        ? [...setup.tripStyles]
+        : [nextTripStyle];
+
     return {
       tripStyle: nextTripStyle,
+      tripStyles: nextTripStyles,
       laundry: laundryEnabled,
       weatherOverrides,
       packingTripPurpose: tripPurpose,
