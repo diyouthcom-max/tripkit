@@ -4,6 +4,7 @@ import { formatCloudSyncError } from '../firebase';
 import i18n from '../i18n';
 import { getErrorBoundaryCopy } from '../i18n/packs/settingsAndProPack';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
+import { reportClientError } from '../utils/errorReporter';
 
 interface AppErrorBoundaryState {
   hasError: boolean;
@@ -28,6 +29,12 @@ export class AppErrorBoundary extends React.Component<
 
   override componentDidCatch(error: unknown, info: React.ErrorInfo): void {
     console.error('AppErrorBoundary caught error:', error, info);
+    reportClientError({
+      message: String(error),
+      stack: info?.componentStack ?? undefined,
+      url: typeof location !== 'undefined' ? location.href : undefined,
+      source: 'boundary',
+    });
   }
 
   private handleResetRoomAndReload = () => {

@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import compression from 'compression';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
 
@@ -298,9 +299,99 @@ function mapGeminiError(
   };
 }
 
+/** In-memory rate limit for client-error reports: 30 / IP / minute. */
+const CLIENT_ERROR_RATE_LIMIT = 30;
+const CLIENT_ERROR_WINDOW_MS = 60_000;
+const clientErrorBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function getClientErrorIp(req: express.Request): string {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string' && forwarded.trim()) {
+    return forwarded.split(',')[0]!.trim();
+  }
+  if (Array.isArray(forwarded) && forwarded[0]) {
+    return String(forwarded[0]).split(',')[0]!.trim();
+  }
+  return req.socket.remoteAddress || 'unknown';
+}
+
+function allowClientErrorReport(ip: string): boolean {
+  const now = Date.now();
+  const bucket = clientErrorBuckets.get(ip);
+  if (!bucket || now >= bucket.resetAt) {
+    clientErrorBuckets.set(ip, { count: 1, resetAt: now + CLIENT_ERROR_WINDOW_MS });
+    return true;
+  }
+  if (bucket.count >= CLIENT_ERROR_RATE_LIMIT) return false;
+  bucket.count += 1;
+  return true;
+}
+
 async function startServer() {
   const app = express();
+  // gzip/brotli for text assets & JSON — before static + API handlers.
+  // Default filter already skips most binary image/font types; skip SSE if any.
+  app.use(
+    compression({
+      filter: (req, res) => {
+        const type = String(res.getHeader('Content-Type') || '');
+        if (type.includes('text/event-stream')) return false;
+        return compression.filter(req, res);
+      },
+    })
+  );
   app.use(express.json({ limit: '18mb' }));
+
+  // Lightweight client error ingest (stdout → Cloud Logging). No secrets.
+  app.post('/api/client-error', (req, res) => {
+    try {
+      const ip = getClientErrorIp(req);
+      if (!allowClientErrorReport(ip)) {
+        res.status(429).json({ ok: false, error: 'rate_limited' });
+        return;
+      }
+      const body = req.body;
+      if (!body || typeof body !== 'object' || Array.isArray(body)) {
+        res.status(400).json({ ok: false, error: 'invalid_body' });
+        return;
+      }
+      if (typeof body.message !== 'string') {
+        res.status(400).json({ ok: false, error: 'invalid_message' });
+        return;
+      }
+      const message = body.message.slice(0, 2000);
+      const stack =
+        typeof body.stack === 'string' ? body.stack.slice(0, 8000) : undefined;
+      const url =
+        typeof body.url === 'string' ? body.url.slice(0, 500) : undefined;
+      const source =
+        body.source === 'boundary' ||
+        body.source === 'window' ||
+        body.source === 'rejection'
+          ? body.source
+          : 'unknown';
+      const ts =
+        typeof body.ts === 'number' && Number.isFinite(body.ts)
+          ? body.ts
+          : undefined;
+
+      console.error(
+        '[client-error]',
+        JSON.stringify({
+          message,
+          stack,
+          url,
+          source,
+          clientTs: ts,
+          serverTs: Date.now(),
+          ip,
+        })
+      );
+      res.status(200).json({ ok: true });
+    } catch {
+      res.status(400).json({ ok: false, error: 'invalid_body' });
+    }
+  });
 
   // 1. AI Trip & Packing Architect
   app.post('/api/ai/plan-trip', async (req, res) => {
