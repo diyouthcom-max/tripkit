@@ -35,6 +35,31 @@ export class AppErrorBoundary extends React.Component<
       url: typeof location !== 'undefined' ? location.href : undefined,
       source: 'boundary',
     });
+
+    // After redeploy, stale lazy chunks 404 → React.lazy fails. Auto-reload once
+    // so the user picks up the new index.html asset map (sessionStorage debounce).
+    const msg = String(error ?? '').toLowerCase();
+    const isChunkMismatch =
+      msg.includes('dynamically imported module') ||
+      msg.includes('loading chunk') ||
+      msg.includes('chunkloaderror') ||
+      msg.includes('javascript mime type') ||
+      msg.includes('failed to fetch');
+    if (!isChunkMismatch || typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
+      return;
+    }
+    const RELOAD_KEY = 'tripkit_chunk_reload_v1';
+    try {
+      const last = Number(sessionStorage.getItem(RELOAD_KEY) || '0');
+      const now = Date.now();
+      if (Number.isFinite(last) && now - last <= 30_000) {
+        return;
+      }
+      sessionStorage.setItem(RELOAD_KEY, String(now));
+      window.location.reload();
+    } catch {
+      // Ignore storage / reload failures; error UI remains.
+    }
   }
 
   private handleResetRoomAndReload = () => {

@@ -3139,7 +3139,13 @@ ${getAiLangDirective(lang)}`,
   } else {
     const distPath = path.resolve(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (_req, res) => {
+    app.get('*', (req, res) => {
+      // Stale hashed chunks after redeploy must 404 (not index.html) — avoids
+      // browsers treating SPA HTML as JS ("text/html is not a valid JavaScript MIME type").
+      if (req.path.startsWith('/assets/')) {
+        res.status(404).type('text/plain').send('Not Found');
+        return;
+      }
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
