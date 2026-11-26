@@ -72,6 +72,15 @@ import {
   listTripSnapshots,
   pushTripSnapshot,
 } from './utils/snapshotStack';
+import {
+  getBlockedDomainsForProposal,
+  getTouchedDomainsForProposal,
+  listDisabledAiWriteDomains,
+  loadAiWriteDomains,
+  saveAiWriteDomains,
+  type AiWriteDomain,
+  type AiWriteDomainMap,
+} from './utils/aiWritePermissions';
 import { getConfiguredGoogleMapsApiKey } from './utils/googleMapsHelpers';
 import { getItineraryViewCopy } from './i18n/packs/itineraryViewPack';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -1857,6 +1866,9 @@ export default function App() {
     meetup: TripState['meetup'];
   } | null>(null);
   const [snapshotStackTick, setSnapshotStackTick] = useState(0);
+  const [aiWriteDomains, setAiWriteDomains] = useState<AiWriteDomainMap>(() =>
+    loadAiWriteDomains()
+  );
   const [activeReminderBanner, setActiveReminderBanner] = useState<{
     headline: string;
     items: string[];
@@ -2129,9 +2141,20 @@ export default function App() {
       setTrip((prev) => applyTripSnapshotSlice(prev, entry.state));
       setPreReclusterByDay({});
       setItineraryWarning(null);
-      showToast(appCopy.snapshotRestoredToast);
+      showToast(appCopy.aiWriteSnapshotRestored);
     },
-    [activeEntry.id, appCopy.snapshotRestoredToast, showToast]
+    [activeEntry.id, appCopy.aiWriteSnapshotRestored, showToast]
+  );
+
+  const handleToggleAiWriteDomain = useCallback(
+    (domain: AiWriteDomain, enabled: boolean) => {
+      setAiWriteDomains((prev) => {
+        const next = { ...prev, [domain]: enabled };
+        saveAiWriteDomains(next);
+        return next;
+      });
+    },
+    []
   );
 
   const handleUpdatePreferences = useCallback((updates: Partial<AppPreferences>) => {
@@ -6031,6 +6054,7 @@ export default function App() {
         tripSnapshot,
         conversationHistory: conversationHistory || [],
         language: activeLang,
+        disabledDomains: listDisabledAiWriteDomains(aiWriteDomains),
       }),
     });
     const data = await res.json();
@@ -6590,20 +6614,34 @@ export default function App() {
 
   const handleApplyAiProposal = (proposal: AiAssistantProposal) => {
     const appliedParts: string[] = [];
+    const perms = aiWriteDomains;
+    const allowDates = Boolean(perms.dates);
+    const allowTripCreate = Boolean(perms.tripCreate);
+    const allowItinerary = Boolean(perms.itinerary);
+    const allowPacking = Boolean(perms.packing);
+    const allowExpense = Boolean(perms.expense);
+
+    const touched = getTouchedDomainsForProposal(proposal);
+    const blocked = getBlockedDomainsForProposal(proposal, perms);
+    if (touched.length > 0 && blocked.length === touched.length) {
+      showToast(appCopy.aiWriteAllBlocked);
+      return;
+    }
+
     const isBulkDestructive = Boolean(
-      (proposal.removeStops && proposal.removeStops.length > 0) ||
-        (proposal.stops && proposal.stops.length > 0) ||
-        proposal.itineraryRebuild ||
-        proposal.packingTemplate ||
-        proposal.destinationChange ||
-        proposal.dateChange
+      (allowItinerary && proposal.removeStops && proposal.removeStops.length > 0) ||
+        (allowItinerary && proposal.stops && proposal.stops.length > 0) ||
+        (allowTripCreate && proposal.itineraryRebuild) ||
+        (allowPacking && proposal.packingTemplate) ||
+        (allowDates && proposal.destinationChange) ||
+        (allowDates && proposal.dateChange)
     );
     if (isBulkDestructive) {
       pushBusinessSnapshot(appCopy.snapshotLabelAiProposal);
     }
 
     // 1. Apply Expenses
-    if (proposal.expenses && proposal.expenses.length > 0) {
+    if (allowExpense && proposal.expenses && proposal.expenses.length > 0) {
       proposal.expenses.forEach((ex) => {
         addExpenseAtomic({
           day: ex.day,
@@ -6622,7 +6660,7 @@ export default function App() {
     }
 
     // 2. Apply Packing Items
-    if (proposal.packingItems && proposal.packingItems.length > 0) {
+    if (allowPacking && proposal.packingItems && proposal.packingItems.length > 0) {
       const defaultOwner = trip.crew[0]?.id || 'm1';
       const additionsByGroup = new Map<string, PackingItem[]>();
       const fallbackGroupId =
@@ -6668,7 +6706,7 @@ export default function App() {
     }
 
     // 3. Apply Travel Tasks
-    if (proposal.tasks && proposal.tasks.length > 0) {
+    if (allowItinerary && proposal.tasks && proposal.tasks.length > 0) {
       const defaultOwner = trip.crew[0]?.id || 'm1';
       const newTaskObjects: TripTask[] = proposal.tasks.map((tk, idx) => ({
         id: `ast_tk_${Date.now()}_${idx}`,
@@ -6688,15 +6726,19 @@ export default function App() {
 
     // 4. Apply Stop Removals & Stop Additions atomically
     const removeIds = new Set(
-      (proposal.removeStops ?? [])
-        .map((r) => r.id)
-        .filter((id) => {
-          const node = trip.timeline.find((n) => n.id === id);
-          return node ? !isNodeProtected(node, trip.travelPasses) : true;
-        })
+      allowItinerary
+        ? (proposal.removeStops ?? [])
+            .map((r) => r.id)
+            .filter((id) => {
+              const node = trip.timeline.find((n) => n.id === id);
+              return node ? !isNodeProtected(node, trip.travelPasses) : true;
+            })
+        : []
     );
-    const hasStopAdds = Boolean(proposal.stops && proposal.stops.length > 0);
-    if (removeIds.size > 0 || hasStopAdds) {
+    const hasStopAdds = Boolean(
+      allowItinerary && proposal.stops && proposal.stops.length > 0
+    );
+    if (allowItinerary && (removeIds.size > 0 || hasStopAdds)) {
       const newNodes: TimelineNode[] = (proposal.stops ?? []).map((st, idx) => ({
         id: `ast_tl_${Date.now()}_${idx}`,
         day: st.day,
@@ -6781,7 +6823,7 @@ export default function App() {
     }
 
     // 5. Apply Rain Swap
-    if (proposal.rainSwap) {
+    if (allowItinerary && proposal.rainSwap) {
       const targetVal = proposal.rainSwap.action === 'enable';
       const rainDay = proposal.rainSwap.day;
       setTrip((prev) => ({
@@ -6800,7 +6842,7 @@ export default function App() {
     }
 
     // 6. Apply Date Change
-    if (proposal.dateChange) {
+    if (allowDates && proposal.dateChange) {
       const { departureDate, returnDate, days } = proposal.dateChange;
       const computeSyncedReturnDate = (
         depStr: string,
@@ -6889,7 +6931,7 @@ export default function App() {
     }
 
     // 7. Apply Destination Change
-    if (proposal.destinationChange) {
+    if (allowDates && proposal.destinationChange) {
       const nextCities = proposal.destinationChange.cities
         .map((c) => c.trim())
         .filter(Boolean)
@@ -6954,7 +6996,7 @@ export default function App() {
     }
 
     // 8. Apply Itinerary Rebuild
-    if (proposal.itineraryRebuild) {
+    if (allowTripCreate && proposal.itineraryRebuild) {
       const rebuild = proposal.itineraryRebuild;
       const patchedSetup: TripSetup = {
         ...trip.setup,
@@ -6976,7 +7018,7 @@ export default function App() {
     }
 
     // 9. Apply Packing Template
-    if (proposal.packingTemplate) {
+    if (allowPacking && proposal.packingTemplate) {
       const tpl = proposal.packingTemplate;
       const updatedSetupPatch: Partial<TripSetup> = {};
       if (tpl.scenarioIds.length > 0) {
@@ -7000,6 +7042,8 @@ export default function App() {
 
     if (appliedParts.length > 0) {
       showToast(appCopy.appliedProposalToast(appliedParts.join(' · ')));
+    } else if (touched.length > 0) {
+      showToast(appCopy.aiWriteNothingApplied);
     }
   };
 
@@ -9293,6 +9337,10 @@ export default function App() {
             onDispatchCommand={handleAssistantDispatch}
             onApplyProposal={handleApplyAiProposal}
             onUploadReceiptAndAdd={handleUploadReceiptInAssistant}
+            permissionState={aiWriteDomains}
+            onToggleWriteDomain={handleToggleAiWriteDomain}
+            snapshotEntries={snapshotEntriesForUi}
+            onRestoreSnapshot={handleRestoreSnapshot}
             onNavigateToModule={(targetTab, targetDay) => {
               if (typeof targetDay === 'number' && targetDay >= 1) {
                 handleSelectFinanceDay(targetDay);

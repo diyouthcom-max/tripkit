@@ -45,6 +45,12 @@ import {
   getCopilotUiCopy,
   resolveCountryLabel8,
 } from '../i18n/packs/aiCopilotPack';
+import {
+  AI_WRITE_DOMAIN_LIST,
+  countEnabledAiWriteDomains,
+  type AiWriteDomain,
+  type AiWriteDomainMap,
+} from '../utils/aiWritePermissions';
 
 interface AiAssistantDrawerProps {
   open: boolean;
@@ -70,6 +76,10 @@ interface AiAssistantDrawerProps {
   onApplyProposal: (proposal: AiAssistantProposal) => void;
   onUploadReceiptAndAdd: (file: File) => Promise<ExpenseRecord | null>;
   onNavigateToModule?: (targetTab: AppTab, targetDay?: number) => void;
+  permissionState: AiWriteDomainMap;
+  onToggleWriteDomain: (domain: AiWriteDomain, enabled: boolean) => void;
+  snapshotEntries?: Array<{ id: string; at: number; label: string }>;
+  onRestoreSnapshot?: (snapshotId: string) => void;
 }
 
 type PromptCategory =
@@ -198,6 +208,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   onApplyProposal,
   onUploadReceiptAndAdd,
   onNavigateToModule,
+  permissionState,
+  onToggleWriteDomain,
+  snapshotEntries = [],
+  onRestoreSnapshot,
 }) => {
   const { t, i18n } = useTranslation();
   const activeLang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
@@ -206,6 +220,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const [input, setInput] = useState('');
   const [activeCategory, setActiveCategory] = useState<PromptCategory>('featured');
   const [showInspirationShelf, setShowInspirationShelf] = useState(false);
+  const [headerPanel, setHeaderPanel] = useState<'permissions' | 'snapshots' | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [pendingUserPrompt, setPendingUserPrompt] = useState<string | null>(null);
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
@@ -432,6 +449,38 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             )}
             <button
               type="button"
+              onClick={() =>
+                setHeaderPanel((p) => (p === 'permissions' ? null : 'permissions'))
+              }
+              aria-label={copy.permissionsTitle}
+              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                headerPanel === 'permissions'
+                  ? 'tk-bg-forest-tint tk-text-forest'
+                  : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink'
+              }`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              <span>
+                {copy.permissionButton(countEnabledAiWriteDomains(permissionState), 5)}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setHeaderPanel((p) => (p === 'snapshots' ? null : 'snapshots'))
+              }
+              aria-label={copy.snapshotTitle}
+              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                headerPanel === 'snapshots'
+                  ? 'tk-bg-forest-tint tk-text-forest'
+                  : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink'
+              }`}
+            >
+              <RotateCcw className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              <span>{copy.snapshotButton(snapshotEntries.length)}</span>
+            </button>
+            <button
+              type="button"
               onClick={onClose}
               aria-label={t('common.close')}
               className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink cursor-pointer"
@@ -440,6 +489,127 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             </button>
           </div>
         </div>
+
+        {headerPanel === 'permissions' && (
+          <div className="shrink-0 border-b tk-bc-hair tk-bg-card px-5 py-3 space-y-2.5">
+            <div>
+              <p className="text-xs font-bold tk-text-ink">{copy.permissionsTitle}</p>
+              <p className="text-[11px] tk-text-ink2 leading-snug mt-0.5">
+                {copy.permissionsHint}
+              </p>
+            </div>
+            <ul className="space-y-1.5">
+              {AI_WRITE_DOMAIN_LIST.map((domain) => {
+                const enabled = Boolean(permissionState[domain]);
+                const label =
+                  domain === 'dates'
+                    ? copy.domainDates
+                    : domain === 'tripCreate'
+                      ? copy.domainTripCreate
+                      : domain === 'itinerary'
+                        ? copy.domainItinerary
+                        : domain === 'packing'
+                          ? copy.domainPacking
+                          : copy.domainExpense;
+                const hint =
+                  domain === 'dates'
+                    ? copy.domainDatesHint
+                    : domain === 'tripCreate'
+                      ? copy.domainTripCreateHint
+                      : domain === 'itinerary'
+                        ? copy.domainItineraryHint
+                        : domain === 'packing'
+                          ? copy.domainPackingHint
+                          : copy.domainExpenseHint;
+                return (
+                  <li key={domain}>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={enabled}
+                      onClick={() => onToggleWriteDomain(domain, !enabled)}
+                      className={`w-full flex items-start justify-between gap-3 rounded-xl border px-3 py-2 text-left cursor-pointer transition-colors ${
+                        enabled
+                          ? 'tk-bc-hair tk-bg-paper'
+                          : 'tk-bc-hair tk-bg-warning-tint'
+                      }`}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div
+                          className={`text-xs font-semibold ${
+                            enabled ? 'tk-text-ink' : 'tk-text-warning'
+                          }`}
+                        >
+                          {label}
+                        </div>
+                        <div className="text-[11px] tk-text-ink2 leading-snug mt-0.5">
+                          {hint}
+                        </div>
+                      </div>
+                      <span
+                        className={`mt-0.5 inline-flex h-5 w-9 shrink-0 items-center rounded-full px-0.5 transition-colors ${
+                          enabled ? 'tk-bg-forest' : 'tk-bg-idle'
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <span
+                          className={`h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
+                            enabled ? 'translate-x-4' : 'translate-x-0'
+                          }`}
+                        />
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        {headerPanel === 'snapshots' && (
+          <div className="shrink-0 border-b tk-bc-hair tk-bg-card px-5 py-3 space-y-2">
+            <p className="text-xs font-bold tk-text-ink">{copy.snapshotTitle}</p>
+            <div className="max-h-64 overflow-y-auto space-y-1.5 pr-0.5">
+              {snapshotEntries.length === 0 ? (
+                <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+              ) : (
+                snapshotEntries.map((entry) => {
+                  const ageMin = Math.max(
+                    0,
+                    Math.round((Date.now() - entry.at) / 60000)
+                  );
+                  return (
+                    <div
+                      key={entry.id}
+                      className="flex items-center justify-between gap-2 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-semibold tk-text-ink truncate">
+                          {entry.label}
+                        </div>
+                        <div className="text-[11px] tk-text-ink2 tabular-nums">
+                          {copy.snapshotRelative(ageMin)}
+                        </div>
+                      </div>
+                      {onRestoreSnapshot ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onRestoreSnapshot(entry.id);
+                            setHeaderPanel(null);
+                          }}
+                          className="shrink-0 rounded-lg border tk-bc-hair px-2 py-1 text-[11px] font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
+                        >
+                          {copy.snapshotRestoreBtn}
+                        </button>
+                      ) : null}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Main Scrollable Area */}
         <div className="flex-1 overflow-y-auto px-5 py-5">

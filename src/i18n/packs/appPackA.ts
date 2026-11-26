@@ -117,6 +117,9 @@ export interface AppPackACopy {
   snoozedAlertToast: (mins: number) => string;
   sentPackingPreviewToast: string;
   snoozedReminderToast: (mins: number) => string;
+  aiWriteAllBlocked: string;
+  aiWriteNothingApplied: string;
+  aiWriteSnapshotRestored: string;
 }
 
 export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
@@ -267,6 +270,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `已延后 ${mins} 分钟再推送`,
       sentPackingPreviewToast: '已发送起飞前打包提醒预览',
       snoozedReminderToast: (mins) => `已延后 ${mins} 分钟再提醒`,
+      aiWriteAllBlocked: '当前提案涉及的写权限均已关闭，未写入任何改动',
+      aiWriteNothingApplied: '没有可应用的改动（相关权限域已关闭）',
+      aiWriteSnapshotRestored: '已从操作快照回滚业务数据',
     },
     'en-US': {
       proRestoredToast: 'Automatically restored your account-linked Trip Kit Pro membership',
@@ -437,6 +443,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Snoozed alert for ${mins} min`,
       sentPackingPreviewToast: 'Sent pre-trip packing reminder preview',
       snoozedReminderToast: (mins) => `Snoozed reminder for ${mins} min`,
+      aiWriteAllBlocked: 'All write domains for this proposal are off — nothing was applied',
+      aiWriteNothingApplied: 'Nothing to apply (related write domains are disabled)',
+      aiWriteSnapshotRestored: 'Restored business data from an action snapshot',
     },
     'en-GB': {
       proRestoredToast: 'Automatically restored your account-linked Trip Kit Pro membership',
@@ -607,6 +616,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Snoozed alert for ${mins} min`,
       sentPackingPreviewToast: 'Sent pre-trip packing reminder preview',
       snoozedReminderToast: (mins) => `Snoozed reminder for ${mins} min`,
+      aiWriteAllBlocked: 'All write domains for this proposal are off — nothing was applied',
+      aiWriteNothingApplied: 'Nothing to apply (related write domains are disabled)',
+      aiWriteSnapshotRestored: 'Restored business data from an action snapshot',
     },
     'es-MX': {
       proRestoredToast: 'Se restauró automáticamente tu membresía Trip Kit Pro vinculada',
@@ -779,6 +791,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Alerta pospuesta ${mins} min`,
       sentPackingPreviewToast: 'Vista previa de recordatorio enviada',
       snoozedReminderToast: (mins) => `Recordatorio pospuesto ${mins} min`,
+      aiWriteAllBlocked: 'Todos los permisos de esta propuesta están off — no se aplicó nada',
+      aiWriteNothingApplied: 'Nada que aplicar (dominios de escritura desactivados)',
+      aiWriteSnapshotRestored: 'Datos restaurados desde una instantánea de acciones',
     },
     'fr-FR': {
       proRestoredToast: 'Abonnement Trip Kit Pro lié au compte restauré automatiquement',
@@ -948,6 +963,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Alerte reportée de ${mins} min`,
       sentPackingPreviewToast: 'Aperçu du rappel bagages envoyé',
       snoozedReminderToast: (mins) => `Rappel reporté de ${mins} min`,
+      aiWriteAllBlocked: 'Tous les droits d’écriture de cette proposition sont off — rien n’a été appliqué',
+      aiWriteNothingApplied: 'Rien à appliquer (domaines d’écriture désactivés)',
+      aiWriteSnapshotRestored: 'Données restaurées depuis un instantané d’actions',
     },
     'de-DE': {
       proRestoredToast: 'Verknüpfte Trip Kit Pro-Mitgliedschaft automatisch wiederhergestellt',
@@ -1120,6 +1138,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Alert um ${mins} Min. verschoben`,
       sentPackingPreviewToast: 'Packerinnerung-Vorschau gesendet',
       snoozedReminderToast: (mins) => `Erinnerung um ${mins} Min. verschoben`,
+      aiWriteAllBlocked: 'Alle Schreibrechte für diesen Vorschlag sind aus — nichts übernommen',
+      aiWriteNothingApplied: 'Nichts anzuwenden (Schreibdomänen deaktiviert)',
+      aiWriteSnapshotRestored: 'Geschäftsdaten aus Aktions-Snapshot wiederhergestellt',
     },
     'pt-BR': {
       proRestoredToast: 'Assinatura Trip Kit Pro vinculada restaurada automaticamente',
@@ -1290,6 +1311,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `Alerta adiado por ${mins} min`,
       sentPackingPreviewToast: 'Prévia do lembrete de bagagem enviada',
       snoozedReminderToast: (mins) => `Lembrete adiado por ${mins} min`,
+      aiWriteAllBlocked: 'Todos os domínios desta proposta estão off — nada foi aplicado',
+      aiWriteNothingApplied: 'Nada a aplicar (domínios de escrita desativados)',
+      aiWriteSnapshotRestored: 'Dados restaurados a partir de um snapshot de ações',
     },
     'ja-JP': {
       proRestoredToast: 'アカウント連携済みの Trip Kit Pro 権利を自動復元しました',
@@ -1456,6 +1480,9 @@ export function getAppPackACopy(lang: AppLanguage): AppPackACopy {
       snoozedAlertToast: (mins) => `アラートを ${mins} 分延期しました`,
       sentPackingPreviewToast: '出発前通知のプレビューを送信しました',
       snoozedReminderToast: (mins) => `リマインダーを ${mins} 分延期しました`,
+      aiWriteAllBlocked: 'この提案の書き込み権限はすべてオフのため、何も適用しませんでした',
+      aiWriteNothingApplied: '適用できる変更がありません（関連権限がオフ）',
+      aiWriteSnapshotRestored: '操作スナップショットから業務データを復元しました',
     },
   });
 }
