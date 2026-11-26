@@ -570,6 +570,8 @@ export interface PackingItemDetailCopy {
   renameTitle: string;
   deleteTitle: string;
   dontSuggestTitle: string;
+  segmentItemScope: string;
+  segmentAllTrips: string;
 }
 
 const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
@@ -618,6 +620,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: '重命名与修改备注',
     deleteTitle: '从当前清单删除',
     dontSuggestTitle: '以后不再推荐此物品',
+    segmentItemScope: '适用分段',
+    segmentAllTrips: '全程通用（默认）',
   },
   'en-US': {
     formatTotalWeight: (w) => `${w} in total`,
@@ -664,6 +668,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Rename',
     deleteTitle: 'Delete from this list',
     dontSuggestTitle: "Don't suggest this again",
+    segmentItemScope: 'Applies to segments',
+    segmentAllTrips: 'Whole trip (default)',
   },
   'en-GB': {
     formatTotalWeight: (w) => `${w} in total`,
@@ -710,6 +716,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Rename',
     deleteTitle: 'Delete from this list',
     dontSuggestTitle: "Don't suggest this again",
+    segmentItemScope: 'Applies to segments',
+    segmentAllTrips: 'Whole trip (default)',
   },
   'es-MX': {
     formatTotalWeight: (w) => `${w} en total`,
@@ -756,6 +764,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Renombrar y editar nota',
     deleteTitle: 'Eliminar de esta lista',
     dontSuggestTitle: 'No volver a sugerir esto',
+    segmentItemScope: 'Tramos aplicables',
+    segmentAllTrips: 'Todo el viaje (predeterminado)',
   },
   'fr-FR': {
     formatTotalWeight: (w) => `${w} au total`,
@@ -802,6 +812,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Renommer et modifier la note',
     deleteTitle: 'Retirer de cette liste',
     dontSuggestTitle: 'Ne plus suggérer cet article',
+    segmentItemScope: 'Segments concernés',
+    segmentAllTrips: 'Tout le voyage (par défaut)',
   },
   'de-DE': {
     formatTotalWeight: (w) => `${w} gesamt`,
@@ -848,6 +860,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Umbenennen & Notiz bearbeiten',
     deleteTitle: 'Aus dieser Liste löschen',
     dontSuggestTitle: 'Nicht mehr vorschlagen',
+    segmentItemScope: 'Gilt für Abschnitte',
+    segmentAllTrips: 'Gesamte Reise (Standard)',
   },
   'pt-BR': {
     formatTotalWeight: (w) => `${w} no total`,
@@ -894,6 +908,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: 'Renomear e editar nota',
     deleteTitle: 'Remover desta lista',
     dontSuggestTitle: 'Não sugerir novamente',
+    segmentItemScope: 'Trechos aplicáveis',
+    segmentAllTrips: 'Viagem inteira (padrão)',
   },
   'ja-JP': {
     formatTotalWeight: (w) => `合計 ${w}`,
@@ -940,6 +956,8 @@ const PACKING_ITEM_DETAIL_COPY: Record<AppLanguage, PackingItemDetailCopy> = {
     renameTitle: '名称とメモを編集',
     deleteTitle: 'このリストから削除',
     dontSuggestTitle: '今後はおすすめしない',
+    segmentItemScope: '適用セグメント',
+    segmentAllTrips: '全行程共通（デフォルト）',
   },
 };
 

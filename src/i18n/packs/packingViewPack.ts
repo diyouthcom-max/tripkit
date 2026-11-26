@@ -46,6 +46,23 @@ export interface PackingViewCopy {
   beforeDepartureTiming: string;
   duringTripTiming: string;
   renameFallbackWhy: string;
+  templateLibraryBtn: string;
+  templateSaveBtn: string;
+  templateNamePlaceholder: string;
+  templateEmptyHint: string;
+  templateApplyBtn: string;
+  templateRenameBtn: string;
+  templateDeleteBtn: string;
+  templateItemsUnit: string;
+  templateSavedToast: (name: string) => string;
+  templateAppliedToast: (name: string) => string;
+  templateDeletedToast: (name: string) => string;
+  templateConfirmDelete: (name: string) => string;
+  templateMergedHint: string;
+  segmentAll: string;
+  segmentSwitchAria: string;
+  segmentItemScope: string;
+  segmentAllTrips: string;
 }
 
 const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
@@ -98,6 +115,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: '出发前',
     duringTripTiming: '旅行期间',
     renameFallbackWhy: '旅行随行物品',
+    templateLibraryBtn: '模板库',
+    templateSaveBtn: '保存当前清单为模板',
+    templateNamePlaceholder: '输入模板名称（如：日本滑雪 7 天）',
+    templateEmptyHint: '还没有保存的清单模板',
+    templateApplyBtn: '套用到当前行程',
+    templateRenameBtn: '重命名',
+    templateDeleteBtn: '删除',
+    templateItemsUnit: '件',
+    templateSavedToast: (name) => `已保存清单模板「${name}」`,
+    templateAppliedToast: (name) => `已套用模板「${name}」，已保留勾选进度`,
+    templateDeletedToast: (name) => `已删除模板「${name}」`,
+    templateConfirmDelete: (name) => `确认删除模板「${name}」？`,
+    templateMergedHint: '套用时会按物品名合并，保留你已勾选的进度与自定义数量',
+    segmentAll: '全部',
+    segmentSwitchAria: '按行程分段查看清单',
+    segmentItemScope: '适用分段',
+    segmentAllTrips: '全程通用（默认）',
   },
   'en-US': {
     packedSuffix: 'packed',
@@ -148,6 +182,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: 'Before departure',
     duringTripTiming: 'During trip',
     renameFallbackWhy: 'Travel gear',
+    templateLibraryBtn: 'Templates',
+    templateSaveBtn: 'Save current list as template',
+    templateNamePlaceholder: 'Template name (e.g. Japan ski 7 days)',
+    templateEmptyHint: 'No saved packing templates yet',
+    templateApplyBtn: 'Apply to this trip',
+    templateRenameBtn: 'Rename',
+    templateDeleteBtn: 'Delete',
+    templateItemsUnit: 'items',
+    templateSavedToast: (name) => `Saved packing template “${name}”`,
+    templateAppliedToast: (name) => `Applied “${name}” — checked progress kept`,
+    templateDeletedToast: (name) => `Deleted template “${name}”`,
+    templateConfirmDelete: (name) => `Delete template “${name}”?`,
+    templateMergedHint: 'Apply merges by item name and keeps checked progress & custom quantities',
+    segmentAll: 'All',
+    segmentSwitchAria: 'Filter packing list by trip segment',
+    segmentItemScope: 'Applies to segments',
+    segmentAllTrips: 'Whole trip (default)',
   },
   'es-MX': {
     packedSuffix: 'empacados',
@@ -198,6 +249,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: 'Antes de salir',
     duringTripTiming: 'Durante el viaje',
     renameFallbackWhy: 'Artículo de viaje',
+    templateLibraryBtn: 'Plantillas',
+    templateSaveBtn: 'Guardar lista actual como plantilla',
+    templateNamePlaceholder: 'Nombre (ej. Japón ski 7 días)',
+    templateEmptyHint: 'Aún no hay plantillas de lista guardadas',
+    templateApplyBtn: 'Aplicar a este viaje',
+    templateRenameBtn: 'Renombrar',
+    templateDeleteBtn: 'Eliminar',
+    templateItemsUnit: 'artículos',
+    templateSavedToast: (name) => `Plantilla «${name}» guardada`,
+    templateAppliedToast: (name) => `Se aplicó «${name}»; se conservó el progreso marcado`,
+    templateDeletedToast: (name) => `Plantilla «${name}» eliminada`,
+    templateConfirmDelete: (name) => `¿Eliminar la plantilla «${name}»?`,
+    templateMergedHint: 'Al aplicar se fusiona por nombre y conserva marcas y cantidades',
+    segmentAll: 'Todo',
+    segmentSwitchAria: 'Ver lista por tramo del viaje',
+    segmentItemScope: 'Tramos aplicables',
+    segmentAllTrips: 'Todo el viaje (predeterminado)',
   },
   'fr-FR': {
     packedSuffix: 'rangés',
@@ -248,6 +316,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: 'Avant le départ',
     duringTripTiming: 'Pendant le voyage',
     renameFallbackWhy: 'Équipement de voyage',
+    templateLibraryBtn: 'Modèles',
+    templateSaveBtn: 'Enregistrer la liste comme modèle',
+    templateNamePlaceholder: 'Nom du modèle (ex. Ski Japon 7 j)',
+    templateEmptyHint: 'Aucun modèle de liste enregistré',
+    templateApplyBtn: 'Appliquer à ce voyage',
+    templateRenameBtn: 'Renommer',
+    templateDeleteBtn: 'Supprimer',
+    templateItemsUnit: 'articles',
+    templateSavedToast: (name) => `Modèle « ${name} » enregistré`,
+    templateAppliedToast: (name) => `« ${name} » appliqué — progression cochée conservée`,
+    templateDeletedToast: (name) => `Modèle « ${name} » supprimé`,
+    templateConfirmDelete: (name) => `Supprimer le modèle « ${name} » ?`,
+    templateMergedHint: 'L’application fusionne par nom et conserve coches et quantités',
+    segmentAll: 'Tout',
+    segmentSwitchAria: 'Filtrer la liste par segment du voyage',
+    segmentItemScope: 'Segments concernés',
+    segmentAllTrips: 'Tout le voyage (par défaut)',
   },
   'de-DE': {
     packedSuffix: 'gepackt',
@@ -298,6 +383,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: 'Vor Abflug',
     duringTripTiming: 'Während der Reise',
     renameFallbackWhy: 'Reiseausrüstung',
+    templateLibraryBtn: 'Vorlagen',
+    templateSaveBtn: 'Aktuelle Liste als Vorlage speichern',
+    templateNamePlaceholder: 'Vorlagenname (z. B. Japan Ski 7 Tage)',
+    templateEmptyHint: 'Noch keine Listen-Vorlagen gespeichert',
+    templateApplyBtn: 'Auf diese Reise anwenden',
+    templateRenameBtn: 'Umbenennen',
+    templateDeleteBtn: 'Löschen',
+    templateItemsUnit: 'Artikel',
+    templateSavedToast: (name) => `Vorlage „${name}“ gespeichert`,
+    templateAppliedToast: (name) => `„${name}“ übernommen — Häkchen behalten`,
+    templateDeletedToast: (name) => `Vorlage „${name}“ gelöscht`,
+    templateConfirmDelete: (name) => `Vorlage „${name}“ löschen?`,
+    templateMergedHint: 'Anwenden führt nach Namen zusammen und behält Häkchen & Mengen',
+    segmentAll: 'Alle',
+    segmentSwitchAria: 'Packliste nach Reiseabschnitten filtern',
+    segmentItemScope: 'Gilt für Abschnitte',
+    segmentAllTrips: 'Gesamte Reise (Standard)',
   },
   'pt-BR': {
     packedSuffix: 'prontos',
@@ -348,6 +450,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: 'Antes da partida',
     duringTripTiming: 'Durante a viagem',
     renameFallbackWhy: 'Item de viagem',
+    templateLibraryBtn: 'Modelos',
+    templateSaveBtn: 'Salvar lista atual como modelo',
+    templateNamePlaceholder: 'Nome do modelo (ex. Japão ski 7 dias)',
+    templateEmptyHint: 'Nenhum modelo de lista salvo ainda',
+    templateApplyBtn: 'Aplicar a esta viagem',
+    templateRenameBtn: 'Renomear',
+    templateDeleteBtn: 'Excluir',
+    templateItemsUnit: 'itens',
+    templateSavedToast: (name) => `Modelo “${name}” salvo`,
+    templateAppliedToast: (name) => `“${name}” aplicado — progresso marcado mantido`,
+    templateDeletedToast: (name) => `Modelo “${name}” excluído`,
+    templateConfirmDelete: (name) => `Excluir o modelo “${name}”?`,
+    templateMergedHint: 'Ao aplicar, mescla por nome e mantém marcas e quantidades',
+    segmentAll: 'Tudo',
+    segmentSwitchAria: 'Filtrar lista por trecho da viagem',
+    segmentItemScope: 'Trechos aplicáveis',
+    segmentAllTrips: 'Viagem inteira (padrão)',
   },
   'ja-JP': {
     packedSuffix: '済み',
@@ -398,6 +517,23 @@ const PACKING_VIEW_COPY: LangMap8<PackingViewCopy> = {
     beforeDepartureTiming: '出発前',
     duringTripTiming: '旅行中',
     renameFallbackWhy: '旅行アイテム',
+    templateLibraryBtn: 'テンプレート',
+    templateSaveBtn: '現在のリストをテンプレート保存',
+    templateNamePlaceholder: '名前（例：日本スキー 7 日）',
+    templateEmptyHint: '保存済みのリストテンプレートはまだありません',
+    templateApplyBtn: 'この旅程に適用',
+    templateRenameBtn: '名前変更',
+    templateDeleteBtn: '削除',
+    templateItemsUnit: '点',
+    templateSavedToast: (name) => `テンプレート「${name}」を保存しました`,
+    templateAppliedToast: (name) => `「${name}」を適用しました（チェック進捗を保持）`,
+    templateDeletedToast: (name) => `テンプレート「${name}」を削除しました`,
+    templateConfirmDelete: (name) => `テンプレート「${name}」を削除しますか？`,
+    templateMergedHint: '適用時は名前で統合し、チェック済みと数量を保持します',
+    segmentAll: 'すべて',
+    segmentSwitchAria: '旅程セグメントでリストを絞り込み',
+    segmentItemScope: '適用セグメント',
+    segmentAllTrips: '全行程共通（デフォルト）',
   },
 };
 
