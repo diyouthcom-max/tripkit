@@ -246,13 +246,13 @@ const MapRouteSkeleton: React.FC<{
 
       {/* Center loading status card */}
       <div className="relative z-10 flex h-full items-center justify-center px-4">
-        <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 shadow-xs flex items-center gap-3 max-w-md">
+        <div className="rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-3 shadow-xs flex items-center gap-3 max-w-md">
           <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
           <div className="min-w-0">
-            <div className="text-xs font-bold tk-text-ink truncate">
+            <div className="font-serif text-sm font-bold tk-text-ink truncate">
               {stageLabel || copy.skeletonTitle(cityLabel)}
             </div>
-            <div className="mt-0.5 text-[11px] tk-text-ink2 font-num tabular-nums truncate">
+            <div className="mt-0.5 text-[13px] tk-text-ink2 font-serif tabular-nums truncate">
               {scopeLabel} · {cityLabel}
               {stopCount > 0 ? copy.skeletonStops(stopCount) : ''}
             </div>
@@ -402,30 +402,30 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
       {/* Top City Identity + Quick Navigation Action Bar */}
       <div className="px-4 sm:px-5 py-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl tk-bg-card border tk-bc-hair tk-text-forest">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] tk-bg-card border tk-bc-hair tk-text-forest">
             <Compass className="h-5 w-5" />
           </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span className="text-xs font-bold tk-text-forest">
+              <span className="text-sm font-bold tk-text-forest">
                 {copy.scopeCity(scopeLabel)}
               </span>
               <span aria-hidden="true" className="tk-text-ink2">
                 ·
               </span>
-              <h4 className="text-base font-extrabold tracking-tight tk-text-ink truncate">
+              <h4 className="font-serif text-base font-extrabold tracking-tight tk-text-ink truncate">
                 {cityLabel || primaryCity || copy.destinationCity}
               </h4>
               <span aria-hidden="true" className="tk-text-ink2">
                 ·
               </span>
-              <span className="font-num text-xs tk-text-ink2 tabular-nums">
+              <span className="font-serif text-sm tk-text-ink2 tabular-nums">
                 {stops.length > 0
                   ? copy.stopsAndMode(stops.length, activeModeLabel)
                   : copy.noStopsToday}
               </span>
             </div>
-            <p className="mt-0.5 text-xs tk-text-ink2">
+            <p className="mt-0.5 text-sm tk-text-ink2">
               {fallbackReason === 'sdk_failed'
                 ? copy.sdkFailedDesc
                 : copy.unconfiguredDesc}
@@ -440,9 +440,9 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={fullDayRouteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
-              <Navigation className="h-3.5 w-3.5" />
+              <Navigation className="h-4 w-4" />
               <span>
                 {multiDayMode
                   ? copy.multiDayRouteBtn(stops.length)
@@ -454,9 +454,9 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={activeStopDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
-              <Navigation className="h-3.5 w-3.5" />
+              <Navigation className="h-4 w-4" />
               <span>
                 {copy.directionsToBtn(activeStop.title)}
               </span>
@@ -467,9 +467,9 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             href={cityExploreUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap shrink-0"
           >
-            <ExternalLink className="h-3.5 w-3.5 tk-text-forest" />
+            <ExternalLink className="h-4 w-4 tk-text-forest" />
             <span>
               {copy.exploreCityOnMaps(primaryCity || cityLabel)}
             </span>
@@ -479,16 +479,16 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             <button
               type="button"
               onClick={handleCopyRouteText}
-              className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {copiedKey === 'route' ? (
                 <>
-                  <Check className="h-3.5 w-3.5 tk-text-forest" />
+                  <Check className="h-4 w-4 tk-text-forest" />
                   <span>{copy.copiedRoute}</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-3.5 w-3.5 tk-text-forest" />
+                  <Copy className="h-4 w-4 tk-text-forest" />
                   <span>{copy.copyRoute}</span>
                 </>
               )}
@@ -504,10 +504,10 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             <div className="flex h-10 w-10 items-center justify-center rounded-full tk-bg-card border tk-bc-hair tk-text-forest">
               <MapPin className="h-5 w-5" />
             </div>
-            <div className="text-xs font-bold tk-text-ink">
+            <div className="font-serif text-sm font-bold tk-text-ink">
               {copy.emptyOverviewTitle(dayNumber, cityLabel)}
             </div>
-            <p className="text-xs tk-text-ink2 max-w-md">
+            <p className="text-sm tk-text-ink2 max-w-md">
               {copy.emptyOverviewDesc}
             </p>
           </div>
@@ -665,7 +665,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
 
       {/* Interactive Selected Stop Detail & Per-Stop Quick Navigation Bar */}
       {activeStop && (
-        <div className="px-4 sm:px-5 py-3 tk-bg-card flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="px-4 sm:px-5 py-3 tk-bg-card flex flex-wrap items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div className="inline-flex items-center gap-1 shrink-0">
               <button
@@ -675,7 +675,7 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                 aria-label={copy.previousStopAria}
                 className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
               >
-                <ChevronLeft className="h-3.5 w-3.5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 type="button"
@@ -686,18 +686,18 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
                 aria-label={copy.nextStopAria}
                 className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
               >
-                <ChevronRight className="h-3.5 w-3.5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </div>
 
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <span className="font-num font-bold tk-text-forest tabular-nums">
+                <span className="font-serif font-bold tk-text-forest tabular-nums">
                   {copy.stopFraction(activeStop.orderNumber, stops.length)}
                   {multiDayMode && activeStop.dayNumber ? ` · D${activeStop.dayNumber}` : ''} ·{' '}
                   {activeStop.time}
                 </span>
-                <strong className="text-sm font-bold tk-text-ink truncate">
+                <strong className="font-serif text-sm font-bold tk-text-ink truncate">
                   {activeStop.title}
                 </strong>
                 {activeStop.isSwappedIndoor && (
@@ -858,7 +858,7 @@ const StopAdvancedMarker: React.FC<{
  }`}
           >
             <span
-              className="flex h-5 w-5 items-center justify-center rounded-full font-num text-[10.5px] font-extrabold tk-text-card shrink-0"
+              className="flex h-5 w-5 items-center justify-center rounded-full font-serif text-[10.5px] font-extrabold tk-text-card shrink-0"
               style={{ backgroundColor: badgeColor }}
             >
               {stop.orderNumber}
@@ -880,12 +880,12 @@ const StopAdvancedMarker: React.FC<{
           onClick={() => triggerSelect()}
         >
           <div
-            className={`relative flex w-[208px] items-center gap-2 rounded-2xl tk-bg-card p-1.5 pr-2 tk-elev-card border ${
+            className={`relative flex w-[208px] items-center gap-2 rounded-[20px] tk-bg-card p-1.5 pr-2 tk-elev-card border ${
  isSelected ? 'tk-bc-forest ring-2 tk-rc-forest' : 'tk-bc-hair'
  }`}
           >
             <span
-              className="absolute -top-2 -left-1.5 flex h-5.5 min-w-5.5 items-center justify-center rounded-full border-2 border-white px-1 font-num text-[11px] font-extrabold tk-text-card shadow-xs"
+              className="absolute -top-2 -left-1.5 flex h-5.5 min-w-5.5 items-center justify-center rounded-full border-2 border-white px-1 font-serif text-[13px] font-extrabold tk-text-card shadow-xs"
               style={{ backgroundColor: badgeColor }}
             >
               {stop.orderNumber}
@@ -937,7 +937,7 @@ const StopAdvancedMarker: React.FC<{
                 title={copy.viewStopDetails}
                 className="flex h-6 w-5 items-center justify-center tk-text-ink2 hover:tk-text-forest shrink-0 cursor-pointer"
               >
-                <ChevronRight className="h-3.5 w-3.5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             ) : null}
           </div>
@@ -1530,7 +1530,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
               <span className="flex h-5 w-5 items-center justify-center rounded-full tk-bg-swatch-2 shrink-0">
                 <Home className="h-3 w-3 tk-text-card" />
               </span>
-              <span className="max-w-[116px] truncate text-[11px] font-extrabold">
+              <span className="max-w-[116px] truncate text-[13px] font-extrabold">
                 {dayStayAnchor.placeName}
               </span>
             </div>
@@ -1780,8 +1780,8 @@ const ConfiguredInteractiveMapViewport: React.FC<{
         {/* Top-Left Auto-Fading Right-Click Hint (vanishes after 3.2s) */}
         {!loading && onHoldMapAddPlace && !holdHintDismissed && (
           <div className="absolute top-3 left-3 z-10 max-w-[calc(100%-76px)]">
-            <div className="inline-flex items-center gap-1.5 rounded-full border tk-bc-hair tk-bg-card px-3 py-1.5 text-[11px] font-semibold tk-text-ink shadow-sm">
-              <Hand className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border tk-bc-hair tk-bg-card px-3 py-1.5 text-[13px] font-semibold tk-text-ink shadow-sm">
+              <Hand className="h-4 w-4 tk-text-forest shrink-0" />
               <span className="truncate">
                 {copy.rightClickHint}
               </span>
@@ -1862,8 +1862,8 @@ const ConfiguredInteractiveMapViewport: React.FC<{
       </div>
 
       {routeNotice && (
-        <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[11px] tk-text-ink2 flex items-center gap-1.5">
-          <AlertCircle className="h-3.5 w-3.5 tk-text-warning shrink-0" />
+        <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[13px] tk-text-ink2 flex items-center gap-1.5">
+          <AlertCircle className="h-4 w-4 tk-text-warning shrink-0" />
           <span>{routeNotice}</span>
         </div>
       )}
@@ -2338,7 +2338,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
   return (
     <section
       aria-label={copy.sectionAria(scopeLabel)}
-      className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden"
     >
       {/* Minimalist Single-Line Header Bar */}
       <div className="flex items-center justify-between gap-2.5 px-4 sm:px-5 py-3 tk-bg-paper">
@@ -2349,12 +2349,12 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
         >
           <AccentIconBadge accent="ocean" icon={RouteIcon} size="md" />
           <div className="min-w-0 flex items-center gap-1.5 flex-wrap">
-            <h3 className="text-sm font-extrabold tracking-tight tk-text-ink whitespace-nowrap">
+            <h3 className="font-serif text-sm font-extrabold tracking-tight tk-text-ink whitespace-nowrap">
               {isMultiDayActive
                 ? copy.multiDayHeading(activeMultiDays.map((d) => `D${d}`).join(' / '))
                 : `Day ${dayNumber} · ${displayCityLabel}`}
             </h3>
-            <span className="tabular-nums text-xs tk-text-ink2 leading-snug">
+            <span className="tabular-nums text-sm tk-text-ink2 leading-snug">
               {stops.length > 0
                 ? copy.stopsInline(stops.length)
                 : copy.cityMapInline}
@@ -2375,9 +2375,9 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
               href={fullDayRouteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
+              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-4 w-4" />
               {copy.openInMaps}
             </a>
           ) : (
@@ -2385,9 +2385,9 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
               href={cityQuickSearchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
+              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-4 w-4" />
               {copy.exploreShort(displayPrimaryCity)}
             </a>
           )}
@@ -2413,7 +2413,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
         <div className="border-t tk-bc-hair divide-y tk-divide-hair">
           {/* On-Demand Multi-Day Selector Bar (shown ONLY when Multi-Day toggle is active) */}
           {isMultiDayActive && (
-            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex items-center justify-between gap-3 text-xs">
+            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex items-center justify-between gap-3 text-sm">
               <HorizontalChipScroller
                 activeKey={activeMultiDays.join(',')}
                 fadeBgClassName=""
@@ -2429,9 +2429,9 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                       type="button"
                       data-chip-active={info.day === dayNumber ? 'true' : undefined}
                       onClick={() => handleTogglePreviewDay(info.day)}
-                      className={`min-h-[32px] inline-flex items-center gap-1.5 rounded-full border px-3 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`min-h-[32px] inline-flex items-center gap-1.5 rounded-full border px-3 text-[13px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  selected
- ? 'tk-bg-card tk-text-ink shadow-2xs'
+ ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-text-ink2'
  }`}
                       style={selected ? { borderColor: dayColor } : undefined}
@@ -2443,14 +2443,14 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                         }}
                         aria-hidden="true"
                       />
-                      <span className="font-num font-bold">D{info.day}</span>
+                      <span className="font-serif font-bold">D{info.day}</span>
                       <span>{info.cityLabel}</span>
                     </button>
                   );
                 })}
               </HorizontalChipScroller>
 
-              <div className="flex items-center gap-2 shrink-0 text-[11px]">
+              <div className="flex items-center gap-2 shrink-0 text-[13px]">
                 {sameCityPopulatedDays.length >= 2 && (
                   <button
                     type="button"
@@ -2484,8 +2484,8 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
 
           {/* On-Demand Reorder Diff Bar (shown ONLY after drag/AI route reorder) */}
           {hasOrderChanged && (
-            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="font-num font-semibold tabular-nums tk-text-forest">
+            <div className="px-4 sm:px-5 py-2 tk-bg-paper flex flex-wrap items-center justify-between gap-2 text-sm">
+              <span className="font-serif font-semibold tabular-nums tk-text-forest">
                 {savedKm > 0.05
                   ? copy.routeReorderedSaved(savedKm.toFixed(1), savedPct)
                   : copy.orderUpdated}
@@ -2495,7 +2495,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowComparison((v) => !v)}
-                  className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[13px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  showComparison
  ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
  : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-text-ink'
@@ -2512,7 +2512,7 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
                   <button
                     type="button"
                     onClick={onRestorePreviousOrder}
-                    className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2 py-1 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2 py-1 text-[13px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
                   >
                     <RotateCcw className="h-3 w-3" />
                     {copy.undoReorder}

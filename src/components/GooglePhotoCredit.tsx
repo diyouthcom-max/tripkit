@@ -18,8 +18,8 @@ export const GooglePhotoCredit: React.FC<GooglePhotoCreditProps> = ({
   const label = `© ${displayName}`;
   const className =
     variant === 'overlay'
-      ? 'absolute bottom-0 left-0 right-0 bg-black/45 px-1 py-0.5 text-[10px] leading-tight text-white/90 break-words line-clamp-2'
-      : 'block max-w-full break-words text-xs leading-snug tk-text-ink2';
+      ? "[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] absolute bottom-0 left-0 right-0 bg-black/45 px-1 py-0.5 text-[12px] leading-tight text-white/90 break-words line-clamp-2"
+      : "[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] block max-w-full break-words text-[12px] leading-snug tk-text-ink2";
 
   const stopBubble: React.MouseEventHandler = (e) => {
     e.stopPropagation();

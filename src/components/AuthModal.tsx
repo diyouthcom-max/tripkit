@@ -449,18 +449,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   if (legalDoc) {
     const isTerms = legalDoc === 'terms';
     return (
-      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-50 p-0 sm:p-4">
-        <div className="w-full max-w-md max-h-[86vh] flex flex-col rounded-t-[28px] sm:rounded-[26px] bg-white border tk-bc-hair shadow-2xl overflow-hidden">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-50 p-0 sm:p-4 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
+        <div className="w-full max-w-md max-h-[86vh] flex flex-col rounded-t-[28px] sm:rounded-[26px] bg-white border tk-bc-hair tk-elev-soft overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b tk-bc-hair shrink-0">
             <button
               type="button"
               onClick={() => setLegalDoc(null)}
-              className="inline-flex items-center gap-1.5 text-xs font-bold tk-text-forest hover:tk-text-forest cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-sm font-bold tk-text-forest hover:tk-text-forest cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>{copy.backToSignIn}</span>
             </button>
-            <h3 className="text-sm font-extrabold tk-text-ink">
+            <h3 className="text-sm font-serif font-extrabold tk-text-ink">
               {isTerms ? copy.termsTitle : copy.privacyTitle}
             </h3>
             <button
@@ -473,7 +473,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 text-xs tk-text-ink2 leading-relaxed">
+          <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 text-sm tk-text-ink2 leading-relaxed">
             {isTerms ? (
               <>
                 <p className="font-semibold tk-text-ink">{copy.termsHeading}</p>
@@ -501,11 +501,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   return (
     <div
       onClick={handleDismiss}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-55 p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-55 p-0 sm:p-4 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md max-h-[92vh] flex flex-col rounded-t-[28px] sm:rounded-[28px] bg-white border tk-bc-hair shadow-2xl overflow-hidden"
+        className="w-full max-w-md max-h-[92vh] flex flex-col rounded-t-[28px] sm:rounded-[28px] bg-white border tk-bc-hair tk-elev-soft overflow-hidden"
       >
         {/* Editorial Destination Hero Banner */}
         <div className="relative h-40 sm:h-44 shrink-0 overflow-hidden tk-bg-forest">
@@ -536,14 +536,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="inline-flex items-center gap-1 rounded-full tk-bg-ink/30 border border-white/20 px-3 py-1.5 text-xs font-bold text-white hover:tk-bg-ink/45 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 rounded-full tk-bg-ink/30 border border-white/20 px-3 py-1.5 text-sm font-bold text-white hover:tk-bg-ink/45 transition-colors cursor-pointer"
               >
-                <ArrowLeft className="h-3.5 w-3.5" />
+                <ArrowLeft className="h-4 w-4" />
                 <span>{copy.back}</span>
               </button>
             ) : (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/20 px-3 py-1 text-[11px] font-bold tracking-wide text-white">
-                <Compass className="h-3.5 w-3.5" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/20 px-3 py-1 text-[13px] font-bold tracking-wide text-white">
+                <Compass className="h-4 w-4" />
                 <span>Trip Kit</span>
               </span>
             )}
@@ -567,7 +567,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 ? copy.heroWelcomeTitle
                 : copy.heroSignInTitle}
             </h2>
-            <p className="mt-1 text-xs text-white/80 leading-snug">
+            <p className="mt-1 text-sm text-white/80 leading-snug">
               {isAccountView ? copy.heroPassportSub : copy.heroSignInSub}
             </p>
           </div>
@@ -576,13 +576,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 bg-white">
           {errorMsg && (
-            <div className="rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint px-3.5 py-2.5 text-xs font-semibold tk-text-danger leading-relaxed">
+            <div className="rounded-[20px] border tk-bc-danger-hair tk-bg-danger-tint px-3.5 py-2.5 text-sm font-semibold tk-text-danger leading-relaxed">
               {errorMsg}
             </div>
           )}
 
           {infoMsg && (
-            <div className="rounded-2xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2.5 text-xs font-semibold tk-text-forest leading-relaxed">
+            <div className="rounded-[20px] border tk-bc-hair tk-bg-forest-tint px-3.5 py-2.5 text-sm font-semibold tk-text-forest leading-relaxed">
               {infoMsg}
             </div>
           )}
@@ -591,32 +591,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             /* ================= SIGNED-IN ACCOUNT MANAGEMENT VIEW ================= */
             <div className="space-y-4">
               {/* Passport Identity Card */}
-              <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-4 flex items-center gap-3.5">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-4 flex items-center gap-3.5">
                 {authUser.photoURL ? (
                   <img
                     src={authUser.photoURL}
                     alt=""
-                    className="h-12 w-12 rounded-2xl object-cover border tk-bc-hair shrink-0"
+                    className="h-12 w-12 rounded-[20px] object-cover border tk-bc-hair shrink-0"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-2xl tk-bg-forest text-white text-base font-extrabold flex items-center justify-center shrink-0">
+                  <div className="h-12 w-12 rounded-[20px] tk-bg-forest text-white text-base font-extrabold flex items-center justify-center shrink-0">
                     {(authUser.displayName || authUser.email || 'T').slice(0, 1).toUpperCase()}
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-extrabold tk-text-ink truncate">
+                    <span className="text-sm font-serif font-extrabold tk-text-ink truncate">
                       {authUser.displayName || copy.defaultTravelerName}
                     </span>
-                    <span className="rounded-md tk-bg-forest-tint px-2 py-0.5 text-[10px] font-bold tk-text-forest shrink-0">
+                    <span className="rounded-md tk-bg-forest-tint px-2 py-0.5 text-[13px] font-bold tk-text-forest shrink-0">
                       {resolveAuthProviderLabel(authUser, language)}
                     </span>
                   </div>
-                  <div className="text-xs tk-text-ink2 truncate mt-0.5">
+                  <div className="text-sm tk-text-ink2 truncate mt-0.5">
                     {authUser.email || copy.privateRelayEmail}
                   </div>
-                  <div className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  <div className="mt-1.5 inline-flex items-center gap-1 text-[13px] font-semibold tk-text-forest">
+                    <CheckCircle2 className="h-4 w-4" />
                     <span>
                       {activeRoomId ? copy.liveCrewRoom(activeRoomId) : copy.cloudSyncReady}
                     </span>
@@ -630,10 +630,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   providerId === 'password' && !emailVerifiedLocal;
                 if (!needsEmailVerification) return null;
                 return (
-                  <div className="rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3 space-y-3">
+                  <div className="rounded-[20px] border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3 space-y-3">
                     <div className="flex items-start gap-2.5">
                       <MailWarning className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
-                      <p className="text-xs font-semibold tk-text-warning leading-relaxed">
+                      <p className="text-sm font-semibold tk-text-warning leading-relaxed">
                         {copy.emailUnverifiedNote}
                       </p>
                     </div>
@@ -642,12 +642,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         type="button"
                         disabled={isBusy}
                         onClick={() => void handleResendVerification()}
-                        className="w-full min-h-10 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-bold tk-text-ink hover:tk-bg-paper inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
+                        className="w-full min-h-10 rounded-[16px] border tk-bc-hair bg-white px-3 py-2 text-sm font-bold tk-text-ink hover:tk-bg-paper inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
                       >
                         {busyProvider === 'resend-verify' ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest shrink-0" />
+                          <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
                         ) : (
-                          <Mail className="h-3.5 w-3.5 tk-text-ink2 shrink-0" />
+                          <Mail className="h-4 w-4 tk-text-ink2 shrink-0" />
                         )}
                         <span>{copy.resendVerificationBtn}</span>
                       </button>
@@ -655,12 +655,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         type="button"
                         disabled={isBusy}
                         onClick={() => void handleRefreshVerification()}
-                        className="w-full min-h-10 rounded-xl tk-bg-forest px-3 py-2 text-xs font-bold text-white hover:tk-bg-press inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
+                        className="w-full min-h-10 rounded-[16px] tk-bg-forest px-3 py-2 text-sm font-bold text-white hover:tk-bg-press inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 leading-snug text-center"
                       >
                         {busyProvider === 'refresh-verify' ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+                          <Loader2 className="h-4 w-4 animate-spin shrink-0" />
                         ) : (
-                          <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                          <RefreshCw className="h-4 w-4 shrink-0" />
                         )}
                         <span>{copy.refreshVerificationBtn}</span>
                       </button>
@@ -670,7 +670,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               })()}
 
               {/* Privacy Reassurance */}
-              <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 flex items-start gap-2.5 text-xs tk-text-ink2">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-3 flex items-start gap-2.5 text-sm tk-text-ink2">
                 <ShieldCheck className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                 <p className="leading-relaxed">{copy.privacyReassurance}</p>
               </div>
@@ -680,7 +680,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="button"
                 disabled={isBusy}
                 onClick={() => void handleSignOut()}
-                className="w-full h-11 rounded-2xl border tk-bc-hair bg-white px-4 text-xs font-bold tk-text-ink hover:tk-bg-paper inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+                className="w-full h-11 rounded-[20px] border tk-bc-hair bg-white px-4 text-sm font-bold tk-text-ink hover:tk-bg-paper inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
               >
                 {busyProvider === 'signout' ? (
                   <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
@@ -700,17 +700,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       setConfirmDeleteOpen(true);
                       setErrorMsg(null);
                     }}
-                    className="w-full py-2 text-xs font-semibold tk-text-danger hover:tk-text-danger inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="w-full py-2 text-sm font-semibold tk-text-danger hover:tk-text-danger inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                     <span>{copy.deleteAccountBtn}</span>
                   </button>
                 ) : (
-                  <div className="rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint p-4 space-y-3">
-                    <div className="text-xs font-extrabold tk-text-danger">
+                  <div className="rounded-[20px] border tk-bc-danger-hair tk-bg-danger-tint p-4 space-y-3">
+                    <div className="text-sm font-extrabold tk-text-danger">
                       {copy.deleteConfirmTitle}
                     </div>
-                    <p className="text-[11px] tk-text-danger leading-relaxed">
+                    <p className="text-[13px] tk-text-danger leading-relaxed">
                       {copy.deleteConfirmBody}
                     </p>
                     <div className="flex items-center gap-2">
@@ -721,7 +721,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                           setConfirmDeleteOpen(false);
                           setNeedsReauthForDelete(false);
                         }}
-                        className="flex-1 h-9 rounded-xl border tk-bc-hair bg-white text-xs font-bold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
+                        className="flex-1 h-9 rounded-[16px] border tk-bc-hair bg-white text-sm font-bold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
                       >
                         {copy.cancel}
                       </button>
@@ -729,10 +729,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         type="button"
                         disabled={isBusy}
                         onClick={() => void handleDeleteAccount(needsReauthForDelete)}
-                        className="flex-1 h-9 rounded-xl tk-bg-danger text-xs font-bold text-white hover:tk-bg-danger inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                        className="flex-1 h-9 rounded-[16px] tk-bg-danger text-sm font-bold text-white hover:tk-bg-danger inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                       >
                         {busyProvider === 'delete' && (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          <Loader2 className="h-4 w-4 animate-spin" />
                         )}
                         <span>
                           {needsReauthForDelete ? copy.reverifyAndDelete : copy.confirmDelete}
@@ -748,22 +748,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <div className="space-y-4">
               {/* 3 Compact High-Value Traveler Benefits (shown when email form is collapsed) */}
               {!showEmailForm && (
-                <div className="grid grid-cols-1 gap-2 rounded-2xl tk-bg-paper border tk-bc-hair p-3.5">
-                  <div className="flex items-center gap-2.5 text-xs tk-text-ink">
+                <div className="grid grid-cols-1 gap-2 rounded-[20px] tk-bg-paper border tk-bc-hair p-3.5">
+                  <div className="flex items-center gap-2.5 text-sm tk-text-ink">
                     <span className="h-6 w-6 rounded-lg tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
-                      <Users className="h-3.5 w-3.5" />
+                      <Users className="h-4 w-4" />
                     </span>
                     <span className="font-medium">{copy.benefitCollab}</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-xs tk-text-ink">
+                  <div className="flex items-center gap-2.5 text-sm tk-text-ink">
                     <span className="h-6 w-6 rounded-lg tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
-                      <Cloud className="h-3.5 w-3.5" />
+                      <Cloud className="h-4 w-4" />
                     </span>
                     <span className="font-medium">{copy.benefitSync}</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-xs tk-text-ink">
+                  <div className="flex items-center gap-2.5 text-sm tk-text-ink">
                     <span className="h-6 w-6 rounded-lg tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
-                      <Lock className="h-3.5 w-3.5" />
+                      <Lock className="h-4 w-4" />
                     </span>
                     <span className="font-medium">{copy.benefitPrivacy}</span>
                   </div>
@@ -777,7 +777,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="button"
                   disabled={isBusy}
                   onClick={() => void handleAppleSignIn()}
-                  className="w-full h-12 rounded-2xl tk-bg-ink text-white hover:tk-bg-ink px-4 text-sm font-semibold inline-flex items-center justify-center gap-2.5 shadow-2xs transition-colors cursor-pointer disabled:opacity-60"
+                  className="w-full h-12 rounded-[20px] tk-bg-ink text-white hover:tk-bg-ink px-4 text-sm font-semibold inline-flex items-center justify-center gap-2.5 shadow-2xs transition-colors cursor-pointer disabled:opacity-60"
                 >
                   {busyProvider === 'apple' ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -792,7 +792,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="button"
                   disabled={isBusy}
                   onClick={() => void handleGoogleSignIn()}
-                  className="w-full h-12 rounded-2xl border tk-bc-hair bg-white tk-text-ink hover:tk-bg-paper px-4 text-sm font-semibold inline-flex items-center justify-center gap-2.5 shadow-2xs transition-colors cursor-pointer disabled:opacity-60"
+                  className="w-full h-12 rounded-[20px] border tk-bc-hair bg-white tk-text-ink hover:tk-bg-paper px-4 text-sm font-semibold inline-flex items-center justify-center gap-2.5 shadow-2xs transition-colors cursor-pointer disabled:opacity-60"
                 >
                   {busyProvider === 'google' ? (
                     <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
@@ -806,7 +806,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               {/* Divider */}
               <div className="flex items-center gap-3">
                 <div className="h-px flex-1 tk-bg-forest-plate" />
-                <span className="text-[11px] font-medium tk-text-ink2">
+                <span className="text-[13px] font-medium tk-text-ink2">
                   {copy.orDivider}
                 </span>
                 <div className="h-px flex-1 tk-bg-forest-plate" />
@@ -822,7 +822,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     setErrorMsg(null);
                     setInfoMsg(null);
                   }}
-                  className="w-full h-11 rounded-2xl border tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest hover:bg-white px-4 text-xs font-bold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  className="w-full h-11 rounded-[20px] border tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest hover:bg-white px-4 text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Mail className="h-4 w-4 tk-text-forest" />
                   <span>{copy.continueEmail}</span>
@@ -830,10 +830,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               ) : (
                 <form
                   onSubmit={handleEmailSubmit}
-                  className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 space-y-3"
+                  className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="inline-flex rounded-xl tk-bg-forest-tint p-0.5 text-[11px] font-bold">
+                    <div className="inline-flex rounded-[16px] tk-bg-forest-tint p-0.5 text-[13px] font-bold">
                       <button
                         type="button"
                         onClick={() => {
@@ -866,7 +866,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowEmailForm(false)}
-                      className="text-[11px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                      className="text-[13px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                     >
                       {copy.hideBtn}
                     </button>
@@ -878,7 +878,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={nameInput}
                       onChange={(e) => setNameInput(e.target.value)}
                       placeholder={copy.nicknamePlaceholder}
-                      className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                      className="w-full h-10 rounded-[16px] border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                     />
                   )}
 
@@ -889,7 +889,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder={copy.emailPlaceholder}
-                    className="w-full h-10 rounded-xl border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                    className="w-full h-10 rounded-[16px] border tk-bc-hair bg-white px-3 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                   />
 
                   {emailStep !== 'reset' && (
@@ -907,7 +907,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                             ? copy.passwordNewPlaceholder
                             : copy.passwordPlaceholder
                         }
-                        className="w-full h-10 rounded-xl border tk-bc-hair bg-white pl-3 pr-9 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
+                        className="w-full h-10 rounded-[16px] border tk-bc-hair bg-white pl-3 pr-9 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none"
                       />
                       <button
                         type="button"
@@ -932,7 +932,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                           setEmailStep('reset');
                           setErrorMsg(null);
                         }}
-                        className="text-[11px] font-semibold tk-text-forest hover:underline cursor-pointer"
+                        className="text-[13px] font-semibold tk-text-forest hover:underline cursor-pointer"
                       >
                         {copy.forgotPassword}
                       </button>
@@ -940,12 +940,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setEmailStep('signin')}
-                        className="text-[11px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                        className="text-[13px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                       >
                         {copy.backToSignInArrow}
                       </button>
                     ) : (
-                      <span className="text-[11px] tk-text-ink2">
+                      <span className="text-[13px] tk-text-ink2">
                         {copy.instantSyncNote}
                       </span>
                     )}
@@ -953,14 +953,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <button
                       type="submit"
                       disabled={isBusy}
-                      className="h-9 rounded-xl tk-bg-forest px-4 text-xs font-bold text-white hover:tk-bg-forest inline-flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+                      className="h-9 rounded-[16px] tk-bg-forest px-4 text-sm font-bold text-white hover:tk-bg-forest inline-flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {busyProvider === 'email' ? (
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : emailStep === 'reset' ? (
-                        <KeyRound className="h-3.5 w-3.5" />
+                        <KeyRound className="h-4 w-4" />
                       ) : (
-                        <Sparkles className="h-3.5 w-3.5" />
+                        <Sparkles className="h-4 w-4" />
                       )}
                       <span>
                         {emailStep === 'signup'
@@ -979,14 +979,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <button
                   type="button"
                   onClick={handleDismiss}
-                  className="w-full py-2.5 rounded-2xl text-xs font-bold tk-text-ink2 hover:tk-bg-paper hover:tk-text-forest inline-flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                  className="w-full py-2.5 rounded-[20px] text-sm font-bold tk-text-ink2 hover:tk-bg-paper hover:tk-text-forest inline-flex items-center justify-center gap-1 transition-colors cursor-pointer"
                 >
                   <span>{copy.continueGuest}</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  <ArrowRight className="h-4 w-4" />
                 </button>
 
                 {/* Mandatory Legal Links (Apple Guideline 5.1.1(i)) */}
-                <p className="text-[11px] tk-text-ink2 leading-relaxed">
+                <p className="text-[13px] tk-text-ink2 leading-relaxed">
                   {copy.legalPrefix}
                   <button
                     type="button"

@@ -8462,7 +8462,7 @@ export default function App() {
   };
 
   const renderCrewAvatarsCluster = (size: 'sm' | 'xs' = 'sm') => {
-    const dimClass = size === 'xs' ? 'h-5 w-5 text-[9px]' : 'h-6 w-6 text-[10px]';
+    const dimClass = size === 'xs' ? 'h-5 w-5 text-[9px]' : 'h-6 w-6 text-[12px]';
     const ringClass = size === 'xs' ? 'ring-1.5 ring-white' : 'ring-2 ring-white/95';
     return (
       <span className="flex items-center -space-x-1.5">
@@ -8488,7 +8488,7 @@ export default function App() {
   };
 
   const appContent = (
-    <div className="tk-shell-root min-h-screen flex flex-col">
+    <div className="tk-shell-root min-h-screen flex flex-col [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       {/* Scheme A: Immersive Destination Scenic Cover + Scroll-Down Floating Sticky Bar */}
       {wizardOverlayMode === null && (
         <>
@@ -8511,7 +8511,7 @@ export default function App() {
                     prev === 'mobile_sticky' ? null : 'mobile_sticky'
                   )
                 }
-                className="inline-flex max-w-full items-center gap-2 rounded-xl py-1 pr-2 text-left cursor-pointer"
+                className="inline-flex max-w-full items-center gap-2 rounded-[16px] py-1 pr-2 text-left cursor-pointer"
                 title={t('header.switchTripTitle')}
               >
                 {isAutoCoverMode && coverCityName ? (
@@ -8539,11 +8539,11 @@ export default function App() {
                     className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
                   />
                 )}
-                <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
+                <span className="tk-shell-ink truncate text-sm font-serif font-extrabold tracking-tight">
                   {cleanDestinationTitle}
                 </span>
                 <ChevronDown
-                  className={`h-3.5 w-3.5 tk-shell-muted transition-transform duration-150 shrink-0 ${
+                  className={`h-4 w-4 tk-shell-muted transition-transform duration-150 shrink-0 ${
                     tripMenuSource === 'mobile_sticky' ? 'rotate-180 tk-shell-accent' : ''
                   }`}
                 />
@@ -8579,7 +8579,7 @@ export default function App() {
                 onClick={() => setInviteModalOpen(true)}
                 title={t('header.inviteCrew')}
                 aria-label={t('header.inviteCrew')}
-                className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-xl px-2 text-[11px] font-bold cursor-pointer"
+                className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-[16px] px-2 text-[13px] font-bold cursor-pointer"
               >
                 {renderCrewAvatarsCluster('xs')}
                 {activeRoomId && (
@@ -8594,9 +8594,9 @@ export default function App() {
                   />
                 )}
                 {trip.crew.length > 1 && (
-                  <span className="tabular-nums tk-shell-muted">{trip.crew.length}</span>
+                  <span className="font-serif tabular-nums tk-shell-muted">{trip.crew.length}</span>
                 )}
-                <UserPlus className="h-3 w-3 tk-shell-accent" />
+                <UserPlus className="h-4 w-4 tk-shell-accent" />
               </button>
             </div>
           </div>
@@ -8672,7 +8672,7 @@ export default function App() {
                   onClick={() => setInviteModalOpen(true)}
                   title={t('header.inviteCrew')}
                   aria-label={t('header.inviteCrew')}
-                  className="tk-hero-crew group h-9 inline-flex items-center gap-1.5 rounded-xl px-2.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98]"
+                  className="tk-hero-crew group h-9 inline-flex items-center gap-1.5 rounded-[16px] px-2.5 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer active:scale-[0.98]"
                 >
                   {renderCrewAvatarsCluster('sm')}
                   {activeRoomId && (
@@ -8687,9 +8687,9 @@ export default function App() {
                     />
                   )}
                   {trip.crew.length > 1 && (
-                    <span className="tabular-nums tk-shell-on-card">{trip.crew.length}</span>
+                    <span className="font-serif tabular-nums tk-shell-on-card">{trip.crew.length}</span>
                   )}
-                  <UserPlus className="tk-hero-crew-icon h-3.5 w-3.5 transition-colors ml-0.5" />
+                  <UserPlus className="tk-hero-crew-icon h-4 w-4 transition-colors ml-0.5" />
                 </button>
               </div>
 
@@ -8704,10 +8704,10 @@ export default function App() {
                     onClick={() =>
                       setTripMenuSource((prev) => (prev === 'hero' ? null : 'hero'))
                     }
-                    className="tk-hero-title-hit group inline-flex items-center gap-2 rounded-xl -ml-1.5 px-1.5 py-0.5 text-left transition-colors cursor-pointer max-w-full"
+                    className="tk-hero-title-hit group inline-flex items-center gap-2 rounded-[16px] -ml-1.5 px-1.5 py-0.5 text-left transition-colors cursor-pointer max-w-full"
                     title={t('header.switchTripTitle')}
                   >
-                    <h1 className="tk-shell-on-card text-2xl sm:text-[28px] font-extrabold tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate shrink-0">
+                    <h1 className="tk-shell-on-card text-2xl sm:text-[28px] font-serif font-extrabold tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] truncate shrink-0">
                       {cleanDestinationTitle}
                     </h1>
                     <span
@@ -8718,7 +8718,7 @@ export default function App() {
                       }`}
                     >
                       <ChevronDown
-                        className={`h-3.5 w-3.5 transition-transform duration-150 ${
+                        className={`h-4 w-4 transition-transform duration-150 ${
                           tripMenuSource === 'hero' ? 'rotate-180' : ''
                         }`}
                       />
@@ -8750,12 +8750,12 @@ export default function App() {
                 </div>
 
                 {/* Clean 1-Line Travel Context (No Pro Badge, No VAT Exit Prompt) */}
-                <div className="tk-hero-meta mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
+                <div className="tk-hero-meta mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
                   <button
                     type="button"
                     onClick={() => setWizardOverlayMode('edit_current')}
                     title={t('header.editDaysTitle')}
-                    className="tk-hero-link tabular-nums font-semibold underline-offset-2 hover:underline transition-colors cursor-pointer"
+                    className="tk-hero-link font-serif tabular-nums font-semibold underline-offset-2 hover:underline transition-colors cursor-pointer"
                   >
                     {compactDateSpan
                       ? `${compactDateSpan} (${t('header.daysCount', { count: trip.setup.days })})`
@@ -8772,14 +8772,14 @@ export default function App() {
                   <span aria-hidden="true" className="tk-hero-meta-sep">
                     ·
                   </span>
-                  <span className="tabular-nums">
+                  <span className="font-serif tabular-nums">
                     {formatTempRangeByPref(trip.intel.tempRange, preferences.unitSystem)}{' '}
                     {translateRainChanceLabel(trip.intel.rainChance, preferences.language)}
                   </span>
                   <span aria-hidden="true" className="tk-hero-meta-sep">
                     ·
                   </span>
-                  <span className="tabular-nums">
+                  <span className="font-serif tabular-nums">
                     {t('header.sunset', {
                       time: formatTimeByPref(trip.intel.sunsetTime, preferences.timeFormat),
                     })}
@@ -8812,7 +8812,7 @@ export default function App() {
                           prev === 'desktop_sticky' ? null : 'desktop_sticky'
                         )
                       }
-                      className="tk-shell-hover-plate inline-flex items-center gap-2 rounded-xl px-2 py-1 -ml-2 transition-colors cursor-pointer max-w-[240px]"
+                      className="tk-shell-hover-plate inline-flex items-center gap-2 rounded-[16px] px-2 py-1 -ml-2 transition-colors cursor-pointer max-w-[240px]"
                       title={t('header.switchTripTitle')}
                     >
                       {isAutoCoverMode && coverCityName ? (
@@ -8840,11 +8840,11 @@ export default function App() {
                           className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
                         />
                       )}
-                      <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
+                      <span className="tk-shell-ink truncate text-sm font-serif font-extrabold tracking-tight">
                         {cleanDestinationTitle}
                       </span>
                       <ChevronDown
-                        className={`h-3.5 w-3.5 tk-shell-muted transition-transform duration-150 shrink-0 ${
+                        className={`h-4 w-4 tk-shell-muted transition-transform duration-150 shrink-0 ${
                           tripMenuSource === 'desktop_sticky' ? 'rotate-180 tk-shell-accent' : ''
                         }`}
                       />
@@ -8922,7 +8922,7 @@ export default function App() {
                       onClick={() => setInviteModalOpen(true)}
                       title={t('header.inviteCrew')}
                       aria-label={t('header.inviteCrew')}
-                      className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-xl px-2.5 text-xs font-bold transition-colors cursor-pointer"
+                      className="tk-shell-chip h-8 inline-flex items-center gap-1.5 rounded-[16px] px-2.5 text-sm font-bold transition-colors cursor-pointer"
                     >
                       {renderCrewAvatarsCluster('xs')}
                       {activeRoomId && (
@@ -8937,9 +8937,9 @@ export default function App() {
                         />
                       )}
                       {trip.crew.length > 1 && (
-                        <span className="tabular-nums tk-shell-muted">{trip.crew.length}</span>
+                        <span className="font-serif tabular-nums tk-shell-muted">{trip.crew.length}</span>
                       )}
-                      <UserPlus className="h-3.5 w-3.5 tk-shell-accent" />
+                      <UserPlus className="h-4 w-4 tk-shell-accent" />
                     </button>
                   </>
                 )}
@@ -8947,9 +8947,9 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => handleOpenAiAssistant()}
-                  className="tk-shell-fill inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="tk-shell-fill inline-flex items-center gap-1.5 rounded-[16px] px-3.5 py-1.5 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-4 w-4" />
                   <span>{t('nav.aiAssistant')}</span>
                 </button>
               </div>
@@ -9025,14 +9025,14 @@ export default function App() {
         ) : (
           <>
             {firedScheduledBanner && (
-              <div className="mb-4 rounded-2xl border tk-bc-forest tk-bg-forest-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+              <div className="mb-4 rounded-[20px] border tk-bc-forest tk-bg-forest-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 tk-elev-soft">
                 <div className="flex items-start gap-3 min-w-0">
                   <AccentIconBadge accent="teal" icon={BellRing} size="md" />
                   <div className="min-w-0">
-                    <div className="text-xs font-bold tk-text-forest">
+                    <div className="text-[13px] font-bold tk-text-forest">
                       {firedScheduledBanner.title}
                     </div>
-                    <p className="mt-0.5 text-xs tk-text-ink2 line-clamp-2 sm:truncate">
+                    <p className="mt-0.5 text-[13px] tk-text-ink2 line-clamp-2 sm:truncate">
                       {firedScheduledBanner.body}
                     </p>
                   </div>
@@ -9050,7 +9050,7 @@ export default function App() {
                         setTab(firedScheduledBanner.targetTab);
                         setFiredScheduledBanner(null);
                       }}
-                      className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-semibold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
+                      className="rounded-[16px] tk-bg-forest px-3 py-1.5 text-[13px] font-semibold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
                     >
                       {firedScheduledBanner.targetTab === 'itinerary'
                         ? appCopy.bannerViewStop
@@ -9060,14 +9060,14 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => handleSnoozeScheduledBanner(firedScheduledBanner, 15)}
-                    className="rounded-lg border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-card whitespace-nowrap cursor-pointer"
+                    className="rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-[13px] font-semibold tk-text-forest hover:tk-bg-card whitespace-nowrap cursor-pointer"
                   >
                     {appCopy.bannerSnooze15m}
                   </button>
                   <button
                     type="button"
                     onClick={() => setFiredScheduledBanner(null)}
-                    className="rounded-lg px-2 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
+                    className="rounded-[16px] px-2 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
                   >
                     {t('header.gotIt')}
                   </button>
@@ -9078,15 +9078,15 @@ export default function App() {
             {tab === 'packing' &&
               preferences.workspaceBannerEnabled &&
               activeReminderBanner && (
-              <div className="mb-5 rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mb-5 rounded-[20px] border tk-bc-warning-hair tk-bg-warning-tint px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-start gap-3 min-w-0">
                   <AccentIconBadge accent="peach" icon={BellRing} size="md" />
                   <div className="min-w-0">
-                    <div className="text-xs font-bold tk-text-warning">
+                    <div className="text-[13px] font-bold tk-text-warning">
                       {activeReminderBanner.headline}
                     </div>
                     {activeReminderBanner.items.length > 0 && (
-                      <p className="mt-0.5 text-xs tk-text-warning line-clamp-2 sm:truncate">
+                      <p className="mt-0.5 text-[13px] tk-text-warning line-clamp-2 sm:truncate">
                         {t('header.pendingPackPrefix')}
                         {activeReminderBanner.items.join(' · ')}
                       </p>
@@ -9097,7 +9097,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => handleSnoozeReminder(60)}
-                    className="rounded-lg border tk-bc-warning-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-warning hover:tk-bg-warning-tint whitespace-nowrap cursor-pointer"
+                    className="rounded-[16px] border tk-bc-warning-hair bg-white px-3 py-1.5 text-[13px] font-semibold tk-text-warning hover:tk-bg-warning-tint whitespace-nowrap cursor-pointer"
                   >
                     {t('header.snoozeOneHour')}
                   </button>
@@ -9107,7 +9107,7 @@ export default function App() {
                       setReminderDismissed(true);
                       setActiveReminderBanner(null);
                     }}
-                    className="rounded-lg px-2 py-1.5 text-xs font-semibold tk-text-warning hover:underline whitespace-nowrap cursor-pointer"
+                    className="rounded-[16px] px-2 py-1.5 text-[13px] font-semibold tk-text-warning hover:underline whitespace-nowrap cursor-pointer"
                   >
                     {t('header.gotIt')}
                   </button>
@@ -9373,7 +9373,7 @@ export default function App() {
                     setAiDrawerOpen(false);
                     setTab(item.id);
                   }}
-                  className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-0.5 text-[13px] font-semibold whitespace-nowrap cursor-pointer ${
                     active ? tabToken.textClass : 'tk-shell-muted'
                   }`}
                 >
@@ -9395,7 +9395,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => handleOpenAiAssistant()}
-                  className={`flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-0.5 text-[13px] font-semibold whitespace-nowrap cursor-pointer ${
                     aiDrawerOpen ? aiToken.textClass : 'tk-shell-muted'
                   }`}
                 >
@@ -9688,7 +9688,7 @@ export default function App() {
       )}
 
       {toast && (
-        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 rounded-xl tk-bg-ink px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
+        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 rounded-[16px] tk-bg-ink px-4 py-2.5 text-[13px] font-semibold text-white tk-elev-soft">
           {toast}
         </div>
       )}

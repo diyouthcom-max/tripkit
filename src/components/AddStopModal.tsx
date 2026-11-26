@@ -280,7 +280,7 @@ const StopCategoryAvatar: React.FC<{
         src={photoBlobUrl}
         alt={title}
         onError={() => setImgFailed(true)}
-        className="h-16 w-16 rounded-xl object-cover shrink-0 tk-bg-forest-plate"
+        className="h-16 w-16 rounded-[16px] object-cover shrink-0 tk-bg-forest-plate"
       />
     );
   }
@@ -303,7 +303,7 @@ const StopCategoryAvatar: React.FC<{
 
   return (
     <div
-      className={`h-16 w-16 rounded-xl ${bgMap[stopType] || 'tk-bg-forest-plate'} flex items-center justify-center shrink-0`}
+      className={`h-16 w-16 rounded-[16px] ${bgMap[stopType] || 'tk-bg-forest-plate'} flex items-center justify-center shrink-0`}
     >
       {iconMap[stopType] || <MapPin className="h-6 w-6 tk-text-forest" />}
     </div>
@@ -1827,7 +1827,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
     return (
       <div
         key={item.key}
-        className="rounded-2xl border tk-bc-hair tk-bg-card p-3 sm:p-3.5 flex items-center gap-3 hover:tk-bc-hair transition-colors"
+        className="rounded-[20px] border tk-bc-hair tk-bg-card p-3 sm:p-3.5 flex items-center gap-3 hover:tk-bc-hair transition-colors"
       >
         <StopCategoryAvatar
           stopType={item.stopType}
@@ -1837,10 +1837,10 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
 
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex items-center gap-1.5 min-w-0">
-            <h4 className="text-sm font-bold tk-text-ink truncate">{item.title}</h4>
+            <h4 className="font-serif text-sm font-bold tk-text-ink truncate">{item.title}</h4>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs tk-text-ink2 tabular-nums">
+          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm tk-text-ink2 tabular-nums">
             {item.fromGooglePlaces && typeof item.rating === 'number' ? (
               <>
                 <span className="font-semibold tk-text-ink">
@@ -1878,7 +1878,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
             />
           ) : null}
 
-          <p className="text-xs tk-text-ink2 truncate">
+          <p className="text-sm tk-text-ink2 truncate">
             {item.reason || item.address}
           </p>
         </div>
@@ -1889,7 +1889,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               type="button"
               onClick={() => stageCandidateInComposer(item, true)}
               title={copy.tuneBtnTitle}
-              className="min-h-[40px] px-2.5 rounded-xl text-xs font-semibold tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink transition-colors whitespace-nowrap cursor-pointer"
+              className="font-serif min-h-[40px] px-2.5 rounded-[16px] text-sm font-semibold tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink transition-colors whitespace-nowrap cursor-pointer"
             >
               {copy.tuneBtn}
             </button>
@@ -1899,7 +1899,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
             type="button"
             disabled={isAdded}
             onClick={() => handleQuickAddCandidate(item)}
-            className={`min-h-[40px] px-3.5 rounded-xl text-xs font-bold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+            className={`min-h-[40px] px-3.5 rounded-[16px] text-sm font-bold inline-flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isAdded
  ? 'tk-bg-paper tk-text-forest cursor-default'
  : 'tk-bg-forest tk-text-card hover:tk-bg-press'
@@ -1907,12 +1907,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
           >
             {isAdded ? (
               <>
-                <Check className="h-3.5 w-3.5" />
+                <Check className="h-4 w-4" />
                 <span>{copy.addedBtn}</span>
               </>
             ) : (
               <>
-                <Plus className="h-3.5 w-3.5" />
+                <Plus className="h-4 w-4" />
                 <span>{copy.addBtn}</span>
               </>
             )}
@@ -1927,15 +1927,15 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
       {[0, 1, 2, 3, 4].map((idx) => (
         <div
           key={idx}
-          className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 flex items-center gap-3.5 animate-pulse"
+          className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 flex items-center gap-3.5 animate-pulse"
         >
-          <div className="h-16 w-16 rounded-xl tk-bg-forest-plate shrink-0" />
+          <div className="h-16 w-16 rounded-[16px] tk-bg-forest-plate shrink-0" />
           <div className="flex-1 space-y-2">
             <div className="h-3.5 w-3/5 rounded-md tk-bg-forest-plate" />
             <div className="h-3 w-2/5 rounded-md tk-bg-forest-plate" />
             <div className="h-3 w-4/5 rounded-md tk-bg-forest-plate" />
           </div>
-          <div className="h-9 w-16 rounded-xl tk-bg-forest-plate shrink-0" />
+          <div className="h-9 w-16 rounded-[16px] tk-bg-forest-plate shrink-0" />
         </div>
       ))}
     </div>
@@ -1947,7 +1947,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-stop-modal-title"
-      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       {Boolean(apiKey) && (
         <PlacesDiscoveryBridge
@@ -1972,7 +1972,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
         onClick={(e) => e.stopPropagation()}
         className={`w-full ${
  activeTab === 'search' && showMapPicker ? 'sm:max-w-3xl' : 'sm:max-w-2xl'
- } rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all`}
+ } rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card tk-elev-soft overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all`}
       >
         {/* Mobile Sheet Grab Handle */}
         <div
@@ -1987,7 +1987,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               type="button"
               id="add-stop-modal-title"
               onClick={() => setDayStripOpen((v) => !v)}
-              className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0"
+              className="font-serif min-h-[44px] inline-flex items-center gap-1.5 rounded-[16px] px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0"
             >
               <span className="truncate">
                 {copy.addToDayTitle(addTargetDay, targetPrimaryCity)}
@@ -1999,12 +1999,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               />
             </button>
 
-            <span className="text-xs tk-text-ink2 tabular-nums whitespace-nowrap hidden xs:inline">
+            <span className="text-sm tk-text-ink2 tabular-nums whitespace-nowrap hidden xs:inline">
               · {copy.stopCount(targetDayNodes.length)}
             </span>
 
             {sessionAddCount > 0 && (
-              <span className="text-xs font-semibold tk-text-forest tabular-nums whitespace-nowrap">
+              <span className="text-sm font-semibold tk-text-forest tabular-nums whitespace-nowrap">
                 · {copy.sessionAdded(sessionAddCount)}
               </span>
             )}
@@ -2047,7 +2047,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       setCenterCityTrigger((n) => n + 1);
                       setDayStripOpen(false);
                     }}
-                    className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-colors tabular-nums cursor-pointer ${
+                    className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition-colors tabular-nums cursor-pointer ${
  isSelected
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-paper'
@@ -2066,7 +2066,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
           <div
             role="tablist"
             aria-label={copy.modeTabAria}
-            className="grid grid-cols-4 gap-1 rounded-2xl tk-bg-paper p-1"
+            className="grid grid-cols-4 gap-1 rounded-[20px] tk-bg-paper p-1"
           >
             {(
               [
@@ -2101,10 +2101,10 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-h-[52px] rounded-xl px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`min-h-[52px] rounded-[16px] px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
  isActive
- ? 'tk-bg-card tk-text-ink shadow-xs font-bold'
- : 'tk-text-ink2 hover:tk-text-ink font-medium'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest font-bold'
+ : 'bg-white tk-bc-hair border tk-text-ink2 hover:tk-text-ink font-medium'
  }`}
                 >
                   <Icon
@@ -2112,7 +2112,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
  isActive ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                   />
-                  <span className="text-[11px] sm:text-xs leading-none truncate max-w-full">
+                  <span className="text-[13px] sm:text-sm leading-none truncate max-w-full">
                     {tab.label}
                   </span>
                 </button>
@@ -2158,7 +2158,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       type="button"
                       data-chip-active={isActive ? 'true' : undefined}
                       onClick={() => setForYouSub(pill.id)}
-                      className={`min-h-[38px] px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                      className={`min-h-[38px] px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isActive
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-card tk-text-ink hover:tk-bg-paper'
@@ -2172,12 +2172,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
 
               {forYouSub === 'wishlist' ? (
                 wishlist.length === 0 ? (
-                  <div className="rounded-2xl border tk-bc-hair tk-bg-paper px-5 py-10 text-center space-y-2">
+                  <div className="rounded-[20px] border tk-bc-hair tk-bg-paper px-5 py-10 text-center space-y-2">
                     <Heart className="h-6 w-6 tk-text-ink2 mx-auto" />
-                    <p className="text-sm font-bold tk-text-ink">
+                    <p className="font-serif text-sm font-bold tk-text-ink">
                       {copy.wishlistEmptyTitle}
                     </p>
-                    <p className="text-xs tk-text-ink2 max-w-sm mx-auto">
+                    <p className="text-sm tk-text-ink2 max-w-sm mx-auto">
                       {copy.wishlistEmptyBody}
                     </p>
                   </div>
@@ -2189,12 +2189,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               ) : isForYouBusy ? (
                 renderSkeletonList()
               ) : forYouError && activeForYouItems.length === 0 ? (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-4 text-xs tk-text-ink2 flex items-center justify-between gap-3">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-4 text-sm tk-text-ink2 flex items-center justify-between gap-3">
                   <span>{forYouError}</span>
                   <button
                     type="button"
                     onClick={() => void fetchAiForYou(forYouSub)}
-                    className="min-h-[36px] px-3 rounded-xl tk-bg-card border tk-bc-hair font-bold tk-text-ink2 hover:tk-bg-paper whitespace-nowrap cursor-pointer"
+                    className="min-h-[36px] px-3 rounded-[16px] tk-bg-card border tk-bc-hair font-bold tk-text-ink2 hover:tk-bg-paper whitespace-nowrap cursor-pointer"
                   >
                     {copy.retryBtn}
                   </button>
@@ -2227,7 +2227,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       <Search className="h-4 w-4 tk-text-forest absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     }
                     placeholder={copy.searchPlaceholder(targetPrimaryCity)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper pl-10 pr-3 py-2.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper pl-10 pr-3 py-2.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
 
@@ -2244,21 +2244,21 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowMapPicker((v) => !v)}
-                  className={`min-h-[42px] px-3 rounded-xl border text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                  className={`min-h-[42px] px-3 rounded-[16px] border text-sm font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  showMapPicker
  ? 'tk-bc-forest tk-bg-forest tk-text-card'
  : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bg-paper'
  }`}
                 >
-                  <MapPin className="h-3.5 w-3.5" />
+                  <MapPin className="h-4 w-4" />
                   <span>{copy.mapPinBtn}</span>
                 </button>
               </div>
 
               {/* Collapsible Interactive Map Pin Picker */}
               {showMapPicker && (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-paper overflow-hidden">
-                  <div className="px-3.5 py-2 border-b tk-bc-hair tk-bg-card flex items-center justify-between gap-2 text-xs">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-paper overflow-hidden">
+                  <div className="px-3.5 py-2 border-b tk-bc-hair tk-bg-card flex items-center justify-between gap-2 text-sm">
                     <span className="tk-text-ink2 truncate">
                       {mapResolving
                         ? copy.mapResolving
@@ -2268,7 +2268,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setCenterCityTrigger((n) => n + 1)}
-                      className="min-h-[32px] px-2.5 rounded-lg border tk-bc-hair tk-bg-paper text-[11px] font-semibold tk-text-ink2 hover:tk-bg-paper inline-flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+                      className="min-h-[32px] px-2.5 rounded-lg border tk-bc-hair tk-bg-paper text-[13px] font-semibold tk-text-ink2 hover:tk-bg-paper inline-flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       <Crosshair className="h-3 w-3 tk-text-forest" />
                       <span>{targetPrimaryCity}</span>
@@ -2332,12 +2332,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                   {searchResults.map((item) => renderCandidateCard(item))}
 
                   {searchInput.trim().length > 0 && (
-                    <div className="rounded-2xl border border-dashed tk-bc-hair tk-bg-paper p-3.5 flex items-center justify-between gap-3">
+                    <div className="rounded-[20px] border border-dashed tk-bc-hair tk-bg-paper p-3.5 flex items-center justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs font-bold tk-text-ink truncate">
+                        <p className="font-serif text-sm font-bold tk-text-ink truncate">
                           {copy.useCustomDirect(searchInput.trim(), addTargetDay)}
                         </p>
-                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                        <p className="text-[13px] tk-text-ink2 leading-snug">
                           {copy.useCustomMeta(targetPrimaryCity, nextSmartTime)}
                         </p>
                       </div>
@@ -2361,7 +2361,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                               true
                             )
                           }
-                          className="min-h-[38px] px-2.5 rounded-xl text-xs font-semibold tk-text-ink2 hover:tk-bg-paper whitespace-nowrap cursor-pointer"
+                          className="min-h-[38px] px-2.5 rounded-[16px] text-sm font-semibold tk-text-ink2 hover:tk-bg-paper whitespace-nowrap cursor-pointer"
                         >
                           {copy.tuneBtn}
                         </button>
@@ -2381,9 +2381,9 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                             });
                             onClose();
                           }}
-                          className="min-h-[38px] px-3.5 rounded-xl tk-bg-forest text-xs font-bold tk-text-card hover:tk-bg-press inline-flex items-center gap-1 whitespace-nowrap cursor-pointer"
+                          className="min-h-[38px] px-3.5 rounded-[16px] tk-bg-forest text-sm font-bold tk-text-card hover:tk-bg-press inline-flex items-center gap-1 whitespace-nowrap cursor-pointer"
                         >
-                          <Plus className="h-3.5 w-3.5" />
+                          <Plus className="h-4 w-4" />
                           <span>{copy.addBtn}</span>
                         </button>
                       </div>
@@ -2391,9 +2391,9 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                   )}
 
                   {!searchInput.trim() && !showMapPicker && (
-                    <div className="rounded-2xl border tk-bc-hair tk-bg-paper px-4 py-7 text-center space-y-1.5">
+                    <div className="rounded-[20px] border tk-bc-hair tk-bg-paper px-4 py-7 text-center space-y-1.5">
                       <Search className="h-5 w-5 tk-text-ink2 mx-auto" />
-                      <p className="text-xs font-semibold tk-text-ink2">
+                      <p className="text-sm font-semibold tk-text-ink2">
                         {copy.searchEmptyHint(targetPrimaryCity)}
                       </p>
                       {searchInput.trim() === '' && (
@@ -2401,7 +2401,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                           href={buildGoogleMapsSearchUrl({ title: targetPrimaryCity })}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest hover:underline"
+                          className="inline-flex items-center gap-1 text-[13px] font-semibold tk-text-forest hover:underline"
                         >
                           <ExternalLink className="h-3 w-3" />
                           <span>{copy.browseGoogleMaps}</span>
@@ -2417,13 +2417,13 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
           {/* TAB 3: LINK & AI NATURAL LANGUAGE */}
           {activeTab === 'link' && (
             <div className="space-y-3.5">
-              <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-3.5 space-y-2.5">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-3.5 space-y-2.5">
                 <textarea
                   rows={3}
                   value={linkOrPromptText}
                   onChange={(e) => setLinkOrPromptText(e.target.value)}
                   placeholder={copy.linkPlaceholder(targetPrimaryCity)}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
+                  className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3.5 py-2.5 text-base sm:text-sm tk-text-ink placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
                 />
 
                 <div className="flex items-center justify-between gap-2">
@@ -2449,7 +2449,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                           setLinkSummaryTip(null);
                           setLinkError(null);
                         }}
-                        className="min-h-[38px] px-2.5 rounded-xl text-xs font-semibold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
+                        className="min-h-[38px] px-2.5 rounded-[16px] text-sm font-semibold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
                       >
                         {copy.clearBtn}
                       </button>
@@ -2460,12 +2460,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                     type="button"
                     disabled={linkLoading || !linkOrPromptText.trim()}
                     onClick={() => void handleExtractFromLinkOrText()}
-                    className="min-h-[40px] px-4 rounded-xl tk-bg-forest text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                    className="min-h-[40px] px-4 rounded-[16px] tk-bg-forest text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                   >
                     {linkLoading ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Sparkles className="h-3.5 w-3.5" />
+                      <Sparkles className="h-4 w-4" />
                     )}
                     <span>
                       {linkLoading ? copy.extractingBtn : copy.extractPlacesBtn}
@@ -2488,7 +2488,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                         setLinkOrPromptText(sample);
                         void handleExtractFromLinkOrText(sample);
                       }}
-                      className="min-h-[34px] px-3 py-1 rounded-full border tk-bc-hair tk-bg-card text-[11px] font-medium tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
+                      className="min-h-[34px] px-3 py-1 rounded-full border tk-bc-hair tk-bg-card text-[13px] font-medium tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {sample}
                     </button>
@@ -2503,7 +2503,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       onClose();
                       onOpenAiAssistant(draft || undefined);
                     }}
-                    className="text-[11px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                    className="text-[13px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copy.fullAiCopilot}
                   </button>
@@ -2511,13 +2511,13 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               </div>
 
               {linkError && (
-                <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-xs tk-text-ink2">
+                <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm tk-text-ink2">
                   {linkError}
                 </div>
               )}
 
               {linkSummaryTip && (
-                <p className="text-xs font-medium tk-text-forest px-0.5">{linkSummaryTip}</p>
+                <p className="text-sm font-medium tk-text-forest px-0.5">{linkSummaryTip}</p>
               )}
 
               {linkLoading ? (
@@ -2526,13 +2526,13 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                 <div className="space-y-2.5">
                   {linkExtractedStops.length > 1 && (
                     <div className="flex items-center justify-between px-0.5">
-                      <span className="text-xs font-semibold tk-text-ink2 tabular-nums">
+                      <span className="text-sm font-semibold tk-text-ink2 tabular-nums">
                         {copy.recognizedStopsCount(linkExtractedStops.length)}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleBatchAddCandidates(linkExtractedStops)}
-                        className="min-h-[36px] px-3.5 rounded-xl tk-bg-forest text-xs font-bold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
+                        className="min-h-[36px] px-3.5 rounded-[16px] tk-bg-forest text-sm font-bold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
                       >
                         {copy.addAllBtn(linkExtractedStops.length)}
                       </button>
@@ -2581,38 +2581,38 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       fileInputRef.current?.click();
                     }
                   }}
-                  className={`rounded-2xl border-2 border-dashed p-6 sm:p-8 text-center transition-colors cursor-pointer ${
+                  className={`rounded-[20px] border-2 border-dashed p-6 sm:p-8 text-center transition-colors cursor-pointer ${
  dragActive
  ? 'tk-bc-forest tk-bg-forest-tint'
  : 'tk-bc-hair tk-bg-paper hover:tk-bc-forest'
  }`}
                 >
-                  <div className="h-12 w-12 rounded-2xl tk-bg-paper tk-text-forest flex items-center justify-center mx-auto mb-3">
+                  <div className="h-12 w-12 rounded-[20px] tk-bg-paper tk-text-forest flex items-center justify-center mx-auto mb-3">
                     <Upload className="h-5 w-5" />
                   </div>
-                  <p className="text-sm font-bold tk-text-ink">
+                  <p className="font-serif text-sm font-bold tk-text-ink">
                     {copy.screenshotUploadTitle}
                   </p>
-                  <p className="text-xs tk-text-ink2 mt-1 max-w-md mx-auto">
+                  <p className="text-sm tk-text-ink2 mt-1 max-w-md mx-auto">
                     {copy.screenshotUploadSub}
                   </p>
                 </div>
               ) : (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-3 flex items-center justify-between gap-3">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <img
                       src={screenshotPreview}
                       alt={copy.screenshotAlt}
                       referrerPolicy="no-referrer"
-                      className="h-14 w-14 rounded-xl object-cover border tk-bc-hair shrink-0"
+                      className="h-14 w-14 rounded-[16px] object-cover border tk-bc-hair shrink-0"
                     />
                     <div className="min-w-0">
-                      <p className="text-xs font-bold tk-text-ink truncate">
+                      <p className="font-serif text-sm font-bold tk-text-ink truncate">
                         {screenshotLoading
                           ? copy.recognizingImg
                           : screenshotSummaryTip || copy.screenshotAnalyzed}
                       </p>
-                      <p className="text-[11px] tk-text-ink2">
+                      <p className="text-[13px] tk-text-ink2">
                         {copy.targetDayCity(addTargetDay, targetPrimaryCity)}
                       </p>
                     </div>
@@ -2623,7 +2623,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       type="button"
                       disabled={screenshotLoading}
                       onClick={() => fileInputRef.current?.click()}
-                      className="min-h-[36px] px-3 rounded-xl border tk-bc-hair tk-bg-card text-xs font-semibold tk-text-ink hover:tk-bg-paper whitespace-nowrap cursor-pointer"
+                      className="font-serif min-h-[36px] px-3 rounded-[16px] border tk-bc-hair tk-bg-card text-sm font-semibold tk-text-ink hover:tk-bg-paper whitespace-nowrap cursor-pointer"
                     >
                       {copy.changeBtn}
                     </button>
@@ -2637,7 +2637,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                         setScreenshotError(null);
                       }}
                       aria-label={copy.removeScreenshotAria}
-                      className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink cursor-pointer"
+                      className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-[16px] tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -2646,7 +2646,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               )}
 
               {screenshotError && (
-                <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-xs tk-text-ink2">
+                <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-sm tk-text-ink2">
                   {screenshotError}
                 </div>
               )}
@@ -2656,14 +2656,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               ) : screenshotStops.length > 0 ? (
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between px-0.5">
-                    <span className="text-xs font-semibold tk-text-ink2 tabular-nums">
+                    <span className="text-sm font-semibold tk-text-ink2 tabular-nums">
                       {copy.foundPlacesCount(screenshotStops.length)}
                     </span>
                     {screenshotStops.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleBatchAddCandidates(screenshotStops)}
-                        className="min-h-[36px] px-3.5 rounded-xl tk-bg-forest text-xs font-bold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
+                        className="min-h-[36px] px-3.5 rounded-[16px] tk-bg-forest text-sm font-bold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
                       >
                         {copy.addAllBtn(screenshotStops.length)}
                       </button>
@@ -2687,7 +2687,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
               <div className="space-y-3 pb-2 border-b tk-bc-hair max-h-[36vh] overflow-y-auto pr-0.5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.stopTitleLabel}
                     </label>
                     <input
@@ -2695,12 +2695,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
                       placeholder={copy.stopTitlePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.areaLabel}
                     </label>
                     <input
@@ -2708,14 +2708,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newDistrict}
                       onChange={(e) => setNewDistrict(e.target.value)}
                       placeholder={targetPrimaryCity}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* 5-Way Stop Type Selector */}
                 <div>
-                  <span className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                  <span className="block text-[13px] font-bold tk-text-ink2 mb-1">
                     {copy.stopCategoryLabel}
                   </span>
                   <HorizontalChipScroller fadeBgClassName="">
@@ -2726,7 +2726,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                           key={opt.id}
                           type="button"
                           onClick={() => handleStopTypeChange(opt.id)}
-                          className={`min-h-[34px] px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                          className={`min-h-[34px] px-3 py-1 rounded-[16px] text-sm font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  active
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bg-paper'
@@ -2742,31 +2742,31 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                 {/* Time, Close Time & Spend */}
                 <div className="grid grid-cols-3 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.arrivalLabel}
                     </label>
                     <input
                       type="time"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.closesAtLabel}
                     </label>
                     <input
                       type="time"
                       value={newCloseTime}
                       onChange={(e) => setNewCloseTime(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.estCostLabel(currencyCode)}
                     </label>
                     <input
@@ -2775,21 +2775,21 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       step="1"
                       value={newEst}
                       onChange={(e) => setNewEst(e.target.value)}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-mono text-base sm:text-sm tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {showClosingWarning && (
-                  <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-[11px] tk-text-ink2 flex items-center gap-1.5">
-                    <AlertTriangle className="h-3.5 w-3.5 shrink-0 tk-text-warning" />
+                  <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-[13px] tk-text-ink2 flex items-center gap-1.5">
+                    <AlertTriangle className="h-4 w-4 shrink-0 tk-text-warning" />
                     <span>{copy.closingWarning(newTime, newCloseTime)}</span>
                   </div>
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.streetAddressLabel}
                     </label>
                     <input
@@ -2797,12 +2797,12 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newAddress}
                       onChange={(e) => setNewAddress(e.target.value)}
                       placeholder={copy.streetAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                       {copy.transitNoteLabel}
                     </label>
                     <input
@@ -2810,14 +2810,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newTransit}
                       onChange={(e) => setNewTransit(e.target.value)}
                       placeholder={copy.transitNotePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Anchor & Rain Backup Toggles */}
                 <div className="flex flex-wrap items-center gap-4 pt-0.5">
-                  <label className="inline-flex items-center gap-2 text-xs font-medium tk-text-ink cursor-pointer">
+                  <label className="inline-flex items-center gap-2 text-sm font-medium tk-text-ink cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newIsAnchor}
@@ -2827,7 +2827,7 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                     <span>{copy.anchorCheckbox}</span>
                   </label>
 
-                  <label className="inline-flex items-center gap-2 text-xs font-medium tk-text-ink cursor-pointer">
+                  <label className="inline-flex items-center gap-2 text-sm font-medium tk-text-ink cursor-pointer">
                     <input
                       type="checkbox"
                       checked={newIsOutdoor}
@@ -2845,14 +2845,14 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                       value={newRainTitle}
                       onChange={(e) => setNewRainTitle(e.target.value)}
                       placeholder={copy.rainVenuePlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                     <input
                       type="text"
                       value={newRainAddress}
                       onChange={(e) => setNewRainAddress(e.target.value)}
                       placeholder={copy.rainAddressPlaceholder}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                   </div>
                 )}
@@ -2862,10 +2862,10 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
             {/* Compact Sticky Action Bar */}
             <div className="flex items-center justify-between gap-2.5">
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-bold tk-text-ink truncate">
+                <p className="font-serif text-sm font-bold tk-text-ink truncate">
                   {newTitle.trim() || searchInput.trim() || copy.confirmHint}
                 </p>
-                <p className="text-[11px] tk-text-ink2 tabular-nums truncate">
+                <p className="text-[13px] tk-text-ink2 tabular-nums truncate">
                   D{addTargetDay} {targetPrimaryCity} · {newTime}
                   {Number(newEst) > 0 ? ` · ${pricePrefix}${newEst}` : ''}
                   {newIsAnchor ? copy.meetupAnchorTag : ''}
@@ -2876,21 +2876,21 @@ export const AddStopModal: React.FC<AddStopModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setFineTuneExpanded((v) => !v)}
-                  className="min-h-[42px] px-3 rounded-xl border tk-bc-hair tk-bg-card text-xs font-semibold tk-text-ink hover:tk-bg-forest-plate inline-flex items-center gap-1 whitespace-nowrap cursor-pointer"
+                  className="font-serif min-h-[42px] px-3 rounded-[16px] border tk-bc-hair tk-bg-card text-sm font-semibold tk-text-ink hover:tk-bg-forest-plate inline-flex items-center gap-1 whitespace-nowrap cursor-pointer"
                 >
-                  <SlidersHorizontal className="h-3.5 w-3.5 tk-text-forest" />
+                  <SlidersHorizontal className="h-4 w-4 tk-text-forest" />
                   <span>{copy.detailsBtn}</span>
                   {fineTuneExpanded ? (
-                    <ChevronUp className="h-3.5 w-3.5" />
+                    <ChevronUp className="h-4 w-4" />
                   ) : (
-                    <ChevronDown className="h-3.5 w-3.5" />
+                    <ChevronDown className="h-4 w-4" />
                   )}
                 </button>
 
                 <button
                   type="submit"
                   disabled={!(newTitle.trim() || searchInput.trim())}
-                  className="min-h-[42px] px-4 rounded-xl tk-bg-forest text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-45 inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
+                  className="min-h-[42px] px-4 rounded-[16px] tk-bg-forest text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-45 inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                   <span>{copy.addToDaySubmit(addTargetDay)}</span>

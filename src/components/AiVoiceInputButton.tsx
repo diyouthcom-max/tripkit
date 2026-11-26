@@ -434,20 +434,20 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
       return (
         <div
           title={livePreview || t('voice.listening')}
-          className="min-h-[60px] w-full rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint px-2 py-2 flex flex-col items-center justify-center gap-1.5 tk-text-danger"
+          className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] min-h-[60px] w-full rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint px-2 py-2 flex flex-col items-center justify-center gap-1.5 tk-text-danger"
         >
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full tk-bg-danger opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 tk-bg-danger" />
             </span>
-            <span className="font-num text-[11px] font-bold tabular-nums">{formattedDuration}</span>
+            <span className="font-serif text-[11px] font-bold tabular-nums">{formattedDuration}</span>
           </div>
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={finishRecording}
-              className="inline-flex items-center gap-0.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-0.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[12px] font-bold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
             >
               <Square className="h-2 w-2 fill-current" />
               <span>{t('voice.doneBtn')}</span>
@@ -468,7 +468,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
 
     if (status === 'transcribing') {
       return (
-        <div className="min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-forest">
+        <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-forest">
           <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
           <span className="text-[11px] font-semibold whitespace-nowrap truncate max-w-full">
             {t('voice.transcribing')}
@@ -484,7 +484,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
         onClick={() => void startRecording()}
         title={t('voice.tooltipSpeech')}
         aria-label={displayLabel}
-        className="min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint disabled:opacity-50 px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors cursor-pointer"
+        className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] min-h-[60px] w-full rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint disabled:opacity-50 px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors cursor-pointer"
       >
         <Mic className="h-4 w-4 tk-text-forest shrink-0" />
         <span className="text-[11px] sm:text-xs font-semibold whitespace-nowrap truncate max-w-full">
@@ -498,7 +498,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
     return (
       <div
         title={livePreview || t('voice.listening')}
-        className={`inline-flex items-center gap-1.5 rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-2.5 text-xs font-semibold tk-text-danger max-w-full shrink-0 ${
+        className={`[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint px-2.5 text-xs font-semibold tk-text-danger max-w-full shrink-0 ${
  compact ? 'min-h-[32px] py-1' : 'min-h-[36px] py-1'
  }`}
       >
@@ -506,7 +506,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full tk-bg-danger opacity-75" />
           <span className="relative inline-flex rounded-full h-2.5 w-2.5 tk-bg-danger" />
         </span>
-        <span className="font-num tabular-nums shrink-0">{formattedDuration}</span>
+        <span className="font-serif tabular-nums shrink-0">{formattedDuration}</span>
         {!compact && (
           <span className="max-w-[120px] sm:max-w-[180px] truncate tk-text-danger font-medium">
             {livePreview ? `“${livePreview}”` : t('voice.listening')}
@@ -536,7 +536,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
   if (status === 'transcribing') {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-forest-tint text-xs font-semibold tk-text-forest whitespace-nowrap shrink-0 ${
+        className={`[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-forest-tint text-xs font-semibold tk-text-forest whitespace-nowrap shrink-0 ${
  compact ? 'h-8 px-2.5' : 'h-9 px-3'
  }`}
       >
@@ -555,7 +555,7 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
       onClick={() => void startRecording()}
       title={t('voice.tooltipSpeech')}
       aria-label={displayLabel}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-forest-tint font-semibold tk-text-forest hover:tk-bc-forest hover:tk-bg-warning-tint disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+      className={`[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] inline-flex items-center justify-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-forest-tint font-semibold tk-text-forest hover:tk-bc-forest hover:tk-bg-warning-tint disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
         iconOnly
           ? 'h-8 w-8 p-0'
           : compact

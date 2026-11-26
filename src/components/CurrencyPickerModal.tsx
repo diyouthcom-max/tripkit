@@ -126,11 +126,11 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="currency-picker-modal-title"
-      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 flex items-end sm:items-center justify-center"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[80vh]"
+        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white tk-elev-soft overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[80vh]"
       >
         {/* Packy-Style Sheet Handle */}
         <div
@@ -143,11 +143,11 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
           <div>
             <h2
               id="currency-picker-modal-title"
-              className="text-lg font-extrabold tracking-tight tk-text-ink"
+              className="font-serif text-lg font-extrabold tracking-tight tk-text-ink"
             >
               {copy.title}
             </h2>
-            <p className="text-xs tk-text-ink2">{copy.subtitle}</p>
+            <p className="text-sm tk-text-ink2">{copy.subtitle}</p>
           </div>
 
           <button
@@ -162,7 +162,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
 
         {/* Search Input Bar (Packy Style: "Search, e.g. THB") */}
         <div className="px-5 pb-3 border-b tk-bc-hair shrink-0">
-          <div className="flex items-center gap-2 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 focus-within:tk-bc-forest focus-within:bg-white transition-colors">
+          <div className="flex items-center gap-2 rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2 focus-within:tk-bc-forest focus-within:bg-white transition-colors">
             <Search className="h-4 w-4 tk-text-ink2 shrink-0" />
             <input
               ref={searchInputRef}
@@ -174,7 +174,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
             />
             {syncingRates && (
               <RefreshCw
-                className="h-3.5 w-3.5 animate-spin tk-text-forest shrink-0"
+                className="h-4 w-4 animate-spin tk-text-forest shrink-0"
                 aria-label={copy.refreshing}
               />
             )}
@@ -182,7 +182,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                className="font-serif text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
               >
                 {copy.clear}
               </button>
@@ -200,14 +200,14 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
                 onSelectCurrency(pinnedTripSpec.code);
                 onClose();
               }}
-              className="w-full px-3.5 py-3.5 rounded-2xl flex items-center justify-between gap-3 text-left hover:tk-bg-warning-tint transition-colors cursor-pointer"
+              className="w-full px-3.5 py-3.5 rounded-[20px] flex items-center justify-between gap-3 text-left hover:tk-bg-warning-tint transition-colors cursor-pointer"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-num text-base font-extrabold tk-text-ink">
+                  <span className="font-serif tabular-nums text-base font-extrabold tk-text-ink">
                     {pinnedTripSpec.code}
                   </span>
-                  <span className="text-xs font-semibold tk-text-ink2">
+                  <span className="text-sm font-semibold tk-text-ink2">
                     {localizeCurrencyName(
                       pinnedTripSpec.code,
                       pinnedTripSpec.nameZh,
@@ -217,7 +217,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
                     ({pinnedTripSpec.symbol})
                   </span>
                 </div>
-                <div className="mt-0.5 text-xs font-medium tk-text-forest">
+                <div className="mt-0.5 text-sm font-medium tk-text-forest">
                   {copy.tripCurrencyTag}
                 </div>
               </div>
@@ -240,14 +240,14 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
                   onSelectCurrency(spec.code);
                   onClose();
                 }}
-                className="w-full px-3.5 py-3 rounded-2xl flex items-center justify-between gap-3 text-left hover:tk-bg-paper transition-colors cursor-pointer"
+                className="w-full px-3.5 py-3 rounded-[20px] flex items-center justify-between gap-3 text-left hover:tk-bg-paper transition-colors cursor-pointer"
               >
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-num text-[15px] font-bold tk-text-ink w-11 shrink-0">
+                    <span className="font-serif tabular-nums text-[15px] font-bold tk-text-ink w-11 shrink-0">
                       {spec.code}
                     </span>
-                    <span className="text-xs font-medium tk-text-ink2 truncate">
+                    <span className="text-sm font-medium tk-text-ink2 truncate">
                       {localizeCurrencyName(spec.code, spec.nameZh, spec.nameEn, language)} (
                       {spec.symbol})
                     </span>
@@ -256,7 +256,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
 
                 <div className="flex items-center gap-2.5 shrink-0">
                   {rateHint && (
-                    <span className="font-num text-[11px] tk-text-ink2 tabular-nums hidden sm:inline">
+                    <span className="font-serif text-[13px] tk-text-ink2 tabular-nums hidden sm:inline">
                       {rateHint}
                     </span>
                   )}
@@ -271,7 +271,7 @@ export const CurrencyPickerModal: React.FC<CurrencyPickerModalProps> = ({
           })}
 
           {!pinnedTripSpec && otherSpecs.length === 0 && (
-            <div className="py-10 text-center text-xs tk-text-ink2">
+            <div className="py-10 text-center text-sm tk-text-ink2">
               {copy.emptyMatch(query)}
             </div>
           )}

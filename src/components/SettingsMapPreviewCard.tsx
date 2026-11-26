@@ -162,17 +162,17 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
   };
 
   return (
-    <div className="pl-2.5 pr-4 py-3.5 space-y-3">
+    <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] pl-2.5 pr-4 py-3.5 space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3.5 min-w-0 flex-1">
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border tk-bc-hair tk-bg-forest-tint tk-text-swatch-3">
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] border tk-bc-hair tk-bg-forest-tint tk-text-swatch-3">
             <MapPin className="h-4 w-4" />
           </span>
           <div className="min-w-0">
-            <div className="text-sm font-bold tk-text-ink">
+            <div className="text-sm font-serif font-bold tk-text-ink">
               {copy.cardTitle}
             </div>
-            <div className="mt-0.5 text-xs tk-text-ink2">
+            <div className="mt-0.5 text-sm tk-text-ink2">
               {apiKey ? copy.connectedSub : copy.standardSub}
             </div>
           </div>
@@ -183,7 +183,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
             <button
               type="button"
               onClick={() => setPreviewOpen(false)}
-              className="rounded-xl border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
+              className="rounded-[16px] border tk-bc-hair bg-white px-2.5 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
             >
               {copy.hidePreviewBtn}
             </button>
@@ -192,12 +192,12 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
             type="button"
             onClick={handleRunTest}
             disabled={testing}
-            className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-60 whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-1.5 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-60 whitespace-nowrap cursor-pointer"
           >
             {testing ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Play className="h-3.5 w-3.5" />
+              <Play className="h-4 w-4" />
             )}
             {previewOpen ? copy.refreshPreviewBtn : copy.previewMapBtn}
           </button>
@@ -205,7 +205,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
       </div>
 
       {previewOpen && (
-        <div className="rounded-xl border tk-bc-hair bg-white overflow-hidden">
+        <div className="rounded-[16px] border tk-bc-hair bg-white overflow-hidden">
           {apiKey ? (
             /* h-44(176) → h-52(208): +32px attribution safety for .gm-style-cc + logo */
             <div
@@ -234,14 +234,14 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
             </div>
           ) : (
             <div className="px-4 py-3.5 tk-bg-card flex flex-wrap items-center justify-between gap-3">
-              <div className="text-xs tk-text-ink2 leading-relaxed">
+              <div className="text-sm tk-text-ink2 leading-relaxed">
                 {copy.externalMapsHint}
               </div>
               <a
                 href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-xs font-semibold tk-text-swatch-3 hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-sm font-semibold tk-text-swatch-3 hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
               >
                 <ExternalLink className="h-3 w-3" />
                 {copy.openMapsBtn}
@@ -251,7 +251,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
 
           {probeResult && (
             <div
-              className={`border-t tk-bc-hair px-3.5 py-2 text-[11px] leading-relaxed ${
+              className={`border-t tk-bc-hair px-3.5 py-2 text-[13px] leading-relaxed ${
  probeResult.ok
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-bg-warning-tint tk-text-warning'

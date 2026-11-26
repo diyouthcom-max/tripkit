@@ -635,11 +635,11 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-gear-modal-title"
-      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
+        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card tk-elev-soft overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
       >
         {/* Mobile Sheet Grab Handle */}
         <div
@@ -654,7 +654,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               type="button"
               id="add-gear-modal-title"
               onClick={() => setGroupStripOpen((v) => !v)}
-              className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0"
+              className="font-serif min-h-[44px] inline-flex items-center gap-1.5 rounded-[16px] px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0"
             >
               <span className="truncate">
                 {selectedGroupObj
@@ -675,7 +675,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
             </button>
 
             {sessionAddCount > 0 && (
-              <span className="text-xs font-semibold tk-text-forest tabular-nums whitespace-nowrap">
+              <span className="text-sm font-semibold tk-text-forest tabular-nums whitespace-nowrap">
                 · {copy.sessionAddedCount(sessionAddCount)}
               </span>
             )}
@@ -688,9 +688,9 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                 setGroupStripOpen(true);
                 setShowNewCategoryInline(true);
               }}
-              className="h-8 inline-flex items-center gap-1 rounded-full border tk-bc-hair tk-bg-paper px-2.5 text-xs font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-8 inline-flex items-center gap-1 rounded-full border tk-bc-hair tk-bg-paper px-2.5 text-sm font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <FolderPlus className="h-3.5 w-3.5 shrink-0" />
+              <FolderPlus className="h-4 w-4 shrink-0" />
               <span>{copy.newListBtn}</span>
             </button>
 
@@ -720,7 +720,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   setTargetGroup('auto');
                   setGroupStripOpen(false);
                 }}
-                className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  targetGroup === 'auto'
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-forest-plate'
@@ -741,7 +741,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                       setDetailGroupId(grp.id);
                       setGroupStripOpen(false);
                     }}
-                    className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-colors tabular-nums cursor-pointer ${
+                    className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition-colors tabular-nums cursor-pointer ${
  isSelected
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-forest-plate'
@@ -755,9 +755,9 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               <button
                 type="button"
                 onClick={() => setShowNewCategoryInline((v) => !v)}
-                className="min-h-[36px] inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed tk-bc-forest tk-bg-forest-tint text-xs font-bold tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
+                className="font-serif min-h-[36px] inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed tk-bc-forest tk-bg-forest-tint text-sm font-bold tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
               >
-                <FolderPlus className="h-3.5 w-3.5 shrink-0" />
+                <FolderPlus className="h-4 w-4 shrink-0" />
                 <span>{copy.newCategoryChip}</span>
               </button>
             </HorizontalChipScroller>
@@ -775,7 +775,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   setShowNewCategoryInline(false);
                   setGroupStripOpen(false);
                 }}
-                className="rounded-xl border tk-bc-hair tk-bg-paper p-3 space-y-2"
+                className="rounded-[16px] border tk-bc-hair tk-bg-paper p-3 space-y-2"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <input
@@ -783,7 +783,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     value={newCategoryTitle}
                     onChange={(e) => setNewCategoryTitle(e.target.value)}
                     placeholder={copy.newCategoryNamePlaceholder}
-                    className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+                    className="font-serif rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                   />
                   <input
                     type="text"
@@ -814,7 +814,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   <button
                     type="submit"
                     disabled={!newCategoryTitle.trim()}
-                    className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card disabled:opacity-40 whitespace-nowrap cursor-pointer"
+                    className="rounded-lg tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card disabled:opacity-40 whitespace-nowrap cursor-pointer"
                   >
                     {copy.createAndSelectBtn}
                   </button>
@@ -829,7 +829,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
           <div
             role="tablist"
             aria-label={copy.modeAria}
-            className="grid grid-cols-3 gap-1 rounded-2xl tk-bg-paper p-1"
+            className="grid grid-cols-3 gap-1 rounded-[20px] tk-bg-paper p-1"
           >
             {(
               [
@@ -859,10 +859,10 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-h-[50px] rounded-xl px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`min-h-[50px] rounded-[16px] px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
  isActive
- ? 'tk-bg-card tk-text-ink shadow-xs font-bold'
- : 'tk-text-ink2 hover:tk-text-ink font-medium'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest font-bold'
+ : 'bg-white border tk-bc-hair tk-text-ink2 hover:tk-text-ink font-medium'
  }`}
                 >
                   <Icon
@@ -870,7 +870,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
  isActive ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                   />
-                  <span className="text-[11px] sm:text-xs leading-none truncate max-w-full">
+                  <span className="text-[13px] sm:text-sm leading-none truncate max-w-full">
                     {tab.label}
                   </span>
                 </button>
@@ -886,9 +886,9 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
             <>
               {/* Compact Smart Parameter Calibration Capsule Bar (Size / Weather / Scenarios) */}
               {setup && (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-3 space-y-3">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-3 space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="flex flex-wrap items-center gap-1.5 min-w-0 text-xs tk-text-ink">
+                    <div className="flex flex-wrap items-center gap-1.5 min-w-0 text-sm tk-text-ink">
                       <span className="inline-flex items-center rounded-lg tk-bg-card border tk-bc-hair px-2 py-0.5 font-semibold whitespace-nowrap">
                         {weatherOverrides.length > 0
                           ? weatherOverrides
@@ -915,7 +915,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setSmartParamsOpen((v) => !v)}
-                      className="h-7 inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 text-xs font-bold tk-text-forest hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
+                      className="font-serif h-7 inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 text-sm font-bold tk-text-forest hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       <SlidersHorizontal className="h-3 w-3 shrink-0" />
                       <span>{copy.tuneParamsBtn}</span>
@@ -931,7 +931,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     <div className="border-t tk-bc-hair pt-3 space-y-3">
                       {/* 1. Weather Feel + Laundry */}
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-[11px] font-bold tk-text-ink2 mr-1">
+                        <span className="text-[13px] font-bold tk-text-ink2 mr-1">
                           {copy.weatherLaundryLabel}
                         </span>
                         {(
@@ -947,7 +947,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                               key={opt.id}
                               type="button"
                               onClick={() => toggleWeatherOverride(opt.id)}
-                              className={`rounded-full px-2.5 py-1 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                              className={`rounded-full px-2.5 py-1 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  active
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bg-forest-plate'
@@ -963,7 +963,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                             setSmartSyncedBanner('');
                             setLaundryEnabled((v) => !v);
                           }}
-                          className={`rounded-full px-2.5 py-1 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                          className={`rounded-full px-2.5 py-1 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  laundryEnabled
  ? 'tk-bg-forest-tint border tk-bc-forest tk-text-forest'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2'
@@ -975,7 +975,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
 
                       {/* 2. Trip Scenarios */}
                       <div className="space-y-1.5">
-                        <span className="block text-[11px] font-bold tk-text-ink2">
+                        <span className="block text-[13px] font-bold tk-text-ink2">
                           {copy.specialScenariosLabel}
                         </span>
                         <div className="flex flex-wrap gap-1.5">
@@ -987,7 +987,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                                 key={sc.id}
                                 type="button"
                                 onClick={() => toggleScenario(sc.id)}
-                                className={`rounded-full px-2.5 py-1 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                                className={`rounded-full px-2.5 py-1 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  active
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bg-forest-plate'
@@ -1003,7 +1003,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                       {/* 4. One-Tap Smart Sync to Full Packing List */}
                       {onApplySmartParams && (
                         <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t tk-bc-hair">
-                          <span className="text-[11px] tk-text-ink2">
+                          <span className="text-[13px] tk-text-ink2">
                             {smartSyncedBanner || copy.paramsLiveHint}
                           </span>
                           <button
@@ -1021,9 +1021,9 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                               setSmartSyncedBanner(copy.paramsSyncedMsg);
                               setSmartParamsOpen(false);
                             }}
-                            className="h-8 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                            className="h-8 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                           >
-                            <Zap className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                            <Zap className="h-4 w-4 tk-text-forest shrink-0" />
                             <span>{copy.smartMergeBtn}</span>
                           </button>
                         </div>
@@ -1061,7 +1061,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                       type="button"
                       data-chip-active={isActive ? 'true' : undefined}
                       onClick={() => handleSelectForYouSub(pill.id)}
-                      className={`min-h-[38px] px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                      className={`min-h-[38px] px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isActive
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-card tk-text-ink hover:tk-bg-paper'
@@ -1086,7 +1086,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     return (
                       <div
                         key={cand.key}
-                        className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3 hover:tk-bc-hair transition-colors"
+                        className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3 hover:tk-bc-hair transition-colors"
                       >
                         <div className="flex items-start gap-3 min-w-0 flex-1">
                           {iconMeta && (
@@ -1099,10 +1099,10 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                             </div>
                           )}
                           <div className="min-w-0 flex-1">
-                            <div className="text-sm font-bold tk-text-ink truncate">
+                            <div className="font-serif text-sm font-bold tk-text-ink truncate">
                               {cand.name}
                             </div>
-                            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs tk-text-ink2 tabular-nums">
+                            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-sm tk-text-ink2 tabular-nums">
                               <span>{cand.targetGroupTitle}</span>
                               <span>·</span>
                               <span>
@@ -1117,7 +1117,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                                 </>
                               )}
                             </div>
-                            <p className="mt-0.5 text-xs tk-text-ink2 truncate">
+                            <p className="mt-0.5 text-sm tk-text-ink2 truncate">
                               {cand.why}
                             </p>
                           </div>
@@ -1137,7 +1137,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                                   cand.carryOnOnly
                                 )
                               }
-                              className="px-2 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
+                              className="font-serif px-2 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap cursor-pointer"
                             >
                               {copy.tweakBtn}
                             </button>
@@ -1146,7 +1146,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                             type="button"
                             disabled={isAdded}
                             onClick={() => handleAddCandidate(cand)}
-                            className={`h-9 inline-flex items-center justify-center gap-1 rounded-xl px-3.5 text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                            className={`h-9 inline-flex items-center justify-center gap-1 rounded-[16px] px-3.5 text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isAdded
  ? 'tk-bg-forest-tint tk-text-forest border tk-bc-hair cursor-default'
  : 'tk-bg-forest tk-text-card hover:tk-bg-press'
@@ -1154,12 +1154,12 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           >
                             {isAdded ? (
                               <>
-                                <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                                <Check className="h-4 w-4 stroke-[1.5]" />
                                 <span>{copy.addedBtn}</span>
                               </>
                             ) : (
                               <>
-                                <Plus className="h-3.5 w-3.5" />
+                                <Plus className="h-4 w-4" />
                                 <span>{copy.addBtn}</span>
                               </>
                             )}
@@ -1174,19 +1174,19 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               {forYouSub === 'ai_audit' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold tk-text-ink2">
+                    <span className="text-sm font-semibold tk-text-ink2">
                       {auditSummary || copy.auditIntroDefault}
                     </span>
                     <button
                       type="button"
                       onClick={() => void runAiAudit()}
                       disabled={isAuditingGap}
-                      className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
+                      className="font-serif inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {isAuditingGap ? (
-                        <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest" />
+                        <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
                       ) : (
-                        <Sparkles className="h-3.5 w-3.5 tk-text-forest" />
+                        <Sparkles className="h-4 w-4 tk-text-forest" />
                       )}
                       <span>
                         {isAuditingGap ? copy.scanningBtn : copy.rescanBtn}
@@ -1199,18 +1199,18 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                       {[1, 2, 3].map((idx) => (
                         <div
                           key={idx}
-                          className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3 animate-pulse"
+                          className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3 animate-pulse"
                         >
                           <div className="space-y-2 flex-1">
                             <div className="h-4 w-36 rounded tk-bg-forest-plate" />
                             <div className="h-3 w-52 rounded tk-bg-forest-plate" />
                           </div>
-                          <div className="h-9 w-20 rounded-xl tk-bg-forest-plate shrink-0" />
+                          <div className="h-9 w-20 rounded-[16px] tk-bg-forest-plate shrink-0" />
                         </div>
                       ))}
                     </div>
                   ) : auditError ? (
-                    <div className="rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint px-4 py-3 flex items-center gap-2 text-xs tk-text-danger">
+                    <div className="rounded-[20px] border tk-bc-danger-hair tk-bg-danger-tint px-4 py-3 flex items-center gap-2 text-sm tk-text-danger">
                       <AlertTriangle className="h-4 w-4 shrink-0" />
                       <span>{auditError}</span>
                     </div>
@@ -1222,25 +1222,25 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                         return (
                           <div
                             key={sug.name}
-                            className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3"
+                            className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-sm font-bold tk-text-ink">
+                                <span className="font-serif text-sm font-bold tk-text-ink">
                                   {sug.name}
                                 </span>
                                 {(sug.quantity ?? 1) > 1 && (
-                                  <span className="rounded-md tk-bg-forest-tint px-1.5 py-0.5 font-num text-[11px] font-bold tk-text-forest">
+                                  <span className="rounded-md tk-bg-forest-tint px-1.5 py-0.5 font-serif text-[13px] font-bold tk-text-forest">
                                     ×{sug.quantity}
                                   </span>
                                 )}
                               </div>
-                              <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
+                              <div className="mt-0.5 text-sm tk-text-ink2 tabular-nums">
                                 {sug.targetGroupTitle} ·{' '}
                                 {formatItemWeightByPref(sug.weightGrams, unitSystem)}
                                 {sug.carryOnOnly ? ` · ${t('common.carryOnBadge')}` : ''}
                               </div>
-                              <p className="mt-0.5 text-xs tk-text-ink2 leading-relaxed">
+                              <p className="mt-0.5 text-sm tk-text-ink2 leading-relaxed">
                                 {sug.why}
                               </p>
                             </div>
@@ -1253,7 +1253,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                                 setAddedKeys((prev) => ({ ...prev, [key]: true }));
                                 setSessionAddCount((n) => n + 1);
                               }}
-                              className={`h-9 inline-flex items-center justify-center gap-1 rounded-xl px-3.5 text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                              className={`h-9 inline-flex items-center justify-center gap-1 rounded-[16px] px-3.5 text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isAdded
  ? 'tk-bg-forest-tint tk-text-forest border tk-bc-hair cursor-default'
  : 'tk-bg-forest tk-text-card hover:tk-bg-press'
@@ -1261,12 +1261,12 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                             >
                               {isAdded ? (
                                 <>
-                                  <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                                  <Check className="h-4 w-4 stroke-[1.5]" />
                                   <span>{copy.addedBtn}</span>
                                 </>
                               ) : (
                                 <>
-                                  <Plus className="h-3.5 w-3.5" />
+                                  <Plus className="h-4 w-4" />
                                   <span>{copy.addBtn}</span>
                                 </>
                               )}
@@ -1282,14 +1282,14 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               {forYouSub === 'always_pack' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs tk-text-ink2">
+                    <span className="text-sm tk-text-ink2">
                       {copy.alwaysPackDesc}
                     </span>
                     {alwaysPackLibrary.length === 0 ? (
                       <button
                         type="button"
                         onClick={onSeedAlwaysPack}
-                        className="rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card whitespace-nowrap shrink-0 cursor-pointer"
+                        className="rounded-[16px] tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         {copy.extractEssentialsBtn}
                       </button>
@@ -1300,7 +1300,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           onSyncAlwaysPack();
                           setSessionAddCount((n) => n + 1);
                         }}
-                        className="rounded-xl border tk-bc-hair tk-bg-forest-tint px-3 py-1.5 text-xs font-semibold tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
+                        className="rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-3 py-1.5 text-sm font-semibold tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         {copy.syncAllMissingBtn}
                       </button>
@@ -1308,7 +1308,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   </div>
 
                   {alwaysPackLibrary.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed tk-bc-hair tk-bg-paper px-4 py-6 text-center text-xs tk-text-ink2">
+                    <div className="rounded-[20px] border border-dashed tk-bc-hair tk-bg-paper px-4 py-6 text-center text-sm tk-text-ink2">
                       {copy.alwaysPackEmptyHint}
                     </div>
                   ) : (
@@ -1320,15 +1320,15 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                         return (
                           <div
                             key={tpl.id}
-                            className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3"
+                            className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 flex items-center justify-between gap-3"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
                               <AccentIconBadge accent="teal" icon={Bookmark} size="sm" />
                               <div className="min-w-0">
-                                <div className="text-sm font-bold tk-text-ink truncate">
+                                <div className="font-serif text-sm font-bold tk-text-ink truncate">
                                   {translateDemoPackItemName(tpl.name, activeLang)}
                                 </div>
-                                <div className="text-xs tk-text-ink2 tabular-nums">
+                                <div className="text-sm tk-text-ink2 tabular-nums">
                                   {formatItemWeightByPref(
                                     tpl.unitWeightGrams * Math.max(1, tpl.quantity || 1),
                                     unitSystem
@@ -1362,7 +1362,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                                 setAddedKeys((prev) => ({ ...prev, [key]: true }));
                                 setSessionAddCount((n) => n + 1);
                               }}
-                              className={`h-9 inline-flex items-center justify-center gap-1 rounded-xl px-3.5 text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                              className={`h-9 inline-flex items-center justify-center gap-1 rounded-[16px] px-3.5 text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isAdded
  ? 'tk-bg-forest-tint tk-text-forest border tk-bc-hair cursor-default'
  : 'tk-bg-forest tk-text-card hover:tk-bg-press'
@@ -1370,12 +1370,12 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                             >
                               {isAdded ? (
                                 <>
-                                  <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                                  <Check className="h-4 w-4 stroke-[1.5]" />
                                   <span>{copy.inListBtn}</span>
                                 </>
                               ) : (
                                 <>
-                                  <Plus className="h-3.5 w-3.5" />
+                                  <Plus className="h-4 w-4" />
                                   <span>{copy.addBtn}</span>
                                 </>
                               )}
@@ -1400,7 +1400,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                 }}
                 className="space-y-2.5"
               >
-                <div className="flex items-center gap-2 rounded-2xl border tk-bc-hair tk-bg-paper pl-3.5 pr-2 py-1.5 focus-within:tk-bc-forest focus-within:tk-bg-card transition-colors">
+                <div className="flex items-center gap-2 rounded-[20px] border tk-bc-hair tk-bg-paper pl-3.5 pr-2 py-1.5 focus-within:tk-bc-forest focus-within:tk-bg-card transition-colors">
                   <Search className="h-4 w-4 tk-text-ink2 shrink-0" />
                   <input
                     type="text"
@@ -1426,12 +1426,12 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   <button
                     type="submit"
                     disabled={isClassifying || !aiInput.trim()}
-                    className="h-9 inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-4 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="h-9 inline-flex items-center justify-center gap-1.5 rounded-[16px] tk-bg-forest px-4 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {isClassifying ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Plus className="h-3.5 w-3.5" />
+                      <Plus className="h-4 w-4" />
                     )}
                     <span>
                       {isClassifying ? t('packing.addingBtn') : copy.addBtn}
@@ -1440,18 +1440,18 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                 </div>
 
                 {quickSuccessMsg && !classifyError && (
-                  <p className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-forest">
-                    <Check className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                  <p className="inline-flex items-center gap-1.5 text-sm font-semibold tk-text-forest">
+                    <Check className="h-4 w-4 tk-text-forest shrink-0" />
                     <span>{quickSuccessMsg}</span>
                   </p>
                 )}
                 {classifyError && (
-                  <p className="text-xs font-medium tk-text-warning">{classifyError}</p>
+                  <p className="text-sm font-medium tk-text-warning">{classifyError}</p>
                 )}
 
                 {duplicateWarning && (
-                  <div className="rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint p-3.5 flex flex-wrap items-center justify-between gap-2.5">
-                    <div className="flex items-start gap-2 min-w-0 text-xs tk-text-warning">
+                  <div className="rounded-[20px] border tk-bc-warning-hair tk-bg-warning-tint p-3.5 flex flex-wrap items-center justify-between gap-2.5">
+                    <div className="flex items-start gap-2 min-w-0 text-sm tk-text-warning">
                       <Lightbulb className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
                       <span>{duplicateWarning.duplicateQuestion}</span>
                     </div>
@@ -1464,7 +1464,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           setAiInput('');
                           setSessionAddCount((n) => n + 1);
                         }}
-                        className="rounded-xl border tk-bc-warning-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-warning hover:tk-bg-warning-tint cursor-pointer"
+                        className="rounded-[16px] border tk-bc-warning-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-warning hover:tk-bg-warning-tint cursor-pointer"
                       >
                         {t('packingExtra.keepBoth')}
                       </button>
@@ -1476,7 +1476,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           setAiInput('');
                           setSessionAddCount((n) => n + 1);
                         }}
-                        className="rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+                        className="rounded-[16px] tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                       >
                         {t('packingExtra.keepExisting')}
                       </button>
@@ -1486,7 +1486,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               </form>
 
               <div className="space-y-2">
-                <div className="text-xs font-bold tk-text-ink2">
+                <div className="text-sm font-bold tk-text-ink2">
                   {copy.quickChipsTitle}
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -1502,14 +1502,14 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           setAddedKeys((prev) => ({ ...prev, [key]: true }));
                           await submitQuickText(chip, false);
                         }}
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  isAdded
  ? 'tk-bc-hair tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest'
  }`}
                       >
                         {isAdded ? (
-                          <Check className="h-3 w-3 stroke-[2.5]" />
+                          <Check className="h-3 w-3 stroke-[1.5]" />
                         ) : (
                           <Plus className="h-3 w-3 tk-text-forest" />
                         )}
@@ -1526,7 +1526,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
           {activeTab === 'detailed' && (
             <form onSubmit={handleSubmitDetailed} className="space-y-3.5">
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold tk-text-ink2">
+                <label className="block text-sm font-bold tk-text-ink2">
                   {copy.itemNameLabel}
                 </label>
                 <input
@@ -1534,19 +1534,19 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   value={detailName}
                   onChange={(e) => setDetailName(e.target.value)}
                   placeholder={copy.itemNamePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                  className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold tk-text-ink2">
+                  <label className="block text-sm font-bold tk-text-ink2">
                     {copy.categoryLabel}
                   </label>
                   <select
                     value={detailGroupId}
                     onChange={(e) => setDetailGroupId(e.target.value)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   >
                     {groups.map((g) => (
                       <option key={g.id} value={g.id}>
@@ -1558,18 +1558,18 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
 
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold tk-text-ink2">
+                    <label className="block text-sm font-bold tk-text-ink2">
                       {copy.quantityLabel}
                     </label>
-                    <div className="flex items-center justify-between rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5">
+                    <div className="flex items-center justify-between rounded-[16px] border tk-bc-hair tk-bg-paper px-2.5 py-1.5">
                       <button
                         type="button"
                         onClick={() => setDetailQty((q) => Math.max(1, q - 1))}
                         className="h-7 w-7 inline-flex items-center justify-center rounded-lg tk-bg-card border tk-bc-hair tk-text-ink cursor-pointer"
                       >
-                        <Minus className="h-3.5 w-3.5" />
+                        <Minus className="h-4 w-4" />
                       </button>
-                      <span className="font-num text-sm font-bold tk-text-ink tabular-nums">
+                      <span className="font-serif text-sm font-bold tk-text-ink tabular-nums">
                         ×{detailQty}
                       </span>
                       <button
@@ -1577,13 +1577,13 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                         onClick={() => setDetailQty((q) => Math.min(99, q + 1))}
                         className="h-7 w-7 inline-flex items-center justify-center rounded-lg tk-bg-card border tk-bc-hair tk-text-ink cursor-pointer"
                       >
-                        <Plus className="h-3.5 w-3.5" />
+                        <Plus className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-bold tk-text-ink2">
+                    <label className="block text-sm font-bold tk-text-ink2">
                       {copy.unitWeightLabel}
                     </label>
                     <input
@@ -1598,14 +1598,14 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                           e.target.value === '' || !Number.isFinite(val) ? null : Math.max(5, val)
                         );
                       }}
-                      className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-base sm:text-sm font-semibold tk-text-ink tabular-nums focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                      className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 font-serif text-base sm:text-sm font-semibold tk-text-ink tabular-nums focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold tk-text-ink2">
+                <label className="block text-sm font-bold tk-text-ink2">
                   {copy.noteLabel}
                 </label>
                 <input
@@ -1613,7 +1613,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                   value={detailWhy}
                   onChange={(e) => setDetailWhy(e.target.value)}
                   placeholder={copy.notePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                  className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                 />
               </div>
 
@@ -1621,7 +1621,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setDetailCarryOn((v) => !v)}
-                  className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                  className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  detailCarryOn
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink2'
@@ -1633,7 +1633,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setDetailToBuy((v) => !v)}
-                  className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                  className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  detailToBuy
  ? 'tk-bc-warning-hair tk-bg-danger-tint tk-text-danger'
  : 'tk-bc-hair tk-bg-card tk-text-ink2'
@@ -1648,7 +1648,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                     onClick={() =>
                       setDetailOwnership((prev) => (prev === 'shared' ? 'personal' : 'shared'))
                     }
-                    className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                    className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  detailOwnership === 'shared'
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink2'
@@ -1661,7 +1661,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
 
               {crew.length > 1 && detailOwnership === 'personal' && (
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-xs tk-text-ink2 mr-1">
+                  <span className="text-sm tk-text-ink2 mr-1">
                     {copy.assignToLabel}
                   </span>
                   {crew.map((m) => (
@@ -1669,7 +1669,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
                       key={m.id}
                       type="button"
                       onClick={() => setDetailOwnerId(m.id)}
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold cursor-pointer ${
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-semibold cursor-pointer ${
  detailOwnerId === m.id
  ? 'tk-bc-forest tk-bg-forest tk-text-card'
  : 'tk-bc-hair tk-bg-card tk-text-ink2'
@@ -1689,8 +1689,8 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               )}
 
               {detailSuccessMsg && (
-                <p className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-forest">
-                  <Check className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                <p className="inline-flex items-center gap-1.5 text-sm font-semibold tk-text-forest">
+                  <Check className="h-4 w-4 tk-text-forest shrink-0" />
                   <span>{detailSuccessMsg}</span>
                 </p>
               )}
@@ -1698,7 +1698,7 @@ export const AddGearModal: React.FC<AddGearModalProps> = ({
               <button
                 type="submit"
                 disabled={!detailName.trim()}
-                className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-2xl tk-bg-forest px-4 py-2.5 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
+                className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-[20px] tk-bg-forest px-4 py-2.5 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
               >
                 <Plus className="h-4 w-4" />
                 <span>{copy.submitDetailedBtn}</span>

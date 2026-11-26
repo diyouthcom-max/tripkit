@@ -758,9 +758,9 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
   const displayPrimaryCity = translateCityName(primaryCity, activeLang);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       {/* Packy-Style First-Screen Bar: Row 1 Pinned Pass Wallet + Day Scroller, Row 2 Crisp 2-Action Toolbar */}
-      <section className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 shadow-2xs space-y-2.5">
+      <section className="rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-3 tk-elev-soft space-y-2.5">
         {/* Row 1: Pinned Offline Pass Wallet Capsule + Subtle Divider + Swipeable Day Scroller */}
         <div className="flex items-center gap-2 min-w-0">
           {onOpenGoModeWallet && (
@@ -769,10 +769,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 type="button"
                 onClick={() => onOpenGoModeWallet()}
                 title={copy.openWalletTitle}
-                className="min-h-[38px] inline-flex items-center gap-1.5 rounded-full border tk-bc-hair tk-bg-forest-tint px-3 text-xs font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-paper transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="min-h-[44px] inline-flex items-center gap-1.5 rounded-full border tk-bc-hair tk-bg-forest-tint px-3 text-sm font-serif font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-paper transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
-                <QrCode className="h-3.5 w-3.5 tk-text-forest shrink-0" />
-                <span>{copy.passesBtn}</span>
+                <QrCode className="h-4 w-4 tk-text-forest shrink-0" />
+                <span className="font-serif">{copy.passesBtn}</span>
               </button>
               <span aria-hidden="true" className="h-4 w-px tk-bg-paper shrink-0" />
             </>
@@ -802,20 +802,28 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     setActiveDragId(null);
                     onSelectDay(d);
                   }}
-                  className={`min-h-[38px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-xs font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`min-h-[44px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-sm font-serif font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isSelected
- ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ ? 'tk-sel'
  : nodesForD.length === 0
  ? 'border-dashed tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-hair hover:tk-text-ink'
  }`}
                 >
-                  <span className="font-num font-bold">D{d}</span>
-                  {cityForD && <span>{cityForD}</span>}
+                  <span
+                    className={`font-serif font-bold tabular-nums ${
+                      isSelected
+                        ? 'inline-flex h-5 min-w-5 items-center justify-center rounded-full tk-badge--cognac px-1 text-[11px] text-white'
+                        : ''
+                    }`}
+                  >
+                    D{d}
+                  </span>
+                  {cityForD && <span className="font-serif">{cityForD}</span>}
                   {nodesForD.length > 0 && (
                     <span
-                      className={`font-num text-[11px] tabular-nums ${
- isSelected ? 'text-white/80' : 'tk-text-ink2'
+                      className={`font-serif text-[13px] tabular-nums ${
+ isSelected ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                     >
                       {nodesForD.length}
@@ -838,10 +846,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 setShowOptimizeMenu(false);
                 if (showFullPlanner) setShowFullPlanner(false);
               }}
-              className="min-h-[38px] inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-3.5 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 text-sm font-serif font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <Plus className="h-3.5 w-3.5" />
-              <span>{copy.addPlaceBtn}</span>
+              <Plus className="h-4 w-4" />
+              <span className="font-serif">{copy.addPlaceBtn}</span>
             </button>
 
             {/* 2. Unified Route Optimize Menu (Consolidates Day Recluster + Multi-Day Smart Reorder + Full AI Plan) */}
@@ -852,7 +860,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 onClick={() => setShowOptimizeMenu((v) => !v)}
                 aria-expanded={showOptimizeMenu}
                 aria-haspopup="menu"
-                className={`min-h-[38px] inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-55 ${
+                className={`min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-[16px] border px-3 text-sm font-serif font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-55 ${
  showOptimizeMenu || showFullPlanner
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-forest hover:tk-text-forest'
@@ -861,11 +869,11 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 {busyAction === 'recluster' ||
                 busyAction === 'smart_reorder' ||
                 busyAction === 'plan_full' ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest shrink-0" />
+                  <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
                 ) : (
-                  <ArrowUpDown className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                  <ArrowUpDown className="h-4 w-4 tk-text-forest shrink-0" />
                 )}
-                <span>
+                <span className="font-serif">
                   {busyAction === 'recluster'
                     ? copy.optimizingDay(currentDay)
                     : busyAction === 'smart_reorder'
@@ -875,7 +883,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     : copy.optimizeRouteBtn}
                 </span>
                 <ChevronDown
-                  className={`h-3.5 w-3.5 tk-text-ink2 transition-transform duration-150 ${
+                  className={`h-4 w-4 tk-text-ink2 transition-transform duration-150 ${
  showOptimizeMenu ? 'rotate-180' : ''
  }`}
                 />
@@ -884,7 +892,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               {showOptimizeMenu && (
                 <div
                   role="menu"
-                  className="absolute left-0 z-30 mt-1.5 w-72 sm:w-80 rounded-2xl border tk-bc-hair tk-bg-card p-1.5 shadow-xl space-y-1"
+                  className="absolute left-0 z-30 mt-1.5 w-72 sm:w-80 rounded-[20px] border tk-bc-hair tk-bg-card p-1.5 shadow-xl space-y-1"
                 >
                   <button
                     type="button"
@@ -895,10 +903,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   >
                     <Navigation className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                      <div className="text-xs font-bold tk-text-ink">
+                      <div className="text-sm font-serif font-bold tk-text-ink">
                         {copy.optimizeDayTitle(currentDay, dayNodes.length)}
                       </div>
-                      <div className="text-[11px] tk-text-ink2 mt-0.5 leading-snug">
+                      <div className="text-[15px] tk-text-ink2 mt-0.5 leading-snug">
                         {copy.optimizeDayDesc}
                       </div>
                     </div>
@@ -914,10 +922,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     >
                       <ArrowUpDown className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                       <div className="min-w-0">
-                        <div className="text-xs font-bold tk-text-ink">
+                        <div className="text-sm font-serif font-bold tk-text-ink">
                           {copy.smartReorderTitle(safeDaysCount, unvisitedAcrossTripCount)}
                         </div>
-                        <div className="text-[11px] tk-text-ink2 mt-0.5 leading-snug">
+                        <div className="text-[15px] tk-text-ink2 mt-0.5 leading-snug">
                           {copy.smartReorderDesc(unvisitedAcrossTripCount)}
                         </div>
                       </div>
@@ -937,10 +945,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   >
                     <Sparkles className="h-4 w-4 tk-text-ink2 shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                      <div className="text-xs font-bold tk-text-ink">
+                      <div className="text-sm font-serif font-bold tk-text-ink">
                         {copy.aiRebuildTitle(safeDaysCount)}
                       </div>
-                      <div className="text-[11px] tk-text-ink2 mt-0.5 leading-snug">
+                      <div className="text-[15px] tk-text-ink2 mt-0.5 leading-snug">
                         {copy.aiRebuildDesc}
                       </div>
                     </div>
@@ -951,7 +959,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           </div>
 
           {/* Quiet Unboxed Trip & Budget Summary */}
-          <div className="hidden sm:flex items-center gap-1.5 text-xs tk-text-ink2 tabular-nums">
+          <div className="hidden sm:flex items-center gap-1.5 text-sm font-serif tk-text-ink2 tabular-nums">
             <span>
               {t('itinerary.plannedDays', {
                 covered: coveredDaysCount,
@@ -972,20 +980,20 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
         {/* Multi-Day Smart Reorder Result & Undo Strip */}
         {smartReorderResult && (
-          <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint p-3.5 space-y-2 text-xs">
+          <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint p-3.5 space-y-2 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-bold tk-text-forest">
                 <span>
                   {copy.smartReorderApplied(safeDaysCount)}
                 </span>
                 <span aria-hidden="true" className="tk-text-ink2">·</span>
-                <span className="font-num tabular-nums font-semibold tk-text-ink">
+                <span className="font-serif tabular-nums font-semibold tk-text-ink">
                   {copy.reorderedStopsCount(smartReorderResult.reorderedStopCount)}
                 </span>
                 {smartReorderResult.preservedVisitedCount > 0 && (
                   <>
                     <span aria-hidden="true" className="tk-text-ink2">·</span>
-                    <span className="font-num tabular-nums font-normal tk-text-ink2">
+                    <span className="font-serif tabular-nums font-normal tk-text-ink2">
                       {copy.visitedLockedCount(smartReorderResult.preservedVisitedCount)}
                     </span>
                   </>
@@ -1002,7 +1010,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     }}
                     className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
                   >
-                    <RotateCcw className="h-3.5 w-3.5 shrink-0" />
+                    <RotateCcw className="h-4 w-4 shrink-0" />
                     <span>{t('itinerary.smartReorderUndo')}</span>
                   </button>
                 )}
@@ -1012,7 +1020,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     onClick={() => setShowSnapshotPanel((v) => !v)}
                     className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
                   >
-                    <History className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                    <History className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                     <span>
                       {copy.snapshotHistoryBtn}
                       {snapshotEntries.length > 0 ? ` (${snapshotEntries.length})` : ''}
@@ -1031,9 +1039,9 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
             {showSnapshotPanel && onRestoreSnapshot && (
               <div className="rounded-lg border tk-bc-hair tk-bg-card p-2.5 space-y-1.5">
-                <p className="text-[11px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
+                <p className="text-[13px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
                 {snapshotEntries.length === 0 ? (
-                  <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+                  <p className="text-[15px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
                 ) : (
                   <ul className="space-y-1.5">
                     {snapshotEntries.slice(0, 12).map((entry) => {
@@ -1050,7 +1058,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       return (
                         <li
                           key={entry.id}
-                          className="flex items-center justify-between gap-2 text-[11px]"
+                          className="flex items-center justify-between gap-2 text-[13px]"
                         >
                           <div className="min-w-0 flex-1">
                             <div className="font-semibold tk-text-ink truncate">{entry.label}</div>
@@ -1088,7 +1096,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     key={d}
                     type="button"
                     onClick={() => onSelectDay(d)}
-                    className={`rounded-lg px-2 py-0.5 font-num text-[11px] font-bold tabular-nums transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`rounded-lg px-2 py-0.5 font-serif text-[13px] font-bold tabular-nums transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  d === currentDay
  ? 'tk-bg-forest tk-text-card'
  : 'tk-bg-card border tk-bc-hair tk-text-forest hover:tk-bc-forest'
@@ -1102,7 +1110,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
             {smartReorderResult.warningNote && (
               <div className="pt-2 border-t tk-bc-hair flex items-start gap-1.5 tk-text-ink2">
-                <AlertTriangle className="h-3.5 w-3.5 tk-text-warning shrink-0 mt-0.5" />
+                <AlertTriangle className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
                 <span>{smartReorderResult.warningNote}</span>
               </div>
             )}
@@ -1111,7 +1119,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
         {/* Minimal snapshot entry when undo strip is collapsed but history exists */}
         {!smartReorderResult && onRestoreSnapshot && (snapshotEntries.length > 0 || canUndoSmartReorder) && (
-          <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 space-y-2 text-xs">
+          <div className="rounded-xl border tk-bc-hair tk-bg-card p-3 space-y-2 text-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-3">
                 {canUndoSmartReorder && onUndoSmartReorder && (
@@ -1120,7 +1128,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     onClick={() => onUndoSmartReorder()}
                     className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
                   >
-                    <RotateCcw className="h-3.5 w-3.5 shrink-0" />
+                    <RotateCcw className="h-4 w-4 shrink-0" />
                     <span>{t('itinerary.smartReorderUndo')}</span>
                   </button>
                 )}
@@ -1129,7 +1137,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   onClick={() => setShowSnapshotPanel((v) => !v)}
                   className="inline-flex items-center gap-1 font-semibold tk-text-forest hover:tk-text-ink2 whitespace-nowrap cursor-pointer"
                 >
-                  <History className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                  <History className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                   <span>
                     {copy.snapshotHistoryBtn}
                     {snapshotEntries.length > 0 ? ` (${snapshotEntries.length})` : ''}
@@ -1139,9 +1147,9 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             </div>
             {showSnapshotPanel && (
               <div className="rounded-lg border tk-bc-hair tk-bg-paper p-2.5 space-y-1.5">
-                <p className="text-[11px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
+                <p className="text-[13px] font-semibold tk-text-ink">{copy.snapshotHistoryTitle}</p>
                 {snapshotEntries.length === 0 ? (
-                  <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+                  <p className="text-[15px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
                 ) : (
                   <ul className="space-y-1.5">
                     {snapshotEntries.slice(0, 12).map((entry) => {
@@ -1158,7 +1166,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       return (
                         <li
                           key={entry.id}
-                          className="flex items-center justify-between gap-2 text-[11px]"
+                          className="flex items-center justify-between gap-2 text-[13px]"
                         >
                           <div className="min-w-0 flex-1">
                             <div className="font-semibold tk-text-ink truncate">{entry.label}</div>
@@ -1189,17 +1197,17 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           <div className="pt-3 border-t tk-bc-hair space-y-3">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold tk-text-ink">
+                <h3 className="text-sm font-serif font-bold tk-text-ink">
                   {copy.fullPlannerTitle(safeDaysCount)}
                 </h3>
-                <p className="mt-0.5 text-xs tk-text-ink2">
+                <p className="mt-0.5 text-sm tk-text-ink2">
                   {copy.fullPlannerSubtitle(safeDaysCount)}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowFullPlanner(false)}
-                className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                className="text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
               >
                 {t('itinerary.collapse')}
               </button>
@@ -1235,8 +1243,8 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
  : 'tk-bc-hair tk-bg-paper hover:tk-bc-hair'
  }`}
                   >
-                    <div className="text-xs font-bold tk-text-ink">{tier.label}</div>
-                    <div className="mt-0.5 text-[11px] tk-text-ink2 leading-snug">
+                    <div className="text-sm font-serif font-bold tk-text-ink">{tier.label}</div>
+                    <div className="mt-0.5 text-[15px] tk-text-ink2 leading-snug">
                       {tier.desc}
                     </div>
                   </button>
@@ -1245,7 +1253,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-4 text-xs">
+              <div className="flex flex-wrap items-center gap-4 text-sm">
                 <label className="inline-flex items-center gap-2 font-semibold tk-text-ink2">
                   <span>{t('itinerary.targetDailySpend', { currency: intel.currencyCode })}</span>
                   <input
@@ -1255,7 +1263,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     value={planDailyBudgetInput}
                     onChange={(e) => setPlanDailyBudgetInput(e.target.value)}
                     placeholder={dailyBudgetLocal.toFixed(0)}
-                    className="w-28 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                    className="w-28 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-serif text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                   />
                 </label>
 
@@ -1284,12 +1292,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 type="button"
                 disabled={busyAction !== null}
                 onClick={() => void handleRunFullPlan()}
-                className="ml-auto inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2.5 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 whitespace-nowrap cursor-pointer"
+                className="ml-auto inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2.5 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 whitespace-nowrap cursor-pointer"
               >
                 {busyAction === 'plan_full' ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-4 w-4" />
                 )}
                 {busyAction === 'plan_full'
                   ? t('itinerary.generatingFull', { count: safeDaysCount })
@@ -1298,7 +1306,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             </div>
 
             {planStrategyResult && (
-              <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint p-3.5 space-y-1.5 text-xs">
+              <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint p-3.5 space-y-1.5 text-sm">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-bold tk-text-forest">
                   <span>
                     {copy.budgetBuiltTitle(safeDaysCount)}
@@ -1306,7 +1314,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   {planStrategyResult.recommendedDailyBudgetLocal ? (
                     <>
                       <span aria-hidden="true">·</span>
-                      <span className="font-num tabular-nums">
+                      <span className="font-serif tabular-nums">
                         {copy.suggestedDailyPrefix}
                         {intel.currencySymbol}
                         {planStrategyResult.recommendedDailyBudgetLocal.toFixed(0)}
@@ -1317,7 +1325,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   {planStrategyResult.recommendedHotelAndTransitTotalLocal ? (
                     <>
                       <span aria-hidden="true">·</span>
-                      <span className="font-num tabular-nums">
+                      <span className="font-serif tabular-nums">
                         {copy.estStaysTransitPrefix}
                         {intel.currencySymbol}
                         {planStrategyResult.recommendedHotelAndTransitTotalLocal.toFixed(0)}
@@ -1340,8 +1348,8 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
         <div className="lg:col-span-8 space-y-4">
           {/* Contextual Post-Add Smart Optimize Nudge (Only surfaces right after new stops are added!) */}
           {(newlyAddedCountByDay[currentDay] || 0) > 0 && dayNodes.length >= 2 && (
-            <section className="rounded-2xl border tk-bc-hair tk-bg-forest-tint px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
-              <div className="flex items-center gap-2 min-w-0 text-xs tk-text-ink">
+            <section className="rounded-[20px] border tk-bc-hair tk-bg-forest-tint px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2 min-w-0 text-sm tk-text-ink">
                 <ArrowUpDown className="h-4 w-4 tk-text-forest shrink-0" />
                 <span className="font-semibold">
                   {copy.postAddNudge(newlyAddedCountByDay[currentDay], currentDay)}
@@ -1353,12 +1361,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   type="button"
                   disabled={busyAction !== null}
                   onClick={() => void runOptimize('recluster')}
-                  className="min-h-[34px] inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 whitespace-nowrap cursor-pointer"
+                  className="min-h-[34px] inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 whitespace-nowrap cursor-pointer"
                 >
                   {busyAction === 'recluster' ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Sparkles className="h-3.5 w-3.5" />
+                    <Sparkles className="h-4 w-4" />
                   )}
                   <span>{copy.optimizeNowBtn}</span>
                 </button>
@@ -1371,7 +1379,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       return next;
                     })
                   }
-                  className="min-h-[34px] px-2.5 rounded-xl text-xs font-semibold tk-text-ink2 hover:bg-white/80 hover:tk-text-ink whitespace-nowrap cursor-pointer"
+                  className="min-h-[34px] px-2.5 rounded-xl text-sm font-semibold tk-text-ink2 hover:bg-white/80 hover:tk-text-ink whitespace-nowrap cursor-pointer"
                 >
                   {copy.keepAsIsBtn}
                 </button>
@@ -1380,10 +1388,10 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           )}
 
           {/* Slim Single-Line Collapsible Route Summary Strip (Replaces 7-line wall of text) */}
-          <section className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-2.5">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <section className="rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 tk-text-ink2">
-                <Navigation className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                <Navigation className="h-4 w-4 tk-text-forest shrink-0" />
                 <span className="font-bold tk-text-ink">
                   D{currentDay} · {dayCityLabel}
                 </span>
@@ -1424,7 +1432,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       type="button"
                       disabled={busyAction !== null}
                       onClick={() => void runOptimize('recluster')}
-                      className="text-xs font-bold tk-text-forest hover:underline whitespace-nowrap cursor-pointer"
+                      className="text-sm font-bold tk-text-forest hover:underline whitespace-nowrap cursor-pointer"
                     >
                       {copy.optimizeLink}
                     </button>
@@ -1434,13 +1442,13 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setAuditExpanded((v) => !v)}
-                    className="min-h-[30px] inline-flex items-center gap-1 rounded-lg px-2 text-xs font-semibold tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink whitespace-nowrap cursor-pointer"
+                    className="min-h-[30px] inline-flex items-center gap-1 rounded-lg px-2 text-sm font-semibold tk-text-ink2 hover:tk-bg-paper hover:tk-text-ink whitespace-nowrap cursor-pointer"
                   >
                     <span>{copy.routeNotesBtn}</span>
                     {auditExpanded ? (
-                      <ChevronUp className="h-3.5 w-3.5" />
+                      <ChevronUp className="h-4 w-4" />
                     ) : (
-                      <ChevronDown className="h-3.5 w-3.5" />
+                      <ChevronDown className="h-4 w-4" />
                     )}
                   </button>
                 )}
@@ -1448,14 +1456,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             </div>
 
             {auditExpanded && spatialSummary && (
-              <p className="mt-2.5 pt-2.5 border-t tk-bc-hair text-xs leading-relaxed tk-text-ink2">
+              <p className="mt-2.5 pt-2.5 border-t tk-bc-hair text-sm leading-relaxed tk-text-ink2">
                 {translateDemoSpatialSummary(spatialSummary, activeLang)}
               </p>
             )}
 
             {warningNote && (
-              <div className="mt-2.5 pt-2.5 border-t tk-bc-hair flex items-start gap-2 text-xs tk-text-warning">
-                <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+              <div className="mt-2.5 pt-2.5 border-t tk-bc-hair flex items-start gap-2 text-sm tk-text-warning">
+                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>{warningNote}</span>
               </div>
             )}
@@ -1492,20 +1500,20 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
           {/* Drag Reorder & Horizontal Swipe Hint */}
           {dayNodes.length >= 2 ? (
-            <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs tk-text-ink2">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-sm tk-text-ink2">
               <span>
                 {copy.dragHintPrefix}
                 <span className="font-mono font-bold tk-text-forest">⋮⋮</span>
                 {copy.dragHintSuffix}
               </span>
-              <span className="font-num tabular-nums">
+              <span className="font-serif tabular-nums">
                 {copy.stopsCountLabel(dayNodes.length)}
               </span>
             </div>
           ) : dayNodes.length > 0 ? (
-            <div className="flex items-center justify-between px-1 text-xs tk-text-ink2 sm:hidden">
+            <div className="flex items-center justify-between px-1 text-sm tk-text-ink2 sm:hidden">
               <span>{copy.swipeHintSingle}</span>
-              <span className="font-num tabular-nums">
+              <span className="font-serif tabular-nums">
                 {copy.stopsCountLabel(dayNodes.length)}
               </span>
             </div>
@@ -1513,268 +1521,287 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
           {/* Packy-Style Daily Hotel Stay Anchor ("Add where you're staying >") */}
           {onUpdateDayStay && (
-            <div ref={staySectionRef}>
-              {editingStay ? (
-                <>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const cleanName = stayNameDraft.trim();
-                      if (!cleanName) return;
-                      onUpdateDayStay(
-                        currentDay,
-                        {
-                          placeName: cleanName,
-                          address: stayAddressDraft.trim() || `${cleanName}, ${primaryCity}`,
-                          placeId: stayPlaceIdDraft,
-                          lat: stayCoordsDraft?.lat,
-                          lng: stayCoordsDraft?.lng,
-                        },
-                        applyStayToCityDays
-                      );
-                      setEditingStay(false);
-                    }}
-                    className="rounded-2xl border tk-bc-forest tk-bg-card p-4 space-y-3 shadow-2xs"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-bold tk-text-forest">
+            <>
+              <div ref={staySectionRef}>
+                {currentDayStay ? (
+                  <div className="rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="h-8 w-8 rounded-xl tk-bg-forest-tint border tk-bc-hair flex items-center justify-center shrink-0">
                         <Home className="h-4 w-4 tk-text-forest" />
-                        <span>
-                          {copy.stayHeading(currentDay, displayPrimaryCity)}
-                        </span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setEditingStay(false)}
-                        className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
-                      >
-                        {t('common.cancel')}
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-start">
-                      <PlaceAutocompleteInput
-                        value={stayNameDraft}
-                        onChange={(val) => {
-                          setStayNameDraft(val);
-                          setStayPlaceIdDraft(undefined);
-                        }}
-                        cityHint={primaryCity}
-                        includedPrimaryTypes={['lodging']}
-                        onSelectPlace={(place) => {
-                          setStayNameDraft(place.name);
-                          if (place.formattedAddress) setStayAddressDraft(place.formattedAddress);
-                          setStayPlaceIdDraft(place.placeId);
-                          setStayCoordsDraft(place.location);
-                        }}
-                        placeholder={copy.staySearchPlaceholder(displayPrimaryCity)}
-                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
-                      />
-                      <input
-                        type="text"
-                        value={stayAddressDraft}
-                        onChange={(e) => setStayAddressDraft(e.target.value)}
-                        placeholder={copy.stayAddressPlaceholder}
-                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
-                      />
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                      <label className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-ink2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={applyStayToCityDays}
-                          onChange={(e) => setApplyStayToCityDays(e.target.checked)}
-                          className="rounded tk-bc-hair tk-accent-forest"
-                        />
-                        <span>
-                          {copy.stayApplyAllDays(displayPrimaryCity)}
-                        </span>
-                      </label>
-
-                      <div className="flex items-center gap-2 ml-auto">
-                        {currentDayStay && (
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 text-sm sm:text-sm font-serif font-bold tk-text-ink">
+                          <span className="truncate">{currentDayStay.placeName}</span>
                           <button
                             type="button"
-                            onClick={() => {
-                              onUpdateDayStay(currentDay, null, false);
-                              setEditingStay(false);
-                            }}
-                            className="rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
+                            onClick={openStayEditor}
+                            className="text-sm font-semibold tk-text-forest hover:underline shrink-0 cursor-pointer"
                           >
-                            {copy.clearBtn}
+                            {copy.changeBtn}
                           </button>
-                        )}
-                        <button
-                          type="submit"
-                          disabled={!stayNameDraft.trim()}
-                          className="rounded-xl tk-bg-forest px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 cursor-pointer"
-                        >
-                          {copy.saveStayBtn}
-                        </button>
+                        </div>
+                        <div className="text-[15px] tk-text-ink2 leading-snug">
+                          {currentDayStay.address}
+                        </div>
                       </div>
                     </div>
-                  </form>
-                  <div className="border-t tk-bc-hair my-4" />
-                  <NearbyHotelsPanel
-                    day={currentDay}
-                    city={primaryCity}
-                    displayCity={displayPrimaryCity}
-                    dayNodes={dayNodes}
-                    language={activeLang}
-                    budgetTier={initialBudgetTier}
-                    currencyCode={intel.currencyCode}
-                    currencySymbol={intel.currencySymbol}
-                    tripStyle={tripStyle}
-                    affiliatePartners={affiliatePartners}
-                    onSetStay={(stay) => {
-                      onUpdateDayStay(currentDay, stay, applyStayToCityDays);
-                      setEditingStay(false);
-                    }}
-                  />
-                </>
-              ) : currentDayStay ? (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="h-8 w-8 rounded-xl tk-bg-forest-tint border tk-bc-hair flex items-center justify-center shrink-0">
-                      <Home className="h-4 w-4 tk-text-forest" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold tk-text-ink">
-                        <span className="truncate">{currentDayStay.placeName}</span>
-                        <button
-                          type="button"
-                          onClick={openStayEditor}
-                          className="text-xs font-semibold tk-text-forest hover:underline shrink-0 cursor-pointer"
-                        >
-                          {copy.changeBtn}
-                        </button>
-                      </div>
-                      <div className="text-[11px] tk-text-ink2 leading-snug">
-                        {currentDayStay.address}
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-wrap items-center gap-1.5 shrink-0">
-                    {dayNodes.length > 0 && (
-                      <a
-                        href={buildGoogleMapsDirectionsUrl({
-                          origin: buildPlaceQueryString(
+                    <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+                      {dayNodes.length > 0 && (
+                        <a
+                          href={buildGoogleMapsDirectionsUrl({
+                            origin: buildPlaceQueryString(
+                              currentDayStay.placeName,
+                              currentDayStay.address,
+                              primaryCity
+                            ),
+                            destination: buildPlaceQueryString(
+                              rainSwapped && dayNodes[0].isOutdoor && dayNodes[0].rainSwapTitle
+                                ? dayNodes[0].rainSwapTitle
+                                : dayNodes[0].title,
+                              rainSwapped && dayNodes[0].isOutdoor && dayNodes[0].rainSwapAddress
+                                ? dayNodes[0].rainSwapAddress
+                                : dayNodes[0].address,
+                              primaryCity
+                            ),
+                            travelMode: 'transit',
+                          })}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg tk-bg-forest-tint border tk-bc-hair px-2.5 py-1.5 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap"
+                        >
+                          <TrainFront className="h-3 w-3 tk-text-forest" />
+                          <span>{copy.toStopOneBtn}</span>
+                          <ChevronRight className="h-3 w-3" />
+                        </a>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openDriverCard(
+                            copy.hotelDriverScenario,
                             currentDayStay.placeName,
                             currentDayStay.address,
-                            primaryCity
-                          ),
-                          destination: buildPlaceQueryString(
-                            rainSwapped && dayNodes[0].isOutdoor && dayNodes[0].rainSwapTitle
-                              ? dayNodes[0].rainSwapTitle
-                              : dayNodes[0].title,
-                            rainSwapped && dayNodes[0].isOutdoor && dayNodes[0].rainSwapAddress
-                              ? dayNodes[0].rainSwapAddress
-                              : dayNodes[0].address,
-                            primaryCity
-                          ),
-                          travelMode: 'transit',
-                        })}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg tk-bg-forest-tint border tk-bc-hair px-2.5 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap"
+                            { openFullscreen: true, nodeId: `stay_day_${currentDay}` }
+                          )
+                        }
+                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
                       >
-                        <TrainFront className="h-3 w-3 tk-text-forest" />
-                        <span>{copy.toStopOneBtn}</span>
-                        <ChevronRight className="h-3 w-3" />
-                      </a>
-                    )}
+                        <Navigation className="h-3 w-3 tk-text-forest" />
+                        <span>{copy.hotelTaxiCardBtn}</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openDriverCard(
-                          copy.hotelDriverScenario,
-                          currentDayStay.placeName,
-                          currentDayStay.address,
-                          { openFullscreen: true, nodeId: `stay_day_${currentDay}` }
-                        )
-                      }
-                      className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
-                    >
-                      <Navigation className="h-3 w-3 tk-text-forest" />
-                      <span>{copy.hotelTaxiCardBtn}</span>
-                    </button>
-
-                    {onUpsertTravelPass &&
-                      (() => {
-                        const existingHotelPass = travelPasses.find(
-                          (p) =>
-                            p.category === 'hotel' &&
-                            p.title.toLowerCase().includes(currentDayStay.placeName.toLowerCase())
-                        );
-                        if (existingHotelPass && onOpenPassInGoMode) {
+                      {onUpsertTravelPass &&
+                        (() => {
+                          const existingHotelPass = travelPasses.find(
+                            (p) =>
+                              p.category === 'hotel' &&
+                              p.title.toLowerCase().includes(currentDayStay.placeName.toLowerCase())
+                          );
+                          if (existingHotelPass && onOpenPassInGoMode) {
+                            return (
+                              <button
+                                type="button"
+                                onClick={() => onOpenPassInGoMode(existingHotelPass.id)}
+                                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-sm font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap cursor-pointer"
+                              >
+                                <QrCode className="h-3 w-3 tk-text-forest" />
+                                <span>{copy.checkinPassBtn}</span>
+                              </button>
+                            );
+                          }
                           return (
                             <button
                               type="button"
-                              onClick={() => onOpenPassInGoMode(existingHotelPass.id)}
-                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap cursor-pointer"
+                              onClick={() => {
+                                const passId = `pass_hotel_d${currentDay}_${Date.now()}`;
+                                onUpsertTravelPass({
+                                  id: passId,
+                                  category: 'hotel',
+                                  title: `${currentDayStay.placeName} ${copy.hotelPassTitleSuffix}`,
+                                  subtitle: displayPrimaryCity,
+                                  day: currentDay,
+                                  dateTimeLabel: `Day ${currentDay}`,
+                                  localLanguageTitle: currentDayStay.placeName,
+                                  localLanguageAddress: currentDayStay.address,
+                                  status: 'ready',
+                                  updatedAt: Date.now(),
+                                });
+                                onOpenPassInGoMode?.(passId);
+                              }}
+                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
                             >
                               <QrCode className="h-3 w-3 tk-text-forest" />
-                              <span>{copy.checkinPassBtn}</span>
+                              <span>{copy.addToWalletBtn}</span>
                             </button>
                           );
-                        }
-                        return (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const passId = `pass_hotel_d${currentDay}_${Date.now()}`;
-                              onUpsertTravelPass({
-                                id: passId,
-                                category: 'hotel',
-                                title: `${currentDayStay.placeName} ${copy.hotelPassTitleSuffix}`,
-                                subtitle: displayPrimaryCity,
-                                day: currentDay,
-                                dateTimeLabel: `Day ${currentDay}`,
-                                localLanguageTitle: currentDayStay.placeName,
-                                localLanguageAddress: currentDayStay.address,
-                                status: 'ready',
-                                updatedAt: Date.now(),
-                              });
-                              onOpenPassInGoMode?.(passId);
-                            }}
-                            className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap cursor-pointer"
-                          >
-                            <QrCode className="h-3 w-3 tk-text-forest" />
-                            <span>{copy.addToWalletBtn}</span>
-                          </button>
+                        })()}
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={openStayEditor}
+                    className="group w-full flex items-center gap-3 rounded-[16px] border tk-bc-forest tk-bg-forest-tint px-4 py-3 tk-elev-soft hover:brightness-[0.97] transition-all cursor-pointer text-left"
+                  >
+                    <span className="h-10 w-10 rounded-full tk-bg-forest flex items-center justify-center shrink-0">
+                      <Home className="h-5 w-5 tk-text-card" />
+                    </span>
+                    <span className="flex-1 text-[16px] font-serif font-bold tk-text-ink">
+                      {copy.addWhereStayingBtn}
+                    </span>
+                    <span className="h-8 w-8 rounded-full tk-bg-card flex items-center justify-center shrink-0">
+                      <ChevronRight className="h-4 w-4 tk-text-forest group-hover:translate-x-0.5 transition-transform" />
+                    </span>
+                  </button>
+                )}
+              </div>
+
+              {editingStay && (
+                <div
+                  onClick={() => setEditingStay(false)}
+                  role="dialog"
+                  aria-modal="true"
+                  className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card tk-elev-soft overflow-y-auto max-h-[88vh] sm:max-h-[86vh] p-5 sm:p-6"
+                  >
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const cleanName = stayNameDraft.trim();
+                        if (!cleanName) return;
+                        onUpdateDayStay(
+                          currentDay,
+                          {
+                            placeName: cleanName,
+                            address: stayAddressDraft.trim() || `${cleanName}, ${primaryCity}`,
+                            placeId: stayPlaceIdDraft,
+                            lat: stayCoordsDraft?.lat,
+                            lng: stayCoordsDraft?.lng,
+                          },
+                          applyStayToCityDays
                         );
-                      })()}
+                        setEditingStay(false);
+                      }}
+                      className="rounded-[20px] border tk-bc-forest tk-bg-card p-4 space-y-3 tk-elev-soft"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-sm font-bold tk-text-forest">
+                          <Home className="h-4 w-4 tk-text-forest" />
+                          <span>
+                            {copy.stayHeading(currentDay, displayPrimaryCity)}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditingStay(false)}
+                          className="text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                        >
+                          {t('common.cancel')}
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-start">
+                        <PlaceAutocompleteInput
+                          value={stayNameDraft}
+                          onChange={(val) => {
+                            setStayNameDraft(val);
+                            setStayPlaceIdDraft(undefined);
+                          }}
+                          cityHint={primaryCity}
+                          includedPrimaryTypes={['lodging']}
+                          onSelectPlace={(place) => {
+                            setStayNameDraft(place.name);
+                            if (place.formattedAddress) setStayAddressDraft(place.formattedAddress);
+                            setStayPlaceIdDraft(place.placeId);
+                            setStayCoordsDraft(place.location);
+                          }}
+                          placeholder={copy.staySearchPlaceholder(displayPrimaryCity)}
+                          className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                        />
+                        <input
+                          type="text"
+                          value={stayAddressDraft}
+                          onChange={(e) => setStayAddressDraft(e.target.value)}
+                          placeholder={copy.stayAddressPlaceholder}
+                          className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <label className="inline-flex items-center gap-1.5 text-sm font-semibold tk-text-ink2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={applyStayToCityDays}
+                            onChange={(e) => setApplyStayToCityDays(e.target.checked)}
+                            className="rounded tk-bc-hair tk-accent-forest"
+                          />
+                          <span>
+                            {copy.stayApplyAllDays(displayPrimaryCity)}
+                          </span>
+                        </label>
+
+                        <div className="flex items-center gap-2 ml-auto">
+                          {currentDayStay && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                onUpdateDayStay(currentDay, null, false);
+                                setEditingStay(false);
+                              }}
+                              className="rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
+                            >
+                              {copy.clearBtn}
+                            </button>
+                          )}
+                          <button
+                            type="submit"
+                            disabled={!stayNameDraft.trim()}
+                            className="rounded-[16px] tk-bg-forest px-4 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 cursor-pointer"
+                          >
+                            {copy.saveStayBtn}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <div className="border-t tk-bc-hair my-4" />
+                    <NearbyHotelsPanel
+                      day={currentDay}
+                      city={primaryCity}
+                      displayCity={displayPrimaryCity}
+                      dayNodes={dayNodes}
+                      language={activeLang}
+                      budgetTier={initialBudgetTier}
+                      currencyCode={intel.currencyCode}
+                      currencySymbol={intel.currencySymbol}
+                      tripStyle={tripStyle}
+                      affiliatePartners={affiliatePartners}
+                      onSetStay={(stay) => {
+                        onUpdateDayStay(currentDay, stay, applyStayToCityDays);
+                        setEditingStay(false);
+                      }}
+                    />
                   </div>
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={openStayEditor}
-                  className="group inline-flex items-center gap-2 px-2 py-1 text-xs sm:text-sm font-medium tk-text-ink2 hover:tk-text-forest transition-colors cursor-pointer"
-                >
-                  <Home className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest transition-colors" />
-                  <span>{copy.addWhereStayingBtn}</span>
-                  <span className="tk-t-cap tk-text-ink2 font-normal">· {copy.nearbyHotelsHint}</span>
-                  <ChevronRight className="h-4 w-4 tk-text-ink2 group-hover:translate-x-0.5 transition-transform" />
-                </button>
               )}
-            </div>
+            </>
           )}
 
           {/* Timeline Nodes or Empty-Day AI Generator */}
           {dayNodes.length === 0 ? (
-            <section className="rounded-2xl border border-dashed tk-bc-hair tk-bg-card p-8 text-center space-y-3">
+            <section className="rounded-[20px] border border-dashed tk-bc-hair tk-bg-card p-8 text-center space-y-3">
               <div className="mx-auto flex justify-center">
                 <AccentIconBadge accent="teal" icon={MapPin} size="lg" shape="circle" />
               </div>
               <div>
-                <h3 className="text-sm font-bold tk-text-ink">
+                <h3 className="text-sm font-serif font-bold tk-text-ink">
                   {copy.emptyDayTitle(currentDay, dayCityLabel)}
                 </h3>
-                <p className="mt-1 text-xs tk-text-ink2">
+                <p className="mt-1 text-sm tk-text-ink2">
                   {copy.emptyDayDesc(dayCityLabel)}
                 </p>
               </div>
@@ -1783,12 +1810,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   type="button"
                   disabled={busyAction !== null}
                   onClick={() => runOptimize('generate_day')}
-                  className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2.5 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2.5 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 cursor-pointer"
                 >
                   {busyAction === 'generate_day' ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Sparkles className="h-3.5 w-3.5" />
+                    <Sparkles className="h-4 w-4" />
                   )}
                   {copy.aiGenerateDayBtn(currentDay)}
                 </button>
@@ -1799,17 +1826,17 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     setShowFullPlanner(true);
                     void handleRunFullPlan();
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-forest tk-bg-forest-tint px-4 py-2.5 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-forest tk-bg-forest-tint px-4 py-2.5 text-sm font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer"
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-4 w-4" />
                   {copy.planAllDaysBtn(safeDaysCount)}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowAddStop(true)}
-                  className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper px-4 py-2.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper px-4 py-2.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer"
                 >
-                  <Plus className="h-3.5 w-3.5 tk-text-forest" />
+                  <Plus className="h-4 w-4 tk-text-forest" />
                   {copy.addFirstStopBtn}
                 </button>
               </div>
@@ -1954,18 +1981,18 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                               target="_blank"
                               rel="noopener noreferrer"
                               title={copy.connectorMapsTitle}
-                              className="group inline-flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-medium tk-text-ink2 hover:tk-bg-card hover:tk-text-forest transition-colors"
+                              className="group inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-serif font-medium tk-text-ink2 hover:tk-bg-card hover:tk-text-forest transition-colors"
                             >
                               {isWalkLeg ? (
-                                <Footprints className="h-3.5 w-3.5 tk-text-ink2 group-hover:tk-text-forest" />
+                                <Footprints className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest" />
                               ) : isDriveLeg ? (
-                                <CarTaxiFront className="h-3.5 w-3.5 tk-text-ink2 group-hover:tk-text-forest" />
+                                <CarTaxiFront className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest" />
                               ) : (
-                                <TrainFront className="h-3.5 w-3.5 tk-text-ink2 group-hover:tk-text-forest" />
+                                <TrainFront className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest" />
                               )}
 
                               {typeof legMin === 'number' && legMin > 0 ? (
-                                <span className="font-num tabular-nums">
+                                <span className="font-serif tabular-nums">
                                   {copy.minsLabel(legMin)}
                                   {typeof legKm === 'number' && legKm > 0
                                     ? ` · ${legKm.toFixed(1)} km`
@@ -1977,7 +2004,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                                 </span>
                               )}
 
-                              <ChevronRight className="h-3.5 w-3.5 tk-text-ink2 group-hover:tk-text-forest group-hover:translate-x-0.5 transition-transform" />
+                              <ChevronRight className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest group-hover:translate-x-0.5 transition-transform" />
                             </a>
                           </div>
                         )}
@@ -2040,7 +2067,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 setAddStopInitialCoords(null);
                 setShowAddStop(true);
               }}
-              className="w-full min-h-[48px] rounded-2xl border border-dashed tk-bc-hair tk-bg-card hover:tk-bc-forest hover:tk-bg-paper px-4 py-3 text-xs sm:text-sm font-bold tk-text-forest flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              className="w-full min-h-[48px] rounded-[20px] border border-dashed tk-bc-hair tk-bg-card hover:tk-bc-forest hover:tk-bg-paper px-4 py-3 text-sm sm:text-sm font-serif font-bold tk-text-forest flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <Plus className="h-4 w-4 tk-text-forest" />
               <span>
@@ -2054,16 +2081,16 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
         <div className="lg:col-span-4 space-y-5">
           {/* Evening Split Meetup Anchor (integrated from former Crew module) */}
           {crew.length > 1 && (
-            <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5 space-y-3.5">
+            <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5 space-y-3.5">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <AccentIconBadge accent="teal" icon={Users} size="sm" />
-                  <h3 className="text-sm font-bold tk-text-ink">
+                  <h3 className="text-sm font-serif font-bold tk-text-ink">
                     {railCopy.splitMeetupTitle}
                   </h3>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-num text-xs font-bold tk-text-forest tabular-nums">
+                  <span className="font-serif text-sm font-bold tk-text-forest tabular-nums">
                     {formatTimeByPref(meetup.time, timeFormat)}
                   </span>
                   <button
@@ -2077,7 +2104,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       }
                       setEditingMeetup((v) => !v);
                     }}
-                    className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 hover:tk-text-forest cursor-pointer"
+                    className="inline-flex items-center gap-1 text-sm font-semibold tk-text-ink2 hover:tk-text-forest cursor-pointer"
                   >
                     <Pencil className="h-3 w-3" />
                     {editingMeetup ? t('itinerary.collapse') : t('common.edit')}
@@ -2104,7 +2131,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       type="time"
                       value={meetupTimeDraft}
                       onChange={(e) => setMeetupTimeDraft(e.target.value)}
-                      className="rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tabular-nums"
+                      className="rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-1.5 font-serif text-base sm:text-sm font-bold tabular-nums"
                     />
                     <div className="col-span-2">
                       <PlaceAutocompleteInput
@@ -2138,13 +2165,13 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     <button
                       type="button"
                       onClick={() => setEditingMeetup(false)}
-                      className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                      className="text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                     >
                       {t('common.cancel')}
                     </button>
                     <button
                       type="submit"
-                      className="rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+                      className="rounded-[16px] tk-bg-forest px-3.5 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {railCopy.saveMeetupBtn}
                     </button>
@@ -2156,11 +2183,11 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     {crew.map((member) => (
                       <div
                         key={member.id}
-                        className="py-2.5 flex items-center justify-between gap-2 text-xs"
+                        className="py-2.5 flex items-center justify-between gap-2 text-sm"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div
-                            className={`h-7 w-7 rounded-full flex items-center justify-center font-num text-[11px] font-bold shrink-0 ${
+                            className={`h-7 w-7 rounded-full flex items-center justify-center font-serif text-[13px] font-bold shrink-0 ${
  HERO_AVATAR_BG[member.accent] || HERO_AVATAR_BG.teal
  }`}
                           >
@@ -2175,14 +2202,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                             </div>
                           </div>
                         </div>
-                        <span className="text-[11px] tk-text-ink2 tabular-nums shrink-0">
+                        <span className="text-[13px] tk-text-ink2 tabular-nums shrink-0">
                           {railCopy.walkEta(member.etaMinutes)}
                         </span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2.5 border-t tk-bc-hair text-xs space-y-1.5">
+                  <div className="pt-2.5 border-t tk-bc-hair text-sm space-y-1.5">
                     <div className="font-bold tk-text-ink">
                       {railCopy.meetupSpotPrefix}
                       {meetup.placeName}
@@ -2211,7 +2238,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                             setTimeout(() => setCopiedMeetupAddr(false), 1800);
                           }
                         }}
-                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
                       >
                         {copiedMeetupAddr ? (
                           <>
@@ -2236,7 +2263,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                         })}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap"
+                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap"
                       >
                         <ExternalLink className="h-3 w-3 tk-text-forest" />
                         {railCopy.googleMapsBtn}
@@ -2252,7 +2279,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                             { openFullscreen: true, nodeId: 'meetup_anchor' }
                           )
                         }
-                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-forest-tint px-2.5 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-forest-tint px-2.5 py-1.5 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
                       >
                         <Navigation className="h-3 w-3 tk-text-forest" />
                         {railCopy.showDriverMeetupBtn}
@@ -2278,11 +2305,11 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             const nowSnapshot = Date.now();
 
             return (
-              <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5 space-y-3.5">
+              <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5 space-y-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
                     <AccentIconBadge accent="peach" icon={BellRing} size="sm" />
-                    <h3 className="text-sm font-bold tk-text-ink truncate">
+                    <h3 className="text-sm font-serif font-bold tk-text-ink truncate">
                       {railCopy.pushAlertsTitle}
                     </h3>
                   </div>
@@ -2293,12 +2320,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     <button
                       type="button"
                       onClick={() => void onRequestBrowserPermission()}
-                      className="rounded-lg tk-bg-forest px-2.5 py-1 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                      className="rounded-lg tk-bg-forest px-2.5 py-1 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {railCopy.allowPushBtn}
                     </button>
                   ) : (
-                    <span className="font-num text-[11px] font-semibold tk-text-forest whitespace-nowrap shrink-0 tabular-nums">
+                    <span className="font-serif text-[13px] font-semibold tk-text-forest whitespace-nowrap shrink-0 tabular-nums">
                       {notificationPermission === 'granted'
                         ? railCopy.pushReadyStatus
                         : railCopy.inAppBannerStatus}
@@ -2306,13 +2333,13 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   )}
                 </div>
 
-                <p className="text-xs leading-relaxed tk-text-ink2">
+                <p className="text-sm leading-relaxed tk-text-ink2">
                   {railCopy.pushAlertsDesc}
                 </p>
 
                 {/* Lead-time selector */}
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center justify-between text-sm">
                     <span className="font-semibold tk-text-ink2">
                       {railCopy.alertLeadTimeLabel}
                     </span>
@@ -2337,7 +2364,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                         key={mins}
                         type="button"
                         onClick={() => onChangeItineraryLeadMinutes?.(mins)}
-                        className={`rounded-xl py-1.5 font-num text-xs font-semibold tabular-nums transition-colors cursor-pointer ${
+                        className={`rounded-xl py-1.5 font-serif text-sm font-semibold tabular-nums transition-colors cursor-pointer ${
  itineraryLeadMinutes === mins
  ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest'
@@ -2355,14 +2382,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onToggleDayStopsAlerts(currentDay)}
-                      className={`flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                      className={`flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  allDayArmed
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-forest'
  }`}
                     >
-                      <BellRing className="h-3.5 w-3.5 tk-text-forest" />
-                      <span className="font-num tabular-nums">
+                      <BellRing className="h-4 w-4 tk-text-forest" />
+                      <span className="font-serif tabular-nums">
                         {allDayArmed
                           ? railCopy.dayArmedBtn(currentDay, armedDayCount)
                           : railCopy.alertDayStopsBtn(currentDay, unvisitedDayNodes.length)}
@@ -2374,14 +2401,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onToggleMeetupAlert(currentDay)}
-                      className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                      className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  isMeetupAlertArmed
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-forest'
  }`}
                     >
-                      <Users className="h-3.5 w-3.5 tk-text-forest" />
-                      <span className="font-num tabular-nums">
+                      <Users className="h-4 w-4 tk-text-forest" />
+                      <span className="font-serif tabular-nums">
                         {railCopy.meetupBtnTime(formatTimeByPref(meetup.time, timeFormat))}
                       </span>
                     </button>
@@ -2418,17 +2445,17 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                         type="datetime-local"
                         value={customAlertTime}
                         onChange={(e) => setCustomAlertTime(e.target.value)}
-                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm tk-text-ink tabular-nums"
+                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-serif text-base sm:text-sm tk-text-ink tabular-nums"
                       />
                       <button
                         type="submit"
                         disabled={!customAlertTitle.trim()}
-                        className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 whitespace-nowrap cursor-pointer"
+                        className="rounded-lg tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 whitespace-nowrap cursor-pointer"
                       >
                         {railCopy.scheduleBtn}
                       </button>
                     </div>
-                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <div className="flex flex-wrap items-center gap-1.5 text-[13px]">
                       <span className="tk-text-ink2">
                         {railCopy.quickLabel}
                       </span>
@@ -2457,7 +2484,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 {/* Upcoming Scheduled Queue */}
                 {upcomingQueue.length > 0 && (
                   <div className="pt-2.5 border-t tk-bc-hair space-y-1.5">
-                    <div className="flex items-center justify-between text-[11px] font-semibold tk-text-ink2">
+                    <div className="flex items-center justify-between text-[13px] font-semibold tk-text-ink2">
                       <span>
                         {railCopy.scheduledQueueTitle(upcomingQueue.length)}
                       </span>
@@ -2466,13 +2493,13 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                       {upcomingQueue.slice(0, 5).map((item) => (
                         <div
                           key={item.signature}
-                          className="py-1.5 flex items-center justify-between gap-2 text-xs"
+                          className="py-1.5 flex items-center justify-between gap-2 text-sm"
                         >
                           <div className="min-w-0">
                             <div className="font-semibold tk-text-ink truncate">
                               {item.title}
                             </div>
-                            <div className="font-num text-[11px] tk-text-forest tabular-nums">
+                            <div className="font-serif text-[13px] tk-text-forest tabular-nums">
                               {formatScheduleBadgeLabel(
                                 item.triggerAtMs,
                                 nowSnapshot,
@@ -2488,7 +2515,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                               title={railCopy.cancelAlertTitle}
                               className="h-6 w-6 rounded-md tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center shrink-0 cursor-pointer"
                             >
-                              <Trash2 className="h-3.5 w-3.5" />
+                              <Trash2 className="h-4 w-4" />
                             </button>
                           )}
                         </div>
@@ -2501,14 +2528,14 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           })()}
 
           {/* Delay Ripple */}
-          <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5">
+          <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5">
             <div className="flex items-center gap-2">
               <AccentIconBadge accent="peach" icon={Clock} size="sm" />
-              <h3 className="text-sm font-bold tk-text-ink">
+              <h3 className="text-sm font-serif font-bold tk-text-ink">
                 {railCopy.delayTitle(currentDay)}
               </h3>
             </div>
-            <p className="mt-1.5 text-xs leading-relaxed tk-text-ink2">
+            <p className="mt-1.5 text-sm leading-relaxed tk-text-ink2">
               {railCopy.delayDesc}
             </p>
             <div className="mt-3 grid grid-cols-3 gap-2">
@@ -2517,7 +2544,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                   key={mins}
                   type="button"
                   onClick={() => setDelayMinutes(mins)}
-                  className={`rounded-xl py-2 text-xs font-semibold tabular-nums transition-colors cursor-pointer ${
+                  className={`rounded-xl py-2 text-sm font-semibold tabular-nums transition-colors cursor-pointer ${
  delayMinutes === mins
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2'
@@ -2531,25 +2558,25 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               type="button"
               disabled={busyAction !== null || dayNodes.length === 0}
               onClick={() => runOptimize('delay', { delayMinutes })}
-              className="mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-forest tk-bg-forest-tint px-4 py-2.5 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer"
+              className="mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-[16px] border tk-bc-forest tk-bg-forest-tint px-4 py-2.5 text-sm font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer"
             >
               {busyAction === 'delay' ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : null}
               {railCopy.shiftDayBtn(currentDay, delayMinutes)}
             </button>
           </section>
 
           {/* Bidirectional Wishlist Smart Insertion */}
-          <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5">
+          <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
                 <AccentIconBadge accent="lavender" icon={Bookmark} size="sm" />
-                <h3 className="text-sm font-bold tk-text-ink truncate">
+                <h3 className="text-sm font-serif font-bold tk-text-ink truncate">
                   {railCopy.wishlistTitle}
                 </h3>
               </div>
-              <span className="font-num text-xs tk-text-ink2 tabular-nums shrink-0">
+              <span className="font-serif text-sm tk-text-ink2 tabular-nums shrink-0">
                 {railCopy.wishlistSavedCount(wishlist.length)}
               </span>
             </div>
@@ -2569,7 +2596,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               />
               <button
                 type="submit"
-                className="rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                className="rounded-[16px] tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
               >
                 + {t('common.add')}
               </button>
@@ -2577,7 +2604,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
 
             <div className="mt-3 divide-y tk-divide-hair border-t tk-bc-hair">
               {wishlist.length === 0 ? (
-                <p className="py-3 text-xs tk-text-ink2">
+                <p className="py-3 text-sm tk-text-ink2">
                   {railCopy.wishlistAllScheduled}
                 </p>
               ) : (
@@ -2590,7 +2617,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         title={railCopy.viewOnGoogleMapsTitle(displayWish)}
-                        className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink hover:tk-text-forest truncate min-w-0"
+                        className="inline-flex items-center gap-1 text-sm font-semibold tk-text-ink hover:tk-text-forest truncate min-w-0"
                       >
                         <MapPin className="h-3 w-3 tk-text-forest shrink-0" />
                         <span className="truncate">{displayWish}</span>
@@ -2600,7 +2627,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                           type="button"
                           disabled={busyAction !== null}
                           onClick={() => runOptimize('insert_wishlist', { wishlistItem: item })}
-                          className="rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 text-xs font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap cursor-pointer"
+                          className="rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1 text-sm font-semibold tk-text-forest hover:tk-bc-forest whitespace-nowrap cursor-pointer"
                         >
                           {busyAction === `insert_wishlist${item}`
                             ? railCopy.fittingBtn
@@ -2612,7 +2639,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                           title={railCopy.removeWishlistTitle}
                           className="h-6 w-6 rounded-md tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center cursor-pointer"
                         >
-                          <X className="h-3.5 w-3.5" />
+                          <X className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
@@ -2623,11 +2650,11 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           </section>
 
           {/* Quick Local Communication Cards + Custom Scenario + Fullscreen Mode */}
-          <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5 space-y-3">
+          <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5 space-y-3">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <AccentIconBadge accent="teal" icon={MessageSquareText} size="sm" />
-                <h3 className="text-sm font-bold tk-text-ink">
+                <h3 className="text-sm font-serif font-bold tk-text-ink">
                   {railCopy.localCardsTitle(displayPrimaryCity)}
                 </h3>
               </div>
@@ -2643,7 +2670,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     intel.vatExitAirport
                   )
                 }
-                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
+                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
               >
                 {railCopy.vatBtn}
               </button>
@@ -2656,7 +2683,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     primaryCity
                   )
                 }
-                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
+                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
               >
                 {railCopy.diningBtn}
               </button>
@@ -2669,7 +2696,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     primaryCity
                   )
                 }
-                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
+                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
               >
                 {railCopy.luggageBtn}
               </button>
@@ -2682,7 +2709,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     primaryCity
                   )
                 }
-                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
+                className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer"
               >
                 {railCopy.platformBtn}
               </button>
@@ -2699,7 +2726,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               <button
                 type="submit"
                 disabled={cardLoading}
-                className="rounded-xl border tk-bc-forest tk-bg-forest-tint px-3 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
+                className="rounded-[16px] border tk-bc-forest tk-bg-forest-tint px-3 py-1.5 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
               >
                 {railCopy.createCardBtn}
               </button>
@@ -2708,12 +2735,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             {localCard && (
               <div
                 ref={inlineCardRef}
-                className="mt-3 rounded-xl tk-bg-forest p-4 tk-text-card space-y-2.5"
+                className="mt-3 rounded-[16px] tk-bg-forest p-4 tk-text-card space-y-2.5"
               >
-                <div className="flex items-center justify-between text-[11px] opacity-85">
+                <div className="flex items-center justify-between text-[13px] opacity-85">
                   <span>{localCard.languageLabel}</span>
                   <div className="flex items-center gap-2">
-                    {cardLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                    {cardLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                     <button
                       type="button"
                       onClick={() => setFullscreenCardOpen(true)}
@@ -2728,12 +2755,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                 <div className="text-sm font-semibold leading-relaxed bg-white/10 rounded-lg p-3 whitespace-pre-line">
                   {localCard.localAddressOrPhrase}
                 </div>
-                <div className="text-xs opacity-90">
+                <div className="text-sm opacity-90">
                   {railCopy.pronunciationPrefix}
                   {localCard.pronunciationHint}
                 </div>
                 {localCard.etiquetteTip && (
-                  <div className="text-xs opacity-85 border-t border-white/20 pt-2">
+                  <div className="text-sm opacity-85 border-t border-white/20 pt-2">
                     {railCopy.localTipPrefix}
                     {localCard.etiquetteTip}
                   </div>
@@ -2756,12 +2783,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
           >
             <div className="flex flex-wrap items-center justify-between gap-2 border-b tk-bc-hair pb-4">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold tk-text-forest">
+                <span className="text-sm font-bold tk-text-forest">
                   {localCard.languageLabel} · {railCopy.showDirectlyToDriver}
                 </span>
                 {cardLoading && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-medium tk-text-ink2">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest" />
+                  <span className="inline-flex items-center gap-1 text-[13px] font-medium tk-text-ink2">
+                    <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
                     {railCopy.aiPolishingPhrasing}
                   </span>
                 )}
@@ -2769,7 +2796,7 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               <button
                 type="button"
                 onClick={() => setFullscreenCardOpen(false)}
-                className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-plate px-3 py-1.5 text-xs font-bold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
+                className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-plate px-3 py-1.5 text-sm font-bold tk-text-ink2 hover:tk-bg-paper cursor-pointer"
               >
                 <X className="h-4 w-4" /> {t('common.close')}
               </button>
@@ -2785,9 +2812,9 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
             </div>
 
             {driverTargetAddress && (
-              <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-4 flex flex-wrap items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold tk-text-ink2">
+                  <div className="text-[13px] font-semibold tk-text-ink2">
                     {railCopy.exactAddressHeading}
                   </div>
                   <div className="mt-0.5 text-base sm:text-lg font-extrabold tk-text-forest break-words">
@@ -2802,23 +2829,23 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
                     })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0"
                   >
-                    <ExternalLink className="h-3.5 w-3.5" />
+                    <ExternalLink className="h-4 w-4" />
                     {railCopy.openGoogleMapsModalBtn}
                   </a>
                   <button
                     type="button"
                     onClick={handleCopyModalAddress}
-                    className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2 text-sm font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copiedModalAddr ? (
                       <>
-                        <Check className="h-3.5 w-3.5" /> {railCopy.addrCopiedBtn}
+                        <Check className="h-4 w-4" /> {railCopy.addrCopiedBtn}
                       </>
                     ) : (
                       <>
-                        <Copy className="h-3.5 w-3.5" /> {railCopy.copyAddrBtn}
+                        <Copy className="h-4 w-4" /> {railCopy.copyAddrBtn}
                       </>
                     )}
                   </button>

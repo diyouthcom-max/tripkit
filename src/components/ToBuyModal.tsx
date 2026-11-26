@@ -152,11 +152,11 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="to-buy-modal-title"
-      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
+        className="w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair bg-white tk-elev-soft overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[86vh] transition-all"
       >
         {/* Mobile Sheet Grab Handle */}
         <div
@@ -169,11 +169,11 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
           <div className="flex items-center gap-2 min-w-0">
             <h2
               id="to-buy-modal-title"
-              className="text-base sm:text-lg font-extrabold tracking-tight tk-text-ink truncate"
+              className="font-serif text-base sm:text-lg font-extrabold tracking-tight tk-text-ink truncate"
             >
               {copy.headerTitle}
             </h2>
-            <span className="text-xs font-semibold tk-text-danger tabular-nums whitespace-nowrap">
+            <span className="text-sm font-semibold tk-text-danger tabular-nums whitespace-nowrap">
               · {copy.pendingCount(toBuyPairs.length)}
             </span>
           </div>
@@ -192,7 +192,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
         <div className="px-5 pb-3 bg-white shrink-0">
           <div
             role="tablist"
-            className="grid grid-cols-3 gap-1 rounded-2xl tk-bg-forest-plate p-1"
+            className="grid grid-cols-3 gap-1 rounded-[20px] tk-bg-forest-plate p-1"
           >
             {(
               [
@@ -222,10 +222,10 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-h-[50px] rounded-xl px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`min-h-[50px] rounded-[16px] px-2 py-1.5 flex flex-col items-center justify-center gap-1 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
  isActive
- ? 'bg-white tk-text-ink shadow-xs font-bold'
- : 'tk-text-ink2 hover:tk-text-ink font-medium'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest font-bold'
+ : 'bg-white border tk-bc-hair tk-text-ink2 hover:tk-text-ink font-medium'
  }`}
                 >
                   <Icon
@@ -233,7 +233,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
  isActive ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                   />
-                  <span className="text-[11px] sm:text-xs leading-none truncate max-w-full tabular-nums">
+                  <span className="text-[13px] sm:text-sm leading-none truncate max-w-full tabular-nums">
                     {tab.label}
                   </span>
                 </button>
@@ -248,20 +248,20 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
           {activeTab === 'list' && (
             <>
               {toBuyPairs.length === 0 ? (
-                <div className="rounded-2xl border border-dashed tk-bc-hair tk-bg-card px-4 py-8 text-center space-y-3">
-                  <p className="text-xs tk-text-ink2">{copy.emptyText}</p>
+                <div className="rounded-[20px] border border-dashed tk-bc-hair tk-bg-card px-4 py-8 text-center space-y-3">
+                  <p className="text-sm tk-text-ink2">{copy.emptyText}</p>
                   <div className="flex items-center justify-center gap-2">
                     <button
                       type="button"
                       onClick={() => setActiveTab('recommended')}
-                      className="rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold text-white cursor-pointer"
+                      className="rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold text-white cursor-pointer"
                     >
                       {copy.browsePicksBtn}
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveTab('add')}
-                      className="rounded-xl border tk-bc-hair bg-white px-3.5 py-2 text-xs font-bold tk-text-ink cursor-pointer"
+                      className="font-serif rounded-[16px] border tk-bc-hair bg-white px-3.5 py-2 text-sm font-bold tk-text-ink cursor-pointer"
                     >
                       + {copy.addToBuyBtn}
                     </button>
@@ -282,7 +282,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                     return (
                       <div
                         key={item.id}
-                        className="rounded-2xl border tk-bc-hair bg-white p-3.5 flex flex-wrap items-center justify-between gap-3"
+                        className="rounded-[20px] border tk-bc-hair bg-white p-3.5 flex flex-wrap items-center justify-between gap-3"
                       >
                         <div className="flex items-start gap-3 min-w-0 flex-1">
                           <div className="mt-0.5 shrink-0">
@@ -293,10 +293,10 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                             />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="text-sm font-bold tk-text-ink truncate">
+                            <div className="font-serif text-sm font-bold tk-text-ink truncate">
                               {translateDemoPackItemName(item.name, activeLang)}
                             </div>
-                            <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
+                            <div className="mt-0.5 text-sm tk-text-ink2 tabular-nums">
                               {translateGroupTitleLabel(grp.id, grp.title, activeLang)} ·{' '}
                               {formatItemWeightByPref(item.weightGrams, unitSystem)}
                             </div>
@@ -308,7 +308,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                                     href={offer.url}
                                     target="_blank"
                                     rel="noopener noreferrer nofollow sponsored"
-                                    className="inline-flex items-center gap-1 rounded-lg border tk-bc-danger-hair tk-bg-danger-tint px-2 py-0.5 text-[11px] font-semibold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap shrink-0"
+                                    className="inline-flex items-center gap-1 rounded-lg border tk-bc-danger-hair tk-bg-danger-tint px-2 py-0.5 text-[13px] font-semibold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap shrink-0"
                                   >
                                     <span>{offer.merchant}</span>
                                     <ExternalLink className="h-2.5 w-2.5 shrink-0" />
@@ -322,9 +322,9 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                         <button
                           type="button"
                           onClick={() => onToggleToBuy(grp.id, item.id)}
-                          className="h-9 inline-flex items-center justify-center gap-1 rounded-xl tk-bg-forest px-3.5 text-xs font-bold text-white hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                          className="h-9 inline-flex items-center justify-center gap-1 rounded-[16px] tk-bg-forest px-3.5 text-sm font-bold text-white hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                         >
-                          <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                          <Check className="h-4 w-4 stroke-[1.5]" />
                           <span>{copy.boughtBtn}</span>
                         </button>
                       </div>
@@ -338,9 +338,9 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
           {/* TAB 2: DESTINATION ROUTE PICKS */}
           {activeTab === 'recommended' && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs tk-text-ink2">
+              <div className="flex items-center justify-between text-sm tk-text-ink2">
                 <span>{copy.recommendedSubtitle}</span>
-                <span className="font-num text-[11px] tk-text-ink2 shrink-0">
+                <span className="font-serif text-[13px] tk-text-ink2 shrink-0">
                   {intel.plugType} · {intel.rainChance}
                 </span>
               </div>
@@ -351,17 +351,17 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                   return (
                     <div
                       key={pick.id}
-                      className="rounded-2xl border tk-bc-hair bg-white p-3.5 flex flex-wrap items-center justify-between gap-3"
+                      className="rounded-[20px] border tk-bc-hair bg-white p-3.5 flex flex-wrap items-center justify-between gap-3"
                     >
                       <div className="flex items-start gap-3 min-w-0 flex-1">
                         <div className="mt-0.5 shrink-0">
                           <AccentIconBadge accent="peach" icon={ShoppingBag} size="md" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-sm font-bold tk-text-ink truncate">
+                          <div className="font-serif text-sm font-bold tk-text-ink truncate">
                             {pick.name}
                           </div>
-                          <p className="mt-0.5 text-xs tk-text-ink2 truncate">
+                          <p className="mt-0.5 text-sm tk-text-ink2 truncate">
                             {pick.why} · {formatItemWeightByPref(pick.unitWeightGrams, unitSystem)}
                           </p>
                           <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
@@ -369,7 +369,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                               href={pick.primaryOffer.url}
                               target="_blank"
                               rel="noopener noreferrer nofollow sponsored"
-                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2 py-0.5 text-[11px] font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0"
+                              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-paper px-2 py-0.5 text-[13px] font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0"
                             >
                               <span>{pick.primaryOffer.merchant}</span>
                               <ExternalLink className="h-2.5 w-2.5 shrink-0" />
@@ -379,7 +379,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                                 href={pick.secondaryOffer.url}
                                 target="_blank"
                                 rel="noopener noreferrer nofollow sponsored"
-                                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2 py-0.5 text-[11px] font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap shrink-0"
+                                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2 py-0.5 text-[13px] font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap shrink-0"
                               >
                                 <span>{pick.secondaryOffer.merchant}</span>
                                 <ExternalLink className="h-2.5 w-2.5 shrink-0" />
@@ -396,7 +396,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                           onQuickAddAffiliateGear(pick);
                           setAddedPickIds((prev) => ({ ...prev, [pick.id]: true }));
                         }}
-                        className={`h-9 inline-flex items-center justify-center gap-1 rounded-xl px-3.5 text-xs font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                        className={`h-9 inline-flex items-center justify-center gap-1 rounded-[16px] px-3.5 text-sm font-bold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isAdded
  ? 'tk-bg-forest-tint tk-text-forest border tk-bc-hair cursor-default'
  : 'tk-bg-forest text-white hover:tk-bg-press'
@@ -404,12 +404,12 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                       >
                         {isAdded ? (
                           <>
-                            <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                            <Check className="h-4 w-4 stroke-[1.5]" />
                             <span>{copy.addedBtn}</span>
                           </>
                         ) : (
                           <>
-                            <Plus className="h-3.5 w-3.5" />
+                            <Plus className="h-4 w-4" />
                             <span>{copy.addBtn}</span>
                           </>
                         )}
@@ -420,7 +420,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
               </div>
 
               {affiliatePartners?.disclosureEnabled !== false && (
-                <p className="text-[11px] tk-text-ink2">{copy.partnerDisclosure}</p>
+                <p className="text-[13px] tk-text-ink2">{copy.partnerDisclosure}</p>
               )}
             </div>
           )}
@@ -429,7 +429,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
           {activeTab === 'add' && (
             <form onSubmit={handleCreateToBuy} className="space-y-3.5">
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold tk-text-ink2">
+                <label className="block text-sm font-bold tk-text-ink2">
                   {copy.gearNameLabel}
                 </label>
                 <input
@@ -438,19 +438,19 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder={copy.gearNamePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                  className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold tk-text-ink2">
+                  <label className="block text-sm font-bold tk-text-ink2">
                     {copy.targetCategoryLabel}
                   </label>
                   <select
                     value={newGroupId}
                     onChange={(e) => setNewGroupId(e.target.value)}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
+                    className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none"
                   >
                     {groups.map((g) => (
                       <option key={g.id} value={g.id}>
@@ -461,18 +461,18 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold tk-text-ink2">
+                  <label className="block text-sm font-bold tk-text-ink2">
                     {copy.quantityLabel}
                   </label>
-                  <div className="flex items-center justify-between rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5">
+                  <div className="flex items-center justify-between rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5">
                     <button
                       type="button"
                       onClick={() => setNewQty((q) => Math.max(1, q - 1))}
                       className="h-7 w-7 inline-flex items-center justify-center rounded-lg bg-white border tk-bc-hair tk-text-ink cursor-pointer"
                     >
-                      <Minus className="h-3.5 w-3.5" />
+                      <Minus className="h-4 w-4" />
                     </button>
-                    <span className="font-num text-sm font-bold tk-text-ink tabular-nums">
+                    <span className="font-serif text-sm font-bold tk-text-ink tabular-nums">
                       ×{newQty}
                     </span>
                     <button
@@ -480,15 +480,15 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
                       onClick={() => setNewQty((q) => Math.min(99, q + 1))}
                       className="h-7 w-7 inline-flex items-center justify-center rounded-lg bg-white border tk-bc-hair tk-text-ink cursor-pointer"
                     >
-                      <Plus className="h-3.5 w-3.5" />
+                      <Plus className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
               </div>
 
               {addSuccess && (
-                <p className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-forest">
-                  <Check className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                <p className="inline-flex items-center gap-1.5 text-sm font-semibold tk-text-forest">
+                  <Check className="h-4 w-4 tk-text-forest shrink-0" />
                   <span>{addSuccess}</span>
                 </p>
               )}
@@ -496,7 +496,7 @@ export const ToBuyModal: React.FC<ToBuyModalProps> = ({
               <button
                 type="submit"
                 disabled={!newName.trim()}
-                className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-2xl tk-bg-forest px-4 py-2.5 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
+                className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-[20px] tk-bg-forest px-4 py-2.5 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-40 transition-colors cursor-pointer"
               >
                 <Plus className="h-4 w-4" />
                 <span>{copy.submitAddBtn}</span>

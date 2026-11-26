@@ -159,11 +159,11 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
     <div
       role="dialog"
       aria-label={draftStart ? pickEndLabel : pickStartLabel}
-      className="mt-3 rounded-2xl border tk-bc-hair tk-bg-card p-3.5 tk-elev-card space-y-2.5"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] mt-3 rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 tk-elev-card space-y-2.5"
     >
       {/* Calendar Header */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-bold tk-text-forest truncate">
+        <span className="text-sm font-serif font-bold tk-text-forest truncate">
           {draftStart && !singleStartOnly ? pickEndLabel : pickStartLabel}
         </span>
         <div className="flex items-center gap-0.5 shrink-0">
@@ -175,7 +175,7 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="min-w-[112px] text-center text-xs font-extrabold tk-text-ink tabular-nums">
+          <span className="font-serif min-w-[112px] text-center text-sm font-extrabold tk-text-ink tabular-nums">
             {monthHeading}
           </span>
           <button
@@ -192,7 +192,7 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
             aria-label="Close calendar"
             className="ml-0.5 inline-flex h-8 w-8 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-warning-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -202,7 +202,7 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
         {weekdayLabels.map((lbl, idx) => (
           <div
             key={`${lbl}_${idx}`}
-            className="py-1 text-[11px] font-semibold tk-text-ink2"
+            className="py-1 text-[13px] font-semibold tk-text-ink2"
           >
             {lbl}
           </div>
@@ -233,11 +233,11 @@ export const InlineDatePickerPopover: React.FC<InlineDatePickerPopoverProps> = (
               type="button"
               disabled={isBeyondCap}
               onClick={() => handleDayClick(cell.iso)}
-              className={`h-9 w-full rounded-xl text-xs font-num tabular-nums transition-colors flex items-center justify-center ${
+              className={`h-9 w-full rounded-[16px] text-sm font-serif tabular-nums transition-colors flex items-center justify-center ${
  isBeyondCap
  ? 'tk-text-ink2 opacity-40 cursor-not-allowed'
  : isStart || isEnd
- ? 'tk-bg-forest font-bold text-white shadow-xs cursor-pointer'
+ ? 'tk-bg-forest-tint font-bold tk-text-forest border tk-bc-forest cursor-pointer'
  : isInRange
  ? 'tk-bg-forest-tint font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer'
  : isToday

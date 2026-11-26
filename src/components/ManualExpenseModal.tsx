@@ -356,11 +356,11 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="manual-expense-modal-title"
-      className="fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 tk-bg-overlay p-0 sm:p-4 md:p-6 flex items-end sm:items-center justify-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[86vh]"
+        className="w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl border tk-bc-hair tk-bg-card tk-elev-soft overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[86vh]"
       >
         {/* Mobile Sheet Grab Handle */}
         <div
@@ -375,7 +375,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
               type="button"
               id="manual-expense-modal-title"
               onClick={() => setDayStripOpen((v) => !v)}
-              className="min-h-[42px] inline-flex items-center gap-1.5 rounded-xl px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0"
+              className="font-serif min-h-[42px] inline-flex items-center gap-1.5 rounded-[16px] px-2 -ml-2 text-base sm:text-lg font-extrabold tracking-tight tk-text-ink hover:tk-bg-paper transition-colors cursor-pointer min-w-0 tabular-nums"
             >
               <span className="truncate">
                 {copy.logExpenseTitle(manualDay, activeDayMeta?.cityLabel || '')}
@@ -388,7 +388,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
             </button>
 
             {sessionCount > 0 && (
-              <span className="text-xs font-semibold tk-text-forest tabular-nums whitespace-nowrap">
+              <span className="text-sm font-semibold tk-text-forest tabular-nums whitespace-nowrap">
                 · {copy.sessionLoggedCount(sessionCount)}
               </span>
             )}
@@ -423,13 +423,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                       setManualDay(day);
                       setDayStripOpen(false);
                     }}
-                    className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`min-h-[34px] inline-flex items-center gap-1.5 rounded-full px-3.5 text-sm font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isSelected
- ? 'tk-bc-forest tk-bg-forest tk-text-card'
- : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-forest'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-forest'
  }`}
                   >
-                    <span className="font-num">D{day}</span>
+                    <span className="font-serif tabular-nums">D{day}</span>
                     {cityLabel && <span>{cityLabel}</span>}
                   </button>
                 );
@@ -444,29 +444,29 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
           className="flex-1 overflow-y-auto px-5 py-4 space-y-4"
         >
           {savedBanner && (
-            <div className="flex items-center justify-between gap-2 rounded-xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-xs font-semibold tk-text-forest">
+            <div className="flex items-center justify-between gap-2 rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-sm font-semibold tk-text-forest">
               <span className="inline-flex items-center gap-1.5">
-                <Check className="h-3.5 w-3.5 shrink-0" />
+                <Check className="h-4 w-4 shrink-0" />
                 {savedBanner}
               </span>
             </div>
           )}
 
           {voiceError && (
-            <div className="flex items-center justify-between gap-2 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3.5 py-2 text-xs font-semibold tk-text-warning">
+            <div className="flex items-center justify-between gap-2 rounded-[16px] border tk-bc-warning-hair tk-bg-warning-tint px-3.5 py-2 text-sm font-semibold tk-text-warning">
               <span className="inline-flex items-center gap-1.5">
-                <AlertCircle className="h-3.5 w-3.5 tk-text-warning shrink-0" />
+                <AlertCircle className="h-4 w-4 tk-text-warning shrink-0" />
                 {voiceError}
               </span>
             </div>
           )}
 
           {/* Amount + Item Hero Card */}
-          <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-3.5 space-y-3">
+          <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-3.5 space-y-3">
             {/* Big Amount Row with Optional Currency Toggle */}
-            <div className="flex items-center justify-between gap-3 rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 focus-within:tk-bc-forest">
+            <div className="flex items-center justify-between gap-3 rounded-[16px] border tk-bc-hair tk-bg-card px-3.5 py-2.5 focus-within:tk-bc-forest">
               <div className="flex items-baseline gap-1.5 flex-1 min-w-0">
-                <span className="font-num text-xl font-extrabold tk-text-ink shrink-0">
+                <span className="font-serif tabular-nums text-xl font-extrabold tk-text-ink shrink-0">
                   {activeEntrySym}
                 </span>
                 <input
@@ -478,13 +478,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                   value={manualAmt}
                   onChange={(e) => setManualAmt(e.target.value)}
                   placeholder={isZeroDecimalCurrency(activeEntryCode) ? '0' : '0.00'}
-                  className="w-full min-w-0 bg-transparent font-num text-2xl font-extrabold tk-text-ink placeholder:tk-text-ink2 focus:outline-none tabular-nums"
+                  className="w-full min-w-0 bg-transparent font-serif text-2xl font-extrabold tk-text-ink placeholder:tk-text-ink2 focus:outline-none tabular-nums"
                 />
               </div>
 
               <div className="text-right shrink-0 flex flex-col items-end gap-1">
                 {sameCurrency ? (
-                  <div className="text-[11px] font-bold tk-text-ink2 uppercase font-num">
+                  <div className="text-[13px] font-bold tk-text-ink2 uppercase font-serif tabular-nums">
                     {tripCode}
                   </div>
                 ) : (
@@ -492,7 +492,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setEntryCurrencyMode('local')}
-                      className={`rounded-md px-2 py-0.5 font-num text-[11px] font-bold uppercase transition-colors cursor-pointer ${
+                      className={`rounded-md px-2 py-0.5 font-serif tabular-nums text-[13px] font-bold uppercase transition-colors cursor-pointer ${
  entryCurrencyMode === 'local'
  ? 'tk-bg-forest tk-text-card'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -503,7 +503,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setEntryCurrencyMode('home')}
-                      className={`rounded-md px-2 py-0.5 font-num text-[11px] font-bold uppercase transition-colors cursor-pointer ${
+                      className={`rounded-md px-2 py-0.5 font-serif tabular-nums text-[13px] font-bold uppercase transition-colors cursor-pointer ${
  entryCurrencyMode === 'home'
  ? 'tk-bg-forest tk-text-card'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -515,7 +515,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                 )}
 
                 {previewSecondaryConverted && (
-                  <div className="font-num text-xs font-semibold tk-text-forest tabular-nums">
+                  <div className="font-serif text-sm font-semibold tk-text-forest tabular-nums">
                     ≈ {previewSecondaryConverted}
                   </div>
                 )}
@@ -523,14 +523,14 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
             </div>
 
             {/* Item Title + Voice Fill */}
-            <div className="flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card pl-3 pr-1.5 py-1.5 focus-within:tk-bc-forest">
+            <div className="flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card pl-3 pr-1.5 py-1.5 focus-within:tk-bc-forest">
               <input
                 ref={titleInputRef}
                 type="text"
                 value={manualTitle}
                 onChange={(e) => setManualTitle(e.target.value)}
                 placeholder={t('budget.itemPlaceholder')}
-                className="flex-1 min-w-0 bg-transparent py-1 text-base sm:text-sm font-semibold tk-text-ink placeholder:font-normal placeholder:tk-text-ink2 focus:outline-none"
+                className="font-serif flex-1 min-w-0 bg-transparent py-1 text-base sm:text-sm font-semibold tk-text-ink placeholder:font-normal placeholder:tk-text-ink2 focus:outline-none"
               />
               <AiVoiceInputButton
                 compact
@@ -583,9 +583,9 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                       setManualBucket(tpl.bucket);
                       if (!manualAmt) amountInputRef.current?.focus();
                     }}
-                    className={`h-7 rounded-full px-2.5 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                    className={`h-7 rounded-full px-2.5 text-sm font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isSelected
- ? 'tk-bg-forest tk-text-card'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest border'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-forest'
  }`}
                   >
@@ -600,12 +600,12 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
           <div className="space-y-3">
             {/* 1. Expense Bucket */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center justify-between text-sm">
                 <span className="font-bold tk-text-ink2">
                   {copy.categoryLabel}
                 </span>
                 {willQualifyVat && (
-                  <span className="inline-flex items-center gap-1 rounded-full tk-bg-forest-tint px-2 py-0.5 text-[11px] font-bold tk-text-forest">
+                  <span className="inline-flex items-center gap-1 rounded-full tk-bg-forest-tint px-2 py-0.5 text-[13px] font-bold tk-text-forest">
                     <FileCheck2 className="h-3 w-3 shrink-0" />
                     {copy.autoVatBadge}
                   </span>
@@ -638,13 +638,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                       key={b.id}
                       type="button"
                       onClick={() => setManualBucket(b.id)}
-                      className={`h-10 inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                      className={`h-10 inline-flex items-center justify-center gap-1.5 rounded-[16px] border px-2 text-sm font-bold whitespace-nowrap transition-colors cursor-pointer ${
  active
- ? 'tk-bc-forest tk-bg-forest tk-text-card'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-card'
  }`}
                     >
-                      <Icon className="h-3.5 w-3.5 shrink-0" />
+                      <Icon className="h-4 w-4 shrink-0" />
                       <span className="truncate">{b.label}</span>
                     </button>
                   );
@@ -654,7 +654,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
 
             {/* 2. Payment Account */}
             <div className="space-y-1.5">
-              <span className="block text-xs font-bold tk-text-ink2">
+              <span className="block text-sm font-bold tk-text-ink2">
                 {copy.paymentMethodLabel}
               </span>
               <div className="grid grid-cols-3 gap-1.5">
@@ -684,13 +684,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                       key={acc.id}
                       type="button"
                       onClick={() => setManualAccount(acc.id)}
-                      className={`h-10 inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                      className={`h-10 inline-flex items-center justify-center gap-1.5 rounded-[16px] border px-2 text-sm font-bold whitespace-nowrap transition-colors cursor-pointer ${
  active
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-card'
  }`}
                     >
-                      <Icon className="h-3.5 w-3.5 shrink-0" />
+                      <Icon className="h-4 w-4 shrink-0" />
                       <span className="truncate">{acc.label}</span>
                     </button>
                   );
@@ -700,9 +700,9 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
 
             {/* Insufficient Wallet Balance Prompt */}
             {insufficientWalletWarning && (
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3.5 py-2.5 text-xs tk-text-warning">
-                <span className="inline-flex items-center gap-1.5 font-num tabular-nums">
-                  <AlertCircle className="h-3.5 w-3.5 tk-text-warning shrink-0" />
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-[16px] border tk-bc-warning-hair tk-bg-warning-tint px-3.5 py-2.5 text-sm tk-text-warning">
+                <span className="inline-flex items-center gap-1.5 font-serif tabular-nums">
+                  <AlertCircle className="h-4 w-4 tk-text-warning shrink-0" />
                   <span>
                     {copy.insufficientBalance(
                       insufficientWalletWarning.label,
@@ -738,7 +738,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
             {/* 3. Companion Split Mode (when traveling with companion) */}
             {!isSoloTrip && (
               <div className="space-y-2">
-                <span className="block text-xs font-bold tk-text-ink2">
+                <span className="block text-sm font-bold tk-text-ink2">
                   {copy.splitWithCompanionLabel}
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -771,7 +771,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                         key={sp.id}
                         type="button"
                         onClick={() => setManualSplit(sp.id)}
-                        className={`h-9 rounded-xl border px-2 text-xs font-bold whitespace-nowrap truncate transition-colors cursor-pointer ${
+                        className={`h-9 rounded-[16px] border px-2 text-sm font-bold whitespace-nowrap truncate transition-colors cursor-pointer ${
  active
  ? 'tk-bc-hair tk-bg-paper tk-text-ink2'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bg-card'
@@ -784,13 +784,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                 </div>
 
                 {effectiveManualSplit === 'ratio' && (
-                  <div className="rounded-xl border tk-bc-hair tk-bg-paper p-3 space-y-2.5">
+                  <div className="rounded-[16px] border tk-bc-hair tk-bg-paper p-3 space-y-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="inline-flex items-center gap-1 rounded-lg tk-bg-paper p-0.5">
                         <button
                           type="button"
                           onClick={() => setManualPaidBy('me')}
-                          className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                          className={`rounded-md px-2.5 py-1 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  manualPaidBy === 'me'
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2'
@@ -801,7 +801,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                         <button
                           type="button"
                           onClick={() => setManualPaidBy('partner')}
-                          className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                          className={`rounded-md px-2.5 py-1 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  manualPaidBy === 'partner'
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2'
@@ -824,9 +824,9 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                             key={preset.pct}
                             type="button"
                             onClick={() => setManualSharePct(preset.pct)}
-                            className={`rounded-lg px-2 py-0.5 font-num text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                            className={`rounded-lg px-2 py-0.5 font-serif tabular-nums text-sm font-semibold whitespace-nowrap cursor-pointer ${
  manualSharePct === preset.pct
- ? 'tk-bg-forest tk-text-card'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest border'
  : 'tk-bg-card border tk-bc-hair tk-text-ink2'
  }`}
                           >
@@ -837,7 +837,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-semibold tk-text-ink2 whitespace-nowrap shrink-0">
+                      <span className="text-sm font-semibold tk-text-ink2 whitespace-nowrap shrink-0">
                         {copy.myShareLabel}
                       </span>
                       <input
@@ -851,13 +851,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                         }
                         className="flex-1 tk-accent-forest cursor-pointer"
                       />
-                      <span className="font-num text-xs font-bold tk-text-ink tabular-nums whitespace-nowrap">
+                      <span className="font-serif text-sm font-bold tk-text-ink tabular-nums whitespace-nowrap">
                         {clampSharePct(manualSharePct)}% : {100 - clampSharePct(manualSharePct)}%
                       </span>
                     </div>
 
                     {previewFinalAmt > 0 && (
-                      <div className="text-xs tk-text-forest font-semibold font-num tabular-nums">
+                      <div className="text-sm tk-text-forest font-semibold font-serif tabular-nums">
                         {copy.ratioBreakdownLine(
                           sym,
                           previewSplitDetails.myAmountLocal.toFixed(2),
@@ -873,13 +873,13 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
 
             {/* 4. Tip Quick Option + Keep Adding Toggle */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-              <div className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-plate p-1">
+              <div className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest-plate p-1">
                 {(['none', 'round', 'ten'] as const).map((tipOpt) => (
                   <button
                     key={tipOpt}
                     type="button"
                     onClick={() => setTipMode(tipOpt)}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-semibold whitespace-nowrap cursor-pointer ${
+                    className={`rounded-lg px-2.5 py-1 text-sm font-semibold whitespace-nowrap cursor-pointer ${
  tipMode === tipOpt
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -894,12 +894,12 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
                 ))}
               </div>
 
-              <label className="inline-flex items-center gap-1.5 text-xs font-semibold tk-text-ink2 cursor-pointer select-none">
+              <label className="inline-flex items-center gap-1.5 text-sm font-semibold tk-text-ink2 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={keepAdding}
                   onChange={(e) => setKeepAdding(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded tk-accent-forest"
+                  className="h-4 w-4 rounded tk-accent-forest"
                 />
                 <span>{copy.logAnother}</span>
               </label>
@@ -911,7 +911,7 @@ export const ManualExpenseModal: React.FC<ManualExpenseModalProps> = ({
             <button
               type="submit"
               disabled={!manualTitle.trim() || rawManualAmt <= 0}
-              className="w-full h-11 inline-flex items-center justify-center gap-1.5 rounded-2xl tk-bg-forest px-4 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors font-num tabular-nums cursor-pointer"
+              className="w-full h-11 inline-flex items-center justify-center gap-1.5 rounded-[20px] tk-bg-forest px-4 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-40 transition-colors font-serif tabular-nums cursor-pointer"
             >
               <Plus className="h-4 w-4 shrink-0" />
               <span>

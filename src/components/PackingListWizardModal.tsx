@@ -226,7 +226,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay sm:p-4"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay sm:p-4"
       onClick={() => {
         if (!isGenerating) onClose();
       }}
@@ -236,7 +236,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
         aria-modal="true"
         aria-labelledby="packing-wizard-title"
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-white shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-150"
+        className="w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-3xl bg-white tk-elev-soft overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-150"
       >
         {/* Mobile grab handle */}
         <div className="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0">
@@ -258,11 +258,11 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
             <div className="min-w-0">
               <h2
                 id="packing-wizard-title"
-                className="text-lg sm:text-xl font-extrabold tracking-tight tk-text-forest text-balance"
+                className="font-serif text-lg sm:text-xl font-extrabold tracking-tight tk-text-forest text-balance"
               >
                 {copy.title}
               </h2>
-              <p className="mt-0.5 text-xs sm:text-sm tk-text-ink2">
+              <p className="mt-0.5 text-sm sm:text-sm tk-text-ink2">
                 {copy.subtitle}
               </p>
             </div>
@@ -291,18 +291,18 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                   onClose();
                   onEditTripRoute();
                 }}
-                className="w-full rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bg-forest-tint px-4 py-3 flex items-center justify-between gap-3 text-left transition-colors cursor-pointer"
+                className="w-full rounded-[20px] border tk-bc-hair tk-bg-paper hover:tk-bg-forest-tint px-4 py-3 flex items-center justify-between gap-3 text-left transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <Plane className="h-5 w-5 tk-text-forest shrink-0" />
                   <div className="min-w-0">
-                    <div className="text-xs tk-text-ink2">
+                    <div className="text-sm tk-text-ink2">
                       {copy.tripLinkedLabel}
                     </div>
-                    <div className="text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
+                    <div className="font-serif text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
                       {routeDisplay}
                     </div>
-                    <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
+                    <div className="mt-0.5 text-sm tk-text-ink2 tabular-nums">
                       {formatDateByPref(setup.departureDate, activeLang)} ·{' '}
                       {copy.tripDaysPax(setup.days, setup.travelers)}
                     </div>
@@ -311,14 +311,14 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                 <ChevronRight className="h-4 w-4 tk-text-ink2 shrink-0" />
               </button>
             ) : (
-              <div className="w-full rounded-2xl border tk-bc-hair tk-bg-paper px-4 py-3 flex items-center gap-3">
+              <div className="w-full rounded-[20px] border tk-bc-hair tk-bg-paper px-4 py-3 flex items-center gap-3">
                 <Plane className="h-5 w-5 tk-text-forest shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-xs tk-text-ink2">{copy.tripCurrentLabel}</div>
-                  <div className="text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
+                  <div className="text-sm tk-text-ink2">{copy.tripCurrentLabel}</div>
+                  <div className="font-serif text-[15px] sm:text-base font-bold tk-text-forest leading-snug">
                     {routeDisplay}
                   </div>
-                  <div className="mt-0.5 text-xs tk-text-ink2 tabular-nums">
+                  <div className="mt-0.5 text-sm tk-text-ink2 tabular-nums">
                     {formatDateByPref(setup.departureDate, activeLang)} ·{' '}
                     {copy.tripDaysOnly(setup.days)}
                   </div>
@@ -331,10 +331,10 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
             {/* 1. Per-Stop Weather Forecast + Subjective Override (❄️ Warmer / ☀️ Lighter / ☔ Rain+) */}
             <section className="py-5 space-y-3.5">
               <div className="flex items-baseline gap-2 flex-wrap">
-                <h3 className="text-sm sm:text-base font-bold tk-text-forest">
+                <h3 className="font-serif text-sm sm:text-base font-bold tk-text-forest">
                   {copy.weatherHeading}
                 </h3>
-                <span className="text-xs tk-text-ink2">
+                <span className="text-sm tk-text-ink2">
                   {copy.weatherFromForecast}
                 </span>
               </div>
@@ -343,7 +343,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                 {stopForecasts.map((st, idx) => (
                   <div
                     key={`${st.city}_${idx}`}
-                    className="flex items-center gap-2.5 text-xs sm:text-sm leading-snug"
+                    className="flex items-center gap-2.5 text-sm sm:text-sm leading-snug"
                   >
                     {st.isRainy ? (
                       <CloudRain className="h-4 w-4 tk-text-ink2 shrink-0" />
@@ -359,10 +359,10 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
               </div>
 
               <div className="pt-1 space-y-2">
-                <div className="text-xs tk-text-ink2">
+                <div className="text-sm tk-text-ink2">
                   {copy.expectDifferentWeather}
                 </div>
-                <div className="grid grid-cols-3 gap-1.5 rounded-2xl tk-bg-forest-tint p-1">
+                <div className="grid grid-cols-3 gap-1.5 rounded-[20px] tk-bg-forest-tint p-1">
                   {(
                     [
                       { id: 'colder', Icon: Snowflake, tone: 'tk-text-swatch-3' },
@@ -377,15 +377,15 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                         type="button"
                         aria-pressed={active}
                         onClick={() => toggleWeatherOverride(optId)}
-                        className={`min-h-[40px] rounded-xl px-1.5 py-2 text-[12px] sm:text-xs font-bold transition-all whitespace-nowrap cursor-pointer inline-flex items-center justify-center gap-1 ${
+                        className={`min-h-[40px] rounded-[16px] px-1.5 py-2 text-[13px] sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer inline-flex items-center justify-center gap-1 ${
  active
- ? 'tk-bg-forest text-white shadow-xs'
- : 'bg-white tk-text-forest hover:tk-bg-warning-tint'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest'
+ : 'bg-white border tk-bc-hair tk-text-ink2 hover:tk-bg-warning-tint'
  }`}
                       >
                         <Icon
-                          className={`h-3.5 w-3.5 shrink-0 ${
- active ? 'text-white' : tone
+                          className={`h-4 w-4 shrink-0 ${
+ active ? 'tk-text-forest' : tone
  }`}
                         />
                         <span>{copy.weatherOverrides[optId]}</span>
@@ -398,7 +398,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
             {/* 2. Trip Style (Leisure | Business | Both) */}
             <section className="py-5 space-y-2.5">
-              <h3 className="text-sm sm:text-base font-bold tk-text-forest">
+              <h3 className="font-serif text-sm sm:text-base font-bold tk-text-forest">
                 {copy.tripStyleHeading}
               </h3>
               <div className="grid grid-cols-3 rounded-full tk-bg-forest-tint p-1">
@@ -409,7 +409,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       key={optId}
                       type="button"
                       onClick={() => setTripPurpose(optId)}
-                      className={`min-h-[40px] rounded-full px-3 py-1.5 text-xs sm:text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`min-h-[40px] rounded-full px-3 py-1.5 text-sm sm:text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  active
  ? 'tk-bg-forest text-white shadow-2xs'
  : 'tk-text-ink2 hover:tk-text-forest'
@@ -424,7 +424,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
             {/* 3. Clothing Style (Male | Female | Other) */}
             <section className="py-5 space-y-2.5">
-              <h3 className="text-sm sm:text-base font-bold tk-text-forest">
+              <h3 className="font-serif text-sm sm:text-base font-bold tk-text-forest">
                 {copy.clothingStyleHeading}
               </h3>
               <div className="grid grid-cols-3 rounded-full tk-bg-forest-tint p-1">
@@ -435,7 +435,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       key={optId}
                       type="button"
                       onClick={() => setClothingStyle(optId)}
-                      className={`min-h-[40px] rounded-full px-3 py-1.5 text-xs sm:text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`min-h-[40px] rounded-full px-3 py-1.5 text-sm sm:text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  active
  ? 'tk-bg-forest text-white shadow-2xs'
  : 'tk-text-ink2 hover:tk-text-forest'
@@ -450,7 +450,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
             {/* 4. Visual Luggage Physical Constraints + Tactile Mid-Trip Laundry Toggle (Single-Layer Flat Cards) */}
             <section className="py-5 space-y-3.5">
-              <h3 className="text-sm sm:text-base font-bold tk-text-forest">
+              <h3 className="font-serif text-sm sm:text-base font-bold tk-text-forest">
                 {copy.densityHeading}
               </h3>
               <div className="space-y-2.5" role="radiogroup" aria-label={copy.densityHeading}>
@@ -470,14 +470,14 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       role="radio"
                       aria-checked={active}
                       onClick={() => handleSelectLuggageMode(id)}
-                      className={`w-full flex items-start gap-3 rounded-2xl border p-3.5 text-left transition-all cursor-pointer ${
+                      className={`w-full flex items-start gap-3 rounded-[20px] border p-3.5 text-left transition-all cursor-pointer ${
  active
  ? 'tk-bc-forest tk-bg-forest-tint shadow-2xs'
  : 'tk-bc-hair bg-white hover:tk-bc-hair hover:tk-bg-paper'
  }`}
                     >
                       <div
-                        className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
+                        className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] transition-colors ${
  active ? 'tk-bg-forest text-white' : 'tk-bg-forest-tint tk-text-ink2'
  }`}
                       >
@@ -489,17 +489,17 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                             <span className="text-[15px] font-bold tk-text-forest leading-snug">
                               {card.title}
                             </span>
-                            <span className="text-xs font-medium tk-text-ink2">
+                            <span className="text-sm font-medium tk-text-ink2">
                               {card.badge}
                             </span>
                           </div>
                           {active && (
                             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full tk-bg-forest text-white shrink-0">
-                              <Check className="h-3 w-3 stroke-[3]" />
+                              <Check className="h-3 w-3 stroke-[1.5]" />
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 text-xs tk-text-ink2 leading-snug">{card.desc}</p>
+                        <p className="mt-1 text-sm tk-text-ink2 leading-snug">{card.desc}</p>
                       </div>
                     </button>
                   );
@@ -508,7 +508,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
               {/* Tactile Laundry Toggle Row */}
               <div
-                className={`rounded-2xl border p-3.5 transition-colors ${
+                className={`rounded-[20px] border p-3.5 transition-colors ${
  laundryEnabled
  ? 'tk-bc-forest-35 tk-bg-forest-tint'
  : 'tk-bc-hair bg-white'
@@ -520,7 +520,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       {copy.laundryTitle}
                     </div>
                     <div
-                      className={`text-xs font-semibold leading-snug tabular-nums ${
+                      className={`text-sm font-semibold leading-snug tabular-nums ${
  laundryEnabled ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                     >
@@ -554,10 +554,10 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
             <section className="py-5 space-y-3.5">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-baseline gap-2">
-                  <h3 className="text-sm sm:text-base font-bold tk-text-forest">
+                  <h3 className="font-serif text-sm sm:text-base font-bold tk-text-forest">
                     {copy.anythingElseHeading}
                   </h3>
-                  <span className="text-xs tk-text-ink2">
+                  <span className="text-sm tk-text-ink2">
                     {copy.scenariosOptionalCount(activeVisibleScenariosCount)}
                   </span>
                 </div>
@@ -567,7 +567,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                     onClick={() =>
                       setSpecialScenarios((prev) => prev.filter((id) => id === 'cabin_only'))
                     }
-                    className="rounded-lg px-2 py-0.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint transition-colors whitespace-nowrap cursor-pointer"
+                    className="rounded-lg px-2 py-0.5 text-sm font-semibold tk-text-danger hover:tk-bg-danger-tint transition-colors whitespace-nowrap cursor-pointer"
                   >
                     {copy.clearAll}
                   </button>
@@ -583,13 +583,13 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                       key={spec.id}
                       type="button"
                       onClick={() => toggleScenario(spec.id)}
-                      className={`min-h-[38px] rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
+                      className={`min-h-[38px] rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
  active
- ? 'tk-bg-forest text-white'
- : 'tk-bg-forest-tint tk-text-ink hover:tk-bg-warning-tint'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest'
+ : 'bg-white border tk-bc-hair tk-text-ink2 hover:tk-bg-warning-tint'
  }`}
                     >
-                      {active && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
+                      {active && <Check className="h-4 w-4 stroke-[1.5]" />}
                       <span>{label}</span>
                       {active && <X className="h-3 w-3 opacity-75" />}
                     </button>
@@ -599,7 +599,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-semibold tk-text-ink2">
+                  <span className="text-sm font-semibold tk-text-ink2">
                     {copy.extraNotesLabel}
                   </span>
                   <AiVoiceInputButton
@@ -618,19 +618,19 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                   />
                 </div>
                 {voiceError && (
-                  <p className="text-xs tk-text-danger">{voiceError}</p>
+                  <p className="text-sm tk-text-danger">{voiceError}</p>
                 )}
                 <textarea
                   rows={2}
                   value={customNote}
                   onChange={(e) => setCustomNote(e.target.value)}
                   placeholder={copy.notePlaceholder}
-                  className="w-full rounded-xl border tk-bc-hair bg-white px-3.5 py-2.5 text-base sm:text-sm tk-text-forest placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
+                  className="w-full rounded-[16px] border tk-bc-hair bg-white px-3.5 py-2.5 text-base sm:text-sm tk-text-forest placeholder:tk-text-ink2 focus:tk-bc-forest focus:outline-none resize-none"
                 />
               </div>
 
               {(alwaysPackCount > 0 || neverSuggestCount > 0) && (
-                <p className="text-xs tk-text-ink2 leading-snug tabular-nums">
+                <p className="text-sm tk-text-ink2 leading-snug tabular-nums">
                   {copy.memorySummary(alwaysPackCount, neverSuggestCount)}
                 </p>
               )}
@@ -639,7 +639,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
             {/* 7. Smart Progress Safeguard when items are already packed */}
             {existingPackedCount > 0 && existingTotalCount > 0 && (
               <section className="py-5 space-y-2.5">
-                <div className="flex items-center justify-between gap-2 text-xs">
+                <div className="flex items-center justify-between gap-2 text-sm">
                   <span className="font-bold tk-text-forest">
                     {copy.alreadyPackedTitle(existingPackedCount)}
                   </span>
@@ -648,7 +648,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setMergeMode('smart_merge')}
-                    className={`min-h-[38px] rounded-full px-3 py-1 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`min-h-[38px] rounded-full px-3 py-1 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  mergeMode === 'smart_merge'
  ? 'tk-bg-forest text-white'
  : 'tk-text-ink2 hover:tk-text-forest'
@@ -659,7 +659,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setMergeMode('replace_all')}
-                    className={`min-h-[38px] rounded-full px-3 py-1 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`min-h-[38px] rounded-full px-3 py-1 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  mergeMode === 'replace_all'
  ? 'tk-bg-forest text-white'
  : 'tk-text-ink2 hover:tk-text-forest'
@@ -673,7 +673,7 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
           </div>
 
           {errorMessage && (
-            <div className="mt-3 rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-4 py-3 flex items-start gap-2.5 text-xs tk-text-danger">
+            <div className="mt-3 rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint px-4 py-3 flex items-start gap-2.5 text-sm tk-text-danger">
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="font-semibold">{errorMessage}</p>
@@ -711,9 +711,9 @@ export const PackingListWizardModal: React.FC<PackingListWizardModalProps> = ({
               type="button"
               disabled={isGenerating}
               onClick={() => handleTriggerGenerate(true)}
-              className="inline-flex items-center gap-1.5 py-1 text-xs font-semibold tk-text-ink2 hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 py-1 text-sm font-semibold tk-text-ink2 hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-40"
             >
-              <Zap className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+              <Zap className="h-4 w-4 tk-text-forest shrink-0" />
               <span>{copy.instantOfflineBtn}</span>
             </button>
           </div>

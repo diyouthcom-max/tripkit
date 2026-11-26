@@ -4,7 +4,10 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "module": "ESNext",
-    "types": ["vite/client", "google.maps"],
+    "types": [
+      "vite/client",
+      "google.maps"
+    ],
     "lib": [
       "ES2022",
       "DOM",
@@ -25,5 +28,11 @@
     "resolveJsonModule": true,
     "noEmit": true
   },
-  "exclude": ["dist", "firestore.rules.test.ts"]
+  "exclude": [
+    "dist",
+    "firestore.rules.test.ts",
+    "capacitor.config.ts",
+    "android",
+    "ios"
+  ]
 }

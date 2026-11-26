@@ -585,7 +585,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/55 sm:p-4"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/55 sm:p-4"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -593,7 +593,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full sm:max-w-xl max-h-[92vh] rounded-t-3xl sm:rounded-3xl tk-bg-paper overflow-hidden shadow-2xl flex flex-col"
+        className="relative w-full sm:max-w-xl max-h-[92vh] rounded-t-3xl sm:rounded-3xl tk-bg-paper overflow-hidden tk-elev-soft flex flex-col"
       >
         {/* Scrollable Sheet Body */}
         <div className="overflow-y-auto flex-1 pb-8">
@@ -608,17 +608,17 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               />
             ) : (
               <div className="h-full w-full tk-bg-forest flex flex-col items-center justify-center px-6 text-center">
-                <div className="h-14 w-14 rounded-2xl bg-white/12 border border-white/15 flex items-center justify-center tk-text-card mb-3">
+                <div className="h-14 w-14 rounded-[20px] bg-white/12 border border-white/15 flex items-center justify-center tk-text-card mb-3">
                   {isPlaceLoading ? (
                     <Loader2 className="h-6 w-6 animate-spin tk-text-card" />
                   ) : (
                     <StopCategoryIcon className="h-7 w-7 tk-text-card" />
                   )}
                 </div>
-                <div className="text-base font-bold tk-text-card max-w-sm text-balance">
+                <div className="text-base font-serif font-bold tk-text-card max-w-sm text-balance">
                   {localizedTitle}
                 </div>
-                <div className="mt-1 text-xs text-white/75">
+                <div className="mt-1 text-sm text-white/75">
                   {displayDistrict || cityHint}
                   {node.stopType ? ` · ${getStopTypeLabel(node.stopType, activeLang)}` : ''}
                 </div>
@@ -647,9 +647,9 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     onClose();
                     onStartFullEdit();
                   }}
-                  className="min-h-[40px] inline-flex items-center gap-1.5 rounded-full tk-bg-overlay hover:bg-black/65 px-3.5 text-xs font-semibold tk-text-card transition-colors whitespace-nowrap cursor-pointer"
+                  className="min-h-[40px] inline-flex items-center gap-1.5 rounded-full tk-bg-overlay hover:bg-black/65 px-3.5 text-sm font-semibold tk-text-card transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  <Pencil className="h-3.5 w-3.5" />
+                  <Pencil className="h-4 w-4" />
                   <span>{copy.editStopBtn}</span>
                 </button>
                 <button
@@ -704,7 +704,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
             {activeHeroPhoto &&
               livePlace?.photoAttributions &&
               livePlace.photoAttributions.length > 0 && (
-                <div className="absolute bottom-2.5 right-3.5 max-w-[60%] truncate text-[10px] text-white/80">
+                <div className="absolute bottom-2.5 right-3.5 max-w-[60%] truncate text-[13px] text-white/80">
                   {copy.photoAttrPrefix}
                   {livePlace.photoAttributions[0].uri ? (
                     <a
@@ -724,19 +724,19 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
           {/* Primary Title & Day Opening Hours Subline */}
           <div className="tk-bg-card px-5 pt-5 pb-4 border-b tk-bc-hair">
-            <h2 className="text-2xl font-extrabold tracking-tight tk-text-ink text-balance">
+            <h2 className="font-serif text-2xl font-extrabold tracking-tight tk-text-ink text-balance">
               {localizedTitle}
             </h2>
             {livePlace?.displayName &&
               livePlace.displayName.toLowerCase() !== localizedTitle.toLowerCase() && (
-                <div className="mt-0.5 text-xs font-medium tk-text-ink2">
+                <div className="mt-0.5 text-sm font-medium tk-text-ink2">
                   {livePlace.displayName}
                 </div>
               )}
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm tk-text-ink2">
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm sm:text-sm tk-text-ink2">
               <Clock className="h-4 w-4 tk-text-ink2 shrink-0" />
-              <span className="font-num tabular-nums">
+              <span className="font-serif tabular-nums">
                 {todayHoursLine || fallbackHoursLine}
               </span>
               <span aria-hidden="true" className="tk-text-ink2">
@@ -759,7 +759,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   <span aria-hidden="true" className="tk-text-ink2">
                     ·
                   </span>
-                  <span className="font-num tabular-nums tk-text-ink2">
+                  <span className="font-serif tabular-nums tk-text-ink2">
                     {copy.estAmount(sym, node.estLocal.toFixed(0))}
                   </span>
                 </>
@@ -768,7 +768,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
             {/* Quick Stay Duration Selector */}
             <div className="mt-3 flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] tk-text-ink2 mr-1">
+              <span className="text-[13px] tk-text-ink2 mr-1">
                 {copy.stayDurationPrefix}
               </span>
               {DURATION_PRESETS.map((mins) => {
@@ -778,7 +778,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     key={mins}
                     type="button"
                     onClick={() => onUpdateNode(node.id, { durationMinutes: mins })}
-                    className={`rounded-lg px-2.5 py-1 font-num text-xs font-semibold tabular-nums transition-colors cursor-pointer ${
+                    className={`rounded-lg px-2.5 py-1 font-serif text-sm font-semibold tabular-nums transition-colors cursor-pointer ${
  active
  ? 'tk-bg-forest tk-text-card'
  : 'tk-bg-paper tk-text-ink2 hover:tk-bg-paper'
@@ -798,10 +798,10 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   href={primaryDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[60px] rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors"
+                  className="min-h-[60px] rounded-[20px] border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors"
                 >
                   <Navigation className="h-4 w-4 tk-text-forest shrink-0" />
-                  <span className="text-[11px] sm:text-xs font-semibold whitespace-nowrap truncate max-w-full">
+                  <span className="text-[13px] sm:text-sm font-semibold whitespace-nowrap truncate max-w-full">
                     {copy.actionNavigate}
                   </span>
                 </a>
@@ -813,14 +813,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     onClose();
                     onShowDriverCard(livePlace?.displayName || localizedTitle, fullAddress);
                   }}
-                  className="min-h-[60px] rounded-2xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors cursor-pointer"
+                  className="min-h-[60px] rounded-[20px] border tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-ink transition-colors cursor-pointer"
                 >
                   {isDriverCardLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin tk-text-forest shrink-0" />
                   ) : (
                     <CarTaxiFront className="h-4 w-4 tk-text-forest shrink-0" />
                   )}
-                  <span className="text-[11px] sm:text-xs font-semibold whitespace-nowrap truncate max-w-full">
+                  <span className="text-[13px] sm:text-sm font-semibold whitespace-nowrap truncate max-w-full">
                     {copy.actionDriverCard}
                   </span>
                 </button>
@@ -828,11 +828,11 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                 {/* 3. Log Spend */}
                 {node.logged ? (
                   <div
-                    className="min-h-[60px] rounded-2xl border tk-bc-hair tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-forest"
+                    className="min-h-[60px] rounded-[20px] border tk-bc-hair tk-bg-forest-tint px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 tk-text-forest"
                     title={copy.expenseLoggedTitle}
                   >
                     <CheckCircle2 className="h-4 w-4 tk-text-forest shrink-0" />
-                    <span className="font-num text-[11px] sm:text-xs font-bold tabular-nums whitespace-nowrap truncate max-w-full">
+                    <span className="font-serif text-[13px] sm:text-sm font-bold tabular-nums whitespace-nowrap truncate max-w-full">
                       {copy.loggedAmount(sym, node.estLocal.toFixed(0))}
                     </span>
                   </div>
@@ -841,14 +841,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     type="button"
                     disabled={!onQuickLogExpense}
                     onClick={() => setQuickSpendOpen((prev) => !prev)}
-                    className={`min-h-[60px] rounded-2xl border px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 ${
+                    className={`min-h-[60px] rounded-[20px] border px-2 py-2.5 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 ${
  quickSpendOpen
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper hover:tk-bc-forest hover:tk-bg-forest-tint tk-text-ink'
  }`}
                   >
                     <Wallet className="h-4 w-4 tk-text-forest shrink-0" />
-                    <span className="text-[11px] sm:text-xs font-semibold whitespace-nowrap truncate max-w-full">
+                    <span className="text-[13px] sm:text-sm font-semibold whitespace-nowrap truncate max-w-full">
                       {copy.actionLogSpend}
                     </span>
                   </button>
@@ -876,7 +876,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               {/* Live Voice Dictation Preview / Saved Confirmation Banner */}
               {(voiceLivePreview || voiceFeedback) && (
                 <div
-                  className={`mt-2.5 rounded-xl border px-3 py-2 flex items-center justify-between gap-2 text-xs ${
+                  className={`mt-2.5 rounded-[16px] border px-3 py-2 flex items-center justify-between gap-2 text-sm ${
  voiceFeedback?.tone === 'err'
  ? 'tk-bc-danger-hair tk-bg-danger-tint tk-text-danger'
  : 'tk-bc-hair tk-bg-forest-tint tk-text-forest'
@@ -906,7 +906,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               )}
 
               {spendSavedNotice && (
-                <div className="mt-2.5 rounded-xl border tk-bc-hair tk-bg-forest-tint px-3 py-2 text-xs font-semibold tk-text-forest">
+                <div className="mt-2.5 rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-3 py-2 text-sm font-semibold tk-text-forest">
                   {spendSavedNotice}
                 </div>
               )}
@@ -915,16 +915,16 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               {quickSpendOpen && !node.logged && onQuickLogExpense && (
                 <form
                   onSubmit={handleConfirmQuickSpend}
-                  className="mt-3 rounded-2xl border tk-bc-hair tk-bg-paper p-3.5 space-y-3"
+                  className="mt-3 rounded-[20px] border tk-bc-hair tk-bg-paper p-3.5 space-y-3"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold tk-text-forest">
+                    <span className="text-sm font-bold tk-text-forest">
                       {copy.quickSpendTitle}
                     </span>
                     <button
                       type="button"
                       onClick={() => setQuickSpendOpen(false)}
-                      className="text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                      className="font-serif text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                     >
                       {copy.quickSpendCancel}
                     </button>
@@ -932,11 +932,11 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                      <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                         {copy.actualAmountLabel(currencyCode)}
                       </label>
                       <div className="relative flex items-center">
-                        <span className="absolute left-3 font-num text-sm font-bold tk-text-forest">
+                        <span className="absolute left-3 font-serif text-sm font-bold tk-text-forest">
                           {sym}
                         </span>
                         <input
@@ -947,16 +947,16 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           value={spendAmount}
                           onChange={(e) => setSpendAmount(e.target.value)}
                           placeholder="0.00"
-                          className="w-full rounded-xl border tk-bc-hair tk-bg-card pl-8 pr-3 py-2 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
+                          className="w-full rounded-[16px] border tk-bc-hair tk-bg-card pl-8 pr-3 py-2 font-serif text-base sm:text-sm font-bold tk-text-ink tabular-nums focus:tk-bc-forest focus:outline-none"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                      <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                         {copy.paymentAccountLabel}
                       </label>
-                      <div className="grid grid-cols-3 gap-1 rounded-xl tk-bg-paper p-1">
+                      <div className="grid grid-cols-3 gap-1 rounded-[16px] tk-bg-paper p-1">
                         {(
                           [
                             { id: 'card', label: copy.accountCard },
@@ -968,7 +968,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                             key={acc.id}
                             type="button"
                             onClick={() => setSpendAccount(acc.id)}
-                            className={`rounded-lg py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                            className={`rounded-lg py-1.5 text-[13px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  spendAccount === acc.id
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -983,7 +983,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
                   {/* Expense Category Bucket */}
                   <div>
-                    <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                    <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                       {copy.budgetCategoryLabel}
                     </label>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -998,7 +998,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           key={b.id}
                           type="button"
                           onClick={() => setSpendBucket(b.id)}
-                          className={`rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                          className={`rounded-[16px] border px-2.5 py-1.5 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  spendBucket === b.id
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-hair'
@@ -1013,7 +1013,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   {/* Crew Split Mode */}
                   {travelersCount > 1 && (
                     <div>
-                      <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                      <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                         {copy.crewSplitLabel}
                       </label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -1032,7 +1032,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                             key={sp.id}
                             type="button"
                             onClick={() => setSpendSplit(sp.id)}
-                            className={`rounded-xl border px-2 py-1.5 text-[11px] font-semibold transition-colors truncate cursor-pointer ${
+                            className={`rounded-[16px] border px-2 py-1.5 text-[13px] font-semibold transition-colors truncate cursor-pointer ${
  spendSplit === sp.id
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-hair'
@@ -1043,7 +1043,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                         ))}
                       </div>
                       {spendSplit === 'ratio' && (
-                        <div className="mt-2 flex items-center gap-2 text-xs tk-text-ink2">
+                        <div className="mt-2 flex items-center gap-2 text-sm tk-text-ink2">
                           <span className="whitespace-nowrap">
                             {copy.mySharePrefix}
                           </span>
@@ -1056,7 +1056,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                             onChange={(e) => setSpendRatioPct(Number(e.target.value))}
                             className="flex-1 tk-accent-forest"
                           />
-                          <span className="font-num font-bold tk-text-ink tabular-nums w-9 text-right">
+                          <span className="font-serif font-bold tk-text-ink tabular-nums w-9 text-right">
                             {spendRatioPct}%
                           </span>
                         </div>
@@ -1065,7 +1065,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   )}
 
                   {qualifiesForVatRefund && (
-                    <div className="text-[11px] font-medium tk-text-forest">
+                    <div className="text-[13px] font-medium tk-text-forest">
                       {copy.vatRefundNotice(sym, vatThresholdLocal)}
                     </div>
                   )}
@@ -1074,7 +1074,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     <button
                       type="submit"
                       disabled={parsedSpendNum <= 0}
-                      className="min-h-[40px] rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 transition-colors cursor-pointer"
+                      className="min-h-[40px] rounded-[16px] tk-bg-forest px-4 py-2 text-sm font-bold tk-text-card hover:tk-bg-press disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       {copy.saveSpendAndCheckIn(sym, parsedSpendNum.toFixed(2))}
                     </button>
@@ -1084,7 +1084,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
               {/* Subtle Secondary Stop Actions (Visited / Departure Alert / Move to Wishlist) */}
               {(onToggleVisited || (!isVisited && (onToggleStopAlert || onMoveToWishlist))) && (
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm">
                   {onToggleVisited ? (
                     <button
                       type="button"
@@ -1096,9 +1096,9 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
  }`}
                     >
                       {isVisited ? (
-                        <CheckCircle2 className="h-3.5 w-3.5 tk-text-forest" />
+                        <CheckCircle2 className="h-4 w-4 tk-text-forest" />
                       ) : (
-                        <Circle className="h-3.5 w-3.5 tk-text-ink2" />
+                        <Circle className="h-4 w-4 tk-text-ink2" />
                       )}
                       <span>
                         {isVisited ? copy.visitedTapUndo : copy.markAsVisited}
@@ -1119,7 +1119,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
  : 'tk-text-ink2 hover:tk-text-forest'
  }`}
                       >
-                        <BellRing className="h-3.5 w-3.5 tk-text-forest" />
+                        <BellRing className="h-4 w-4 tk-text-forest" />
                         <span>
                           {scheduledLeadMinutes
                             ? copy.alertOn(scheduledLeadMinutes)
@@ -1134,7 +1134,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                         onClick={onMoveToWishlist}
                         className="inline-flex items-center gap-1 font-semibold tk-text-ink2 hover:tk-text-forest transition-colors cursor-pointer"
                       >
-                        <BookmarkPlus className="h-3.5 w-3.5 tk-text-ink2" />
+                        <BookmarkPlus className="h-4 w-4 tk-text-ink2" />
                         <span>{copy.moveToWishlist}</span>
                       </button>
                     )}
@@ -1152,7 +1152,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-3 rounded-2xl border tk-bc-hair tk-bg-card px-4 py-3.5 hover:tk-bc-forest transition-colors"
+                className="flex items-center justify-between gap-3 rounded-[20px] border tk-bc-hair tk-bg-card px-4 py-3.5 hover:tk-bc-forest transition-colors"
               >
                 <div className="flex items-center gap-2.5">
                   {/* Standard 4-color Google G emblem */}
@@ -1174,16 +1174,16 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                       d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"
                     />
                   </svg>
-                  <span className="text-sm font-semibold tk-text-ink">Google</span>
+                  <span className="font-serif text-sm font-semibold tk-text-ink">Google</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   {renderGoogleStars(livePlace.rating)}
-                  <span className="font-num text-sm font-bold tk-text-ink tabular-nums">
+                  <span className="font-serif text-sm font-bold tk-text-ink tabular-nums">
                     {livePlace.rating.toFixed(1)}
                   </span>
                   {livePlace.userRatingCount ? (
-                    <span className="font-num text-xs tk-text-ink2 tabular-nums">
+                    <span className="font-serif text-sm tk-text-ink2 tabular-nums">
                       ({livePlace.userRatingCount.toLocaleString()})
                     </span>
                   ) : null}
@@ -1192,7 +1192,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
             )}
 
             {/* Why it's a must-visit Card */}
-            <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-4 space-y-2">
+            <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-4 space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-sm font-bold tk-text-ink2">
                   <Sparkles className="h-4 w-4 shrink-0" />
@@ -1204,7 +1204,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     setWhyDraft(whyText);
                     setEditingWhy((v) => !v);
                   }}
-                  className="text-xs font-semibold tk-text-ink2 hover:underline cursor-pointer"
+                  className="text-sm font-semibold tk-text-ink2 hover:underline cursor-pointer"
                 >
                   {editingWhy ? copy.cancelEditWhy : copy.customizeWhy}
                 </button>
@@ -1217,7 +1217,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     value={whyDraft}
                     onChange={(e) => setWhyDraft(e.target.value)}
                     placeholder={copy.whyPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
                   />
                   <div className="flex justify-end">
                     <button
@@ -1226,7 +1226,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                         onUpdateNode(node.id, { mustVisitReason: whyDraft.trim() || undefined });
                         setEditingWhy(false);
                       }}
-                      className="rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+                      className="rounded-[16px] tk-bg-forest px-3.5 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {copy.saveHighlightBtn}
                     </button>
@@ -1253,13 +1253,13 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
             </div>
 
             {/* LOCATION Card */}
-            <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-3">
+            <div className="rounded-[20px] border tk-bc-hair tk-bg-card p-4 space-y-3">
               <div className="flex items-start gap-3">
                 <div className="h-9 w-9 rounded-full tk-bg-forest-plate flex items-center justify-center shrink-0 mt-0.5">
                   <MapPin className="h-4 w-4 tk-text-ink" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-semibold tk-text-ink2">
+                  <div className="text-sm font-semibold tk-text-ink2">
                     {copy.locationLabel}
                   </div>
                   <div className="mt-0.5 text-sm font-medium tk-text-ink leading-relaxed break-words">
@@ -1272,16 +1272,16 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                 <button
                   type="button"
                   onClick={() => void handleCopyAddress()}
-                  className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest whitespace-nowrap cursor-pointer"
                 >
                   {copiedAddr ? (
                     <>
-                      <Check className="h-3.5 w-3.5 tk-text-forest" />
+                      <Check className="h-4 w-4 tk-text-forest" />
                       <span>{copy.copiedBtn}</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="h-3.5 w-3.5 tk-text-forest" />
+                      <Copy className="h-4 w-4 tk-text-forest" />
                       <span>{copy.copyAddressBtn}</span>
                     </>
                   )}
@@ -1291,26 +1291,26 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   href={googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap"
+                  className="font-serif inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap"
                 >
-                  <ExternalLink className="h-3.5 w-3.5 tk-text-forest" />
+                  <ExternalLink className="h-4 w-4 tk-text-forest" />
                   <span>{copy.openInGoogleMaps}</span>
                 </a>
               </div>
             </div>
 
             {/* OPENING HOURS Card */}
-            <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4">
+            <div className="rounded-[20px] border tk-bc-hair tk-bg-card p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3 min-w-0">
                   <div className="h-9 w-9 rounded-full tk-bg-forest-plate flex items-center justify-center shrink-0 mt-0.5">
                     <Clock className="h-4 w-4 tk-text-ink" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-xs font-semibold tk-text-ink2">
+                    <div className="text-sm font-semibold tk-text-ink2">
                       {copy.openingHoursLabel}
                     </div>
-                    <div className="mt-0.5 font-num text-sm font-medium tk-text-ink tabular-nums">
+                    <div className="mt-0.5 font-serif text-sm font-medium tk-text-ink tabular-nums">
                       {todayHoursLine || fallbackHoursLine}
                     </div>
                   </div>
@@ -1320,11 +1320,11 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowAllHours((v) => !v)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest hover:underline whitespace-nowrap shrink-0 mt-1 cursor-pointer"
+                    className="inline-flex items-center gap-1 text-sm font-semibold tk-text-forest hover:underline whitespace-nowrap shrink-0 mt-1 cursor-pointer"
                   >
                     <span>{showAllHours ? copy.hideHoursBtn : copy.all7DaysBtn}</span>
                     <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${showAllHours ? 'rotate-180' : ''}`}
+                      className={`h-4 w-4 transition-transform ${showAllHours ? 'rotate-180' : ''}`}
                     />
                   </button>
                 )}
@@ -1333,7 +1333,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               {showAllHours &&
                 livePlace?.weekdayDescriptions &&
                 livePlace.weekdayDescriptions.length > 0 && (
-                  <div className="mt-3 pt-3 pl-12 border-t tk-bc-hair space-y-1 font-num text-xs tk-text-ink2 tabular-nums">
+                  <div className="mt-3 pt-3 pl-12 border-t tk-bc-hair space-y-1 font-serif text-sm tk-text-ink2 tabular-nums">
                     {livePlace.weekdayDescriptions.map((line, i) => (
                       <div
                         key={i}
@@ -1350,14 +1350,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
             {/* CONTACT & OFFICIAL WEBSITE / PARTNER TICKETS Card */}
             {(livePlace?.websiteUri || livePlace?.nationalPhoneNumber || partnerOffer) && (
-              <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-3">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-card p-4 space-y-3">
                 {livePlace?.websiteUri && (
                   <div className="flex items-start gap-3">
                     <div className="h-9 w-9 rounded-full tk-bg-forest-plate flex items-center justify-center shrink-0 mt-0.5">
                       <Globe className="h-4 w-4 tk-text-ink" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-semibold tk-text-ink2">
+                      <div className="text-sm font-semibold tk-text-ink2">
                         {copy.officialWebsiteLabel}
                       </div>
                       <a
@@ -1378,12 +1378,12 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                       <Phone className="h-4 w-4 tk-text-ink" />
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold tk-text-ink2">
+                      <div className="text-sm font-semibold tk-text-ink2">
                         {copy.phoneLabel}
                       </div>
                       <a
                         href={`tel:${livePlace.nationalPhoneNumber}`}
-                        className="font-num text-sm font-medium tk-text-ink hover:tk-text-forest tabular-nums"
+                        className="font-serif text-sm font-medium tk-text-ink hover:tk-text-forest tabular-nums"
                       >
                         {livePlace.nationalPhoneNumber}
                       </a>
@@ -1393,14 +1393,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
 
                 {partnerOffer && (
                   <div className="pt-2 border-t tk-bc-hair flex items-center justify-between gap-2">
-                    <div className="text-xs tk-text-ink2">
+                    <div className="text-sm tk-text-ink2">
                       {partnerOffer.label} · <span className="font-semibold tk-text-ink">{partnerOffer.provider}</span>
                     </div>
                     <a
                       href={partnerOffer.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-xl tk-bg-forest-tint border tk-bc-hair px-3 py-1.5 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
+                      className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest-tint border tk-bc-hair px-3 py-1.5 text-sm font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
                     >
                       <span>{copy.checkAvailabilityBtn}</span>
                       <ExternalLink className="h-3 w-3" />
@@ -1411,8 +1411,8 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
             )}
 
             {/* GETTING THERE Card (Matches Packy Screenshot #3) */}
-            <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-2.5">
-              <div className="text-xs font-semibold tk-text-ink2">
+            <div className="rounded-[20px] border tk-bc-hair tk-bg-card p-4 space-y-2.5">
+              <div className="text-sm font-semibold tk-text-ink2">
                 {copy.gettingThereLabel}
               </div>
 
@@ -1421,11 +1421,11 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   <div className="flex items-center gap-2.5 min-w-0">
                     <Home className="h-4 w-4 tk-text-forest shrink-0" />
                     <div className="min-w-0">
-                      <div className="text-sm font-semibold tk-text-ink truncate">
+                      <div className="font-serif text-sm font-semibold tk-text-ink truncate">
                         {copy.fromHotelStay(dayStay.placeName)}
                       </div>
                       {dayStay.address && (
-                        <div className="text-xs tk-text-ink2 truncate">{dayStay.address}</div>
+                        <div className="text-sm tk-text-ink2 truncate">{dayStay.address}</div>
                       )}
                     </div>
                   </div>
@@ -1433,10 +1433,10 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     href={fromHotelDirectionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3 py-2 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3 py-2 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0"
                   >
                     <span>{copy.directionsBtn}</span>
-                    <ChevronRight className="h-3.5 w-3.5" />
+                    <ChevronRight className="h-4 w-4" />
                   </a>
                 </div>
               ) : (
@@ -1446,7 +1446,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     onClose();
                     onRequestSetDayStay();
                   }}
-                  className="w-full flex items-center justify-between gap-3 py-1.5 text-left text-sm font-semibold tk-text-ink hover:tk-text-forest transition-colors cursor-pointer"
+                  className="font-serif w-full flex items-center justify-between gap-3 py-1.5 text-left text-sm font-semibold tk-text-ink hover:tk-text-forest transition-colors cursor-pointer"
                 >
                   <span className="inline-flex items-center gap-2">
                     <Plus className="h-4 w-4 tk-text-forest" />
@@ -1457,7 +1457,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
               )}
 
               {fromPrevStopDirectionsUrl && prevStopTitle && (
-                <div className="pt-2 border-t tk-bc-hair flex items-center justify-between gap-2 text-xs">
+                <div className="pt-2 border-t tk-bc-hair flex items-center justify-between gap-2 text-sm">
                   <span className="tk-text-ink2 truncate">
                     {copy.fromPrevStop(prevStopTitle)}
                   </span>
@@ -1477,20 +1477,20 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
             {/* Tickets Uploads & Notes — Directly Linked to Go-Mode Offline Pass Wallet */}
             <div ref={notesSectionRef} className="pt-2 space-y-3">
               <div className="flex items-center justify-between gap-2 px-1">
-                <h3 className="text-base font-bold tk-text-ink">
+                <h3 className="font-serif text-base font-bold tk-text-ink">
                   {copy.ticketsAndNotesHeading}
                 </h3>
-                <span className="text-[11px] tk-text-ink2">
+                <span className="text-[13px] tk-text-ink2">
                   {copy.syncedOfflineWallet}
                 </span>
               </div>
 
               {/* Segmented Control: [ Tickets | Notes ] */}
-              <div className="grid grid-cols-2 gap-1 rounded-2xl tk-bg-paper p-1">
+              <div className="grid grid-cols-2 gap-1 rounded-[20px] tk-bg-paper p-1">
                 <button
                   type="button"
                   onClick={() => setBottomTab('tickets')}
-                  className={`min-h-[42px] inline-flex items-center justify-center gap-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[42px] inline-flex items-center justify-center gap-2 rounded-[16px] text-sm sm:text-sm font-semibold transition-colors cursor-pointer ${
  bottomTab === 'tickets'
  ? 'tk-bg-card tk-text-ink shadow-xs'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -1505,7 +1505,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                 <button
                   type="button"
                   onClick={() => setBottomTab('notes')}
-                  className={`min-h-[42px] inline-flex items-center justify-center gap-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[42px] inline-flex items-center justify-center gap-2 rounded-[16px] text-sm sm:text-sm font-semibold transition-colors cursor-pointer ${
  bottomTab === 'notes'
  ? 'tk-bg-card tk-text-ink shadow-xs'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -1539,7 +1539,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                       return (
                         <div
                           key={pass.id}
-                          className="group relative rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden flex flex-col justify-between min-h-[144px]"
+                          className="group relative rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden flex flex-col justify-between min-h-[144px]"
                         >
                           <button
                             type="button"
@@ -1552,7 +1552,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                             {isPdfPass ? (
                               <div className="h-24 w-full tk-bg-forest-plate flex flex-col items-center justify-center gap-1 px-2 text-center">
                                 <FileText className="h-6 w-6 tk-text-forest" />
-                                <span className="text-[11px] font-bold tk-text-forest truncate max-w-full">
+                                <span className="text-[13px] font-bold tk-text-forest truncate max-w-full">
                                   {pass.offlineFileName || copy.pdfDocFallback}
                                 </span>
                               </div>
@@ -1568,17 +1568,17 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                               <div className="h-24 w-full tk-bg-forest-tint flex flex-col items-center justify-center gap-1 px-2 text-center">
                                 <QrCode className="h-6 w-6 tk-text-forest" />
                                 {pass.confirmationCode && (
-                                  <span className="font-mono text-[11px] font-bold tk-text-forest truncate max-w-full">
+                                  <span className="font-mono text-[13px] font-bold tk-text-forest truncate max-w-full">
                                     {pass.confirmationCode}
                                   </span>
                                 )}
                               </div>
                             )}
                             <div className="p-2.5">
-                              <div className="text-xs font-bold tk-text-ink truncate">
+                              <div className="font-serif text-sm font-bold tk-text-ink truncate">
                                 {pass.title}
                               </div>
-                              <div className="mt-0.5 text-[11px] font-semibold tk-text-forest">
+                              <div className="mt-0.5 text-[13px] font-semibold tk-text-forest">
                                 {isPdfPass ? copy.tapViewPdf : copy.tapFullscreenQr}
                               </div>
                             </div>
@@ -1590,7 +1590,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                             aria-label={copy.deleteTicketAria}
                             className="absolute top-2 right-2 h-7 w-7 rounded-full bg-black/55 tk-text-card flex items-center justify-center hover:tk-bg-danger transition-colors cursor-pointer"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       );
@@ -1601,22 +1601,22 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                       type="button"
                       disabled={uploadingTicket}
                       onClick={() => fileInputRef.current?.click()}
-                      className="min-h-[144px] rounded-2xl border border-dashed tk-bc-hair tk-bg-card hover:tk-bc-forest hover:tk-bg-paper flex flex-col items-center justify-center gap-2 p-4 text-center transition-colors cursor-pointer disabled:opacity-60"
+                      className="min-h-[144px] rounded-[20px] border border-dashed tk-bc-hair tk-bg-card hover:tk-bc-forest hover:tk-bg-paper flex flex-col items-center justify-center gap-2 p-4 text-center transition-colors cursor-pointer disabled:opacity-60"
                     >
                       {uploadingTicket ? (
                         <>
                           <Loader2 className="h-6 w-6 animate-spin tk-text-forest" />
-                          <span className="text-xs font-semibold tk-text-forest">
+                          <span className="text-sm font-semibold tk-text-forest">
                             {copy.savingOfflineParsing}
                           </span>
                         </>
                       ) : (
                         <>
                           <Camera className="h-6 w-6 tk-text-ink" />
-                          <span className="text-xs sm:text-sm font-semibold tk-text-ink">
+                          <span className="font-serif text-sm sm:text-sm font-semibold tk-text-ink">
                             {copy.addPhotoOrPdf}
                           </span>
-                          <span className="text-[11px] tk-text-ink2">
+                          <span className="text-[13px] tk-text-ink2">
                             {copy.qrVoucherPdfSub}
                           </span>
                         </>
@@ -1629,15 +1629,15 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowQuickCodeInput(true)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1 text-sm font-semibold tk-text-forest hover:underline cursor-pointer"
                     >
-                      <Plus className="h-3.5 w-3.5" />
+                      <Plus className="h-4 w-4" />
                       <span>{copy.typePnrBtn}</span>
                     </button>
                   ) : (
                     <form
                       onSubmit={handleSaveQuickCodePass}
-                      className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 space-y-2.5"
+                      className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 space-y-2.5"
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <input
@@ -1645,27 +1645,27 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           value={quickPassTitle}
                           onChange={(e) => setQuickPassTitle(e.target.value)}
                           placeholder={copy.passTitlePlaceholder(localizedTitle)}
-                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                          className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                         />
                         <input
                           type="text"
                           value={quickPassCode}
                           onChange={(e) => setQuickPassCode(e.target.value)}
                           placeholder={copy.passCodePlaceholder}
-                          className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-mono text-base sm:text-sm font-bold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                          className="font-serif rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 font-mono text-base sm:text-sm font-bold tk-text-ink focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                         />
                       </div>
                       <div className="flex justify-end gap-2">
                         <button
                           type="button"
                           onClick={() => setShowQuickCodeInput(false)}
-                          className="px-3 py-1.5 text-xs font-semibold tk-text-ink2 cursor-pointer"
+                          className="px-3 py-1.5 text-sm font-semibold tk-text-ink2 cursor-pointer"
                         >
                           {copy.cancelBtn}
                         </button>
                         <button
                           type="submit"
-                          className="rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+                          className="rounded-[16px] tk-bg-forest px-3.5 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                         >
                           {copy.savePassBtn}
                         </button>
@@ -1674,19 +1674,19 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                   )}
 
                   {ticketUploadNotice && (
-                    <div className="rounded-xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-xs font-medium tk-text-forest">
+                    <div className="rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-3.5 py-2 text-sm font-medium tk-text-forest">
                       {ticketUploadNotice}
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="rounded-2xl border tk-bc-hair tk-bg-card p-4 space-y-2.5">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-card p-4 space-y-2.5">
                   <textarea
                     rows={4}
                     value={noteDraft}
                     onChange={(e) => setNoteDraft(e.target.value)}
                     placeholder={copy.noteTextareaPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink leading-relaxed focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink leading-relaxed focus:tk-bg-card focus:tk-bc-forest focus:outline-none"
                   />
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -1700,7 +1700,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                           setVoiceFeedback(msg ? { tone: 'err', text: msg } : null)
                         }
                       />
-                      <span className="text-xs tk-text-forest font-semibold">
+                      <span className="text-sm tk-text-forest font-semibold">
                         {noteSavedToast ? copy.noteSavedToast : ''}
                       </span>
                     </div>
@@ -1711,7 +1711,7 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
                         setNoteSavedToast(true);
                         setTimeout(() => setNoteSavedToast(false), 1800);
                       }}
-                      className="rounded-xl tk-bg-forest px-4 py-2 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+                      className="rounded-[16px] tk-bg-forest px-4 py-2 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
                     >
                       {copy.saveNotesBtn}
                     </button>

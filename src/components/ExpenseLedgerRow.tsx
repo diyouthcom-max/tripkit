@@ -243,17 +243,17 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
     };
 
     return (
-      <form onSubmit={handleSave} className="px-5 py-4 tk-bg-paper space-y-3">
+      <form onSubmit={handleSave} className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] px-5 py-4 tk-bg-paper space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold tk-text-forest">
+          <span className="text-sm font-bold tk-text-forest">
             {copy.editHeader}
           </span>
           <button
             type="button"
             onClick={onCancelEdit}
-            className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+            className="font-serif inline-flex items-center gap-1 text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
           >
-            <X className="h-3.5 w-3.5" /> {t('common.cancel')}
+            <X className="h-4 w-4" /> {t('common.cancel')}
           </button>
         </div>
 
@@ -263,7 +263,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             placeholder={copy.descPlaceholder}
-            className="sm:col-span-2 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="sm:col-span-2 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <input
             type="number"
@@ -279,7 +279,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               }
             }}
             placeholder={copy.amtPlaceholder(currencyCode)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-num tabular-nums tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-serif tabular-nums tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
         </div>
 
@@ -297,13 +297,13 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 type="button"
                 data-chip-active={isSelected ? 'true' : undefined}
                 onClick={() => setEditDay(d)}
-                className={`min-h-[32px] inline-flex items-center gap-1 rounded-full px-3 text-xs font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`min-h-[32px] inline-flex items-center gap-1 rounded-full px-3 text-sm font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isSelected
- ? 'tk-bc-forest tk-bg-forest tk-text-card'
- : 'tk-bc-hair tk-bg-card tk-text-ink hover:tk-bc-hair hover:tk-text-ink'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-hair'
  }`}
               >
-                <span className="font-num font-bold">D{d}</span>
+                <span className="font-serif tabular-nums font-bold">D{d}</span>
               </button>
             );
           })}
@@ -319,7 +319,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 setEditVatEligible(true);
               }
             }}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
+            className="font-serif rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="daily">{copy.bucketDaily}</option>
             <option value="shopping">{copy.bucketShopping}</option>
@@ -329,7 +329,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
           <select
             value={editAccount}
             onChange={(e) => setEditAccount(e.target.value as PaymentAccount)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
+            className="font-serif rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="card">{t('budget.walletCard')}</option>
             <option value="cash">{t('budget.walletCash')}</option>
@@ -339,7 +339,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
           <select
             value={editSplit}
             onChange={(e) => setEditSplit(e.target.value as SplitMode)}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
+            className="font-serif rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-2 text-base sm:text-sm font-semibold tk-text-ink"
           >
             <option value="me">{copy.allMine100}</option>
             {!isSoloTrip && (
@@ -367,7 +367,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 <button
                   type="button"
                   onClick={() => setEditPaidBy('me')}
-                  className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`rounded-md px-2.5 py-1 text-sm font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
  editPaidBy === 'me'
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2'
@@ -378,7 +378,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 <button
                   type="button"
                   onClick={() => setEditPaidBy('partner')}
-                  className={`rounded-md px-2.5 py-1 text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`rounded-md px-2.5 py-1 text-sm font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
  editPaidBy === 'partner'
  ? 'tk-bg-card tk-text-ink shadow-2xs'
  : 'tk-text-ink2'
@@ -394,9 +394,9 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                     key={pct}
                     type="button"
                     onClick={() => setEditSharePct(pct)}
-                    className={`rounded-md px-2 py-1 font-num text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`rounded-md px-2 py-1 font-serif tabular-nums text-sm font-semibold whitespace-nowrap shrink-0 cursor-pointer ${
  editSharePct === pct
- ? 'tk-bg-forest tk-text-card'
+ ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest border'
  : 'tk-bg-card border tk-bc-hair tk-text-ink2'
  }`}
                   >
@@ -407,7 +407,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold tk-text-ink2 whitespace-nowrap shrink-0">
+              <span className="text-sm font-semibold tk-text-ink2 whitespace-nowrap shrink-0">
                 {copy.myShareLabel}
               </span>
               <input
@@ -419,7 +419,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 onChange={(e) => setEditSharePct(clampSharePct(Number(e.target.value)))}
                 className="flex-1 tk-accent-forest cursor-pointer"
               />
-              <div className="inline-flex items-center gap-1 shrink-0 font-num text-xs tabular-nums">
+              <div className="inline-flex items-center gap-1 shrink-0 font-serif text-sm tabular-nums">
                 <input
                   type="number"
                   min={0}
@@ -432,14 +432,14 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               </div>
             </div>
 
-            <div className="text-xs tk-text-ink2 font-num tabular-nums">
+            <div className="text-sm tk-text-ink2 font-serif tabular-nums">
               {ratioPreview.breakdownLabel}
             </div>
           </div>
         )}
 
         {editBucket === 'shopping' && (
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
             <label className="inline-flex items-center gap-2 font-semibold tk-text-ink2 cursor-pointer">
               <input
                 type="checkbox"
@@ -469,21 +469,21 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             value={editNote}
             onChange={(e) => setEditNote(e.target.value)}
             placeholder={copy.notePlaceholder}
-            className="flex-1 min-w-[180px] rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="flex-1 min-w-[180px] rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <div className="flex items-center gap-2 ml-auto">
             <button
               type="button"
               onClick={onDelete}
-              className="inline-flex items-center gap-1 rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap cursor-pointer"
             >
-              <Trash2 className="h-3.5 w-3.5" /> {copy.deleteEntry}
+              <Trash2 className="h-4 w-4" /> {copy.deleteEntry}
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3.5 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3.5 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap cursor-pointer"
             >
-              <Check className="h-3.5 w-3.5" /> {copy.saveChanges}
+              <Check className="h-4 w-4" /> {copy.saveChanges}
             </button>
           </div>
         </div>
@@ -525,7 +525,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
   const VatBadgeIcon = vatStatusKey === 'pending_form' ? Mail : MailCheck;
 
   return (
-    <div className="relative overflow-hidden select-none">
+    <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] relative overflow-hidden select-none">
       {/* Right-side Swipe Action Tray (Mobile Left-Swipe) */}
       <div
         className={`absolute inset-y-0 right-0 flex items-stretch transition-opacity ${
@@ -538,9 +538,9 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
         <button
           type="button"
           onClick={handleBeginEdit}
-          className="w-[66px] tk-bg-forest tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 active:tk-bg-press cursor-pointer"
+          className="w-[66px] tk-bg-forest tk-text-card text-sm font-semibold flex flex-col items-center justify-center gap-1 active:tk-bg-press cursor-pointer"
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-4 w-4" />
           <span>{t('common.edit')}</span>
         </button>
         <button
@@ -549,9 +549,9 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
             onSwipeOpenChange(false);
             onDelete();
           }}
-          className="w-[66px] tk-bg-danger tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 active:tk-bg-danger cursor-pointer"
+          className="w-[66px] tk-bg-danger tk-text-card text-sm font-semibold flex flex-col items-center justify-center gap-1 active:tk-bg-danger cursor-pointer"
         >
-          <Trash2 className="h-3.5 w-3.5" />
+          <Trash2 className="h-4 w-4" />
           <span>{t('common.delete')}</span>
         </button>
       </div>
@@ -582,7 +582,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 onCycleVatStatus();
               }}
               title={copy.cycleVatTitle}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-tight transition-all cursor-pointer active:scale-[0.98] ${
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[13px] font-bold tracking-tight transition-all cursor-pointer active:scale-[0.98] ${
  vatStatusKey === 'stamped'
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest hover:tk-bg-forest-tint'
  : vatStatusKey === 'form_ready'
@@ -590,7 +590,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
  : 'tk-bc-warning-hair tk-bg-warning-tint tk-text-warning hover:tk-bg-warning-tint'
  }`}
             >
-              <VatBadgeIcon className="h-3.5 w-3.5 shrink-0" />
+              <VatBadgeIcon className="h-4 w-4 shrink-0" />
               <span>
                 {walletCopy.vatEnvelopeLabel(vatProgramName, vatStatusKey, vatRefundPct)}
               </span>
@@ -612,18 +612,18 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                   {translateDemoExpenseTitle(expense.title, activeLang)}
                 </span>
                 {expense.settled && expense.split !== 'me' && (
-                  <span className="text-[11px] font-medium tk-text-ink2 shrink-0">
+                  <span className="text-[13px] font-medium tk-text-ink2 shrink-0">
                     · {copy.settledBadge}
                   </span>
                 )}
               </div>
 
-              <div className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs tk-text-ink2">
-                <span className="font-num font-semibold tk-text-forest tabular-nums">
+              <div className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-sm tk-text-ink2">
+                <span className="font-serif font-semibold tk-text-forest tabular-nums">
                   Day {expense.day ?? defaultDay}
                 </span>
                 <span aria-hidden="true">·</span>
-                <span className="font-num tabular-nums">{expense.time}</span>
+                <span className="font-serif tabular-nums">{expense.time}</span>
                 <span aria-hidden="true">·</span>
                 <span
                   className={`font-semibold ${HERO_ACCENT_PALETTE[expenseIconMeta.accent].textClass}`}
@@ -649,7 +649,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
               </div>
 
               {expense.note && (
-                <p className="mt-0.5 text-xs tk-text-ink2 break-words">
+                <p className="mt-0.5 text-sm tk-text-ink2 break-words">
                   {translateDemoExpenseNote(expense.note, activeLang)}
                 </p>
               )}
@@ -659,17 +659,17 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
           {/* Dual-Line Currency Hierarchy: Primary Local Currency + Code, Secondary Home Equivalent + Card Settlement Ref */}
           <div className="flex items-center gap-2.5 shrink-0">
             <div className="text-right">
-              <div className="font-num text-sm font-bold tk-text-ink tabular-nums whitespace-nowrap">
+              <div className="font-serif text-sm font-bold tk-text-ink tabular-nums whitespace-nowrap">
                 <span className="tk-text-danger">
                   -{sym}
                   {expense.amountLocal.toFixed(2)}
                 </span>{' '}
-                <span className="text-xs font-semibold tk-text-ink2">
+                <span className="text-sm font-semibold tk-text-ink2">
                   {upperTripCode}
                 </span>
               </div>
               {isCrossCurrency ? (
-                <div className="mt-0.5 font-num text-xs tk-text-ink2 tabular-nums whitespace-nowrap">
+                <div className="mt-0.5 font-serif text-sm tk-text-ink2 tabular-nums whitespace-nowrap">
                   ≈{' '}
                   {formatHomeCurrencyEquivalent(
                     expense.amountLocal,
@@ -687,7 +687,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 </div>
               ) : (
                 expense.account === 'card' && (
-                  <div className="mt-0.5 text-xs tk-text-ink2 whitespace-nowrap">
+                  <div className="mt-0.5 text-sm tk-text-ink2 whitespace-nowrap">
                     {walletCopy.cardBillRefTag}
                   </div>
                 )
@@ -706,7 +706,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 title={copy.editTitle}
                 className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-forest flex items-center justify-center transition-colors cursor-pointer"
               >
-                <Pencil className="h-3.5 w-3.5" />
+                <Pencil className="h-4 w-4" />
               </button>
               <button
                 type="button"
@@ -718,7 +718,7 @@ export const ExpenseLedgerRow: React.FC<ExpenseLedgerRowProps> = ({
                 title={copy.deleteTitle}
                 className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center transition-colors cursor-pointer"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           </div>

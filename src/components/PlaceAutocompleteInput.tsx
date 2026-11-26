@@ -488,7 +488,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
     'absolute left-0 z-30 mt-1 min-w-full w-[min(22rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)]';
 
   return (
-    <div ref={containerRef} className="relative overflow-visible">
+    <div ref={containerRef} className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] relative overflow-visible">
       <div className="relative">
         {leftIcon}
         <input
@@ -514,7 +514,7 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
           className={`${className || ''} ${value ? 'pr-8' : ''}`}
         />
         {loading ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Loader2 className="h-4 w-4 animate-spin tk-text-forest absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         ) : value ? (
           <button
             type="button"
@@ -529,14 +529,14 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
             aria-label={acCopy.clearInput}
             className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         ) : null}
       </div>
 
       {dropdownOpen && suggestions.length > 0 && (
         <ul
-          className={`${dropdownWidthClass} rounded-xl border tk-bc-hair tk-bg-card py-1 shadow-lg divide-y tk-divide-hair`}
+          className={`${dropdownWidthClass} rounded-[16px] border tk-bc-hair tk-bg-card py-1 tk-elev-soft divide-y tk-divide-hair`}
         >
           {suggestions.map((suggestion, idx) => {
             const pred = suggestion.placePrediction;
@@ -554,13 +554,13 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
                     highlightedIdx === idx ? 'tk-bg-forest-tint' : 'hover:tk-bg-forest-tint'
                   }`}
                 >
-                  <MapPin className="h-3.5 w-3.5 tk-text-forest shrink-0 mt-0.5" />
+                  <MapPin className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-xs font-bold tk-text-ink truncate">
+                    <span className="font-serif block text-sm font-bold tk-text-ink truncate">
                       {mainLabel}
                     </span>
                     {subLabel && (
-                      <span className="block text-[11px] tk-text-ink2 leading-snug line-clamp-2">
+                      <span className="block text-[13px] tk-text-ink2 leading-snug line-clamp-2">
                         {subLabel}
                       </span>
                     )}
@@ -574,10 +574,10 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
 
       {dropdownOpen && lookupError && isFocused && suggestions.length === 0 && (
         <div
-          className={`${dropdownWidthClass} rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-[11px] tk-text-warning shadow-md flex flex-col gap-2`}
+          className={`${dropdownWidthClass} rounded-[16px] border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-[13px] tk-text-warning tk-elev-soft flex flex-col gap-2`}
         >
           <div className="flex items-start gap-1.5">
-            <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 tk-text-warning" />
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 tk-text-warning" />
             <span className="leading-snug">{lookupError}</span>
           </div>
           {hasEnoughQueryChars(value.trim()) ? (
@@ -587,10 +587,10 @@ const PlacesSdkInputInner: React.FC<PlaceAutocompleteInputProps> = ({
               onClick={handleUseTypedName}
               className="self-start inline-flex flex-col items-start gap-0.5 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-left cursor-pointer hover:tk-bg-forest-tint"
             >
-              <span className="text-[11px] font-semibold tk-text-forest leading-snug">
+              <span className="text-[13px] font-semibold tk-text-forest leading-snug">
                 {acCopy.useTypedNameBtn}
               </span>
-              <span className="text-[10px] tk-text-ink2 leading-snug">
+              <span className="text-[13px] tk-text-ink2 leading-snug">
                 {acCopy.unverifiedPlaceNote}
               </span>
             </button>
@@ -620,7 +620,7 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
       : null;
 
   return (
-    <div className={props.wrapperClassName ? `${props.wrapperClassName} space-y-1` : 'space-y-1'}>
+    <div className={props.wrapperClassName ? `[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] ${props.wrapperClassName} space-y-1` : `[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] space-y-1`}>
       {apiKey ? (
         <PlacesSdkInputInner {...props} />
       ) : (
@@ -662,16 +662,16 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
               aria-label={acCopy.clearInput}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-4 w-4" />
             </button>
           ) : null}
         </div>
       )}
 
       {!apiKey && fallbackFocused && (
-        <div className="px-1 text-[11px] tk-text-ink2 leading-snug">
+        <div className="px-1 text-[13px] tk-text-ink2 leading-snug">
           {acCopy.missingApiKeyBefore ? `${acCopy.missingApiKeyBefore} ` : ''}
-          <code className="font-mono text-[10px] tk-bg-forest-plate px-1 py-0.5 rounded">
+          <code className="font-mono text-[13px] tk-bg-forest-plate px-1 py-0.5 rounded">
             VITE_GOOGLE_MAPS_API_KEY
           </code>{' '}
           {acCopy.missingApiKeyAfter}
@@ -684,7 +684,7 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = (pr
             href={lookupHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest hover:underline whitespace-nowrap"
+            className="inline-flex items-center gap-1 text-[13px] font-semibold tk-text-forest hover:underline whitespace-nowrap"
           >
             <ExternalLink className="h-3 w-3" />
             {acCopy.searchOnMaps(trimmed)}

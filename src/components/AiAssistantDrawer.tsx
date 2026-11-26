@@ -471,21 +471,21 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   const isEmptyState = feed.length === 0 && !loading;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-40 p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-forest-40 p-0 sm:p-4 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       <div className="w-full max-w-xl h-[92vh] sm:h-[84vh] max-h-[820px] flex flex-col rounded-t-[28px] sm:rounded-[26px] tk-bg-paper border tk-bc-hair shadow-2xl overflow-hidden">
         {/* Serene Minimal Top Bar */}
         <div className="flex items-center justify-between px-5 py-3.5 bg-white/90 border-b tk-bc-hair shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl tk-bg-forest text-white shrink-0 shadow-2xs">
+            <div className="flex h-8 w-8 items-center justify-center rounded-[16px] tk-bg-forest text-white shrink-0 tk-elev-soft">
               <Sparkles className="h-4 w-4" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h2 className="text-sm font-bold tk-text-ink truncate">
+                <h2 className="text-sm font-serif font-bold tk-text-ink truncate">
                   {copy.headerTitle}
                 </h2>
               </div>
-              <p className="text-[11px] font-medium tk-text-ink2 truncate">
+              <p className="text-[13px] font-medium tk-text-ink2 truncate">
                 {displayTripMeta} · {copy.daysCompact(totalDays)}
               </p>
             </div>
@@ -497,13 +497,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowInspirationShelf((v) => !v)}
-                  className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[13px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  showInspirationShelf
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink'
  }`}
                 >
-                  <Lightbulb className="h-3.5 w-3.5" />
+                  <Lightbulb className="h-4 w-4" />
                   <span>{copy.ideasBtn}</span>
                 </button>
                 <button
@@ -517,7 +517,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   title={copy.newChatTitle}
                   className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink cursor-pointer"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
+                  <RotateCcw className="h-4 w-4" />
                 </button>
               </>
             )}
@@ -527,13 +527,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 setHeaderPanel((p) => (p === 'permissions' ? null : 'permissions'))
               }
               aria-label={copy.permissionsTitle}
-              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[13px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                 headerPanel === 'permissions'
                   ? 'tk-bg-forest-tint tk-text-forest'
                   : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink'
               }`}
             >
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              <ShieldCheck className="h-4 w-4 shrink-0" strokeWidth={1.5} />
               <span>
                 {copy.permissionButton(countEnabledAiWriteDomains(permissionState), 5)}
               </span>
@@ -544,13 +544,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 setHeaderPanel((p) => (p === 'snapshots' ? null : 'snapshots'))
               }
               aria-label={copy.snapshotTitle}
-              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+              className={`inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[13px] font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                 headerPanel === 'snapshots'
                   ? 'tk-bg-forest-tint tk-text-forest'
                   : 'tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink'
               }`}
             >
-              <RotateCcw className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              <RotateCcw className="h-4 w-4 shrink-0" strokeWidth={1.5} />
               <span>{copy.snapshotButton(snapshotEntries.length)}</span>
             </button>
             <button
@@ -567,8 +567,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
         {headerPanel === 'permissions' && (
           <div className="shrink-0 border-b tk-bc-hair tk-bg-card px-5 py-3 space-y-2.5">
             <div>
-              <p className="text-xs font-bold tk-text-ink">{copy.permissionsTitle}</p>
-              <p className="text-[11px] tk-text-ink2 leading-snug mt-0.5">
+              <p className="text-[13px] font-serif font-bold tk-text-ink">{copy.permissionsTitle}</p>
+              <p className="text-[13px] tk-text-ink2 leading-snug mt-0.5">
                 {copy.permissionsHint}
               </p>
             </div>
@@ -602,7 +602,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       role="switch"
                       aria-checked={enabled}
                       onClick={() => onToggleWriteDomain(domain, !enabled)}
-                      className={`w-full flex items-start justify-between gap-3 rounded-xl border px-3 py-2 text-left cursor-pointer transition-colors ${
+                      className={`w-full flex items-start justify-between gap-3 rounded-[16px] border px-3 py-2 text-left cursor-pointer transition-colors ${
                         enabled
                           ? 'tk-bc-hair tk-bg-paper'
                           : 'tk-bc-hair tk-bg-warning-tint'
@@ -610,13 +610,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                     >
                       <div className="min-w-0 flex-1">
                         <div
-                          className={`text-xs font-semibold ${
+                          className={`text-[13px] font-semibold ${
                             enabled ? 'tk-text-ink' : 'tk-text-warning'
                           }`}
                         >
                           {label}
                         </div>
-                        <div className="text-[11px] tk-text-ink2 leading-snug mt-0.5">
+                        <div className="text-[13px] tk-text-ink2 leading-snug mt-0.5">
                           {hint}
                         </div>
                       </div>
@@ -642,10 +642,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
         {headerPanel === 'snapshots' && (
           <div className="shrink-0 border-b tk-bc-hair tk-bg-card px-5 py-3 space-y-2">
-            <p className="text-xs font-bold tk-text-ink">{copy.snapshotTitle}</p>
+            <p className="text-[13px] font-serif font-bold tk-text-ink">{copy.snapshotTitle}</p>
             <div className="max-h-64 overflow-y-auto space-y-1.5 pr-0.5">
               {snapshotEntries.length === 0 ? (
-                <p className="text-[11px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
+                <p className="text-[13px] tk-text-ink2 leading-snug">{copy.snapshotEmpty}</p>
               ) : (
                 snapshotEntries.map((entry) => {
                   const ageMin = Math.max(
@@ -655,13 +655,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   return (
                     <div
                       key={entry.id}
-                      className="flex items-center justify-between gap-2 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2"
+                      className="flex items-center justify-between gap-2 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2"
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="text-xs font-semibold tk-text-ink truncate">
+                        <div className="text-[13px] font-semibold tk-text-ink truncate">
                           {entry.label}
                         </div>
-                        <div className="text-[11px] tk-text-ink2 tabular-nums">
+                        <div className="text-[13px] tk-text-ink2 tabular-nums">
                           {copy.snapshotRelative(ageMin)}
                         </div>
                       </div>
@@ -672,7 +672,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                             onRestoreSnapshot(entry.id);
                             setHeaderPanel(null);
                           }}
-                          className="shrink-0 rounded-lg border tk-bc-hair px-2 py-1 text-[11px] font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
+                          className="shrink-0 rounded-lg border tk-bc-hair px-2 py-1 text-[13px] font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
                         >
                           {copy.snapshotRestoreBtn}
                         </button>
@@ -692,13 +692,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
             <div className={isEmptyState ? 'space-y-6 pt-2 pb-4' : 'mb-5 space-y-3.5 pb-4 border-b tk-bc-hair'}>
               {isEmptyState && (
                 <div className="space-y-2.5">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl tk-bg-forest text-white shadow-sm">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-[20px] tk-bg-forest text-white shadow-sm">
                     <Sparkles className="h-5 w-5" />
                   </div>
-                  <h3 className="text-[26px] font-extrabold tracking-tight tk-text-ink leading-tight">
+                  <h3 className="text-[28px] font-serif font-semibold tracking-tight tk-text-ink leading-tight">
                     {copy.welcomeTitle}
                   </h3>
-                  <p className="text-[14px] tk-text-ink2 leading-relaxed max-w-md">
+                  <p className="text-[15px] tk-text-ink2 leading-relaxed max-w-md">
                     {copy.welcomeDesc}
                   </p>
                 </div>
@@ -720,13 +720,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => setActiveCategory(cat.id)}
-                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                           active
-                            ? 'tk-bg-forest text-white shadow-2xs'
+                            ? 'tk-bg-forest-tint tk-text-forest border border-[var(--tk-forest)]'
                             : 'bg-white tk-text-ink2 border tk-bc-hair hover:tk-bc-hair hover:tk-text-ink'
                         }`}
                       >
-                        <Icon className="h-3.5 w-3.5" />
+                        <Icon className="h-4 w-4" />
                         <span>{cat.label}</span>
                       </button>
                     </React.Fragment>
@@ -750,12 +750,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                         textareaRef.current?.focus();
                       }
                     }}
-                    className="group w-full flex items-center justify-between gap-4 rounded-2xl border tk-bc-hair bg-white px-4 py-4 text-left tk-elev-soft hover:tk-bc-forest hover:shadow-sm transition-all cursor-pointer disabled:opacity-50"
+                    className="group w-full flex items-center justify-between gap-4 rounded-[20px] border tk-bc-hair bg-white px-4 py-4 text-left tk-elev-soft hover:tk-bc-forest hover:shadow-sm transition-all cursor-pointer disabled:opacity-50"
                   >
-                    <span className="text-[14px] font-medium tk-text-ink leading-snug">
+                    <span className="text-[15px] font-medium tk-text-ink leading-snug">
                       {card.label}
                     </span>
-                    <ArrowRight className="h-4 w-4 tk-text-ink2 group-hover:tk-text-forest group-hover:translate-x-0.5 transition-all shrink-0" />
+                    <ArrowRight className="h-4 w-4 box-content rounded-full tk-bg-forest-plate p-1.5 tk-text-ink2 group-hover:tk-text-forest group-hover:translate-x-0.5 transition-all shrink-0" />
                   </button>
                 ))}
               </div>
@@ -776,7 +776,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                   <div key={entry.id} className="space-y-3">
                     {/* User Prompt Bubble */}
                     <div className="flex justify-end">
-                      <div className="max-w-[85%] rounded-2xl rounded-tr-sm tk-bg-forest px-4 py-2.5 text-[14px] text-white leading-relaxed shadow-2xs">
+                      <div className="max-w-[85%] rounded-[20px] rounded-tr-sm tk-bg-forest px-4 py-2.5 text-[15px] text-white leading-relaxed tk-elev-soft">
                         {entry.userPrompt}
                       </div>
                     </div>
@@ -787,9 +787,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       {result.reply && (
                         <div className="flex items-start gap-2.5">
                           <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-lg tk-bg-forest-tint tk-text-forest shrink-0">
-                            <Sparkles className="h-3.5 w-3.5" />
+                            <Sparkles className="h-4 w-4" />
                           </div>
-                          <div className="text-[14px] tk-text-forest leading-relaxed flex-1">
+                          <div className="text-[15px] tk-text-forest leading-relaxed flex-1">
                             {result.reply}
                           </div>
                         </div>
@@ -804,18 +804,18 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                             return (
                               <div
                                 key={`${tip.title}_${idx}`}
-                                className="flex items-start gap-3 rounded-2xl border tk-bc-hair bg-white p-3.5 tk-elev-soft"
+                                className="flex items-start gap-3 rounded-[20px] border tk-bc-hair bg-white p-3.5 tk-elev-soft"
                               >
                                 <div
-                                  className={`flex h-8 w-8 items-center justify-center rounded-xl shrink-0 ${meta.bg} ${meta.text}`}
+                                  className={`flex h-8 w-8 items-center justify-center rounded-[16px] shrink-0 ${meta.bg} ${meta.text}`}
                                 >
                                   <TipIcon className="h-4 w-4" />
                                 </div>
                                 <div className="min-w-0 space-y-0.5">
-                                  <div className="text-[13px] font-bold tk-text-ink leading-snug">
+                                  <div className="text-[15px] font-bold tk-text-ink leading-snug">
                                     {tip.title}
                                   </div>
-                                  <p className="text-xs tk-text-ink2 leading-relaxed">
+                                  <p className="text-[13px] tk-text-ink2 leading-relaxed">
                                     {tip.detail}
                                   </p>
                                 </div>
@@ -829,7 +829,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       {result.proposal && (
                         <div className="pl-8">
                           <div
-                            className={`rounded-2xl border bg-white overflow-hidden transition-all tk-elev-soft ${
+                            className={`rounded-[20px] border bg-white overflow-hidden transition-all tk-elev-soft ${
  proposalStatus === 'applied'
  ? 'tk-bc-forest'
  : proposalStatus === 'dismissed'
@@ -846,7 +846,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
  }`}
                             >
                               <div className="min-w-0">
-                                <div className="text-[11px] font-bold tracking-wide tk-text-forest">
+                                <div className="text-[13px] font-bold tracking-wide tk-text-forest">
                                   {proposalStatus === 'applied'
                                     ? copy.proposalAppliedBanner
                                     : proposalStatus === 'dismissed'
@@ -854,7 +854,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     : copy.proposalPendingBanner}
                                 </div>
                                 {result.proposal.summary && (
-                                  <div className="text-xs font-semibold tk-text-ink mt-0.5 truncate">
+                                  <div className="text-[13px] font-semibold tk-text-ink mt-0.5 truncate">
                                     {result.proposal.summary}
                                   </div>
                                 )}
@@ -870,12 +870,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     {result.proposal.removeStops.map((rm) => (
                                       <div
                                         key={rm.id}
-                                        className="flex items-start gap-2.5 rounded-xl tk-bg-danger-tint border tk-bc-danger-hair px-3 py-2"
+                                        className="flex items-start gap-2.5 rounded-[16px] tk-bg-danger-tint border tk-bc-danger-hair px-3 py-2"
                                       >
                                         <MinusCircle className="h-4 w-4 tk-text-danger shrink-0 mt-0.5" />
                                         <div className="min-w-0 flex-1">
-                                          <div className="flex items-center gap-1.5 text-xs font-semibold tk-text-danger">
-                                            <span className="font-num tabular-nums shrink-0">
+                                          <div className="flex items-center gap-1.5 text-[13px] font-semibold tk-text-danger">
+                                            <span className="font-serif tabular-nums shrink-0">
                                               D{rm.day} {rm.time}
                                             </span>
                                             <span className="line-through truncate">
@@ -883,7 +883,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                             </span>
                                           </div>
                                           {rm.reason && (
-                                            <p className="text-[11px] tk-text-danger mt-0.5 leading-snug">
+                                            <p className="text-[13px] tk-text-danger mt-0.5 leading-snug">
                                               {rm.reason}
                                             </p>
                                           )}
@@ -899,28 +899,28 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   {result.proposal.stops.map((st, idx) => (
                                     <div
                                       key={`${st.title}_${idx}`}
-                                      className="flex items-start justify-between gap-3 rounded-xl tk-bg-warning-tint border tk-bc-hair px-3 py-2.5"
+                                      className="flex items-start justify-between gap-3 rounded-[16px] tk-bg-warning-tint border tk-bc-hair px-3 py-2.5"
                                     >
                                       <div className="flex items-start gap-2 min-w-0">
                                         <PlusCircle className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                                         <div className="min-w-0">
-                                          <div className="flex items-center gap-1.5 text-xs font-bold tk-text-ink">
-                                            <span className="font-num tk-text-forest tabular-nums shrink-0">
+                                          <div className="flex items-center gap-1.5 text-[13px] font-bold tk-text-ink">
+                                            <span className="font-serif tk-text-forest tabular-nums shrink-0">
                                               D{st.day} {st.time}
                                             </span>
                                             <span className="truncate">{st.title}</span>
                                           </div>
-                                          <div className="text-[11px] tk-text-ink2 mt-0.5 truncate">
+                                          <div className="text-[13px] tk-text-ink2 mt-0.5 truncate">
                                             {st.district} · {st.transitNote}
                                           </div>
                                           {st.reason && (
-                                            <p className="text-[11px] tk-text-forest mt-0.5 leading-snug">
+                                            <p className="text-[13px] tk-text-forest mt-0.5 leading-snug">
                                               {st.reason}
                                             </p>
                                           )}
                                         </div>
                                       </div>
-                                      <span className="font-num text-xs font-bold tk-text-forest shrink-0 tabular-nums">
+                                      <span className="font-serif text-[13px] font-bold tk-text-forest shrink-0 tabular-nums">
                                         {st.estLocal > 0
                                           ? `${currencySymbol}${st.estLocal.toFixed(0)}`
                                           : t('common.free')}
@@ -933,9 +933,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                               {/* Proposed Packing Items */}
                               {result.proposal.packingItems &&
                                 result.proposal.packingItems.length > 0 && (
-                                  <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1.5">
-                                    <div className="flex items-center gap-1.5 text-[11px] font-bold tk-text-forest">
-                                      <Luggage className="h-3.5 w-3.5" />
+                                  <div className="rounded-[16px] tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1.5">
+                                    <div className="flex items-center gap-1.5 text-[13px] font-bold tk-text-forest">
+                                      <Luggage className="h-4 w-4" />
                                       <span>
                                         {copy.addPackingHeading(result.proposal.packingItems.length)}
                                       </span>
@@ -943,16 +943,16 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     {result.proposal.packingItems.map((it, idx) => (
                                       <div
                                         key={`${it.name}_${idx}`}
-                                        className="flex items-center justify-between gap-2 text-xs tk-text-ink"
+                                        className="flex items-center justify-between gap-2 text-[13px] tk-text-ink"
                                       >
                                         <span className="font-medium truncate">
                                           {it.name}
                                           {it.quantity > 1 ? ` ×${it.quantity}` : ''}{' '}
-                                          <span className="text-[11px] tk-text-ink2">
+                                          <span className="text-[13px] tk-text-ink2">
                                             · {it.groupTitle}
                                           </span>
                                         </span>
-                                        <span className="font-num text-[11px] tk-text-ink2 tabular-nums shrink-0">
+                                        <span className="font-serif text-[13px] tk-text-ink2 tabular-nums shrink-0">
                                           {it.weightGrams}g
                                         </span>
                                       </div>
@@ -962,9 +962,9 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                               {/* Proposed Travel Tasks */}
                               {result.proposal.tasks && result.proposal.tasks.length > 0 && (
-                                <div className="rounded-xl tk-bg-warning-tint border tk-bc-warning-hair px-3 py-2.5 space-y-1.5">
-                                  <div className="flex items-center gap-1.5 text-[11px] font-bold tk-text-warning">
-                                    <ListChecks className="h-3.5 w-3.5" />
+                                <div className="rounded-[16px] tk-bg-warning-tint border tk-bc-warning-hair px-3 py-2.5 space-y-1.5">
+                                  <div className="flex items-center gap-1.5 text-[13px] font-bold tk-text-warning">
+                                    <ListChecks className="h-4 w-4" />
                                     <span>
                                       {copy.addTasksHeading(result.proposal.tasks.length)}
                                     </span>
@@ -972,10 +972,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   {result.proposal.tasks.map((tk, idx) => (
                                     <div
                                       key={`${tk.title}_${idx}`}
-                                      className="flex items-center justify-between gap-2 text-xs tk-text-warning"
+                                      className="flex items-center justify-between gap-2 text-[13px] tk-text-warning"
                                     >
                                       <span className="font-medium truncate">{tk.title}</span>
-                                      <span className="text-[11px] tk-text-warning shrink-0">
+                                      <span className="text-[13px] tk-text-warning shrink-0">
                                         {translateTaskCategory(tk.category, activeLang)} ·{' '}
                                         {translateTaskTiming(tk.timing, activeLang)}
                                       </span>
@@ -1013,21 +1013,21 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                       return (
                                         <div
                                           key={`${ex.title}_${idx}`}
-                                          className="flex items-center justify-between gap-3 rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2"
+                                          className="flex items-center justify-between gap-3 rounded-[16px] tk-bg-paper border tk-bc-hair px-3 py-2"
                                         >
                                           <div className="min-w-0">
-                                            <div className="flex items-center gap-1.5 text-xs font-bold tk-text-ink">
-                                              <Wallet className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                                            <div className="flex items-center gap-1.5 text-[13px] font-bold tk-text-ink">
+                                              <Wallet className="h-4 w-4 tk-text-forest shrink-0" />
                                               <span className="truncate">
                                                 {ex.title} (D{ex.day})
                                               </span>
                                             </div>
-                                            <div className="text-[11px] tk-text-ink2 mt-0.5">
+                                            <div className="text-[13px] tk-text-ink2 mt-0.5">
                                               {splitInfo.shortLabel}
                                               {ex.vatEligible ? copy.taxFreeTag : ''}
                                             </div>
                                           </div>
-                                          <div className="font-num text-sm font-bold tk-text-danger tabular-nums shrink-0">
+                                          <div className="font-serif text-sm font-bold tk-text-danger tabular-nums shrink-0">
                                             -{currencySymbol}
                                             {ex.amountLocal.toFixed(2)}
                                           </div>
@@ -1039,7 +1039,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                               {/* Proposed Rain Swap */}
                               {result.proposal.rainSwap && (
-                                <div className="flex items-center gap-2 rounded-xl tk-bg-warning-tint border tk-bc-hair px-3 py-2 text-xs font-semibold tk-text-forest">
+                                <div className="flex items-center gap-2 rounded-[16px] tk-bg-warning-tint border tk-bc-hair px-3 py-2 text-[13px] font-semibold tk-text-forest">
                                   <CloudRain className="h-4 w-4 shrink-0" />
                                   <span>
                                     {result.proposal.rainSwap.action === 'enable'
@@ -1051,8 +1051,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                               {/* Proposed Date Change */}
                               {result.proposal.dateChange && (
-                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
-                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                <div className="rounded-[16px] tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-[13px] font-semibold tk-text-ink leading-snug">
                                     {copy.dateChangeSummary(
                                       result.proposal.dateChange.departureDate,
                                       result.proposal.dateChange.returnDate,
@@ -1060,11 +1060,11 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     )}
                                   </p>
                                   {result.proposal.dateChange.note ? (
-                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                    <p className="text-[13px] tk-text-ink2 leading-snug">
                                       {result.proposal.dateChange.note}
                                     </p>
                                   ) : null}
-                                  <p className="text-[11px] tk-text-warning leading-snug">
+                                  <p className="text-[13px] tk-text-warning leading-snug">
                                     {copy.dateChangeRisk}
                                   </p>
                                 </div>
@@ -1072,18 +1072,18 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                               {/* Proposed Destination Change */}
                               {result.proposal.destinationChange && (
-                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
-                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                <div className="rounded-[16px] tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-[13px] font-semibold tk-text-ink leading-snug">
                                     {copy.destinationChangeSummary(
                                       result.proposal.destinationChange.cities.join(' · ')
                                     )}
                                   </p>
                                   {result.proposal.destinationChange.note ? (
-                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                    <p className="text-[13px] tk-text-ink2 leading-snug">
                                       {result.proposal.destinationChange.note}
                                     </p>
                                   ) : null}
-                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                  <p className="text-[13px] tk-text-ink2 leading-snug">
                                     {copy.destinationChangeNote}
                                   </p>
                                 </div>
@@ -1092,24 +1092,24 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                               {/* Proposed Itinerary Rebuild */}
                               {result.proposal.itineraryRebuild && (
                                 <div
-                                  className={`rounded-xl border tk-bc-hair px-3 py-2.5 space-y-1.5 ${
+                                  className={`rounded-[16px] border tk-bc-hair px-3 py-2.5 space-y-1.5 ${
                                     result.proposal.itineraryRebuild.targetMode === 'overwrite'
                                       ? 'tk-bg-warning-tint'
                                       : 'tk-bg-paper'
                                   }`}
                                 >
-                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                  <p className="text-[13px] font-semibold tk-text-ink leading-snug">
                                     {copy.rebuildPromptSummary(
                                       result.proposal.itineraryRebuild.naturalPrompt
                                     )}
                                   </p>
                                   {result.proposal.itineraryRebuild.note ? (
-                                    <p className="text-[11px] tk-text-ink2 leading-snug">
+                                    <p className="text-[13px] tk-text-ink2 leading-snug">
                                       {result.proposal.itineraryRebuild.note}
                                     </p>
                                   ) : null}
                                   <p
-                                    className={`text-[11px] leading-snug ${
+                                    className={`text-[13px] leading-snug ${
                                       result.proposal.itineraryRebuild.targetMode === 'overwrite'
                                         ? 'tk-text-warning font-semibold'
                                         : 'tk-text-ink2'
@@ -1193,12 +1193,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                                         return (
                                           <>
-                                            <p className="text-[11px] tk-text-ink2 leading-snug">
+                                            <p className="text-[13px] tk-text-ink2 leading-snug">
                                               {copy.diffPreviewNote}
                                             </p>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                              <div className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
-                                                <p className="text-[11px] font-bold tk-text-ink">
+                                              <div className="rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
+                                                <p className="text-[13px] font-serif font-bold tk-text-ink">
                                                   {copy.diffBefore}
                                                 </p>
                                                 {diffBaseline.perDay.map(
@@ -1207,7 +1207,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                       key={`before-${row.day}`}
                                                       className="space-y-0.5 border-t tk-bc-hair pt-1.5 first:border-0 first:pt-0"
                                                     >
-                                                      <div className="flex items-baseline justify-between gap-2 text-[11px]">
+                                                      <div className="flex items-baseline justify-between gap-2 text-[13px]">
                                                         <span className="font-semibold tk-text-ink tk-num">
                                                           {copy.diffDayLabel(
                                                             row.day
@@ -1222,7 +1222,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                         </span>
                                                       </div>
                                                       {row.city ? (
-                                                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                        <p className="text-[13px] tk-text-ink2 leading-snug">
                                                           {row.city}
                                                         </p>
                                                       ) : null}
@@ -1233,7 +1233,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                             (title) => (
                                                               <span
                                                                 key={`${row.day}-${title}`}
-                                                                className="inline-flex items-center rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-semibold tk-text-forest leading-snug"
+                                                                className="inline-flex items-center rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[13px] font-semibold tk-text-forest leading-snug"
                                                               >
                                                                 {copy.diffProtectedBadge}
                                                                 ·{title}
@@ -1246,8 +1246,8 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                   )
                                                 )}
                                               </div>
-                                              <div className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
-                                                <p className="text-[11px] font-bold tk-text-ink">
+                                              <div className="rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-2 space-y-1.5 min-w-0">
+                                                <p className="text-[13px] font-serif font-bold tk-text-ink">
                                                   {copy.diffAfter}
                                                 </p>
                                                 {projection.days == null &&
@@ -1256,7 +1256,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                   null &&
                                                 projection.departureDate ==
                                                   null ? (
-                                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                  <p className="text-[13px] tk-text-ink2 leading-snug">
                                                     {copy.diffPreviewNote}
                                                   </p>
                                                 ) : null}
@@ -1291,7 +1291,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                         key={`after-${day}`}
                                                         className="space-y-0.5 border-t tk-bc-hair pt-1.5 first:border-0 first:pt-0"
                                                       >
-                                                        <div className="flex items-baseline justify-between gap-2 text-[11px]">
+                                                        <div className="flex items-baseline justify-between gap-2 text-[13px]">
                                                           <span className="font-semibold tk-text-ink tk-num">
                                                             {copy.diffDayLabel(
                                                               day
@@ -1304,7 +1304,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                             {stopsLabel}
                                                           </span>
                                                         </div>
-                                                        <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                        <p className="text-[13px] tk-text-ink2 leading-snug">
                                                           {inAfter
                                                             ? city || '—'
                                                             : '—'}
@@ -1317,11 +1317,11 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                             </div>
 
                                             <div className="space-y-1.5">
-                                              <p className="text-[11px] font-bold tk-text-ink">
+                                              <p className="text-[13px] font-serif font-bold tk-text-ink">
                                                 {copy.diffConflictHeading}
                                               </p>
                                               {conflicts.length === 0 ? (
-                                                <p className="text-[11px] tk-text-ink2 leading-snug">
+                                                <p className="text-[13px] tk-text-ink2 leading-snug">
                                                   {copy.diffConflictOk}
                                                 </p>
                                               ) : (
@@ -1336,7 +1336,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                             c.day
                                                           )
                                                         }
-                                                        className="w-full text-left rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-2.5 py-1.5 text-[11px] font-semibold tk-text-danger leading-snug cursor-pointer"
+                                                        className="w-full text-left rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint px-2.5 py-1.5 text-[13px] font-semibold tk-text-danger leading-snug cursor-pointer"
                                                       >
                                                         {copy.diffConflictRemove(
                                                           c.name
@@ -1379,7 +1379,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                     }
                                                   );
                                                 }}
-                                                className="flex-1 rounded-xl tk-bg-forest px-3 py-2 text-xs font-bold text-white hover:tk-bg-press transition-colors cursor-pointer"
+                                                className="flex-1 rounded-[16px] tk-bg-forest px-3 py-2 text-[13px] font-bold text-white hover:tk-bg-press transition-colors cursor-pointer"
                                               >
                                                 {copy.diffReplaceCurrent}
                                               </button>
@@ -1413,7 +1413,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                     }
                                                   );
                                                 }}
-                                                className="flex-1 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                                                className="flex-1 rounded-[16px] border tk-bc-hair bg-white px-3 py-2 text-[13px] font-semibold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
                                               >
                                                 {copy.diffSaveAsNewOpen}
                                               </button>
@@ -1427,10 +1427,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   {result.proposal.itineraryRebuild.targetMode === 'overwrite' &&
                                     proposalStatus === 'pending' && (
                                       <div className="pt-1.5 space-y-2 border-t tk-bc-hair">
-                                        <p className="text-xs font-bold tk-text-ink leading-snug">
+                                        <p className="text-[13px] font-bold tk-text-ink leading-snug">
                                           {copy.overwriteConfirmTitle}
                                         </p>
-                                        <p className="text-[11px] tk-text-warning leading-snug">
+                                        <p className="text-[13px] tk-text-warning leading-snug">
                                           {copy.overwriteConfirmRisk}
                                         </p>
                                         <div className="flex flex-wrap gap-2">
@@ -1442,7 +1442,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                 [entry.id]: true,
                                               }))
                                             }
-                                            className={`rounded-xl px-3 py-1.5 text-xs font-semibold border transition-colors cursor-pointer ${
+                                            className={`rounded-[16px] px-3 py-1.5 text-[13px] font-semibold border transition-colors cursor-pointer ${
                                               overwriteConfirmed[entry.id]
                                                 ? 'tk-bg-forest text-white border-transparent'
                                                 : 'bg-white tk-text-forest tk-bc-hair hover:tk-bg-forest-tint'
@@ -1468,7 +1468,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                 return next;
                                               });
                                             }}
-                                            className="rounded-xl px-3 py-1.5 text-xs font-semibold bg-white tk-text-forest border tk-bc-hair hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                                            className="rounded-[16px] px-3 py-1.5 text-[13px] font-semibold bg-white tk-text-forest border tk-bc-hair hover:tk-bg-forest-tint transition-colors cursor-pointer"
                                           >
                                             {copy.overwriteSaveAsNew}
                                           </button>
@@ -1481,7 +1481,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                                 return next;
                                               })
                                             }
-                                            className="rounded-xl px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
+                                            className="rounded-[16px] px-3 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
                                           >
                                             {copy.overwriteCancel}
                                           </button>
@@ -1493,14 +1493,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
                               {/* Proposed Packing Template */}
                               {result.proposal.packingTemplate && (
-                                <div className="rounded-xl tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
-                                  <p className="text-xs font-semibold tk-text-ink leading-snug">
+                                <div className="rounded-[16px] tk-bg-paper border tk-bc-hair px-3 py-2.5 space-y-1">
+                                  <p className="text-[13px] font-semibold tk-text-ink leading-snug">
                                     {copy.packingTemplateSummary(
                                       result.proposal.packingTemplate.note ||
                                         result.proposal.packingTemplate.scenarioIds.join(' · ')
                                     )}
                                   </p>
-                                  <p className="text-[11px] tk-text-ink2 leading-snug">
+                                  <p className="text-[13px] tk-text-ink2 leading-snug">
                                     {copy.packingTemplateMerge}
                                   </p>
                                 </div>
@@ -1514,7 +1514,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   {result.proposal.itineraryRebuild?.targetMode ===
                                     'overwrite' &&
                                     !overwriteConfirmed[entry.id] && (
-                                      <p className="text-[11px] tk-text-warning leading-snug">
+                                      <p className="text-[13px] tk-text-warning leading-snug">
                                         {copy.overwriteNeedConfirm}
                                       </p>
                                     )}
@@ -1522,7 +1522,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     <button
                                       type="button"
                                       onClick={() => handleDismissEntryProposal(entry.id)}
-                                      className="rounded-xl px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
+                                      className="rounded-[16px] px-3 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-ink transition-colors cursor-pointer"
                                     >
                                       {copy.skipBtn}
                                     </button>
@@ -1554,17 +1554,17 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                         }
                                         handleApplyEntryProposal(entry.id, proposal);
                                       }}
-                                      className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-forest transition-colors shadow-2xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                      className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2 text-[13px] font-bold text-white hover:tk-bg-forest transition-colors tk-elev-soft cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                      <Check className="h-3.5 w-3.5" />
+                                      <Check className="h-4 w-4" />
                                       <span>{copy.applyBtn}</span>
                                     </button>
                                   </div>
                                 </>
                               ) : proposalStatus === 'applied' ? (
                                 <div className="flex items-center justify-between gap-2">
-                                  <span className="inline-flex items-center gap-1 text-xs font-semibold tk-text-forest leading-snug">
-                                    <Check className="h-3.5 w-3.5 shrink-0" />
+                                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold tk-text-forest leading-snug">
+                                    <Check className="h-4 w-4 shrink-0" />
                                     <span>
                                       {result.proposal.dateChange
                                         ? copy.resultDateApplied
@@ -1586,7 +1586,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                           proposalTarget.day
                                         )
                                       }
-                                      className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                                      className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-[13px] font-semibold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
                                     >
                                       <MapPin className="h-3 w-3" />
                                       <span>
@@ -1601,7 +1601,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                   )}
                                 </div>
                               ) : (
-                                <span className="text-xs tk-text-ink2">
+                                <span className="text-[13px] tk-text-ink2">
                                   {copy.noChangesApplied}
                                 </span>
                               )}
@@ -1624,24 +1624,24 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                             return (
                               <div
                                 key={ex.id}
-                                className="flex items-center justify-between gap-3 rounded-2xl border tk-bc-hair tk-bg-forest-tint px-3.5 py-2.5"
+                                className="flex items-center justify-between gap-3 rounded-[20px] border tk-bc-hair tk-bg-forest-tint px-3.5 py-2.5"
                               >
                                 <div className="min-w-0">
-                                  <div className="flex items-center gap-1.5 text-xs font-bold tk-text-forest">
-                                    <Wallet className="h-3.5 w-3.5 shrink-0" />
+                                  <div className="flex items-center gap-1.5 text-[13px] font-bold tk-text-forest">
+                                    <Wallet className="h-4 w-4 shrink-0" />
                                     <span className="truncate">
                                       {copy.loggedPrefix}
                                       {ex.title}
                                       {ex.day ? ` (D${ex.day})` : ''}
                                     </span>
                                   </div>
-                                  <div className="mt-0.5 text-[11px] tk-text-ink2">
+                                  <div className="mt-0.5 text-[13px] tk-text-ink2">
                                     {splitInfo.shortLabel}
                                     {ex.vatEligible ? copy.taxFreeTag : ''}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 shrink-0">
-                                  <div className="font-num text-sm font-bold tk-text-danger tabular-nums">
+                                  <div className="font-serif text-sm font-bold tk-text-danger tabular-nums">
                                     -{currencySymbol}
                                     {ex.amountLocal.toFixed(2)}
                                   </div>
@@ -1649,7 +1649,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                     <button
                                       type="button"
                                       onClick={() => onNavigateToModule('budget', ex.day)}
-                                      className="inline-flex items-center gap-0.5 rounded-lg border tk-bc-hair bg-white px-2 py-1 text-[11px] font-semibold tk-text-forest hover:tk-bg-warning-tint whitespace-nowrap cursor-pointer"
+                                      className="inline-flex items-center gap-0.5 rounded-lg border tk-bc-hair bg-white px-2 py-1 text-[13px] font-semibold tk-text-forest hover:tk-bg-warning-tint whitespace-nowrap cursor-pointer"
                                     >
                                       <span>{copy.viewBtn}</span>
                                       <ArrowUpRight className="h-3 w-3" />
@@ -1665,10 +1665,10 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                       {/* Local Communication / Translation Card */}
                       {result.localCard && (
                         <div className="pl-8">
-                          <div className="rounded-2xl border tk-bc-hair tk-bg-forest-tint p-4 space-y-1.5">
-                            <div className="flex items-center justify-between text-[11px] font-semibold tk-text-swatch-3">
+                          <div className="rounded-[20px] border tk-bc-hair tk-bg-forest-tint p-4 space-y-1.5">
+                            <div className="flex items-center justify-between text-[13px] font-semibold tk-text-swatch-3">
                               <span className="inline-flex items-center gap-1.5">
-                                <Languages className="h-3.5 w-3.5" />
+                                <Languages className="h-4 w-4" />
                                 {copy.phraseCardHeader}
                               </span>
                               <span>{result.localCard.languageLabel}</span>
@@ -1680,13 +1680,13 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                               {result.localCard.localAddressOrPhrase}
                             </div>
                             {result.localCard.pronunciationHint && (
-                              <div className="text-xs tk-text-ink2">
+                              <div className="text-[13px] tk-text-ink2">
                                 {copy.pronunciationPrefix}
                                 {result.localCard.pronunciationHint}
                               </div>
                             )}
                             {result.localCard.etiquetteTip && (
-                              <div className="text-[11px] tk-text-swatch-3 pt-1.5 border-t tk-bc-hair">
+                              <div className="text-[13px] tk-text-swatch-3 pt-1.5 border-t tk-bc-hair">
                                 {copy.tipPrefix}
                                 {result.localCard.etiquetteTip}
                               </div>
@@ -1706,7 +1706,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                                 type="button"
                                 disabled={isBusy}
                                 onClick={() => void executePrompt(sugg)}
-                                className="inline-flex items-center gap-1 rounded-full border tk-bc-hair bg-white px-3 py-1.5 text-xs font-medium tk-text-forest hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer disabled:opacity-50"
+                                className="inline-flex items-center gap-1 rounded-full border tk-bc-hair bg-white px-3 py-1.5 text-[13px] font-medium tk-text-forest hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer disabled:opacity-50"
                               >
                                 <span>{sugg}</span>
                                 <ArrowRight className="h-3 w-3 tk-text-ink2" />
@@ -1723,15 +1723,15 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
               {loading && pendingUserPrompt && (
                 <div className="space-y-3">
                   <div className="flex justify-end">
-                    <div className="max-w-[85%] rounded-2xl rounded-tr-sm tk-bg-forest px-4 py-2.5 text-[14px] text-white leading-relaxed">
+                    <div className="max-w-[85%] rounded-[20px] rounded-tr-sm tk-bg-forest px-4 py-2.5 text-[15px] text-white leading-relaxed">
                       {pendingUserPrompt}
                     </div>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-6 w-6 items-center justify-center rounded-lg tk-bg-forest-tint tk-text-forest">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
-                    <span className="text-xs font-medium tk-text-ink2">
+                    <span className="text-[13px] font-medium tk-text-ink2">
                       {copy.thinkingText}
                     </span>
                   </div>
@@ -1748,7 +1748,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
           className="tk-bg-paper px-4 pt-2 pb-4 shrink-0"
         >
           {errorMsg && (
-            <div className="mb-2 rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-3 py-2 text-xs font-semibold tk-text-danger">
+            <div className="mb-2 rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint px-3 py-2 text-[13px] font-semibold tk-text-danger">
               {errorMsg}
             </div>
           )}

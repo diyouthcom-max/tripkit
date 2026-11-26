@@ -175,7 +175,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
   // Immersive Secondary View: Full Memories Photo Book & Print Studio
   if (subView === 'memories') {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
@@ -183,13 +183,13 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
               setAutoOpenStudioOnEnter(false);
               setSubView('portal');
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-bold tk-text-ink hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-sm font-bold tk-text-ink hover:tk-bc-forest hover:tk-text-forest transition-colors cursor-pointer"
           >
-            <ArrowLeft className="h-3.5 w-3.5 shrink-0" />
+            <ArrowLeft className="h-4 w-4 shrink-0" />
             <span>{copy.backToMyKit}</span>
           </button>
 
-          <span className="text-xs font-semibold tk-text-ink2 leading-snug break-words">
+          <span className="text-[15px] font-semibold tk-text-ink2 leading-snug break-words">
             {copy.memoriesStudioHeader}
           </span>
         </div>
@@ -209,9 +209,9 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
   }
 
   return (
-    <div className="space-y-5 max-w-3xl mx-auto">
+    <div className="space-y-5 max-w-3xl mx-auto [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       {/* TRAVELER PASSPORT: Unified Account Entry (Apple / Google / Email + Account Deletion) */}
-      <section className="rounded-2xl border tk-bc-hair bg-white px-4 py-3.5 shadow-2xs">
+      <section className="rounded-[20px] border tk-bc-hair bg-white px-4 py-3.5 tk-elev-soft">
         {authUser ? (
           <button
             type="button"
@@ -223,19 +223,19 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 <img
                   src={authUser.photoURL}
                   alt=""
-                  className="h-10 w-10 rounded-xl object-cover border tk-bc-hair shrink-0"
+                  className="h-10 w-10 rounded-[16px] object-cover border tk-bc-hair shrink-0"
                 />
               ) : (
-                <div className="h-10 w-10 rounded-xl tk-bg-forest text-white text-sm font-extrabold flex items-center justify-center shrink-0">
+                <div className="h-10 w-10 rounded-[16px] tk-bg-forest text-white text-sm font-extrabold flex items-center justify-center shrink-0">
                   {(authUser.displayName || authUser.email || 'T').slice(0, 1).toUpperCase()}
                 </div>
               )}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[15px] font-extrabold tk-text-ink truncate">
+                  <span className="text-[15px] font-serif font-extrabold tk-text-ink truncate">
                     {authUser.displayName || copy.defaultTraveler}
                   </span>
-                  <span className="rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-bold tk-text-forest shrink-0">
+                  <span className="rounded-md tk-bg-forest-tint px-1.5 py-0.5 text-[13px] font-bold tk-text-forest shrink-0">
                     {resolveAuthProviderLabel(authUser, activeLang)}
                   </span>
                 </div>
@@ -244,7 +244,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 </p>
               </div>
             </div>
-            <span className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 group-hover:tk-text-forest whitespace-nowrap shrink-0">
+            <span className="inline-flex items-center gap-1 text-sm font-semibold tk-text-ink2 group-hover:tk-text-forest whitespace-nowrap shrink-0">
               <span>{copy.accountManage}</span>
               <ChevronRight className="h-4 w-4 tk-text-ink2" />
             </span>
@@ -252,11 +252,11 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
         ) : (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="h-10 w-10 rounded-xl tk-bg-forest text-white inline-flex items-center justify-center shrink-0">
+              <span className="h-10 w-10 rounded-[16px] tk-bg-forest text-white inline-flex items-center justify-center shrink-0">
                 <LogIn className="h-4 w-4" />
               </span>
               <div className="min-w-0">
-                <div className="text-[15px] font-extrabold tk-text-ink leading-snug">
+                <div className="text-[15px] font-serif font-extrabold tk-text-ink leading-snug">
                   {copy.signInTitle}
                 </div>
                 <p className="mt-0.5 text-[13px] tk-text-ink2 leading-snug">
@@ -267,10 +267,10 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             <button
               type="button"
               onClick={() => onOpenAuthModal('signin')}
-              className="h-9 inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3.5 text-xs font-bold text-white hover:tk-bg-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-9 inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3.5 text-sm font-bold text-white hover:tk-bg-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <span>{copy.signInBtn}</span>
-              <ChevronRight className="h-3.5 w-3.5" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         )}
@@ -279,24 +279,24 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
       {/* SECTION 1: Physical Delivery Studio (Memories Photobook + Printable A4 PDF Handbook) */}
       <div className="space-y-3">
         <div className="px-1 flex items-center justify-between">
-          <h3 className="text-xs font-bold uppercase tracking-wider tk-text-ink2">
+          <h3 className="text-sm font-bold uppercase tracking-wider tk-text-ink2">
             {copy.sectionDelivery}
           </h3>
         </div>
 
         {/* Hero Editorial Card: Travel Photobook & AI Print Studio */}
-        <section className="rounded-2xl border tk-bc-hair bg-white p-4 sm:p-5 space-y-4 shadow-2xs">
+        <section className="rounded-[20px] border tk-bc-hair bg-white p-4 sm:p-5 space-y-4 tk-elev-soft">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3 min-w-0">
-              <span className="h-10 w-10 rounded-xl tk-bg-forest-plate tk-text-swatch-1 inline-flex items-center justify-center shrink-0">
+              <span className="h-10 w-10 rounded-[16px] tk-bg-forest-plate tk-text-forest inline-flex items-center justify-center shrink-0">
                 <BookOpen className="h-5 w-5" />
               </span>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h4 className="text-base font-extrabold tk-text-ink">
+                  <h4 className="text-base font-serif font-extrabold tk-text-ink">
                     {copy.photobookTitle}
                   </h4>
-                  <span className="rounded-md tk-bg-forest-plate px-2 py-0.5 text-[11px] font-bold tk-text-swatch-1 whitespace-nowrap">
+                  <span className="rounded-md tk-bg-forest-plate px-2 py-0.5 text-[13px] font-bold tk-text-forest whitespace-nowrap">
                     {copy.photobookBadge}
                   </span>
                 </div>
@@ -324,7 +324,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                     setAutoOpenStudioOnEnter(false);
                     setSubView('memories');
                   }}
-                  className="aspect-[4/3] rounded-xl overflow-hidden tk-bg-forest-plate cursor-pointer"
+                  className="aspect-[4/3] rounded-[16px] overflow-hidden tk-bg-forest-plate cursor-pointer"
                 >
                   <img
                     src={url}
@@ -344,9 +344,9 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 setAutoOpenStudioOnEnter(false);
                 setSubView('memories');
               }}
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 text-xs font-bold text-white hover:tk-bg-press transition-colors whitespace-nowrap cursor-pointer"
+              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 text-sm font-bold text-white hover:tk-bg-press transition-colors whitespace-nowrap cursor-pointer"
             >
-              <BookOpen className="h-3.5 w-3.5 shrink-0" />
+              <BookOpen className="h-4 w-4 shrink-0" />
               <span>{copy.openMemoriesBtn}</span>
             </button>
 
@@ -356,22 +356,22 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
                 setAutoOpenStudioOnEnter(true);
                 setSubView('memories');
               }}
-              className="h-9 inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 text-xs font-bold tk-text-swatch-1 hover:tk-bc-swatch-1 hover:tk-bg-forest-tint transition-colors whitespace-nowrap cursor-pointer"
+              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 text-sm font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap cursor-pointer"
             >
-              <Printer className="h-3.5 w-3.5 shrink-0" />
+              <Printer className="h-4 w-4 shrink-0" />
               <span>{copy.openStudioBtn}</span>
             </button>
           </div>
         </section>
 
         {/* Compact Utility Row: Export A4 Foldable PDF Handbook */}
-        <section className="rounded-2xl border tk-bc-hair bg-white px-4 py-3.5 flex items-center justify-between gap-3 shadow-2xs">
+        <section className="rounded-[20px] border tk-bc-hair bg-white px-4 py-3.5 flex items-center justify-between gap-3 tk-elev-soft">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="h-10 w-10 rounded-xl tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
+            <span className="h-10 w-10 rounded-[16px] tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
               <FileDown className="h-5 w-5" />
             </span>
             <div className="min-w-0">
-              <div className="text-[15px] font-extrabold tk-text-ink leading-snug">
+              <div className="text-[15px] font-serif font-extrabold tk-text-ink leading-snug">
                 {copy.exportPdfTitle}
               </div>
               <p className="mt-0.5 text-[13px] tk-text-ink2 leading-snug">
@@ -384,12 +384,12 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             type="button"
             disabled={isExportingPdf}
             onClick={onExportPdf}
-            className="h-9 inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 text-xs font-bold tk-text-ink hover:tk-bc-forest hover:tk-text-forest disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="h-9 inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 text-sm font-bold tk-text-ink hover:tk-bc-forest hover:tk-text-forest disabled:opacity-50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             {isExportingPdf ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin tk-text-forest" />
+              <Loader2 className="h-4 w-4 animate-spin tk-text-forest" />
             ) : (
-              <FileDown className="h-3.5 w-3.5 tk-text-forest" />
+              <FileDown className="h-4 w-4 tk-text-forest" />
             )}
             <span>
               {isExportingPdf ? copy.exportingPdf : copy.exportPdfBtn}
@@ -401,12 +401,12 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
       {/* SECTION 2: Global Preferences & Account (iOS Grouped Settings Rows) */}
       <div className="space-y-3">
         <div className="px-1">
-          <h3 className="text-xs font-bold uppercase tracking-wider tk-text-ink2">
+          <h3 className="text-sm font-bold uppercase tracking-wider tk-text-ink2">
             {copy.sectionPreferences}
           </h3>
         </div>
 
-        <section className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair overflow-hidden shadow-2xs">
+        <section className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair overflow-hidden tk-elev-soft">
           {/* Row 1: Trip Kit Pro Status */}
           <button
             type="button"
@@ -414,11 +414,11 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-card transition-colors cursor-pointer"
           >
             <span className="inline-flex items-center gap-3 min-w-0">
-              <span className="h-8 w-8 rounded-xl tk-bg-warning-tint tk-text-warning inline-flex items-center justify-center shrink-0">
+              <span className="h-8 w-8 rounded-[16px] tk-bg-warning-tint tk-text-warning inline-flex items-center justify-center shrink-0">
                 <Crown className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-bold tk-text-ink">
+                <span className="block text-[15px] font-serif font-bold tk-text-ink">
                   {copy.proRowTitle}
                 </span>
                 <span className="block mt-0.5 text-[13px] tk-text-ink2 leading-snug">
@@ -428,7 +428,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             </span>
             <span className="inline-flex items-center gap-1.5 shrink-0">
               <span
-                className={`rounded-lg px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ${proStatusSummary.toneClass}`}
+                className={`rounded-lg px-2 py-0.5 text-[13px] font-bold whitespace-nowrap ${proStatusSummary.toneClass}`}
               >
                 {proStatusSummary.badge}
               </span>
@@ -443,14 +443,14 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-card transition-colors cursor-pointer"
           >
             <span className="inline-flex items-center gap-3 flex-1 min-w-0">
-              <span className="h-8 w-8 rounded-xl tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
+              <span className="h-8 w-8 rounded-[16px] tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
                 <Wallet className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-bold tk-text-ink">
+                <span className="block text-[15px] font-serif font-bold tk-text-ink">
                   {copy.currencyRowTitle}
                 </span>
-                <span className="block mt-0.5 font-num text-[13px] font-medium tk-text-ink2 leading-snug break-words">
+                <span className="block mt-0.5 font-serif text-[13px] font-medium tk-text-ink2 leading-snug break-words">
                   {getHomeCurrencyLabel(preferences.homeCurrency, activeLang)}
                 </span>
               </span>
@@ -465,14 +465,14 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-card transition-colors cursor-pointer"
           >
             <span className="inline-flex items-center gap-3 flex-1 min-w-0">
-              <span className="h-8 w-8 rounded-xl tk-bg-forest-tint tk-text-swatch-3 inline-flex items-center justify-center shrink-0">
+              <span className="h-8 w-8 rounded-[16px] tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
                 <Luggage className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-bold tk-text-ink">
+                <span className="block text-[15px] font-serif font-bold tk-text-ink">
                   {copy.baggageRowTitle}
                 </span>
-                <span className="block mt-0.5 font-num text-[13px] font-medium tk-text-ink2 tabular-nums">
+                <span className="block mt-0.5 font-serif text-[13px] font-medium tk-text-ink2 tabular-nums">
                   {baggageDisplay}
                 </span>
               </span>
@@ -487,11 +487,11 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-card transition-colors cursor-pointer"
           >
             <span className="inline-flex items-center gap-3 flex-1 min-w-0">
-              <span className="h-8 w-8 rounded-xl tk-bg-forest-tint tk-text-swatch-1 inline-flex items-center justify-center shrink-0">
+              <span className="h-8 w-8 rounded-[16px] tk-bg-forest-tint tk-text-forest inline-flex items-center justify-center shrink-0">
                 <Globe className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-bold tk-text-ink">
+                <span className="block text-[15px] font-serif font-bold tk-text-ink">
                   {copy.langRowTitle}
                 </span>
                 <span className="block mt-0.5 text-[13px] font-medium tk-text-ink2 leading-snug break-words">
@@ -509,11 +509,11 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
             className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-card transition-colors cursor-pointer"
           >
             <span className="inline-flex items-center gap-3 min-w-0">
-              <span className="h-8 w-8 rounded-xl tk-bg-forest-plate tk-text-ink2 inline-flex items-center justify-center shrink-0">
+              <span className="h-8 w-8 rounded-[16px] tk-bg-forest-plate tk-text-ink2 inline-flex items-center justify-center shrink-0">
                 <Settings className="h-4 w-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-bold tk-text-ink">
+                <span className="block text-[15px] font-serif font-bold tk-text-ink">
                   {copy.allSettingsRowTitle}
                 </span>
                 <span className="block mt-0.5 text-[13px] tk-text-ink2 leading-snug">
@@ -522,7 +522,7 @@ export const MyKitView: React.FC<MyKitViewProps> = ({
               </span>
             </span>
             <span className="inline-flex items-center gap-1.5 shrink-0">
-              {authUser && <Sparkles className="h-3.5 w-3.5 tk-text-forest" />}
+              {authUser && <Sparkles className="h-4 w-4 tk-text-forest" />}
               <ChevronRight className="h-4 w-4 tk-text-ink2" />
             </span>
           </button>

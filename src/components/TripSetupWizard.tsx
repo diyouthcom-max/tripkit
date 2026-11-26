@@ -777,7 +777,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
   const isWarmPaperStep = activeStep === 1 || activeStep === 2 || activeStep === 3;
 
   return (
-    <div ref={wizardRootRef} className={`space-y-5 sm:space-y-6${isWarmPaperStep ? ' tk-scope tk-wizard-surface' : ''}`}>
+    <div ref={wizardRootRef} className={`space-y-5 sm:space-y-6 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]${isWarmPaperStep ? ' tk-scope tk-wizard-surface' : ''}`}>
       {/* Borderless Editorial Top Navigation (← Back  |  1 of 3  |  ×) */}
       <nav aria-label={copy.stepProgressLabel(activeStep)} className="space-y-5">
         <div className="flex items-center justify-between gap-3">
@@ -820,7 +820,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
           {/* Center: Clean Editorial Step Counter (1 of 3) + Quiet Interactive Progress Hairline */}
           <div className="flex flex-col items-center gap-1.5 min-w-0">
-            <span className={isWarmPaperStep ? 'tk-num tk-num--cap' : 'font-num tabular-nums text-xs font-semibold tracking-wide tk-text-ink2'}>
+            <span className={isWarmPaperStep ? 'tk-num tk-num--cap' : 'font-serif tabular-nums text-sm font-semibold tracking-wide tk-text-ink2'}>
               {step1Copy.stepOfTotal(activeStep, 3)}
             </span>
             <div
@@ -905,7 +905,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 onClick={() => setShowAiQuickInput((prev) => !prev)}
                 className="tk-link-voice cursor-pointer"
               >
-                <Mic className="h-3.5 w-3.5 shrink-0 tk-glyph--m" />
+                <Mic className="h-4 w-4 shrink-0 tk-glyph--m" />
                 <span>
                   {showAiQuickInput ? copy.headerAiHideBtn : copy.headerAiShortcutBtn}
                 </span>
@@ -915,7 +915,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                 <div className="space-y-2">
                   <div className="tk-ai-bar flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1.5">
                     <div className="flex-1 flex items-center gap-2 px-2 min-w-0">
-                      <Sparkles className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                      <Sparkles className="h-4 w-4 tk-text-forest shrink-0" />
                       <input
                         type="text"
                         value={naturalPrompt}
@@ -943,7 +943,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                           aria-label={copy.clearTextLabel}
                           className="tk-icon-btn cursor-pointer"
                         >
-                          <X className="h-3.5 w-3.5" />
+                          <X className="h-4 w-4" />
                         </button>
                       )}
                       <AiVoiceInputButton
@@ -981,9 +981,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       className="tk-ai-submit"
                     >
                       {isGenerating ? (
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <Sparkles className="h-3.5 w-3.5" />
+                        <Sparkles className="h-4 w-4" />
                       )}
                       <span>{copy.aiQuickBuildShortBtn}</span>
                     </button>
@@ -1127,7 +1127,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   aria-label={copy.removeCityLabel(displayCity)}
                                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer"
                                 >
-                                  <X className="h-3.5 w-3.5" />
+                                  <X className="h-4 w-4" />
                                 </button>
                               </div>
                             </div>
@@ -1141,7 +1141,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   aria-label={copy.decDayLabel}
                                   className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white disabled:opacity-35 cursor-pointer"
                                 >
-                                  <Minus className="h-3.5 w-3.5" />
+                                  <Minus className="h-4 w-4" />
                                 </button>
                                 <div className="inline-flex items-center justify-center px-1.5">
                                   <input
@@ -1170,7 +1170,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   aria-label={copy.incDayLabel}
                                   className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white disabled:opacity-35 cursor-pointer"
                                 >
-                                  <Plus className="h-3.5 w-3.5" />
+                                  <Plus className="h-4 w-4" />
                                 </button>
                               </div>
 
@@ -1199,14 +1199,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                                   aria-label={copy.removeCityLabel(displayCity)}
                                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer"
                                 >
-                                  <X className="h-3.5 w-3.5" />
+                                  <X className="h-4 w-4" />
                                 </button>
                               </div>
                             </div>
                           </div>
                         );
                       })}
-                      <div className="px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
+                      <div className="px-4 py-2.5 flex items-center justify-between gap-2 text-sm">
                         <span
                           className={`tk-num ${setup.days >= 30 ? 'tk-text-forest' : 'tk-text-ink2'}`}
                         >
@@ -1260,7 +1260,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                     <button
                       type="button"
                       onClick={() => addCity(cityInput)}
-                      className="inline-flex tk-h-plate items-center tk-r-ctl tk-bg-forest px-3 text-xs font-bold tk-text-card whitespace-nowrap shrink-0 cursor-pointer"
+                      className="inline-flex tk-h-plate items-center tk-r-ctl tk-bg-forest px-3 text-sm font-bold tk-text-card whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {step1Copy.addActionShort}
                     </button>
@@ -1272,7 +1272,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
             {/* SECTION 2: Dates & Duration — Unified Single-Surface Date Row with Live Season */}
             <section className="space-y-2.5">
               <div className="flex items-center justify-between gap-2 px-0.5">
-                <h2 className="text-xs font-semibold tracking-wide">
+                <h2 className="text-sm font-semibold tracking-wide">
                   {step1Copy.sectionDates}
                 </h2>
                 {setup.cities.length >= 2 && (
@@ -1293,7 +1293,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 tk-num tk-datebar__val">
                       <span>{readableDateRange.startText}</span>
-                      <ArrowRight className="h-3.5 w-3.5 tk-glyph--on shrink-0" />
+                      <ArrowRight className="h-4 w-4 tk-glyph--on shrink-0" />
                       <span>{readableDateRange.endText}</span>
                     </div>
                     <div className="tk-num tk-datebar__sub">
@@ -1410,14 +1410,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       <span
                         className="tk-vibe__plate inline-flex items-center justify-center shrink-0"
                       >
-                        <StyleIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        <StyleIcon className="h-4 w-4 sm:h-4 sm:w-4" />
                       </span>
                       <span className="flex-1 min-w-0 tk-t-option leading-tight">
                         {step1Copy.vibeLabels[styleKey]}
                       </span>
                       {active && (
                         <Check
-                          className="absolute top-2 right-2 sm:static h-3.5 w-3.5 sm:h-4 sm:w-4 tk-glyph--on shrink-0"
+                          className="absolute top-2 right-2 sm:static h-4 w-4 sm:h-4 sm:w-4 tk-glyph--on shrink-0"
                           strokeWidth={2.75}
                         />
                       )}
@@ -2005,7 +2005,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                               }}
                               className="inline-flex items-center justify-center gap-1.5 tk-r-ctl tk-bg-forest tk-text-card px-3 py-1.5 tk-t-btn cursor-pointer disabled:opacity-50"
                             >
-                              {isGenerating && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                              {isGenerating && <Loader2 className="h-4 w-4 animate-spin" />}
                               {copy.confirmOverwriteBtn}
                             </button>
                           </div>
@@ -2023,7 +2023,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
       {/* AI generation staged progress (shown only while waiting, never over CTA) */}
       {isGenerating && !validationError && !errorMessage && (
         <div className="flex items-start gap-2 min-w-0 px-0.5">
-          <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0 mt-0.5 tk-text-ink2" />
+          <Loader2 className="h-4 w-4 animate-spin shrink-0 mt-0.5 tk-text-ink2" />
           <p className="tk-t-cap tk-text-ink2 leading-snug min-w-0">
             {copy.aiProgressStages[aiProgressStageIdx] || copy.aiProgressStages[0]}
           </p>
@@ -2045,7 +2045,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border tk-bc-danger-hair tk-bg-danger-tint p-3.5 text-xs tk-text-danger flex items-start gap-2">
+          <div className="rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint p-3.5 text-sm tk-text-danger flex items-start gap-2">
             <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 tk-text-danger" />
             <div className="space-y-1 min-w-0">
               <p className="font-semibold">{validationError || errorMessage}</p>
@@ -2224,12 +2224,12 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
             aria-modal="true"
             aria-labelledby="clothing-norm-modal-title"
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-lg rounded-2xl border tk-bc-hair bg-white shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-lg rounded-[20px] border tk-bc-hair bg-white tk-elev-soft overflow-hidden animate-in fade-in zoom-in-95 duration-150"
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-3 border-b tk-bc-hair tk-bg-forest-tint px-5 py-4">
               <div className="flex items-start gap-3 min-w-0">
-                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-forest-12 tk-text-forest">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-forest-12 tk-text-forest">
                   <Shirt className="h-4.5 w-4.5" />
                 </div>
                 <div className="min-w-0">
@@ -2241,12 +2241,12 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                       {copy.normPreviewModalTitle}
                     </h3>
                     {baselineDays !== setup.days && (
-                      <span className="font-num text-xs font-bold tk-text-forest">
+                      <span className="font-serif text-sm font-bold tk-text-forest">
                         {copy.normModalDaysBadge(baselineDays, setup.days)}
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 text-xs tk-text-ink2">
+                  <p className="mt-1 text-sm tk-text-ink2">
                     {copy.normModalSub(
                       normalizationPlan.laundryEnabled,
                       normalizationPlan.laundryIntervalDays,
@@ -2268,18 +2268,18 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
             {/* KPI Summary Strip */}
             <div className="grid grid-cols-3 gap-2.5 px-5 pt-4">
-              <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5">
-                <div className="text-[11px] font-medium tk-text-ink2">{copy.kpiAdjusted}</div>
-                <div className="mt-0.5 font-num tabular-nums text-sm font-extrabold tk-text-ink">
+              <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2.5">
+                <div className="text-[13px] font-medium tk-text-ink2">{copy.kpiAdjusted}</div>
+                <div className="mt-0.5 font-serif tabular-nums text-sm font-extrabold tk-text-ink">
                   {copy.kpiAdjustedValue(normalizationPlan.changedItems.length)}
                 </div>
               </div>
-              <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5">
-                <div className="text-[11px] font-medium tk-text-ink2">
+              <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2.5">
+                <div className="text-[13px] font-medium tk-text-ink2">
                   {copy.kpiPieceDelta}
                 </div>
                 <div
-                  className={`mt-0.5 font-num tabular-nums text-sm font-extrabold ${
+                  className={`mt-0.5 font-serif tabular-nums text-sm font-extrabold ${
  normalizationPlan.totalDeltaPieces > 0
  ? 'tk-text-forest'
  : 'tk-text-ink2'
@@ -2291,11 +2291,11 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                   {copy.pcsUnit}
                 </div>
               </div>
-              <div className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5">
-                <div className="text-[11px] font-medium tk-text-ink2">
+              <div className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2.5">
+                <div className="text-[13px] font-medium tk-text-ink2">
                   {copy.kpiEstWeight}
                 </div>
-                <div className="mt-0.5 font-num tabular-nums text-sm font-extrabold tk-text-ink">
+                <div className="mt-0.5 font-serif tabular-nums text-sm font-extrabold tk-text-ink">
                   {formatSignedWeight(normalizationPlan.totalDeltaWeightGrams)}
                 </div>
               </div>
@@ -2303,18 +2303,18 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
 
             {/* Adjusted Clothing Item List */}
             <div className="px-5 py-4">
-              <div className="mb-2 flex items-center justify-between text-xs">
+              <div className="mb-2 flex items-center justify-between text-sm">
                 <span className="font-bold tk-text-ink">{copy.breakdownHeading}</span>
-                <span className="text-[11px] tk-text-ink2">{copy.breakdownRightNote}</span>
+                <span className="text-[13px] tk-text-ink2">{copy.breakdownRightNote}</span>
               </div>
 
-              <div className="max-h-64 overflow-y-auto rounded-xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+              <div className="max-h-64 overflow-y-auto rounded-[16px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                 {normalizationPlan.changedItems.map((diff) => {
                   const isIncrease = diff.deltaQuantity > 0;
                   return (
                     <div
                       key={`${diff.groupId}_${diff.itemId}`}
-                      className="flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs hover:tk-bg-paper transition-colors"
+                      className="flex items-center justify-between gap-3 px-3.5 py-2.5 text-sm hover:tk-bg-paper transition-colors"
                     >
                       <div className="min-w-0 space-y-0.5">
                         <div className="flex flex-wrap items-center gap-1.5">
@@ -2323,7 +2323,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                           </span>
                           {diff.alreadyPacked && (
                             <span
-                              className={`text-[11px] font-semibold ${
+                              className={`text-[13px] font-semibold ${
  isIncrease ? 'tk-text-warning' : 'tk-text-forest'
  }`}
                             >
@@ -2334,14 +2334,14 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-1.5 text-[11px] tk-text-ink2">
+                        <div className="flex items-center gap-1.5 text-[13px] tk-text-ink2">
                           <span className="truncate">{diff.groupTitle}</span>
                           <span aria-hidden="true">·</span>
                           <span className="whitespace-nowrap">{diff.scaleRuleLabel}</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2.5 shrink-0 font-num tabular-nums">
+                      <div className="flex items-center gap-2.5 shrink-0 font-serif tabular-nums">
                         <div className="inline-flex items-center gap-1.5 rounded-lg border tk-bc-hair tk-bg-paper px-2.5 py-1">
                           <span className="tk-text-ink2 line-through">
                             ×{diff.prevQuantity}
@@ -2364,7 +2364,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                             {isIncrease ? `+${diff.deltaQuantity}` : diff.deltaQuantity}
                             {copy.pcsUnit}
                           </div>
-                          <div className="text-[10px] tk-text-ink2">
+                          <div className="text-[13px] tk-text-ink2">
                             {formatSignedWeight(diff.deltaWeightGrams)}
                           </div>
                         </div>
@@ -2383,7 +2383,7 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                   setDismissedSignature(currentClothingSignature);
                   setPreviewModalOpen(false);
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border tk-bc-hair bg-white px-3.5 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink transition-colors whitespace-nowrap cursor-pointer"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-[16px] border tk-bc-hair bg-white px-3.5 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink transition-colors whitespace-nowrap cursor-pointer"
               >
                 {copy.keepExistingBtn}
               </button>
@@ -2396,9 +2396,9 @@ export const TripSetupWizard: React.FC<TripSetupWizardProps> = ({
                     onSaveEditCurrent?.(effective, crew, normalizationPlan.updatedGroups);
                   }
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-press transition-colors whitespace-nowrap cursor-pointer"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2 text-sm font-bold text-white hover:tk-bg-press transition-colors whitespace-nowrap cursor-pointer"
               >
-                <Check className="h-3.5 w-3.5" />
+                <Check className="h-4 w-4" />
                 {copy.saveAndScaleBtn(normalizationPlan.changedItems.length)}
               </button>
             </div>

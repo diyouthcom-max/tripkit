@@ -913,11 +913,11 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
 
   if (waypoints.length === 0 && !dayStayAnchor) {
     return (
-      <div className="h-72 tk-bg-paper px-4 flex flex-col items-center justify-center text-center gap-2.5">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white border tk-bc-hair tk-text-forest shadow-2xs">
+      <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] h-72 tk-bg-paper px-4 flex flex-col items-center justify-center text-center gap-2.5">
+        <div className="flex h-11 w-11 items-center justify-center rounded-[20px] bg-white border tk-bc-hair tk-text-forest shadow-2xs">
           <Compass className="h-5 w-5" />
         </div>
-        <div className="text-xs font-bold tk-text-ink">
+        <div className="font-serif text-sm font-bold tk-text-ink">
           {copy.emptyPrompt(scopeLabel)}
         </div>
       </div>
@@ -928,8 +928,8 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
     <div
       className={
         layout === 'fullscreen'
-          ? 'relative w-full h-full tk-bg-forest-plate'
-          : 'tk-bg-paper divide-y tk-divide-hair'
+          ? `[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] relative w-full h-full tk-bg-forest-plate`
+          : `[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] tk-bg-paper divide-y tk-divide-hair`
       }
     >
       {/* Minimalist Packy-Style Airy 2D Map Viewport */}
@@ -947,8 +947,8 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
             {/* Top-Left Auto-Fading (3s) Add-Place Hint + Transient Toast */}
             <div className="pointer-events-none absolute top-3.5 left-3.5 z-[450] flex flex-col items-start gap-2 max-w-[calc(100%-72px)]">
               {onHoldMapAddPlace && !holdHintDismissed && (
-                <div className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border tk-bc-hair bg-white/95 px-3 py-1.5 text-[11px] font-semibold tk-text-ink tk-elev-soft ">
-                  <Hand className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                <div className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border tk-bc-hair bg-white/95 px-3 py-1.5 text-[13px] font-semibold tk-text-ink tk-elev-soft ">
+                  <Hand className="h-4 w-4 tk-text-forest shrink-0" />
                   <span className="truncate">
                     {copy.holdOrRightClickHint}
                   </span>
@@ -964,7 +964,7 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
               )}
 
               {transientToast && (
-                <div className="pointer-events-none rounded-full tk-bg-ink-strong px-3.5 py-1.5 text-[11px] font-semibold text-white shadow-md">
+                <div className="pointer-events-none rounded-full tk-bg-ink-strong px-3.5 py-1.5 text-[13px] font-semibold text-white tk-elev-soft">
                   {transientToast}
                 </div>
               )}
@@ -1050,7 +1050,7 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
                     });
                   }
                 }}
-                className="inline-flex items-center gap-1.5 rounded-lg border tk-bc-hair tk-bg-forest-tint px-2.5 py-1 text-[11px] font-bold tk-text-swatch-3 hover:tk-bc-forest transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-lg border tk-bc-hair tk-bg-forest-tint px-2.5 py-1 text-[13px] font-bold tk-text-swatch-3 hover:tk-bc-forest transition-colors cursor-pointer"
               >
                 <Home className="h-3 w-3 shrink-0" />
                 <span className="max-w-[110px] truncate">
@@ -1067,13 +1067,13 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
                   key={wp.id}
                   type="button"
                   onClick={() => handleFocusWaypoint(idx)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[13px] font-semibold transition-colors cursor-pointer ${
  isSelected
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink'
  }`}
                 >
-                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full tk-bg-warning font-num text-[10px] font-extrabold text-white shrink-0">
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full tk-bg-warning font-serif text-[13px] font-extrabold text-white shrink-0">
                     {wp.orderNumber}
                   </span>
                   {idx > 0 && (
@@ -1087,7 +1087,7 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
             })}
           </div>
 
-          <span className="text-[11px] font-num tk-text-ink2 tabular-nums">
+          <span className="text-[13px] font-serif tk-text-ink2 tabular-nums">
             {copy.spanAndTapHint(curveData.totalDistanceKm.toFixed(1))}
           </span>
         </div>

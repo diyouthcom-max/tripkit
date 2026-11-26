@@ -248,14 +248,14 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay p-0 sm:p-4 [font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="tripkit-pro-title"
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl tk-bg-paper shadow-2xl"
+        className="relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl tk-bg-paper tk-elev-soft"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Floating Close Button */}
@@ -287,10 +287,10 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             <div className="absolute inset-0 tk-grad-cover-fade" />
 
             <div className="relative z-10 flex flex-col justify-end px-6 pt-12 pb-4">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-white/90">
+              <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-white/90">
                 <span>Trip Kit Pro</span>
                 <span aria-hidden="true">·</span>
-                <span className="font-num tabular-nums">
+                <span className="font-serif tabular-nums">
                   {isProActive
                     ? isLifetimeActive
                       ? copy.statusLifetime
@@ -303,23 +303,23 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
 
               <h2
                 id="tripkit-pro-title"
-                className="mt-1.5 text-2xl sm:text-3xl font-extrabold tracking-tight text-white [text-wrap:balance]"
+                className="mt-1.5 text-2xl sm:text-3xl font-serif font-extrabold tracking-tight text-white [text-wrap:balance]"
               >
                 {copy.heroHeadline}
               </h2>
 
               {/* Top 3 Quick Value Rows */}
-              <div className="mt-5 space-y-3 rounded-2xl bg-white/94 p-4 border border-white/75">
+              <div className="mt-5 space-y-3 rounded-[20px] bg-white/94 p-4 border border-white/75">
                 {copy.highlights.map((item, idx) => {
                   const Icon = idx === 0 ? Sparkles : idx === 1 ? Luggage : FileDown;
                   return (
                     <div key={item.title} className="flex items-center gap-3.5">
-                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-forest text-white">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-forest text-white">
                         <Icon className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <div className="text-sm font-bold tk-text-ink">{item.title}</div>
-                        <div className="text-xs tk-text-ink2">{item.desc}</div>
+                        <div className="text-sm font-serif font-bold tk-text-ink">{item.title}</div>
+                        <div className="text-sm tk-text-ink2">{item.desc}</div>
                       </div>
                     </div>
                   );
@@ -331,24 +331,24 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
           <div className="px-5 sm:px-6 space-y-5">
             {/* Contextual Paywall Trigger Callout (Rule 1 / Rule 2) */}
             {triggerReason && !isProActive && (
-              <div className="rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint p-4 flex items-start gap-3">
+              <div className="rounded-[20px] border tk-bc-warning-hair tk-bg-warning-tint p-4 flex items-start gap-3">
                 <Clock className="h-4 w-4 tk-text-warning shrink-0 mt-0.5" />
-                <div className="space-y-1 text-xs leading-relaxed tk-text-warning">
+                <div className="space-y-1 text-sm leading-relaxed tk-text-warning">
                   <div className="font-extrabold tk-text-warning">
                     {isTrialExpired ? copy.paywallTitleExpired : copy.paywallTitleUnlock}
                   </div>
                   <p>{triggerReason}</p>
-                  <p className="text-[11px] tk-text-warning">{copy.paywallSafeNote}</p>
+                  <p className="text-[13px] tk-text-warning">{copy.paywallSafeNote}</p>
                 </div>
               </div>
             )}
 
             {/* Active Pro Status Banner when already unlocked */}
             {isProActive && (
-              <div className="rounded-2xl border tk-bc-hair tk-bg-forest-tint p-4 flex items-center justify-between gap-3">
-                <div className="space-y-0.5 text-xs">
+              <div className="rounded-[20px] border tk-bc-hair tk-bg-forest-tint p-4 flex items-center justify-between gap-3">
+                <div className="space-y-0.5 text-sm">
                   <div className="font-extrabold tk-text-forest">{copy.activeBannerTitle}</div>
-                  <div className="font-num tk-text-ink2 tabular-nums">
+                  <div className="font-serif tk-text-ink2 tabular-nums">
                     {copy.activeBannerValidUntil(expiresDateLabel || '')}
                     {redeemedCode ? copy.activeBannerCode(redeemedCode) : ''}
                   </div>
@@ -364,22 +364,22 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
               <button
                 type="button"
                 onClick={onOpenAdminCodeGenerator}
-                className="w-full rounded-2xl border tk-bc-forest tk-bg-forest-tint p-4 flex items-center justify-between gap-3 text-left hover:tk-bg-warning-tint transition-colors cursor-pointer"
+                className="w-full rounded-[20px] border tk-bc-forest tk-bg-forest-tint p-4 flex items-center justify-between gap-3 text-left hover:tk-bg-warning-tint transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-forest text-white">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-forest text-white">
                     <KeyRound className="h-4 w-4" />
                   </span>
                   <div className="min-w-0">
-                    <div className="text-sm font-extrabold tk-text-ink">
+                    <div className="text-sm font-serif font-extrabold tk-text-ink">
                       {copy.ownerShortcutTitle}
                     </div>
-                    <div className="mt-0.5 text-xs tk-text-ink2 truncate">
+                    <div className="mt-0.5 text-sm tk-text-ink2 truncate">
                       {copy.ownerShortcutSub}
                     </div>
                   </div>
                 </div>
-                <span className="text-xs font-bold tk-text-forest shrink-0">
+                <span className="text-sm font-bold tk-text-forest shrink-0">
                   {copy.ownerShortcutOpen}
                 </span>
               </button>
@@ -388,16 +388,16 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             {/* Private Domain Welfare + Step-by-Step Guide + One-Time Redeem Code Section */}
             <section
               ref={redeemSectionRef}
-              className="rounded-2xl border tk-bc-hair bg-white p-5 space-y-4"
+              className="rounded-[20px] border tk-bc-hair bg-white p-5 space-y-4"
             >
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-base font-extrabold tk-text-ink">{copy.claimTitle}</h3>
-                  <span className="font-num text-xs font-bold tk-text-forest tabular-nums">
+                  <h3 className="text-base font-serif font-extrabold tk-text-ink">{copy.claimTitle}</h3>
+                  <span className="font-serif text-sm font-bold tk-text-forest tabular-nums">
                     {copy.claimValue}
                   </span>
                 </div>
-                <p className="text-xs tk-text-ink2 leading-relaxed">
+                <p className="text-sm tk-text-ink2 leading-relaxed">
                   {copy.claimDescBefore}
                   <strong className="tk-text-ink">{copy.claimDescStrong}</strong>
                   {copy.claimDescAfter}
@@ -410,23 +410,23 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                   href={buildWhatsAppClaimUrl(activePlanSpec.whatsappMsg, activeLang)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[46px] rounded-xl tk-bg-success px-3.5 py-2.5 text-xs font-bold text-white hover:tk-bg-press transition-colors flex items-center justify-between gap-2 whitespace-nowrap"
+                  className="min-h-[46px] rounded-[16px] tk-bg-success px-3.5 py-2.5 text-sm font-bold text-white hover:tk-bg-press transition-colors flex items-center justify-between gap-2 whitespace-nowrap"
                 >
                   <span className="inline-flex items-center gap-2 min-w-0">
                     <MessageCircle className="h-4 w-4 shrink-0" />
                     <span className="truncate">{copy.whatsappBtn}</span>
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 opacity-85 shrink-0" />
+                  <ExternalLink className="h-4 w-4 opacity-85 shrink-0" />
                 </a>
 
                 <a
                   href={FACEBOOK_PAGE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[46px] rounded-xl tk-bg-swatch-3 px-3.5 py-2.5 text-xs font-bold text-white hover:tk-bg-forest-tint transition-colors flex items-center justify-between gap-2 whitespace-nowrap"
+                  className="min-h-[46px] rounded-[16px] tk-bg-swatch-3 px-3.5 py-2.5 text-sm font-bold text-white hover:tk-bg-forest-tint transition-colors flex items-center justify-between gap-2 whitespace-nowrap"
                 >
                   <span className="inline-flex items-center gap-2 min-w-0">
-                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-white text-[11px] font-black tk-text-swatch-3 shrink-0">
+                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-white text-[13px] font-black tk-text-swatch-3 shrink-0">
                       f
                     </span>
                     <span className="truncate">
@@ -434,37 +434,37 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                       {FACEBOOK_PAGE_HANDLE}
                     </span>
                   </span>
-                  <ExternalLink className="h-3.5 w-3.5 opacity-85 shrink-0" />
+                  <ExternalLink className="h-4 w-4 opacity-85 shrink-0" />
                 </a>
               </div>
 
               {/* Detailed Step-by-Step Guide Card */}
-              <div className="rounded-xl border tk-bc-hair tk-bg-paper overflow-hidden">
+              <div className="rounded-[16px] border tk-bc-hair tk-bg-paper overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setGuideExpanded((prev) => !prev)}
                   aria-expanded={guideExpanded}
                   className="w-full px-3.5 py-2.5 flex items-center justify-between gap-2 text-left hover:tk-bg-warning-tint transition-colors cursor-pointer"
                 >
-                  <span className="inline-flex items-center gap-1.5 text-xs font-extrabold tk-text-ink">
-                    <HelpCircle className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                  <span className="inline-flex items-center gap-1.5 text-sm font-extrabold tk-text-ink">
+                    <HelpCircle className="h-4 w-4 tk-text-forest shrink-0" />
                     {copy.guideTitle}
                   </span>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold tk-text-forest shrink-0">
+                  <span className="inline-flex items-center gap-1 text-[13px] font-semibold tk-text-forest shrink-0">
                     {guideExpanded ? copy.guideHide : copy.guideShow}
                     {guideExpanded ? (
-                      <ChevronUp className="h-3.5 w-3.5" />
+                      <ChevronUp className="h-4 w-4" />
                     ) : (
-                      <ChevronDown className="h-3.5 w-3.5" />
+                      <ChevronDown className="h-4 w-4" />
                     )}
                   </span>
                 </button>
 
                 {guideExpanded && (
-                  <div className="border-t tk-bc-hair px-3.5 py-3.5 space-y-3 text-xs">
+                  <div className="border-t tk-bc-hair px-3.5 py-3.5 space-y-3 text-sm">
                     {/* Step 1 */}
                     <div className="flex items-start gap-2.5">
-                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-num text-[11px] font-bold text-white">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-serif text-[13px] font-bold text-white">
                         1
                       </span>
                       <div className="min-w-0 flex-1 space-y-1.5">
@@ -473,12 +473,12 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                         <div className="space-y-1.5 rounded-lg border tk-bc-hair bg-white p-2.5">
                           <div className="flex items-center justify-between gap-2">
                             <span className="truncate tk-text-ink2">
-                              • WhatsApp：<strong className="font-num tk-text-ink tabular-nums">{WHATSAPP_DISPLAY}</strong>
+                              • WhatsApp：<strong className="font-serif tk-text-ink tabular-nums">{WHATSAPP_DISPLAY}</strong>
                             </span>
                             <button
                               type="button"
                               onClick={() => void handleCopyWhatsAppNumber()}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                              className="inline-flex items-center gap-1 text-[13px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
                             >
                               {copiedWhatsapp ? (
                                 <>
@@ -502,7 +502,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                             <button
                               type="button"
                               onClick={() => void handleCopyFacebookHandle()}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
+                              className="inline-flex items-center gap-1 text-[13px] font-bold tk-text-forest hover:underline whitespace-nowrap shrink-0 cursor-pointer"
                             >
                               {copiedFbHandle ? (
                                 <>
@@ -523,7 +523,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
 
                     {/* Step 2 */}
                     <div className="flex items-start gap-2.5">
-                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-num text-[11px] font-bold text-white">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-serif text-[13px] font-bold text-white">
                         2
                       </span>
                       <div className="min-w-0 flex-1 space-y-1.5">
@@ -532,7 +532,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                           <button
                             type="button"
                             onClick={() => void handleCopyClaimMessage()}
-                            className="inline-flex items-center gap-1 rounded-md border tk-bc-hair bg-white px-2 py-0.5 text-[11px] font-bold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-md border tk-bc-hair bg-white px-2 py-0.5 text-[13px] font-bold tk-text-forest hover:tk-bg-forest-tint transition-colors cursor-pointer"
                           >
                             {copiedClaimText ? (
                               <>
@@ -551,11 +551,11 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                           {copy.step2BodyPrefix}
                           <strong className="tk-text-ink">{copy.step2Keyword}</strong>
                           {copy.step2BodyMid}
-                          <code className="rounded bg-white px-1.5 py-0.5 font-num font-bold tk-text-forest border tk-bc-hair">
+                          <code className="rounded bg-white px-1.5 py-0.5 font-serif font-bold tk-text-forest border tk-bc-hair">
                             TK1Y-8K4M-9X2P
                           </code>
                           {copy.step2BodySuffix1}
-                          <code className="rounded bg-white px-1.5 py-0.5 font-num font-bold tk-text-forest border tk-bc-hair">
+                          <code className="rounded bg-white px-1.5 py-0.5 font-serif font-bold tk-text-forest border tk-bc-hair">
                             TKLT
                           </code>
                           {copy.step2BodySuffix2}
@@ -565,7 +565,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
 
                     {/* Step 3 */}
                     <div className="flex items-start gap-2.5">
-                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-num text-[11px] font-bold text-white">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full tk-bg-forest font-serif text-[13px] font-bold text-white">
                         3
                       </span>
                       <div className="min-w-0 flex-1 space-y-1">
@@ -574,7 +574,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                           <button
                             type="button"
                             onClick={() => codeInputRef.current?.focus()}
-                            className="text-[11px] font-bold tk-text-forest hover:underline cursor-pointer"
+                            className="text-[13px] font-bold tk-text-forest hover:underline cursor-pointer"
                           >
                             {copy.enterCodeJump}
                           </button>
@@ -594,13 +594,13 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
               <form onSubmit={(e) => void handleRedeemSubmit(e)} className="pt-2 border-t tk-bc-hair space-y-2.5">
                 <label
                   htmlFor="tripkit-redeem-input"
-                  className="flex items-center justify-between text-xs font-bold tk-text-ink"
+                  className="flex items-center justify-between text-sm font-bold tk-text-ink"
                 >
                   <span className="inline-flex items-center gap-1.5">
-                    <KeyRound className="h-3.5 w-3.5 tk-text-forest" />
+                    <KeyRound className="h-4 w-4 tk-text-forest" />
                     {copy.redeemInputLabel}
                   </span>
-                  <span className="text-[11px] font-normal tk-text-ink2">
+                  <span className="text-[13px] font-normal tk-text-ink2">
                     {authUser
                       ? copy.bindsTo(authUser.email || copy.fallbackCurrentAcct)
                       : copy.bindsHint}
@@ -619,16 +619,16 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                       if (redeemError) setRedeemError(null);
                     }}
                     placeholder={copy.codePlaceholder}
-                    className="min-h-[44px] flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2 font-num text-base sm:text-sm font-extrabold tracking-wider uppercase tk-text-ink tabular-nums placeholder:font-normal placeholder:tracking-normal placeholder:text-xs focus:tk-bc-forest focus:bg-white focus:outline-none"
+                    className="min-h-[44px] flex-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2 font-serif text-base sm:text-sm font-extrabold tracking-wider uppercase tk-text-ink tabular-nums placeholder:font-normal placeholder:tracking-normal placeholder:text-sm focus:tk-bc-forest focus:bg-white focus:outline-none"
                   />
                   <button
                     type="submit"
                     disabled={redeemBusy}
-                    className="min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-50 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
+                    className="min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-50 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
                   >
                     {redeemBusy ? (
                       <>
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                         {copy.verifying}
                       </>
                     ) : (
@@ -638,7 +638,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                 </div>
 
                 {redeemError && (
-                  <div className="rounded-xl border tk-bc-danger-hair tk-bg-danger-tint px-3 py-2 flex items-start gap-2 text-xs tk-text-danger">
+                  <div className="rounded-[16px] border tk-bc-danger-hair tk-bg-danger-tint px-3 py-2 flex items-start gap-2 text-sm tk-text-danger">
                     <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
                     <span className="leading-relaxed">{redeemError}</span>
                   </div>
@@ -647,15 +647,15 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             </section>
 
             {/* Quantitative Proof Row */}
-            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-0.5 text-xs tk-text-ink2">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-0.5 text-sm tk-text-ink2">
               <span className="inline-flex items-center gap-0.5 tk-text-warning" aria-label="4.9 rating">
-                <Star className="h-3.5 w-3.5 fill-current" />
-                <Star className="h-3.5 w-3.5 fill-current" />
-                <Star className="h-3.5 w-3.5 fill-current" />
-                <Star className="h-3.5 w-3.5 fill-current" />
-                <Star className="h-3.5 w-3.5 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
+                <Star className="h-4 w-4 fill-current" />
               </span>
-              <span className="font-num font-bold tk-text-ink tabular-nums">
+              <span className="font-serif font-bold tk-text-ink tabular-nums">
                 {copy.ratingLabel}
               </span>
               <span aria-hidden="true">·</span>
@@ -665,9 +665,9 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             {/* Plan Value Anchor Selector Section */}
             <section>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base font-extrabold tk-text-ink">{copy.plansHeading}</h3>
+                <h3 className="text-base font-serif font-extrabold tk-text-ink">{copy.plansHeading}</h3>
                 {isProActive && (
-                  <span className="text-xs font-semibold tk-text-forest">
+                  <span className="text-sm font-semibold tk-text-forest">
                     {copy.currentPlanLabel(
                       planOptions.find((p) => p.id === currentPlan)?.title || planOptions[0].title
                     )}
@@ -683,7 +683,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                       key={plan.id}
                       type="button"
                       onClick={() => setSelectedPlan(plan.id)}
-                      className={`w-full rounded-2xl border p-4 text-left transition-colors flex items-center justify-between gap-3 cursor-pointer ${
+                      className={`w-full rounded-[20px] border p-4 text-left transition-colors flex items-center justify-between gap-3 cursor-pointer ${
  selected
  ? 'tk-bc-forest tk-bg-forest-tint'
  : 'tk-bc-hair bg-white hover:tk-bc-hair'
@@ -697,31 +697,31 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
  : 'tk-bc-hair bg-white'
  }`}
                         >
-                          {selected && <Check className="h-3.5 w-3.5 stroke-[3]" />}
+                          {selected && <Check className="h-4 w-4 stroke-[1.5]" />}
                         </span>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-base font-extrabold tk-text-ink">
+                            <span className="text-base font-serif font-extrabold tk-text-ink">
                               {plan.title}
                             </span>
                             {plan.badge && (
-                              <span className="rounded-md tk-bg-forest px-2 py-0.5 font-num text-[11px] font-bold text-white tabular-nums">
+                              <span className="rounded-md tk-bg-forest px-2 py-0.5 font-serif text-[13px] font-bold text-white tabular-nums">
                                 {plan.badge}
                               </span>
                             )}
                           </div>
-                          <p className="mt-0.5 font-num text-xs tk-text-ink2 tabular-nums">
+                          <p className="mt-0.5 font-serif text-sm tk-text-ink2 tabular-nums">
                             {plan.subtitle}
                           </p>
                         </div>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className="font-num text-base font-extrabold tk-text-ink tabular-nums">
+                        <div className="font-serif text-base font-extrabold tk-text-ink tabular-nums">
                           {plan.priceText}
                         </div>
                         {plan.priceSubtext && (
-                          <div className="mt-0.5 text-[11px] tk-text-ink2">
+                          <div className="mt-0.5 text-[13px] tk-text-ink2">
                             {plan.priceSubtext}
                           </div>
                         )}
@@ -733,8 +733,8 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             </section>
 
             {/* Full Included Features Card */}
-            <section className="rounded-2xl border tk-bc-hair bg-white p-5">
-              <h3 className="text-base font-extrabold tk-text-ink">
+            <section className="rounded-[20px] border tk-bc-hair bg-white p-5">
+              <h3 className="text-base font-serif font-extrabold tk-text-ink">
                 {copy.everythingHeading}
               </h3>
               <div className="mt-4 space-y-4">
@@ -746,8 +746,8 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
                         <Icon className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <div className="text-sm font-bold tk-text-ink">{feat.title}</div>
-                        <p className="mt-0.5 text-xs tk-text-ink2 leading-relaxed">
+                        <div className="text-sm font-serif font-bold tk-text-ink">{feat.title}</div>
+                        <p className="mt-0.5 text-sm tk-text-ink2 leading-relaxed">
                           {feat.desc}
                         </p>
                       </div>
@@ -759,29 +759,29 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
 
             {/* Traveler Testimonials Section */}
             <section>
-              <h3 className="text-base font-extrabold tk-text-ink mb-3">
+              <h3 className="text-base font-serif font-extrabold tk-text-ink mb-3">
                 {copy.reviewsHeading}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {reviews.map((rev) => (
                   <article
                     key={rev.author}
-                    className="rounded-2xl border tk-bc-hair bg-white p-4 flex flex-col justify-between gap-3"
+                    className="rounded-[20px] border tk-bc-hair bg-white p-4 flex flex-col justify-between gap-3"
                   >
                     <div>
                       <div className="flex items-center gap-0.5 tk-text-warning">
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        <Star className="h-3.5 w-3.5 fill-current" />
-                        <Star className="h-3.5 w-3.5 fill-current" />
+                        <Star className="h-4 w-4 fill-current" />
+                        <Star className="h-4 w-4 fill-current" />
+                        <Star className="h-4 w-4 fill-current" />
+                        <Star className="h-4 w-4 fill-current" />
+                        <Star className="h-4 w-4 fill-current" />
                       </div>
                       <h4 className="mt-2 text-sm font-bold tk-text-ink">{rev.headline}</h4>
-                      <p className="mt-1.5 text-xs tk-text-ink2 leading-relaxed">
+                      <p className="mt-1.5 text-sm tk-text-ink2 leading-relaxed">
                         {rev.quote}
                       </p>
                     </div>
-                    <div className="pt-2 border-t tk-bc-hair text-[11px] tk-text-ink2">
+                    <div className="pt-2 border-t tk-bc-hair text-[13px] tk-text-ink2">
                       <strong className="tk-text-ink">{rev.author}</strong> · {rev.role}
                     </div>
                   </article>
@@ -798,7 +798,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
               type="button"
               disabled={redeemBusy}
               onClick={() => void handleRedeemSubmit()}
-              className="w-full min-h-[48px] rounded-2xl tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-50 transition-all cursor-pointer whitespace-nowrap"
+              className="w-full min-h-[48px] rounded-[20px] tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press disabled:opacity-50 transition-all cursor-pointer whitespace-nowrap"
             >
               {redeemBusy ? copy.ctaVerifying : copy.ctaRedeem(codeInput)}
             </button>
@@ -806,7 +806,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-full min-h-[48px] rounded-2xl tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press transition-all cursor-pointer whitespace-nowrap"
+              className="w-full min-h-[48px] rounded-[20px] tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press transition-all cursor-pointer whitespace-nowrap"
             >
               {copy.ctaActiveReturn(expiresDateLabel || '')}
             </button>
@@ -818,7 +818,7 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
               onClick={() => {
                 scrollToRedeemSection();
               }}
-              className="w-full min-h-[48px] rounded-2xl tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
+              className="w-full min-h-[48px] rounded-[20px] tk-bg-forest px-5 py-3 text-sm font-bold text-white hover:tk-bg-press transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <MessageCircle className="h-4 w-4 shrink-0" />
               {selectedPlan === 'annual'
@@ -827,9 +827,9 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
             </a>
           )}
 
-          <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] tk-text-ink2">
+          <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[13px] tk-text-ink2">
             <span className="inline-flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 tk-text-forest" />
+              <ShieldCheck className="h-4 w-4 tk-text-forest" />
               {copy.footerShield}
             </span>
 

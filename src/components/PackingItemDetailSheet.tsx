@@ -258,7 +258,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
     <AnimatePresence>
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+          className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-label={displayTitle}
@@ -280,7 +280,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 28 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full sm:max-w-[468px] max-h-[90dvh] overflow-y-auto tk-packing-sheet px-4 sm:px-5 pt-3 pb-6 shadow-2xl space-y-3.5"
+            className="relative z-10 w-full sm:max-w-[468px] max-h-[90dvh] overflow-y-auto tk-packing-sheet px-4 sm:px-5 pt-3 pb-6 tk-elev-soft space-y-3.5"
           >
             {/* Top Grab Handle & Close Affordance */}
             <div className="relative flex items-center justify-center pt-0.5">
@@ -302,10 +302,10 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
             {isRenaming ? (
               <form
                 onSubmit={handleConfirmRename}
-                className="rounded-2xl tk-bg-card border tk-bc-hair p-3.5 space-y-2.5"
+                className="rounded-[20px] tk-bg-card border tk-bc-hair p-3.5 space-y-2.5"
               >
                 <div>
-                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                  <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                     {copy.itemNameLabel}
                   </label>
                   <input
@@ -314,11 +314,11 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={renameText}
                     onChange={(e) => setRenameText(e.target.value)}
                     placeholder={copy.itemNamePlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                  <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                     {copy.subCategoryLabel}
                   </label>
                   <input
@@ -326,11 +326,11 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={subCategoryText}
                     onChange={(e) => setSubCategoryText(e.target.value)}
                     placeholder={copy.subCategoryPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold tk-text-ink2 mb-1">
+                  <label className="block text-[13px] font-semibold tk-text-ink2 mb-1">
                     {copy.noteLabel}
                   </label>
                   <input
@@ -338,20 +338,20 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
                     placeholder={copy.notePlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm tk-text-ink2 focus:tk-bc-forest focus:tk-bg-card focus:outline-none"
                   />
                 </div>
                 <div className="flex items-center justify-end gap-2 pt-0.5">
                   <button
                     type="button"
                     onClick={() => setIsRenaming(false)}
-                    className="min-h-[38px] rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap shrink-0 cursor-pointer"
+                    className="font-serif min-h-[38px] rounded-[16px] border tk-bc-hair tk-bg-card px-3.5 py-1.5 text-sm font-semibold tk-text-ink2 hover:tk-text-ink whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copy.cancelBtn}
                   </button>
                   <button
                     type="submit"
-                    className="min-h-[38px] rounded-xl tk-bg-paper px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                    className="min-h-[38px] rounded-[16px] tk-bg-paper px-4 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copy.saveBtn}
                   </button>
@@ -359,7 +359,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
               </form>
             ) : (
               <div className="px-1 pt-0.5 space-y-1">
-                <h2 className="text-xl sm:text-[22px] font-bold tracking-tight tk-text-ink leading-snug pr-8">
+                <h2 className="font-serif text-xl sm:text-[22px] font-bold tracking-tight tk-text-ink leading-snug pr-8">
                   {displayTitle}
                 </h2>
                 <div className="flex flex-wrap items-center gap-1.5 text-sm tk-text-ink2 tabular-nums">
@@ -376,13 +376,13 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                   <span>{currentBagSpec.shortLabel}</span>
                 </div>
                 {displayWhy && (
-                  <p className="text-xs tk-text-ink2 line-clamp-1">{displayWhy}</p>
+                  <p className="text-sm tk-text-ink2 line-clamp-1">{displayWhy}</p>
                 )}
               </div>
             )}
 
             {/* Card Group 1: Instant Parameters (Quantity, Weight, Bag + Organiser Fine-Tuning) */}
-            <div className="rounded-2xl tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
+            <div className="rounded-[20px] tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
               {/* Row 1: Quantity */}
               <div className="flex items-center justify-between gap-3 px-4 py-3.5 min-h-[64px]">
                 <span className="text-[15px] font-semibold tk-text-ink">
@@ -397,9 +397,9 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     aria-label={copy.decreaseQtyAria}
                     className="flex h-9 w-9 items-center justify-center rounded-full tk-text-ink hover:tk-bg-card disabled:tk-text-ink2 disabled:hover:bg-transparent transition-colors cursor-pointer"
                   >
-                    <Minus className="h-4 w-4 stroke-[2.2]" />
+                    <Minus className="h-4 w-4 stroke-[1.5]" />
                   </button>
-                  <span className="min-w-9 text-center font-num tabular-nums text-[15px] font-bold tk-text-ink">
+                  <span className="min-w-9 text-center font-serif tabular-nums text-[15px] font-bold tk-text-ink">
                     {quantity}
                   </span>
                   <button
@@ -409,7 +409,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     aria-label={copy.increaseQtyAria}
                     className="flex h-9 w-9 items-center justify-center rounded-full tk-text-ink hover:tk-bg-card disabled:tk-text-ink2 transition-colors cursor-pointer"
                   >
-                    <Plus className="h-4 w-4 stroke-[2.2]" />
+                    <Plus className="h-4 w-4 stroke-[1.5]" />
                   </button>
                 </div>
               </div>
@@ -420,7 +420,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                   <div className="text-[15px] font-semibold tk-text-ink">
                     {copy.weightLabel}
                   </div>
-                  <div className="flex items-center gap-2 text-xs tk-text-ink2">
+                  <div className="flex items-center gap-2 text-sm tk-text-ink2">
                     <span>{copy.weightSub}</span>
                     <button
                       type="button"
@@ -460,9 +460,9 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     }}
                     onBlur={(e) => commitWeightString(e.target.value)}
                     aria-label={copy.weightInputAria}
-                    className="w-16 bg-transparent text-center font-num tabular-nums text-[15px] font-bold tk-text-ink focus:outline-none"
+                    className="w-16 bg-transparent text-center font-serif tabular-nums text-[15px] font-bold tk-text-ink focus:outline-none"
                   />
-                  <span className="text-xs font-medium tk-text-ink2 ml-0.5">g</span>
+                  <span className="text-sm font-medium tk-text-ink2 ml-0.5">g</span>
                 </label>
               </div>
 
@@ -472,7 +472,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                   <div className="text-[15px] font-semibold tk-text-ink">
                     {copy.bagLabel}
                   </div>
-                  <div className="text-xs tk-text-ink2">{copy.bagSub}</div>
+                  <div className="text-sm tk-text-ink2">{copy.bagSub}</div>
                 </div>
 
                 <div className="inline-flex items-center rounded-full tk-bg-forest-plate p-1 shrink-0">
@@ -483,7 +483,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                         onSwitchCabinCheckIn(group.id, item.id, 'cabin');
                       }
                     }}
-                    className={`min-h-[36px] px-3.5 rounded-full text-xs sm:text-[13px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`min-h-[36px] px-3.5 rounded-full text-sm sm:text-[13px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isCabin
  ? 'tk-bg-paper tk-text-card'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -498,7 +498,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                         onSwitchCabinCheckIn(group.id, item.id, 'checkin');
                       }
                     }}
-                    className={`min-h-[36px] px-3.5 rounded-full text-xs sm:text-[13px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`min-h-[36px] px-3.5 rounded-full text-sm sm:text-[13px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  !isCabin
  ? 'tk-bg-paper tk-text-card'
  : 'tk-text-ink2 hover:tk-text-ink'
@@ -510,7 +510,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
               </div>
 
               {/* Row 4 (Fusion Fine-Tune): 9-Bag Cube, Category & Crew Member */}
-              <div className="px-4 py-3 tk-bg-paper flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="px-4 py-3 tk-bg-paper flex flex-wrap items-center justify-between gap-2 text-sm">
                 <span className="font-medium tk-text-ink2 whitespace-nowrap">
                   {copy.organiserLabel}
                 </span>
@@ -580,7 +580,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
             </div>
 
             {/* Card Group 2: Smart Actions & Affiliate Commerce */}
-            <div className="rounded-2xl tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
+            <div className="rounded-[20px] tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
               {/* Action 0: Go-Mode Offline Ticket Wallet Bridge for 0g Digital Passes & Vouchers */}
               {onOpenInGoMode && isDigitalOrPassCandidateItem(item, group.id) && (
                 <button
@@ -599,7 +599,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                       <div className="text-[15px] font-semibold tk-text-forest">
                         {copy.goModeTitle}
                       </div>
-                      <div className="text-xs tk-text-ink2">{copy.goModeSub}</div>
+                      <div className="text-sm tk-text-ink2">{copy.goModeSub}</div>
                     </div>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 tk-text-forest" />
@@ -622,7 +622,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     <div className="text-[15px] font-semibold tk-text-ink">
                       {copy.alwaysPackTitle}
                     </div>
-                    <div className="text-xs tk-text-ink2">{copy.alwaysPackSub}</div>
+                    <div className="text-sm tk-text-ink2">{copy.alwaysPackSub}</div>
                   </div>
                 </div>
 
@@ -634,7 +634,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
  }`}
                   aria-hidden="true"
                 >
-                  <Check className="h-3.5 w-3.5 stroke-[2.6]" />
+                  <Check className="h-4 w-4 stroke-[1.5]" />
                 </span>
               </button>
 
@@ -654,7 +654,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     <div className="text-[15px] font-semibold tk-text-ink">
                       {copy.toBuyTitle}
                     </div>
-                    <div className="text-xs tk-text-ink2">{copy.toBuySub}</div>
+                    <div className="text-sm tk-text-ink2">{copy.toBuySub}</div>
                   </div>
                 </div>
 
@@ -666,7 +666,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
  }`}
                   aria-hidden="true"
                 >
-                  <Check className="h-3.5 w-3.5 stroke-[2.6]" />
+                  <Check className="h-4 w-4 stroke-[1.5]" />
                 </span>
               </button>
 
@@ -684,10 +684,10 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                       <div className="min-w-0">
                         <div className="inline-flex items-center gap-1.5 text-[15px] font-semibold tk-text-ink group-hover:tk-text-forest transition-colors">
                           <span>{primaryStoreTitle}</span>
-                          <ExternalLink className="h-3.5 w-3.5 tk-text-ink2" />
+                          <ExternalLink className="h-4 w-4 tk-text-ink2" />
                         </div>
                         {storeDisclosureText && (
-                          <p className="mt-0.5 text-xs leading-relaxed tk-text-ink2">
+                          <p className="mt-0.5 text-sm leading-relaxed tk-text-ink2">
                             {storeDisclosureText}
                           </p>
                         )}
@@ -699,7 +699,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                         href={secondaryOffer.url}
                         target="_blank"
                         rel="noopener noreferrer nofollow sponsored"
-                        className="min-h-[34px] inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper hover:tk-bc-forest px-2.5 py-1 text-xs font-semibold tk-text-ink2 whitespace-nowrap shrink-0"
+                        className="min-h-[34px] inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-paper hover:tk-bc-forest px-2.5 py-1 text-sm font-semibold tk-text-ink2 whitespace-nowrap shrink-0"
                       >
                         <span>
                           {secondaryOffer.merchant === 'Amazon'
@@ -729,7 +729,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                     <div className="text-[15px] font-semibold tk-text-ink">
                       {copy.morningTitle}
                     </div>
-                    <div className="text-xs tk-text-ink2">{copy.morningSub}</div>
+                    <div className="text-sm tk-text-ink2">{copy.morningSub}</div>
                   </div>
                 </div>
 
@@ -741,7 +741,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
  }`}
                   aria-hidden="true"
                 >
-                  <Check className="h-3.5 w-3.5 stroke-[2.6]" />
+                  <Check className="h-4 w-4 stroke-[1.5]" />
                 </span>
               </button>
 
@@ -759,7 +759,7 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
             </div>
 
             {/* Card Group 3: Destructive Actions */}
-            <div className="rounded-2xl tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
+            <div className="rounded-[20px] tk-bg-card border tk-bc-hair divide-y tk-divide-hair overflow-hidden">
               <button
                 type="button"
                 onClick={() => {

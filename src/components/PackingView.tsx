@@ -326,7 +326,7 @@ const CategoryPieTooltip: React.FC<{
   const tipCopy = getCategoryPieTooltipCopy(lang);
 
   return (
-    <div className="rounded-xl border tk-bc-hair tk-bg-card px-3.5 py-2.5 shadow-lg text-xs space-y-1">
+    <div className="rounded-[16px] border tk-bc-hair tk-bg-card px-3.5 py-2.5 tk-elev-soft text-sm space-y-1">
       <div className="font-bold tk-text-ink">{d.name}</div>
       <div className="flex items-center justify-between gap-4 tk-text-ink2">
         <span>
@@ -336,7 +336,7 @@ const CategoryPieTooltip: React.FC<{
             ? tipCopy.totalItems
             : tipCopy.categoryWeight}
         </span>
-        <span className="font-num font-bold tk-text-ink">
+        <span className="font-serif font-bold tk-text-ink">
           {metric === 'weight'
             ? formatTotalWeightByPref(d.weightGrams, unitSystem)
             : tipCopy.countText(d.value)}{' '}
@@ -345,7 +345,7 @@ const CategoryPieTooltip: React.FC<{
       </div>
       <div className="flex items-center justify-between gap-4 tk-text-ink2 border-t tk-bc-hair pt-1">
         <span>{tipCopy.progressLabel}</span>
-        <span className="font-num">
+        <span className="font-serif">
           {tipCopy.progressStats(d.doneCount, d.totalCount, d.pendingCount)}
         </span>
       </div>
@@ -996,23 +996,23 @@ export const PackingView: React.FC<PackingViewProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       {/* Left Main Checklist */}
       <div className="lg:col-span-8 space-y-4">
         {/* Minimalist Top Control Card: Progress + View Switch + Standalone Sheet Triggers */}
         <section
           ref={quickAddSectionRef}
-          className="rounded-2xl border tk-bc-hair tk-bg-card p-4 sm:p-5 space-y-3.5"
+          className="rounded-[20px] border tk-bc-hair tk-bg-card p-4 sm:p-5 space-y-3.5"
         >
           {/* Row 1: Fixed-Height Progress + Weight Pill (Left) & [By List | By Bag] + [👥 Member ⌄] (Right) */}
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-1.5 sm:gap-2">
               <div className="inline-flex items-center gap-1.5 sm:gap-2 min-w-0">
                 <div className="inline-flex items-baseline gap-1 shrink-0">
-                  <span className="font-num text-base sm:text-lg font-extrabold tk-text-ink tabular-nums">
+                  <span className="font-serif text-base sm:text-lg font-extrabold tk-text-ink tabular-nums">
                     {doneCount}/{totalCount}
                   </span>
-                  <span className="text-xs tk-text-ink2 whitespace-nowrap">
+                  <span className="text-sm tk-text-ink2 whitespace-nowrap">
                     {copy.packedSuffix}
                   </span>
                 </div>
@@ -1023,20 +1023,20 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   onClick={() => setWeightModalOpen(true)}
                   aria-label={copy.openWeightAria}
                   title={copy.openWeightTitle}
-                  className={`h-7 inline-flex items-center gap-1 rounded-full border px-2 sm:px-2.5 text-xs font-bold tabular-nums whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                  className={`h-7 inline-flex items-center gap-1 rounded-full border px-2 sm:px-2.5 text-sm font-bold tabular-nums whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
  isCarryOnOverweight || isCheckedOverweight
  ? 'tk-bc-danger-hair tk-bg-danger-tint tk-text-danger hover:tk-bg-danger-tint'
  : 'tk-bc-hair tk-bg-paper tk-text-ink hover:tk-bc-forest hover:tk-bg-forest-tint'
  }`}
                 >
                   {isCarryOnOverweight || isCheckedOverweight ? (
-                    <AlertTriangle className="h-3.5 w-3.5 tk-text-danger shrink-0" />
+                    <AlertTriangle className="h-4 w-4 tk-text-danger shrink-0" />
                   ) : (
-                    <PieChartIcon className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                    <PieChartIcon className="h-4 w-4 tk-text-forest shrink-0" />
                   )}
-                  <span className="font-num">{totalWeightFormatted}</span>
+                  <span className="font-serif">{totalWeightFormatted}</span>
                   {(isCarryOnOverweight || isCheckedOverweight) && (
-                    <span className="hidden sm:inline text-[11px]">
+                    <span className="hidden sm:inline text-[13px]">
                       {copy.overweightDot}
                     </span>
                   )}
@@ -1045,14 +1045,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
 
               {/* Perspective Cluster: [按分类 | 按箱包] + Adaptive Member Selector [👥 ⌄] */}
               <div className="inline-flex items-center gap-1.5 shrink-0">
-                <div className="inline-flex items-center gap-0.5 rounded-xl tk-bg-forest-plate p-0.5 shrink-0">
+                <div className="inline-flex items-center gap-0.5 rounded-[16px] tk-bg-forest-plate p-0.5 shrink-0">
                   <button
                     type="button"
                     onClick={() => setSmartPackOpen(false)}
-                    className={`h-7 inline-flex items-center gap-1 rounded-lg px-2 sm:px-2.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`h-7 inline-flex items-center gap-1 rounded-lg px-2 sm:px-2.5 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  !smartPackOpen
- ? 'tk-bg-card tk-text-ink shadow-xs'
- : 'tk-text-ink2 hover:tk-text-ink'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'border border-transparent tk-text-ink2 hover:tk-text-ink'
  }`}
                   >
                     <span>{copy.byList}</span>
@@ -1060,14 +1060,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setSmartPackOpen(true)}
-                    className={`h-7 inline-flex items-center gap-1 rounded-lg px-2 sm:px-2.5 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    className={`h-7 inline-flex items-center gap-1 rounded-lg px-2 sm:px-2.5 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  smartPackOpen
- ? 'tk-bg-card tk-text-ink shadow-xs'
- : 'tk-text-ink2 hover:tk-text-ink'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'border border-transparent tk-text-ink2 hover:tk-text-ink'
  }`}
                   >
                     <Luggage
-                      className={`h-3.5 w-3.5 shrink-0 ${
+                      className={`h-4 w-4 shrink-0 ${
  smartPackOpen ? 'tk-text-forest' : 'tk-text-ink2'
  }`}
                     />
@@ -1082,11 +1082,11 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       onClick={() => setShowMemberMenu((v) => !v)}
                       aria-label={copy.filterTravelerAria}
                       title={copy.filterTravelerAria}
-                      className="h-8 inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper px-2 sm:px-2.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
+                      className="h-8 inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-2 sm:px-2.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {activeMemberId === 'all' ? (
                         <>
-                          <Users className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                          <Users className="h-4 w-4 tk-text-forest shrink-0" />
                           <span className="hidden sm:inline">{t('packing.filterAll')}</span>
                         </>
                       ) : (
@@ -1106,7 +1106,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               </span>
                             </>
                           ) : (
-                            <Users className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                            <Users className="h-4 w-4 tk-text-forest shrink-0" />
                           );
                         })()
                       )}
@@ -1114,24 +1114,24 @@ export const PackingView: React.FC<PackingViewProps> = ({
                     </button>
 
                     {showMemberMenu && (
-                      <div className="absolute right-0 top-full mt-1.5 z-30 min-w-[152px] rounded-xl border tk-bc-hair tk-bg-card p-1 shadow-lg space-y-0.5">
+                      <div className="absolute right-0 top-full mt-1.5 z-30 min-w-[152px] rounded-[16px] border tk-bc-hair tk-bg-card p-1 tk-elev-soft space-y-0.5">
                         <button
                           type="button"
                           onClick={() => {
                             setActiveMemberId('all');
                             setShowMemberMenu(false);
                           }}
-                          className={`w-full flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold cursor-pointer ${
+                          className={`w-full flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-sm font-semibold cursor-pointer ${
  activeMemberId === 'all'
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-text-ink hover:tk-bg-forest-plate'
  }`}
                         >
                           <span className="inline-flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+                            <Users className="h-4 w-4 tk-text-forest shrink-0" />
                             <span>{t('packing.filterAll')}</span>
                           </span>
-                          {activeMemberId === 'all' && <Check className="h-3.5 w-3.5 shrink-0" />}
+                          {activeMemberId === 'all' && <Check className="h-4 w-4 shrink-0" />}
                         </button>
                         {crew.map((m) => (
                           <button
@@ -1141,7 +1141,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               setActiveMemberId(m.id);
                               setShowMemberMenu(false);
                             }}
-                            className={`w-full flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold cursor-pointer ${
+                            className={`w-full flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-sm font-semibold cursor-pointer ${
  activeMemberId === m.id
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-text-ink hover:tk-bg-forest-plate'
@@ -1157,7 +1157,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               </span>
                               <span>{translateMemberName(m.name, activeLang)}</span>
                             </span>
-                            {activeMemberId === m.id && <Check className="h-3.5 w-3.5 shrink-0" />}
+                            {activeMemberId === m.id && <Check className="h-4 w-4 shrink-0" />}
                           </button>
                         ))}
                       </div>
@@ -1188,21 +1188,21 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <button
               type="button"
               onClick={() => openAddGearSheet('for_you', 'auto')}
-              className="h-8 inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3 text-xs font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-8 inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <Plus className="h-3.5 w-3.5 shrink-0" />
+              <Plus className="h-4 w-4 shrink-0" />
               <span>{copy.addGearBtn}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setToBuyModalOpen(true)}
-              className="h-8 inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-8 inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-paper px-2.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <ShoppingBag className="h-3.5 w-3.5 tk-text-warning shrink-0" />
+              <ShoppingBag className="h-4 w-4 tk-text-forest shrink-0" />
               <span>{copy.toBuyBtn}</span>
               {toBuyCount > 0 && (
-                <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full tk-bg-danger-tint px-1 font-num text-[10px] font-bold tk-text-danger tabular-nums">
+                <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full tk-bg-danger-tint px-1 font-serif text-[13px] font-bold tk-text-danger tabular-nums">
                   {toBuyCount}
                 </span>
               )}
@@ -1211,12 +1211,12 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <button
               type="button"
               onClick={() => setTasksModalOpen(true)}
-              className="h-8 inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="h-8 inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-paper px-2.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <ListTodo className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+              <ListTodo className="h-4 w-4 tk-text-forest shrink-0" />
               <span>{copy.todosBtn}</span>
               {pendingTasksCount > 0 && (
-                <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full tk-bg-forest-tint px-1 font-num text-[10px] font-bold tk-text-forest tabular-nums">
+                <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full tk-bg-forest-tint px-1 font-serif text-[13px] font-bold tk-text-forest tabular-nums">
                   {pendingTasksCount}
                 </span>
               )}
@@ -1229,7 +1229,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                 initial={shouldReduceMotion ? false : { opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center justify-between gap-3 rounded-xl border tk-bc-hair tk-bg-forest-tint px-4 py-2 text-xs tk-text-forest"
+                className="flex items-center justify-between gap-3 rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-4 py-2 text-sm tk-text-forest"
               >
                 <span className="inline-flex items-center gap-2 font-semibold">
                   <PartyPopper className="h-4 w-4 shrink-0 tk-text-forest" />
@@ -1259,9 +1259,9 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   type="button"
                   data-chip-active={isActive ? 'true' : undefined}
                   onClick={() => setFilter(m)}
-                  className={`h-8 rounded-full px-3.5 text-xs font-bold tabular-nums transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`h-8 rounded-full px-3.5 text-sm font-bold tabular-nums transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  isActive
- ? 'tk-bg-forest tk-text-card shadow-xs'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'border tk-bc-hair tk-bg-card tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink'
  }`}
                 >
@@ -1357,7 +1357,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   }
                   setDragData(null);
                 }}
-                className={`rounded-2xl border tk-bg-card overflow-hidden transition-colors ${
+                className={`rounded-[20px] border tk-bg-card overflow-hidden transition-colors ${
  isGroupDropTarget
  ? 'tk-bc-forest ring-2 tk-rc-forest'
  : isGroupAllDone
@@ -1374,14 +1374,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         value={groupEditTitle}
                         onChange={(e) => setGroupEditTitle(e.target.value)}
                         placeholder={t('packingExtra.groupNamePlaceholder')}
-                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
+                        className="rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
                       />
                       <input
                         type="text"
                         value={groupEditCube}
                         onChange={(e) => setGroupEditCube(e.target.value)}
                         placeholder={t('packingExtra.groupCubePlaceholder')}
-                        className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink2"
+                        className="rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 text-base sm:text-sm tk-text-ink2"
                       />
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1403,14 +1403,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         <button
                           type="button"
                           onClick={() => setEditingGroupId(null)}
-                          className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-xs font-semibold tk-text-ink2 cursor-pointer"
+                          className="rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-sm font-semibold tk-text-ink2 cursor-pointer"
                         >
                           {t('common.cancel')}
                         </button>
                         <button
                           type="button"
                           onClick={() => saveGroupEdit(grp.id)}
-                          className="rounded-lg tk-bg-forest px-3 py-1 text-xs font-semibold tk-text-card cursor-pointer"
+                          className="rounded-lg tk-bg-forest px-3 py-1 text-sm font-semibold tk-text-card cursor-pointer"
                         >
                           {t('packingExtra.saveGroup')}
                         </button>
@@ -1445,10 +1445,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         size="md"
                       />
                       <div className="min-w-0">
-                        <h3 className="text-[15px] font-bold tk-text-ink truncate">
+                        <h3 className="text-[15px] font-serif font-bold tk-text-ink truncate">
                           {translateGroupTitleLabel(grp.id, grp.title, activeLang)}
                         </h3>
-                        <p className="text-xs tk-text-ink2 leading-snug">
+                        <p className="text-[15px] tk-text-ink2 leading-snug">
                           {translateGroupCubeLabel(grp.cubeLabel, activeLang)}
                         </p>
                       </div>
@@ -1456,14 +1456,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span
-                        className={`inline-flex h-7 min-w-11 items-center justify-center rounded-xl px-2.5 font-num text-xs font-bold ${
+                        className={`inline-flex h-7 min-w-11 items-center justify-center rounded-[16px] px-2.5 font-serif text-sm font-bold ${
  isGroupAllDone
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'tk-bg-forest-plate tk-text-forest'
  }`}
                       >
                         {isGroupAllDone ? (
-                          <Check className="h-3.5 w-3.5 stroke-[2.6]" />
+                          <Check className="h-4 w-4 stroke-[1.5]" />
                         ) : (
                           `${grpDone}/${perspectiveItems.length}`
                         )}
@@ -1497,7 +1497,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
 
                 {/* Tucked Category Management Drawer */}
                 {expandedGroupMenuId === grp.id && !isEditingGroup && (
-                  <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-sm">
                     <span className="tk-text-ink2">{t('packingExtra.manageGroupHint')}</span>
                     <div className="flex flex-wrap items-center gap-1.5">
                       <button
@@ -1539,7 +1539,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                 {!isClosed && (
                   <div className="border-t tk-bc-hair divide-y tk-divide-hair">
                     {visibleItems.length === 0 && (
-                      <div className="px-5 py-4 text-xs tk-text-ink2 flex items-center justify-between">
+                      <div className="px-5 py-4 text-sm tk-text-ink2 flex items-center justify-between">
                         <span>{t('packingExtra.emptyGroupHint')}</span>
                         <button
                           type="button"
@@ -1592,10 +1592,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
                           <React.Fragment key={cluster.key}>
                             {cluster.label && (
                               <div className="px-4 sm:px-5 py-1.5 tk-bg-paper flex items-center justify-between gap-2">
-                                <span className="text-[11px] font-bold tracking-tight tk-text-ink2">
+                                <span className="text-[13px] font-serif font-bold tracking-tight tk-text-ink2">
                                   {cluster.label}
                                 </span>
-                                <span className="font-num tabular-nums text-[11px] font-semibold tk-text-ink2">
+                                <span className="font-serif tabular-nums text-[13px] font-semibold tk-text-ink2">
                                   {clusterDoneCount}/{cluster.items.length}
                                 </span>
                               </div>
@@ -1664,7 +1664,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                 aria-hidden={swipedItemId !== item.id}
                               >
                                 <div
-                                  className={`flex items-center px-4 tk-text-card text-xs font-semibold transition-opacity ${
+                                  className={`flex items-center px-4 tk-text-card text-sm font-semibold transition-opacity ${
  currentSwipeOffset > 0
  ? 'tk-bg-forest opacity-100'
  : 'opacity-0'
@@ -1684,7 +1684,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => openItemDetailSheet(item.id)}
-                                    className="w-14 tk-bg-forest tk-text-card text-xs font-semibold hover:tk-bg-press whitespace-nowrap cursor-pointer"
+                                    className="w-14 tk-bg-forest tk-text-card text-sm font-semibold hover:tk-bg-press whitespace-nowrap cursor-pointer"
                                   >
                                     {t('common.edit')}
                                   </button>
@@ -1694,7 +1694,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                       onDeleteItem(grp.id, item.id);
                                       setSwipedItemId(null);
                                     }}
-                                    className="w-14 tk-bg-danger tk-text-card text-xs font-semibold hover:tk-bg-danger whitespace-nowrap cursor-pointer"
+                                    className="w-14 tk-bg-danger tk-text-card text-sm font-semibold hover:tk-bg-danger whitespace-nowrap cursor-pointer"
                                   >
                                     {t('common.delete')}
                                   </button>
@@ -1743,16 +1743,16 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     onToggleItem(grp.id, item.id, activeMemberId);
                                   }}
                                   aria-label={item.name}
-                                  className="-ml-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl hover:tk-bg-forest-plate transition-colors cursor-pointer"
+                                  className="-ml-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-[16px] hover:tk-bg-forest-plate transition-colors cursor-pointer"
                                 >
                                   <span
-                                    className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
+                                    className={`flex h-5 w-5 items-center justify-center rounded-md border-[1.5px] transition-colors ${
  item.done
  ? 'tk-bc-forest tk-bg-forest tk-text-card'
- : 'tk-bc-hair tk-bg-card'
+ : 'tk-bc-forest tk-bg-card'
  }`}
                                   >
-                                    {item.done && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
+                                    {item.done && <Check className="h-4 w-4 stroke-[1.5]" />}
                                   </span>
                                 </button>
 
@@ -1794,11 +1794,11 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                           {translateDemoPackItemName(item.name, activeLang)}
                                         </span>
                                         {itemQty > 1 && (
-                                          <span className="font-num tabular-nums text-xs font-bold tk-text-forest">
+                                          <span className="font-serif tabular-nums text-sm font-bold tk-text-forest">
                                             ×{itemQty}
                                           </span>
                                         )}
-                                        <span className="tabular-nums text-xs tk-text-ink2">
+                                        <span className="font-serif tabular-nums text-sm tk-text-ink2">
                                           {formatItemWeightByPref(item.weightGrams, unitSystem)}
                                           {itemQty > 1 &&
                                             ` (${formatItemWeightByPref(itemUnitW, unitSystem)}${t(
@@ -1824,7 +1824,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                   })()}
 
                                   {isShared && (
-                                    <p className="mt-0.5 text-xs tk-text-ink2 leading-snug">
+                                    <p className="mt-0.5 text-[15px] tk-text-ink2 leading-snug">
                                       {item.done
                                         ? t('packingExtra.sharedDone', {
                                             name: translateMemberName(
@@ -1859,7 +1859,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     className="relative flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-105 cursor-pointer"
                                   >
                                     <span
-                                      className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
+                                      className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[13px] font-bold ${
  responsibleMember
  ? HERO_AVATAR_BG[responsibleMember.accent]
  : HERO_AVATAR_BG.teal
@@ -1872,7 +1872,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     </span>
                                     {isShared && (
                                       <span
-                                        className="absolute bottom-0 right-0 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-white tk-bg-forest tk-text-card"
+                                        className="absolute bottom-0 right-0 flex h-4 w-4 items-center justify-center rounded-full border border-white tk-bg-forest tk-text-card"
                                         aria-hidden="true"
                                       >
                                         <Users className="h-2 w-2" />
@@ -1884,7 +1884,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     type="button"
                                     onClick={() => openItemDetailSheet(item.id)}
                                     aria-label={item.name}
-                                    className="flex h-9 w-9 items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink transition-colors cursor-pointer"
+                                    className="flex h-9 w-9 items-center justify-center rounded-[16px] tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink transition-colors cursor-pointer"
                                   >
                                     <MoreHorizontal className="h-4 w-4" />
                                   </button>
@@ -1906,7 +1906,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
           })}
 
                   {/* Packy-Style Bottom Standalone Collapsible Category: Always Pack Library */}
-                  <section className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden transition-colors">
+                  <section className="rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden transition-colors">
                     <div className="flex items-center justify-between gap-2 px-4 sm:px-5 py-3.5 hover:tk-bg-paper transition-colors">
                       <button
                         type="button"
@@ -1915,17 +1915,17 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       >
                         <AccentIconBadge accent="teal" icon={Bookmark} size="md" />
                         <div className="min-w-0">
-                          <h3 className="text-[15px] font-bold tk-text-ink truncate">
+                          <h3 className="text-[15px] font-serif font-bold tk-text-ink truncate">
                             {copy.alwaysPackLibTitle}
                           </h3>
-                          <p className="text-xs tk-text-ink2 leading-snug">
+                          <p className="text-[15px] tk-text-ink2 leading-snug">
                             {copy.alwaysPackLibDesc}
                           </p>
                         </div>
                       </button>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="inline-flex h-6 min-w-8 items-center justify-center rounded-lg tk-bg-paper px-2 font-num text-xs font-bold tk-text-ink2 tabular-nums">
+                        <span className="inline-flex h-6 min-w-8 items-center justify-center rounded-lg tk-bg-paper px-2 font-serif text-sm font-bold tk-text-ink2 tabular-nums">
                           {alwaysPackLibrary.length}
                         </span>
                         <button
@@ -1936,7 +1936,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               ? copy.expandAlwaysPackAria
                               : copy.collapseAlwaysPackAria
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-xl tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink cursor-pointer"
+                          className="flex h-8 w-8 items-center justify-center rounded-[16px] tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink cursor-pointer"
                         >
                           {alwaysPackCollapsed ? (
                             <ChevronRight className="h-4 w-4" />
@@ -1949,7 +1949,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
 
                     {!alwaysPackCollapsed && (
                       <div className="border-t tk-bc-hair px-4 sm:px-5 py-3.5 space-y-3 tk-bg-paper">
-                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
                           <span className="tk-text-ink2">
                             {copy.alwaysPackStarHint}
                           </span>
@@ -1957,25 +1957,25 @@ export const PackingView: React.FC<PackingViewProps> = ({
                             <button
                               type="button"
                               onClick={onSeedAlwaysPack}
-                              className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                              className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                             >
-                              <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                              <Sparkles className="h-4 w-4 shrink-0" />
                               {copy.extractEssentialsBtn}
                             </button>
                           ) : (
                             <button
                               type="button"
                               onClick={onSyncAlwaysPack}
-                              className="inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
+                              className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0 cursor-pointer"
                             >
-                              <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+                              <RefreshCw className="h-4 w-4 shrink-0" />
                               {copy.syncToTripBtn}
                             </button>
                           )}
                         </div>
 
                         {alwaysPackLibrary.length > 0 ? (
-                          <div className="divide-y tk-divide-hair rounded-xl border tk-bc-hair tk-bg-card">
+                          <div className="divide-y tk-divide-hair rounded-[16px] border tk-bc-hair tk-bg-card">
                             {alwaysPackLibrary.map((tpl) => {
                               const existsInTrip = groups.some((g) =>
                                 g.items.some(
@@ -1987,25 +1987,25 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               return (
                                 <div
                                   key={tpl.id}
-                                  className="px-3.5 py-2.5 flex items-center justify-between gap-2 text-xs"
+                                  className="px-3.5 py-2.5 flex items-center justify-between gap-2 text-sm"
                                 >
                                   <div className="min-w-0 flex items-center gap-2 flex-wrap">
                                     <span className="font-semibold tk-text-ink">
                                       {translateDemoPackItemName(tpl.name, activeLang)}
                                     </span>
                                     {(tpl.quantity || 1) > 1 && (
-                                      <span className="font-num font-bold tk-text-forest">
+                                      <span className="font-serif font-bold tk-text-forest">
                                         ×{tpl.quantity}
                                       </span>
                                     )}
-                                    <span className="font-num tabular-nums text-xs tk-text-ink2">
+                                    <span className="font-serif tabular-nums text-sm tk-text-ink2">
                                       {formatItemWeightByPref(
                                         tpl.unitWeightGrams * Math.max(1, tpl.quantity || 1),
                                         unitSystem
                                       )}
                                     </span>
                                     {existsInTrip && (
-                                      <span className="rounded tk-bg-forest-tint px-1.5 py-0.5 text-[10px] font-semibold tk-text-forest">
+                                      <span className="rounded tk-bg-forest-tint px-1.5 py-0.5 text-[13px] font-semibold tk-text-forest">
                                         {copy.inTripBadge}
                                       </span>
                                     )}
@@ -2018,14 +2018,14 @@ export const PackingView: React.FC<PackingViewProps> = ({
                                     aria-label={tpl.name}
                                     className="h-7 w-7 inline-flex items-center justify-center rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger shrink-0 cursor-pointer"
                                   >
-                                    <X className="h-3.5 w-3.5" />
+                                    <X className="h-4 w-4" />
                                   </button>
                                 </div>
                               );
                             })}
                           </div>
                         ) : (
-                          <div className="rounded-xl border border-dashed tk-bc-hair tk-bg-card px-4 py-3 text-center text-xs tk-text-ink2">
+                          <div className="rounded-[16px] border border-dashed tk-bc-hair tk-bg-card px-4 py-3 text-center text-sm tk-text-ink2">
                             {copy.emptyAlwaysPackHint}
                           </div>
                         )}
@@ -2041,18 +2041,18 @@ export const PackingView: React.FC<PackingViewProps> = ({
       {/* Clean Right Rail: 2 Focused Cards */}
       <div className="lg:col-span-4 space-y-4">
         {/* Card 1: Packing Reminder Scheduler */}
-        <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5 space-y-3.5">
+        <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5 space-y-3.5">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
               <AccentIconBadge accent="peach" icon={BellRing} size="md" />
-              <h3 className="text-[15px] font-bold tk-text-ink truncate">
+              <h3 className="text-[15px] font-serif font-bold tk-text-ink truncate">
                 {t('packingExtra.reminderTitle')}
               </h3>
             </div>
             <button
               type="button"
               onClick={() => onUpdateReminder({ ...reminder, enabled: !reminder.enabled })}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+              className={`rounded-lg px-2.5 py-1 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  reminder.enabled
  ? 'tk-bg-forest tk-text-card'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2'
@@ -2064,13 +2064,13 @@ export const PackingView: React.FC<PackingViewProps> = ({
             </button>
           </div>
 
-          <p className="text-xs leading-relaxed tk-text-ink2">
+          <p className="text-[15px] leading-relaxed tk-text-ink2">
             {scheduledSummary}
             {t('packingExtra.reminderDescSuffix')}
           </p>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="font-semibold tk-text-ink2">
                 {t('packingExtra.triggerTiming')}
               </span>
@@ -2097,7 +2097,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                     key={hrs}
                     type="button"
                     onClick={() => onUpdateReminder({ ...reminder, enabled: true, leadHours: hrs })}
-                    className={`rounded-xl py-1.5 font-num text-xs font-semibold transition-colors cursor-pointer ${
+                    className={`rounded-[16px] py-1.5 font-serif text-sm font-semibold transition-colors cursor-pointer ${
  reminder.leadHours === hrs
  ? 'tk-bg-forest-tint border tk-bc-forest tk-text-forest'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2'
@@ -2122,7 +2122,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       customDateTime: e.target.value,
                     })
                   }
-                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm font-num tk-text-ink"
+                  className="flex-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-base sm:text-sm font-serif tk-text-ink"
                 />
               </div>
             )}
@@ -2147,9 +2147,9 @@ export const PackingView: React.FC<PackingViewProps> = ({
                 key={sc.id}
                 type="button"
                 onClick={() => onUpdateReminder({ ...reminder, scope: sc.id })}
-                className={`rounded-xl py-1.5 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
+                className={`rounded-[16px] py-1.5 text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer ${
  reminder.scope === sc.id
- ? 'tk-bg-forest tk-text-card'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'border tk-bc-hair tk-bg-paper tk-text-ink2'
  }`}
               >
@@ -2164,7 +2164,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                 <button
                   type="button"
                   onClick={onRequestBrowserPermission}
-                  className="flex-1 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 py-2 text-xs font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer"
+                  className="flex-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-2.5 py-2 text-sm font-semibold tk-text-ink hover:tk-bc-forest cursor-pointer"
                 >
                   {t('packingExtra.desktopNotifBtn')}
                 </button>
@@ -2172,7 +2172,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               <button
                 type="button"
                 onClick={onTriggerTestReminder}
-                className="flex-1 rounded-xl border tk-bc-hair tk-bg-forest-tint px-2.5 py-2 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
+                className="flex-1 rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-2.5 py-2 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
               >
                 {t('packingExtra.previewPreNight', { count: preNightPending.length })}
               </button>
@@ -2180,15 +2180,15 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <button
               type="button"
               onClick={onTriggerMorningReminder}
-              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-xs font-semibold tk-text-warning hover:tk-bg-warning-tint cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-[16px] border tk-bc-warning-hair tk-bg-warning-tint px-3 py-2 text-sm font-semibold tk-text-warning hover:tk-bg-warning-tint cursor-pointer"
             >
-              <Sun className="h-3.5 w-3.5" />
+              <Sun className="h-4 w-4" />
               {t('packingExtra.previewMorning', { count: morningPending.length })}
             </button>
 
             {onAddCustomPackingAlert && (
               <div className="pt-2 border-t tk-bc-hair space-y-2">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center justify-between text-sm">
                   <span className="font-semibold tk-text-ink2">
                     {copy.customDeadlinesTitle}
                   </span>
@@ -2223,7 +2223,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       setCustomDeadlineTitle('');
                       setShowCustomDeadlineForm(false);
                     }}
-                    className="rounded-xl border tk-bc-hair tk-bg-paper p-3 space-y-2"
+                    className="rounded-[16px] border tk-bc-hair tk-bg-paper p-3 space-y-2"
                   >
                     <input
                       type="text"
@@ -2233,7 +2233,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                       className="w-full rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
                     />
                     {tasks.filter((tk) => !tk.done).length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1 text-xs">
+                      <div className="flex flex-wrap items-center gap-1 text-sm">
                         <span className="tk-text-ink2">
                           {copy.fromTodoLabel}
                         </span>
@@ -2260,17 +2260,17 @@ export const PackingView: React.FC<PackingViewProps> = ({
                         type="datetime-local"
                         value={customDeadlineTime}
                         onChange={(e) => setCustomDeadlineTime(e.target.value)}
-                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm tk-text-ink tabular-nums"
+                        className="flex-1 min-w-0 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-serif text-base sm:text-sm tk-text-ink tabular-nums"
                       />
                       <button
                         type="submit"
                         disabled={!customDeadlineTitle.trim()}
-                        className="rounded-lg tk-bg-forest px-3 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 whitespace-nowrap cursor-pointer"
+                        className="rounded-lg tk-bg-forest px-3 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press disabled:opacity-40 whitespace-nowrap cursor-pointer"
                       >
                         {copy.schedulePushBtn}
                       </button>
                     </div>
-                    <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                    <div className="flex flex-wrap items-center gap-1.5 text-sm">
                       <span className="tk-text-ink2">
                         {copy.quickLabel}
                       </span>
@@ -2297,17 +2297,17 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   const nowSnap = Date.now();
                   if (activeDeadlines.length === 0) return null;
                   return (
-                    <div className="divide-y tk-divide-hair rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1">
+                    <div className="divide-y tk-divide-hair rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1">
                       {activeDeadlines.slice(0, 5).map((item) => (
                         <div
                           key={item.signature}
-                          className="py-1.5 flex items-center justify-between gap-2 text-xs"
+                          className="py-1.5 flex items-center justify-between gap-2 text-sm"
                         >
                           <div className="min-w-0">
                             <div className="text-[15px] font-semibold tk-text-ink truncate">
                               {item.title}
                             </div>
-                            <div className="font-num text-xs tk-text-forest tabular-nums">
+                            <div className="font-serif text-sm tk-text-forest tabular-nums">
                               {formatScheduleBadgeLabel(
                                 item.triggerAtMs,
                                 nowSnap,
@@ -2323,7 +2323,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                               title={copy.cancelDeadlineTitle}
                               className="h-6 w-6 rounded-md tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center shrink-0 cursor-pointer"
                             >
-                              <Trash2 className="h-3.5 w-3.5" />
+                              <Trash2 className="h-4 w-4" />
                             </button>
                           )}
                         </div>
@@ -2339,7 +2339,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
         {/* Card 2 (Desktop Quick Summary): Clean preview delegating full workflow to TripTasksModal */}
         <section
           ref={tasksSectionRef}
-          className={`hidden lg:block rounded-2xl border tk-bg-card overflow-hidden transition-colors ${
+          className={`hidden lg:block rounded-[20px] border tk-bg-card overflow-hidden transition-colors ${
  isAllTasksDone ? 'tk-bc-hair' : 'tk-bc-hair'
  }`}
         >
@@ -2347,10 +2347,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <div className="flex items-center gap-2.5 min-w-0">
               <AccentIconBadge accent="teal" icon={ListTodo} size="md" />
               <div className="min-w-0">
-                <h3 className="text-[15px] font-bold tk-text-ink truncate">
+                <h3 className="text-[15px] font-serif font-bold tk-text-ink truncate">
                   {t('tasks.sidebarTitle')}
                 </h3>
-                <p className="text-xs tk-text-ink2 tabular-nums">
+                <p className="text-sm tk-text-ink2 tabular-nums">
                   {doneTasksCount}/{scopedTasks.length} {copy.tasksDoneSuffix}
                 </p>
               </div>
@@ -2359,16 +2359,16 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <button
               type="button"
               onClick={() => setTasksModalOpen(true)}
-              className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-paper px-3 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-1.5 text-sm font-semibold tk-text-ink hover:tk-bc-forest whitespace-nowrap shrink-0 cursor-pointer"
             >
               <span>{copy.manageTodosBtn}</span>
-              <ChevronRight className="h-3.5 w-3.5 tk-text-ink2" />
+              <ChevronRight className="h-4 w-4 tk-text-ink2" />
             </button>
           </div>
 
           <div className="border-t tk-bc-hair divide-y tk-divide-hair">
             {scopedTasks.length === 0 ? (
-              <div className="px-5 py-4 text-xs tk-text-ink2 flex items-center justify-between gap-2">
+              <div className="px-5 py-4 text-sm tk-text-ink2 flex items-center justify-between gap-2">
                 <span>{t('tasks.emptyAll')}</span>
                 <button
                   type="button"
@@ -2393,7 +2393,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
  : 'tk-bc-hair tk-bg-card'
  }`}
                   >
-                    {task.done && <Check className="h-3 w-3 stroke-[2.5]" />}
+                    {task.done && <Check className="h-3 w-3 stroke-[1.5]" />}
                   </span>
                   <span
                     className={`text-[15px] font-semibold truncate flex-1 ${
@@ -2409,15 +2409,15 @@ export const PackingView: React.FC<PackingViewProps> = ({
         </section>
 
         {/* Card 3: Tabbed Reference (Carry-on Gatekeeper | Destination Infrastructure) */}
-        <section className="rounded-2xl border tk-bc-hair tk-bg-card p-5 space-y-3">
-          <div className="flex items-center gap-1 rounded-xl tk-bg-forest-plate p-1">
+        <section className="rounded-[20px] border tk-bc-hair tk-bg-card p-5 space-y-3">
+          <div className="flex items-center gap-1 rounded-[16px] tk-bg-forest-plate p-1">
             <button
               type="button"
               onClick={() => setRightInfoTab('carryon')}
-              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm font-semibold transition-colors cursor-pointer ${
  rightInfoTab === 'carryon'
- ? 'tk-bg-card tk-text-ink shadow-xs'
- : 'tk-text-ink2 hover:tk-text-ink'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'border border-transparent tk-text-ink2 hover:tk-text-ink'
  }`}
             >
               <AccentIconBadge accent="peach" icon={ShieldAlert} size="2xs" ring={false} />
@@ -2426,10 +2426,10 @@ export const PackingView: React.FC<PackingViewProps> = ({
             <button
               type="button"
               onClick={() => setRightInfoTab('infra')}
-              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-sm font-semibold transition-colors cursor-pointer ${
  rightInfoTab === 'infra'
- ? 'tk-bg-card tk-text-ink shadow-xs'
- : 'tk-text-ink2 hover:tk-text-ink'
+ ? 'border tk-bc-forest tk-bg-forest-tint tk-text-forest'
+ : 'border border-transparent tk-text-ink2 hover:tk-text-ink'
  }`}
             >
               <AccentIconBadge accent="teal" icon={PlugZap} size="2xs" ring={false} />
@@ -2439,7 +2439,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
 
           {rightInfoTab === 'carryon' ? (
             <div>
-              <p className="text-xs tk-text-ink2">
+              <p className="text-sm tk-text-ink2">
                 {t('packingExtra.carryOnIntro')}
               </p>
               <ul className="mt-2.5 divide-y tk-divide-hair border-t tk-bc-hair">
@@ -2447,7 +2447,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   const qty = getItemQuantity(c);
                   const localName = translateDemoPackItemName(c.name, activeLang);
                   return (
-                    <li key={c.id} className="py-2 flex items-center justify-between gap-2 text-xs">
+                    <li key={c.id} className="py-2 flex items-center justify-between gap-2 text-sm">
                       <span className="text-[15px] font-medium tk-text-ink truncate">
                         {qty > 1 ? `${localName} ×${qty}` : localName}
                       </span>
@@ -2460,7 +2460,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               </ul>
             </div>
           ) : (
-            <div className="space-y-2.5 text-xs">
+            <div className="space-y-2.5 text-sm">
               <div className="flex justify-between gap-2">
                 <span className="tk-text-ink2">{t('packingExtra.plugTypeLabel')}</span>
                 <span className="font-semibold tk-text-ink text-right">
@@ -2469,7 +2469,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               </div>
               <div className="flex justify-between gap-2">
                 <span className="tk-text-ink2">{t('packingExtra.voltageLabel')}</span>
-                <span className="font-num font-semibold tk-text-ink">{intel.voltage}</span>
+                <span className="font-serif font-semibold tk-text-ink">{intel.voltage}</span>
               </div>
               <div className="flex justify-between gap-2">
                 <span className="tk-text-ink2">{t('packingExtra.transitPassLabel')}</span>
@@ -2479,7 +2479,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               </div>
               <div className="pt-2 border-t tk-bc-hair">
                 <div className="flex items-center gap-1.5 font-semibold tk-text-forest">
-                  <Globe className="h-3.5 w-3.5 shrink-0" />
+                  <Globe className="h-4 w-4 shrink-0" />
                   <span>
                     {t('packingExtra.vatExitPrefix')}
                     {translateIntelField('vatExitAirport', intel.vatExitAirport, activeLang)}

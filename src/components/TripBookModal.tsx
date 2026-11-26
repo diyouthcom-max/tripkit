@@ -90,11 +90,11 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
       ref={menuRef}
       role="menu"
       aria-label={t('tripBook.menuAria')}
-      className="absolute left-0 top-full mt-2 z-40 w-[min(22rem,calc(100vw-2rem))] rounded-2xl border tk-bc-hair bg-white shadow-xl overflow-hidden"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] absolute left-0 top-full mt-2 z-40 w-[min(22rem,calc(100vw-2rem))] rounded-[20px] border tk-bc-hair bg-white tk-elev-soft overflow-hidden"
     >
       {/* Saved Trips List */}
       <div className="px-3 pt-3 pb-2">
-        <div className="px-2 pb-1.5 flex items-center justify-between text-[11px] font-semibold tk-text-ink2">
+        <div className="px-2 pb-1.5 flex items-center justify-between text-[13px] font-semibold tk-text-ink2">
           <span>{t('tripBook.savedTrips')}</span>
           <span className="tabular-nums">{t('tripBook.setsCount', { count: trips.length })}</span>
         </div>
@@ -113,15 +113,15 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
             return (
               <div
                 key={entry.id}
-                className={`group rounded-xl px-2.5 py-2 transition-colors ${
+                className={`group rounded-[16px] px-2.5 py-2 transition-colors ${
  isActive
- ? 'tk-bg-forest-tint tk-text-ink'
+ ? 'tk-bg-forest-tint tk-text-forest'
  : 'hover:tk-bg-paper tk-text-ink'
  }`}
               >
                 {isConfirmingDelete ? (
                   <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="text-xs font-semibold tk-text-danger truncate">
+                    <span className="text-sm font-semibold tk-text-danger truncate">
                       {t('tripBook.deleteConfirm', { title: routeTitle })}
                     </span>
                     <div className="flex items-center gap-1.5 shrink-0">
@@ -131,14 +131,14 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
                           setConfirmDeleteId(null);
                           onDeleteTrip(entry.id);
                         }}
-                        className="rounded-lg tk-bg-danger px-2.5 py-1 text-[11px] font-bold text-white hover:tk-bg-danger whitespace-nowrap cursor-pointer"
+                        className="rounded-lg tk-bg-danger px-2.5 py-1 text-[13px] font-bold text-white hover:tk-bg-danger whitespace-nowrap cursor-pointer"
                       >
                         {t('tripBook.confirm')}
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmDeleteId(null)}
-                        className="rounded-lg border tk-bc-hair bg-white px-2 py-1 text-[11px] font-semibold tk-text-ink2 whitespace-nowrap cursor-pointer"
+                        className="rounded-lg border tk-bc-hair bg-white px-2 py-1 text-[13px] font-semibold tk-text-ink2 whitespace-nowrap cursor-pointer"
                       >
                         {t('tripBook.cancel')}
                       </button>
@@ -155,18 +155,18 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
                       className="min-w-0 flex-1 text-left cursor-pointer"
                     >
                       <div className="flex items-center gap-1.5">
-                        <span className="truncate text-sm font-bold tk-text-ink">
+                        <span className="font-serif truncate text-sm font-bold tk-text-ink">
                           {routeTitle}
                         </span>
                         {entry.cloudRoomId && (
                           <Cloud
-                            className="h-3.5 w-3.5 tk-text-forest shrink-0"
+                            className="h-4 w-4 tk-text-forest shrink-0"
                             aria-label={`Room ${entry.cloudRoomId}`}
                           />
                         )}
                       </div>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-[11px] tk-text-ink2">
-                        <span className="font-num tabular-nums">
+                      <div className="mt-0.5 flex items-center gap-1.5 text-[13px] tk-text-ink2">
+                        <span className="font-serif tabular-nums">
                           {formatDateByPref(st.setup.departureDate, language)}
                         </span>
                         <span aria-hidden="true">·</span>
@@ -203,7 +203,7 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
                         title={t('tripBook.duplicateTitle')}
                         aria-label={t('tripBook.duplicateTitle')}
                       >
-                        <Copy className="h-3.5 w-3.5" />
+                        <Copy className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
@@ -215,7 +215,7 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
                         title={t('tripBook.deleteTitle')}
                         aria-label={t('tripBook.deleteTitle')}
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -234,9 +234,9 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
             onClose();
             onOpenEditCurrentSetup();
           }}
-          className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold tk-text-ink hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
+          className="font-serif w-full flex items-center gap-2.5 rounded-[16px] px-3 py-2 text-sm font-semibold tk-text-ink hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
         >
-          <SlidersHorizontal className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+          <SlidersHorizontal className="h-4 w-4 tk-text-forest shrink-0" />
           <span>{t('tripBook.editCurrentSetup')}</span>
         </button>
 
@@ -247,9 +247,9 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
               onClose();
               onOpenCoverModal();
             }}
-            className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold tk-text-ink hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
+            className="font-serif w-full flex items-center gap-2.5 rounded-[16px] px-3 py-2 text-sm font-semibold tk-text-ink hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
           >
-            <ImagePlus className="h-3.5 w-3.5 tk-text-forest shrink-0" />
+            <ImagePlus className="h-4 w-4 tk-text-forest shrink-0" />
             <span>
               {language === 'zh-CN' ? '更换当前行程封面' : 'Change Cover Photo'}
             </span>
@@ -262,9 +262,9 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
             onClose();
             onOpenCreateNewWizard();
           }}
-          className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-bold tk-text-forest hover:bg-white transition-colors text-left cursor-pointer"
+          className="w-full flex items-center gap-2.5 rounded-[16px] px-3 py-2 text-sm font-bold tk-text-forest hover:bg-white transition-colors text-left cursor-pointer"
         >
-          <Plus className="h-3.5 w-3.5 shrink-0" />
+          <Plus className="h-4 w-4 shrink-0" />
           <span>{t('tripBook.createNewTrip')}</span>
         </button>
 
@@ -274,7 +274,7 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
             onAddDemoTrip();
             onClose();
           }}
-          className="w-full flex items-center gap-2.5 rounded-xl px-3 py-1.5 text-[11px] font-medium tk-text-ink2 hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
+          className="w-full flex items-center gap-2.5 rounded-[16px] px-3 py-1.5 text-[13px] font-medium tk-text-ink2 hover:bg-white hover:tk-text-forest transition-colors text-left cursor-pointer"
         >
           <Sparkles className="h-3 w-3 tk-text-forest shrink-0" />
           <span>{t('tripBook.loadDemoTrip')}</span>

@@ -198,10 +198,10 @@ function HotelThumb({ photoUri }: { photoUri?: string }) {
           src={blobUrl!}
           alt=""
           onError={() => setImgFailed(true)}
-          className="h-[72px] w-[72px] rounded-xl object-cover tk-bg-paper"
+          className="h-[72px] w-[72px] rounded-[16px] object-cover tk-bg-paper"
         />
       ) : (
-        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-xl tk-bg-forest">
+        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-[16px] tk-bg-forest">
           <BedDouble className="h-7 w-7 text-white" strokeWidth={1.5} />
         </div>
       )}
@@ -244,7 +244,7 @@ function HotelCardActions({
             lng: hotel.lng,
           })
         }
-        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-xl tk-bg-forest px-2 py-1.5 text-[10.5px] font-bold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
+        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-[16px] tk-bg-forest px-2 py-1.5 text-[10.5px] font-bold text-white hover:tk-bg-press whitespace-nowrap cursor-pointer"
       >
         <Check className="h-3 w-3 shrink-0" strokeWidth={1.5} />
         <span className="truncate">{copy.setAsStay}</span>
@@ -253,7 +253,7 @@ function HotelCardActions({
         href={ratesHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-[10.5px] font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap"
+        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-card px-2 py-1.5 text-[10.5px] font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap"
       >
         <ExternalLink className="h-3 w-3 shrink-0" strokeWidth={1.5} />
         <span className="truncate">{copy.checkRates}</span>
@@ -262,7 +262,7 @@ function HotelCardActions({
         href={mapHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-[10.5px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap"
+        className="flex-1 min-w-0 inline-flex items-center justify-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-card px-2 py-1.5 text-[10.5px] font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap"
       >
         <MapPin className="h-3 w-3 shrink-0" strokeWidth={1.5} />
         <span className="truncate">{copy.map}</span>
@@ -686,7 +686,7 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
   };
 
   return (
-    <div className="border-t tk-bc-hair pt-4 space-y-3">
+    <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] border-t tk-bc-hair pt-4 space-y-3">
       {hasMapsKey && mountLive && !useAi ? (
         <LiveNearbyHotels
           city={city || displayCity}
@@ -702,11 +702,11 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h4 className="text-sm font-bold tk-text-ink leading-snug">
+            <h4 className="text-sm font-serif font-bold tk-text-ink leading-snug">
               {copy.title(anchorStopTitle)}
             </h4>
             <span
-              className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+              className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[13px] font-semibold ${
                 source === 'live'
                   ? 'tk-bg-forest-tint tk-text-forest'
                   : 'tk-bg-warning-tint tk-text-warning'
@@ -726,10 +726,10 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
           type="button"
           onClick={handleRefresh}
           disabled={loading}
-          className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-[11px] font-semibold tk-text-ink2 hover:tk-text-forest hover:tk-bc-forest disabled:opacity-50 shrink-0 cursor-pointer"
+          className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-text-forest hover:tk-bc-forest disabled:opacity-50 shrink-0 cursor-pointer"
         >
           <RefreshCw
-            className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`}
+            className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`}
             strokeWidth={1.5}
           />
           <span>{copy.refresh}</span>
@@ -741,10 +741,10 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
-              className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 animate-pulse"
+              className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 animate-pulse"
             >
               <div className="flex gap-3">
-                <div className="h-[72px] w-[72px] rounded-xl tk-bg-paper shrink-0" />
+                <div className="h-[72px] w-[72px] rounded-[16px] tk-bg-paper shrink-0" />
                 <div className="flex-1 space-y-2 min-w-0">
                   <div className="h-3.5 w-3/4 rounded tk-bg-paper" />
                   <div className="h-3 w-1/2 rounded tk-bg-paper" />
@@ -755,63 +755,63 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
           ))}
         </div>
       ) : errorMsg ? (
-        <div className="rounded-2xl border tk-bc-danger-hair tk-bg-danger-tint p-3.5 space-y-2">
-          <p className="text-xs font-semibold tk-text-danger leading-snug">{errorMsg}</p>
+        <div className="rounded-[20px] border tk-bc-danger-hair tk-bg-danger-tint p-3.5 space-y-2">
+          <p className="text-sm font-semibold tk-text-danger leading-snug">{errorMsg}</p>
           <button
             type="button"
             onClick={handleRefresh}
-            className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-bold text-white cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3 py-1.5 text-sm font-bold text-white cursor-pointer"
           >
-            <RefreshCw className="h-3.5 w-3.5" strokeWidth={1.5} />
+            <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
             <span>{copy.retry}</span>
           </button>
         </div>
       ) : hotels.length === 0 ? (
-        <div className="rounded-2xl border tk-bc-hair tk-bg-paper p-3.5">
-          <p className="text-xs tk-text-ink2 leading-snug">{copy.empty}</p>
+        <div className="rounded-[20px] border tk-bc-hair tk-bg-paper p-3.5">
+          <p className="text-sm tk-text-ink2 leading-snug">{copy.empty}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {hotels.map((hotel) => (
             <div
               key={hotel.key}
-              className="rounded-2xl border tk-bc-hair tk-bg-card p-3.5 space-y-2.5"
+              className="rounded-[20px] border tk-bc-hair tk-bg-card p-3.5 space-y-2.5"
             >
               <div className="flex gap-3 items-start">
                 <HotelThumb photoUri={hotel.photoUri} />
                 <div className="min-w-0 flex-1 space-y-1">
-                  <div className="text-sm font-bold tk-text-ink leading-snug">
+                  <div className="font-serif text-sm font-bold tk-text-ink leading-snug">
                     {hotel.name}
                   </div>
                   {hotel.source === 'live' &&
                   typeof hotel.rating === 'number' &&
                   hotel.rating > 0 ? (
-                    <div className="text-[11px] font-semibold tk-text-warning leading-snug">
+                    <div className="text-[13px] font-semibold tk-text-warning leading-snug">
                       ★ {hotel.rating.toFixed(1)}
                       {typeof hotel.userRatingCount === 'number'
                         ? ` (${hotel.userRatingCount})`
                         : ''}
                     </div>
                   ) : null}
-                  <div className="text-[11px] tk-text-ink2 leading-snug">
+                  <div className="text-[13px] tk-text-ink2 leading-snug">
                     {hotel.walkMinutes != null && hotel.nearestStopTitle
                       ? copy.walkTo(hotel.walkMinutes, hotel.nearestStopTitle)
                       : copy.walkUnknown}
                   </div>
                   {hotel.address ? (
-                    <div className="text-[11px] tk-text-ink2 leading-snug break-words">
+                    <div className="text-[13px] tk-text-ink2 leading-snug break-words">
                       {hotel.address}
                     </div>
                   ) : null}
                   {hotel.source === 'ai' && hotel.estNightlyLocal != null ? (
-                    <div className="text-[11px] font-semibold tk-text-forest leading-snug">
+                    <div className="text-[13px] font-semibold tk-text-forest leading-snug">
                       {copy.perNight(
                         `${currencySymbol}${Math.round(hotel.estNightlyLocal).toLocaleString()}`
                       )}
                     </div>
                   ) : null}
                   {hotel.source === 'ai' && hotel.reason ? (
-                    <div className="text-[11px] tk-text-ink2 leading-snug">
+                    <div className="text-[13px] tk-text-ink2 leading-snug">
                       <span className="font-semibold">{copy.reasonLabel}: </span>
                       {hotel.reason}
                     </div>
@@ -826,7 +826,7 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
                 onSetStay={onSetStay}
               />
               {hotel.photoAuthor ? (
-                <div className="min-w-0 max-w-full overflow-hidden text-[10px] leading-snug [&_a]:text-[10px] [&_span]:text-[10px] [&_a]:whitespace-nowrap [&_span]:whitespace-nowrap [&_a]:truncate [&_span]:truncate [&_a]:break-normal [&_span]:break-normal">
+                <div className="min-w-0 max-w-full overflow-hidden text-[13px] leading-snug [&_a]:text-[13px] [&_span]:text-[13px] [&_a]:whitespace-nowrap [&_span]:whitespace-nowrap [&_a]:truncate [&_span]:truncate [&_a]:break-normal [&_span]:break-normal">
                   <GooglePhotoCredit
                     variant="inline"
                     displayName={hotel.photoAuthor}

@@ -154,8 +154,8 @@ const BADGE_SIZE_CLASSES: Record<
   '2xs': { box: 'w-5 h-5', rounded: 'rounded-md', icon: 'w-3 h-3' },
   xs: { box: 'w-6 h-6', rounded: 'rounded-lg', icon: 'w-3.5 h-3.5' },
   sm: { box: 'w-7 h-7', rounded: 'rounded-lg', icon: 'w-3.5 h-3.5' },
-  md: { box: 'w-9 h-9', rounded: 'rounded-xl', icon: 'w-4 h-4' },
-  lg: { box: 'w-11 h-11', rounded: 'rounded-2xl', icon: 'w-5 h-5' },
+  md: { box: 'w-9 h-9', rounded: 'rounded-[16px]', icon: 'w-4 h-4' },
+  lg: { box: 'w-11 h-11', rounded: 'rounded-[20px]', icon: 'w-5 h-5' },
 };
 
 export interface AccentIconBadgeProps {
@@ -192,7 +192,7 @@ export const AccentIconBadge: React.FC<AccentIconBadgeProps> = ({
   return (
     <span
       title={title}
-      className={`inline-flex items-center justify-center shrink-0 transition-colors ${sizeSpec.box} ${radiusClass} ${colorClass} ${className}`}
+      className={`[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] inline-flex items-center justify-center shrink-0 transition-colors ${sizeSpec.box} ${radiusClass} ${colorClass} ${className}`}
     >
       <Icon
         className={`${sizeSpec.icon} shrink-0 ${iconClassName}`}

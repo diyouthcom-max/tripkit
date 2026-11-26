@@ -542,14 +542,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay p-0 sm:p-4"
+      className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 flex items-end sm:items-center justify-center tk-bg-overlay p-0 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="tripkit-settings-title"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl tk-bg-paper shadow-2xl"
+        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl tk-bg-paper tk-elev-soft"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky Sheet Header */}
@@ -559,7 +559,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <button
                 type="button"
                 onClick={() => setSubView('main')}
-                className="inline-flex min-h-[40px] items-center gap-0.5 text-xs font-bold tk-text-forest hover:opacity-80 cursor-pointer"
+                className="inline-flex min-h-[40px] items-center gap-0.5 text-[13px] font-bold tk-text-forest hover:opacity-80 cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" />
                 {t('common.back')}
@@ -569,7 +569,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           <h2
             id="tripkit-settings-title"
-            className="text-base font-extrabold tk-text-ink truncate"
+            className="font-serif text-base font-extrabold tk-text-ink truncate"
           >
             {subViewTitle[subView]}
           </h2>
@@ -594,7 +594,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <button
                 type="button"
                 onClick={onOpenProModal}
-                className={`w-full rounded-2xl p-4 text-left transition-all flex items-center justify-between gap-3 cursor-pointer ${
+                className={`w-full rounded-[20px] p-4 text-left transition-all flex items-center justify-between gap-3 cursor-pointer ${
  isProActive
  ? 'border tk-bc-hair bg-white hover:tk-bc-forest'
  : isTrialExpired
@@ -604,7 +604,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               >
                 <div className="flex items-center gap-3.5 min-w-0">
                   <span
-                    className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                    className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[16px] ${
  isProActive
  ? 'tk-bg-forest-tint tk-text-forest'
  : 'bg-white/15 text-white'
@@ -622,7 +622,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         Trip Kit Pro
                       </span>
                       <span
-                        className={`font-num text-[11px] font-bold tabular-nums ${
+                        className={`font-serif text-[13px] font-bold tabular-nums ${
  isProActive ? 'tk-text-forest' : 'text-white/90'
  }`}
                       >
@@ -634,7 +634,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       </span>
                     </div>
                     <p
-                      className={`mt-0.5 font-num text-[13px] leading-snug tabular-nums ${
+                      className={`mt-0.5 font-serif text-[13px] leading-snug tabular-nums ${
  isProActive ? 'tk-text-ink2' : 'text-white/85'
  }`}
                     >
@@ -648,7 +648,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
 
                 <span
-                  className={`rounded-xl px-3 py-1.5 text-xs font-bold whitespace-nowrap shrink-0 ${
+                  className={`rounded-[16px] px-3 py-1.5 text-[13px] font-bold whitespace-nowrap shrink-0 ${
  isProActive
  ? 'tk-bg-forest-tint tk-text-forest'
  : isTrialExpired
@@ -662,14 +662,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 1: 账户与同步 */}
               <section className="pb-6 border-b tk-bc-hair">
-                <div className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden">
                   <div className="tk-bg-forest-tint border-b tk-bc-hair px-4 py-3 flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0">
-                      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white tk-text-forest">
+                      <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[16px] bg-white tk-text-forest">
                         <UserCheck className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
-                        <h3 className="text-xs font-extrabold tk-text-ink">
+                        <h3 className="text-[13px] font-extrabold tk-text-ink">
                           {copy.accountSectionTitle}
                         </h3>
                         <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
@@ -677,7 +677,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         </p>
                       </div>
                     </div>
-                    <span className="font-num text-[11px] font-semibold tk-text-forest whitespace-nowrap shrink-0 tabular-nums mt-0.5">
+                    <span className="font-serif text-[13px] font-semibold tk-text-forest whitespace-nowrap shrink-0 tabular-nums mt-0.5">
                       {activeRoomId ? copy.roomBadge(activeRoomId) : copy.localFirstBadge}
                     </span>
                   </div>
@@ -686,7 +686,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     {/* Row 1: Google Cloud Account */}
                     <div className="pl-2.5 pr-4 py-3.5 flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-forest-tint tk-text-forest">
+                        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-forest-tint tk-text-forest">
                           <Cloud className="h-4 w-4" />
                         </span>
                         <div className="min-w-0">
@@ -720,13 +720,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               void handleGoogleSignOut();
                             }
                           }}
-                          className="inline-flex min-h-[36px] items-center gap-1 rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
+                          className="inline-flex min-h-[36px] items-center gap-1 rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-[13px] font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
                         >
                           {onOpenAuthModal ? (
                             <span>{copy.manageBtn}</span>
                           ) : (
                             <>
-                              <LogOut className="h-3.5 w-3.5" />
+                              <LogOut className="h-4 w-4" />
                               {copy.signOutBtn}
                             </>
                           )}
@@ -742,9 +742,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               void handleGoogleSignIn();
                             }
                           }}
-                          className="inline-flex min-h-[36px] items-center gap-1 rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-bold text-white hover:tk-bg-forest whitespace-nowrap shrink-0 cursor-pointer"
+                          className="inline-flex min-h-[36px] items-center gap-1 rounded-[16px] tk-bg-forest px-3 py-1.5 text-[13px] font-bold text-white hover:tk-bg-forest whitespace-nowrap shrink-0 cursor-pointer"
                         >
-                          <LogIn className="h-3.5 w-3.5" />
+                          <LogIn className="h-4 w-4" />
                           {copy.signInBtn}
                         </button>
                       )}
@@ -757,14 +757,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="w-full pl-2.5 pr-4 py-3.5 rounded-tl-lg flex items-center justify-between gap-3 text-left hover:tk-bg-forest-tint transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-warning-tint tk-text-warning">
+                        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-warning-tint tk-text-warning">
                           <KeyRound className="h-4 w-4" />
                         </span>
                         <div className="min-w-0">
                           <div className="text-[15px] font-bold tk-text-ink">
                             {copy.activationTitle}
                           </div>
-                          <div className="mt-0.5 font-num text-[13px] leading-snug tk-text-ink2 tabular-nums">
+                          <div className="mt-0.5 font-serif text-[13px] leading-snug tk-text-ink2 tabular-nums">
                             {isProActive && preferences.redeemedCode
                               ? copy.activationCodeBound(preferences.redeemedCode, expiresDateLabel || '')
                               : isProActive
@@ -784,7 +784,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         className="w-full pl-2.5 pr-4 py-3.5 rounded-l-lg flex items-center justify-between gap-3 text-left tk-bg-forest-tint hover:tk-bg-forest-tint transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-forest text-white">
+                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-forest text-white">
                             <KeyRound className="h-4 w-4" />
                           </span>
                           <div className="min-w-0">
@@ -805,10 +805,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 2: 出行与全局偏好 / Travel & Regional Preferences */}
               <section>
-                <h3 className="px-1 mb-2 text-xs font-bold tk-text-ink2">
+                <h3 className="px-1 mb-2 text-[13px] font-bold tk-text-ink2">
                   {t('settings.sectionRegional')}
                 </h3>
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   {/* Language & Regional Conventions (zh-CN / en-US North America / en-GB Europe) */}
                   <div
                     ref={languageSectionRef}
@@ -851,7 +851,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             );
                           }
                         }}
-                        className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-[11px] font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                        className={`inline-flex items-center gap-1.5 rounded-[16px] border px-2.5 py-1.5 text-[13px] font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
  preferences.followSystemLanguage
  ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
  : 'tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest hover:tk-text-ink'
@@ -888,17 +888,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 );
                               }
                             }}
-                            className={`rounded-xl border p-2.5 text-left transition-colors cursor-pointer ${
+                            className={`rounded-[16px] border p-2.5 text-left transition-colors cursor-pointer ${
  active
  ? 'tk-bc-forest tk-bg-forest-tint'
  : 'tk-bc-hair tk-bg-paper hover:tk-bc-hair'
  }`}
                           >
                             <div className="flex items-center justify-between gap-1">
-                              <span className="text-xs font-extrabold tk-text-ink truncate">
+                              <span className="text-[13px] font-extrabold tk-text-ink truncate">
                                 {spec.nativeLabel}
                               </span>
-                              {active && <Check className="h-3.5 w-3.5 tk-text-forest shrink-0" />}
+                              {active && <Check className="h-4 w-4 tk-text-forest shrink-0" />}
                             </div>
                             <p className="mt-0.5 text-[10.5px] tk-text-ink2 leading-snug line-clamp-2">
                               {spec.regionNote}
@@ -908,7 +908,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       })}
                     </div>
 
-                    <label className="inline-flex items-center gap-2 text-xs font-medium tk-text-ink2 cursor-pointer">
+                    <label className="inline-flex items-center gap-2 text-[13px] font-medium tk-text-ink2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={syncRegionalOnLangChange}
@@ -958,7 +958,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={(e) =>
                         handleBaggagePresetChange(e.target.value as BaggagePresetId)
                       }
-                      className="w-full h-10 rounded-xl border tk-bc-hair tk-bg-paper px-3 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none truncate cursor-pointer"
+                      className="font-serif w-full h-10 rounded-[16px] border tk-bc-hair tk-bg-paper px-3 text-base sm:text-sm font-bold tk-text-ink focus:tk-bc-forest focus:bg-white focus:outline-none truncate cursor-pointer"
                     >
                       <option value="lcc">
                         {getBaggagePresetLabels('lcc', activeLang, preferences.unitSystem).label}
@@ -975,12 +975,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </select>
 
                     {(showCustomBaggage || preferences.baggagePreset === 'custom') && (
-                      <div className="pt-2.5 border-t tk-bc-hair grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                        <div className="flex items-center justify-between rounded-xl tk-bg-paper px-3 py-2">
+                      <div className="pt-2.5 border-t tk-bc-hair grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[13px]">
+                        <div className="flex items-center justify-between rounded-[16px] tk-bg-paper px-3 py-2">
                           <span className="font-semibold tk-text-ink2 whitespace-nowrap">
                             {t('settings.carryOnShort')}
                           </span>
-                          <div className="inline-flex items-center gap-1.5 font-num tabular-nums">
+                          <div className="inline-flex items-center gap-1.5 font-serif tabular-nums">
                             <button
                               type="button"
                               onClick={() => adjustLimitKg('carryOnLimitKg', -0.5)}
@@ -1004,11 +1004,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between rounded-xl tk-bg-paper px-3 py-2">
+                        <div className="flex items-center justify-between rounded-[16px] tk-bg-paper px-3 py-2">
                           <span className="font-semibold tk-text-ink2 whitespace-nowrap">
                             {t('settings.checkedShort')}
                           </span>
-                          <div className="inline-flex items-center gap-1.5 font-num tabular-nums">
+                          <div className="inline-flex items-center gap-1.5 font-serif tabular-nums">
                             <button
                               type="button"
                               onClick={() => adjustLimitKg('checkedLimitKg', -1)}
@@ -1045,7 +1045,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       {t('settings.homeCurrencyLabel')}
                     </span>
                     <span className="inline-flex items-center gap-1.5 min-w-0 max-w-[62%]">
-                      <span className="truncate text-sm font-semibold tk-text-ink2 font-num">
+                      <span className="truncate text-sm font-semibold tk-text-ink2 font-serif tabular-nums">
                         {getHomeCurrencyLabel(preferences.homeCurrency, activeLang)}
                       </span>
                       <ChevronRight className="h-4 w-4 tk-text-ink2 shrink-0" />
@@ -1102,10 +1102,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 3: Notifications & Alerts */}
               <section>
-                <h3 className="px-1 mb-2 text-xs font-bold tk-text-ink2">
+                <h3 className="px-1 mb-2 text-[13px] font-bold tk-text-ink2">
                   {copy.notificationsTitle}
                 </h3>
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   {/* Browser Notification Permission + Countdown Lead Time */}
                   <div className="px-4 py-3.5 space-y-2.5">
                     <div className="flex items-center justify-between gap-3">
@@ -1126,7 +1126,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <button
                           type="button"
                           onClick={() => void onRequestBrowserPermission()}
-                          className="rounded-xl tk-bg-forest px-3 py-1.5 text-xs font-bold text-white hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
+                          className="rounded-[16px] tk-bg-forest px-3 py-1.5 text-[13px] font-bold text-white hover:tk-bg-press whitespace-nowrap shrink-0 cursor-pointer"
                         >
                           {copy.allowAlertsBtn}
                         </button>
@@ -1152,7 +1152,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
 
                     {reminder.enabled && (
-                      <div className="pt-2.5 border-t tk-bc-hair space-y-2 text-xs">
+                      <div className="pt-2.5 border-t tk-bc-hair space-y-2 text-[13px]">
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-medium tk-text-ink2">
                             {copy.alertTimingLabel}
@@ -1178,9 +1178,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                   leadHours: hrs,
                                 })
                               }
-                              className={`h-8 rounded-lg px-2 text-center text-xs font-semibold tabular-nums whitespace-nowrap transition-colors cursor-pointer ${
+                              className={`h-8 rounded-lg px-2 text-center text-[13px] font-semibold tabular-nums whitespace-nowrap transition-colors cursor-pointer ${
  reminder.mode === 'preset' && reminder.leadHours === hrs
- ? 'tk-bg-forest text-white'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest'
  : 'tk-bg-forest-plate tk-text-ink2 hover:tk-bg-forest-plate'
  }`}
                             >
@@ -1261,25 +1261,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     const nowSnap = Date.now();
                     return (
                       <div className="px-4 py-3.5 space-y-2">
-                        <div className="flex items-center justify-between text-xs">
+                        <div className="flex items-center justify-between text-[13px]">
                           <span className="font-bold tk-text-ink">
                             {copy.queueTitle(pendingQueue.length)}
                           </span>
-                          <span className="text-xs tk-text-ink2">
+                          <span className="text-[13px] tk-text-ink2">
                             {copy.queueTag}
                           </span>
                         </div>
-                        <div className="divide-y tk-divide-hair rounded-xl border tk-bc-hair tk-bg-card px-3 py-1">
+                        <div className="divide-y tk-divide-hair rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1">
                           {pendingQueue.slice(0, 5).map((item) => (
                             <div
                               key={item.signature}
-                              className="py-1.5 flex items-center justify-between gap-2 text-xs"
+                              className="py-1.5 flex items-center justify-between gap-2 text-[13px]"
                             >
                               <div className="min-w-0">
                                 <div className="font-semibold tk-text-ink truncate">
                                   {item.title}
                                 </div>
-                                <div className="font-num text-xs tk-text-forest tabular-nums">
+                                <div className="font-serif text-[13px] tk-text-forest tabular-nums">
                                   {formatScheduleBadgeLabel(
                                     item.triggerAtMs,
                                     nowSnap,
@@ -1295,7 +1295,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                   title={copy.cancelAlertTitle}
                                   className="h-6 w-6 rounded-md tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center shrink-0 cursor-pointer"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  <Trash2 className="h-4 w-4" />
                                 </button>
                               )}
                             </div>
@@ -1315,7 +1315,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 4: Data Management */}
               <section className="pb-6 border-b tk-bc-hair">
-                <div className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden">
                   <div className="tk-bg-forest-plate border-b tk-bc-hair px-4 py-3 flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 min-w-0">
                       <AccentIconBadge
@@ -1325,7 +1325,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         className="mt-0.5"
                       />
                       <div className="min-w-0">
-                        <h3 className="text-xs font-extrabold tk-text-ink">
+                        <h3 className="text-[13px] font-extrabold tk-text-ink">
                           {copy.dataTitle}
                         </h3>
                         <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
@@ -1333,7 +1333,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         </p>
                       </div>
                     </div>
-                    <span className="font-num text-[11px] font-semibold tk-text-swatch-3 whitespace-nowrap shrink-0 tabular-nums mt-0.5">
+                    <span className="font-serif text-[13px] font-semibold tk-text-swatch-3 whitespace-nowrap shrink-0 tabular-nums mt-0.5">
                       {copy.savedCount(tripBook.length)}
                     </span>
                   </div>
@@ -1408,7 +1408,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             <button
                               type="button"
                               onClick={() => setConfirmClearMemory(false)}
-                              className="rounded-lg px-2 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
+                              className="rounded-lg px-2 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
                             >
                               {t('common.cancel')}
                             </button>
@@ -1419,7 +1419,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 setConfirmClearMemory(false);
                                 onToast(copy.memoryClearedToast);
                               }}
-                              className="rounded-lg tk-bg-danger-tint px-2.5 py-1.5 text-xs font-bold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap cursor-pointer"
+                              className="rounded-lg tk-bg-danger-tint px-2.5 py-1.5 text-[13px] font-bold tk-text-danger hover:tk-bg-danger-tint whitespace-nowrap cursor-pointer"
                             >
                               {copy.confirmClearBtn}
                             </button>
@@ -1428,13 +1428,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           <button
                             type="button"
                             onClick={() => setConfirmClearMemory(true)}
-                            className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-xs font-semibold tk-text-ink2 hover:tk-bc-danger hover:tk-text-danger whitespace-nowrap shrink-0 cursor-pointer"
+                            className="rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-[13px] font-semibold tk-text-ink2 hover:tk-bc-danger hover:tk-text-danger whitespace-nowrap shrink-0 cursor-pointer"
                           >
                             {copy.resetCacheBtn}
                           </button>
                         )
                       ) : (
-                        <span className="text-xs tk-text-ink2 whitespace-nowrap shrink-0">
+                        <span className="text-[13px] tk-text-ink2 whitespace-nowrap shrink-0">
                           {copy.emptyTag}
                         </span>
                       )}
@@ -1445,7 +1445,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 5: Advanced Features */}
               <section className="pb-6 border-b tk-bc-hair">
-                <div className="rounded-2xl border tk-bc-hair tk-bg-paper overflow-hidden">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-paper overflow-hidden">
                   <div className="tk-bg-forest-plate border-b tk-bc-hair px-4 py-3 flex items-start gap-3">
                     <AccentIconBadge
                       accent="lavender"
@@ -1454,7 +1454,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="mt-0.5"
                     />
                     <div className="min-w-0">
-                      <h3 className="text-xs font-extrabold tk-text-ink">
+                      <h3 className="text-[13px] font-extrabold tk-text-ink">
                         {copy.advancedTitle}
                       </h3>
                       <p className="mt-0.5 text-[13px] leading-relaxed tk-text-swatch-3">
@@ -1557,7 +1557,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               nextMode === 'expired' ? copy.trialSimToastOn : copy.trialSimToastOff
                             );
                           }}
-                          className={`rounded-xl px-3 py-1.5 text-xs font-bold whitespace-nowrap shrink-0 cursor-pointer ${
+                          className={`rounded-[16px] px-3 py-1.5 text-[13px] font-bold whitespace-nowrap shrink-0 cursor-pointer ${
  preferences.trialSimulationMode === 'expired'
  ? 'tk-bg-warning-tint tk-text-warning border tk-bc-warning-hair'
  : 'border tk-bc-hair bg-white tk-text-swatch-3 hover:tk-bg-forest-tint'
@@ -1598,7 +1598,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 5.5: Map Service & Preview Test */}
               <section className="pb-6 border-b tk-bc-hair">
-                <div className="rounded-2xl border tk-bc-hair tk-bg-card overflow-hidden">
+                <div className="rounded-[20px] border tk-bc-hair tk-bg-card overflow-hidden">
                   <div className="tk-bg-forest-tint border-b tk-bc-hair px-4 py-3 flex items-start gap-3">
                     <AccentIconBadge
                       accent="ocean"
@@ -1607,7 +1607,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="mt-0.5"
                     />
                     <div className="min-w-0">
-                      <h3 className="text-xs font-extrabold tk-text-ink">
+                      <h3 className="text-[13px] font-extrabold tk-text-ink">
                         {copy.routeMapTitle}
                       </h3>
                       <p className="mt-0.5 text-[13px] leading-relaxed tk-text-ink2">
@@ -1624,17 +1624,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Section 6: About & Support */}
               <section>
-                <h3 className="px-1 mb-2 text-xs font-bold tk-text-ink2">
+                <h3 className="px-1 mb-2 text-[13px] font-bold tk-text-ink2">
                   {copy.aboutTitle}
                 </h3>
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   <button
                     type="button"
                     onClick={() => setSubView('whats_new')}
                     className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-paper transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-warning-tint tk-text-warning">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-warning-tint tk-text-warning">
                         <Sparkles className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
@@ -1655,7 +1655,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="w-full px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:tk-bg-paper transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl tk-bg-danger-tint tk-text-danger">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[16px] tk-bg-danger-tint tk-text-danger">
                         <Heart className="h-4 w-4" />
                       </span>
                       <div className="min-w-0">
@@ -1692,10 +1692,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Quiet Version Footer */}
               <div className="pt-2 pb-3 text-center space-y-0.5">
-                <p className="text-xs font-semibold tk-text-ink2">
+                <p className="text-[13px] font-semibold tk-text-ink2">
                   {copy.footerTagline}
                 </p>
-                <p className="font-num text-xs tk-text-ink2 tabular-nums">
+                <p className="font-serif text-[13px] tk-text-ink2 tabular-nums">
                   Trip Kit v2.5.0
                 </p>
               </div>
@@ -1705,10 +1705,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* SUB-VIEW: Owner Admin Redeem Code Generator */}
           {subView === 'admin_codes' && (
             <div className="space-y-5">
-              <div className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-4">
+              <div className="rounded-[20px] border tk-bc-hair bg-white p-4 space-y-4">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-sm font-extrabold tk-text-ink">
+                    <h3 className="font-serif text-sm font-extrabold tk-text-ink">
                       {copy.mintTitle}
                     </h3>
                     <p className="mt-0.5 text-[13px] tk-text-ink2">
@@ -1720,14 +1720,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     disabled={adminBusy}
                     onClick={() => void loadAdminCodes()}
                     title={copy.refreshCodesTitle}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-xl border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-text-forest cursor-pointer"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-[16px] border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-text-forest cursor-pointer"
                   >
-                    <RefreshCw className={`h-3.5 w-3.5 ${adminBusy ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`h-4 w-4 ${adminBusy ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
 
                 {/* Duration Selector */}
-                <div className="grid grid-cols-2 gap-2 rounded-xl tk-bg-forest-plate p-1 text-xs font-bold">
+                <div className="grid grid-cols-2 gap-2 rounded-[16px] tk-bg-forest-plate p-1 text-[13px] font-bold">
                   <button
                     type="button"
                     onClick={() => setAdminPlanType('annual')}
@@ -1754,7 +1754,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
                 {/* Channel / Customer Memo */}
                 <div>
-                  <label className="block text-xs font-bold tk-text-ink2 mb-1">
+                  <label className="block text-[13px] font-bold tk-text-ink2 mb-1">
                     {copy.channelMemoLabel}
                   </label>
                   <input
@@ -1763,7 +1763,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={adminNote}
                     onChange={(e) => setAdminNote(e.target.value)}
                     placeholder={copy.channelMemoPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                 </div>
 
@@ -1773,12 +1773,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     type="button"
                     disabled={adminBusy}
                     onClick={() => void handleMintCodes(1)}
-                    className="min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest px-3 py-2 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                    className="min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-[16px] tk-bg-forest px-3 py-2 text-[13px] font-bold text-white hover:tk-bg-press disabled:opacity-50 cursor-pointer whitespace-nowrap"
                   >
                     {adminBusy ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Plus className="h-3.5 w-3.5" />
+                      <Plus className="h-4 w-4" />
                     )}
                     {copy.mint1Btn}
                   </button>
@@ -1787,7 +1787,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     type="button"
                     disabled={adminBusy}
                     onClick={() => void handleMintCodes(5)}
-                    className="min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-xl border tk-bc-forest tk-bg-forest-tint px-3 py-2 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer whitespace-nowrap"
+                    className="min-h-[42px] inline-flex items-center justify-center gap-1.5 rounded-[16px] border tk-bc-forest tk-bg-forest-tint px-3 py-2 text-[13px] font-bold tk-text-forest hover:tk-bg-forest-tint disabled:opacity-50 cursor-pointer whitespace-nowrap"
                   >
                     {copy.mint5Btn}
                   </button>
@@ -1797,11 +1797,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* Generated Codes List */}
               <section className="space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-                  <h4 className="font-num text-xs font-bold tk-text-ink2 tabular-nums">
+                  <h4 className="font-serif text-[13px] font-bold tk-text-ink2 tabular-nums">
                     {copy.mintedCodesHeading(adminCodes.length)}
                   </h4>
 
-                  <div className="flex items-center gap-1 rounded-lg tk-bg-forest-tint p-0.5 text-[11px] font-semibold">
+                  <div className="flex items-center gap-1 rounded-lg tk-bg-forest-tint p-0.5 text-[13px] font-semibold">
                     {(
                       [
                         { id: 'all', label: copy.filterAll },
@@ -1825,9 +1825,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                 </div>
 
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   {filteredAdminCodes.length === 0 ? (
-                    <div className="p-6 text-center text-xs tk-text-ink2">
+                    <div className="p-6 text-center text-[13px] tk-text-ink2">
                       {adminBusy ? copy.loadingCodes : copy.noCodesYet}
                     </div>
                   ) : (
@@ -1843,18 +1843,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             <div className="min-w-0">
                               <div className="flex items-center gap-2">
                                 <span
-                                  className={`font-num text-sm font-extrabold tracking-wider tabular-nums ${
+                                  className={`font-serif text-sm font-extrabold tracking-wider tabular-nums ${
  isUsed ? 'line-through tk-text-ink2' : 'tk-text-ink'
  }`}
                                 >
                                   {item.code}
                                 </span>
-                                <span className="text-xs tk-text-ink2">
+                                <span className="text-[13px] tk-text-ink2">
                                   · {item.planType === 'lifetime' ? copy.lifetimeTag : copy.annualTag}{' '}
                                   · {isUsed ? copy.redeemedTag : copy.unusedTag}
                                 </span>
                               </div>
-                              <div className="mt-0.5 font-num text-xs tk-text-ink2 leading-snug break-words tabular-nums">
+                              <div className="mt-0.5 font-serif text-[13px] tk-text-ink2 leading-snug break-words tabular-nums">
                                 {dateStr}
                                 {item.note ? ` · ${item.note}` : ''}
                               </div>
@@ -1867,7 +1867,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                                 title={copy.voidCodeTitle}
                                 className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center shrink-0 cursor-pointer"
                               >
-                                <Trash2 className="h-3.5 w-3.5" />
+                                <Trash2 className="h-4 w-4" />
                               </button>
                             )}
                           </div>
@@ -1877,12 +1877,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => void handleCopyAdminCode(item, true)}
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl tk-bg-forest-tint px-3 py-2 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-[16px] tk-bg-forest-tint px-3 py-2 text-[13px] font-bold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
                               >
                                 {copiedCodeKey === `${item.code}_tpl` ? (
-                                  <Check className="h-3.5 w-3.5" />
+                                  <Check className="h-4 w-4" />
                                 ) : (
-                                  <Copy className="h-3.5 w-3.5" />
+                                  <Copy className="h-4 w-4" />
                                 )}
                                 {copy.copyScriptBtn}
                               </button>
@@ -1890,7 +1890,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => void handleCopyAdminCode(item, false)}
-                                className="rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer whitespace-nowrap"
+                                className="rounded-[16px] border tk-bc-hair bg-white px-3 py-2 text-[13px] font-semibold tk-text-ink2 hover:tk-bc-forest cursor-pointer whitespace-nowrap"
                               >
                                 {copiedCodeKey === `${item.code}_raw`
                                   ? t('common.copied')
@@ -1913,9 +1913,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* Add Custom Category Form */}
               <form
                 onSubmit={handleAddCategorySubmit}
-                className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-3"
+                className="rounded-[20px] border tk-bc-hair bg-white p-4 space-y-3"
               >
-                <h3 className="text-xs font-bold tk-text-ink2">
+                <h3 className="text-[13px] font-bold tk-text-ink2">
                   {copy.addCatTitle}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1924,19 +1924,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={newCatTitle}
                     onChange={(e) => setNewCatTitle(e.target.value)}
                     placeholder={copy.catNamePlaceholder}
-                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="font-serif rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                   <input
                     type="text"
                     value={newCatCube}
                     onChange={(e) => setNewCatCube(e.target.value)}
                     placeholder={copy.catCubePlaceholder}
-                    className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs tk-text-ink2">
+                    <span className="text-[13px] tk-text-ink2">
                       {t('packingExtra.colorLabel')}
                     </span>
                     {COLOR_SWATCHES.map((c) => (
@@ -1956,9 +1956,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <button
                     type="submit"
                     disabled={!newCatTitle.trim()}
-                    className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-3.5 py-2 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-40 cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-3.5 py-2 text-[13px] font-bold text-white hover:tk-bg-press disabled:opacity-40 cursor-pointer"
                   >
-                    <Plus className="h-3.5 w-3.5" />
+                    <Plus className="h-4 w-4" />
                     {copy.addCatBtn}
                   </button>
                 </div>
@@ -1966,10 +1966,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Existing Categories List */}
               <section>
-                <h3 className="px-1 mb-2 text-xs font-bold tk-text-ink2">
+                <h3 className="px-1 mb-2 text-[13px] font-bold tk-text-ink2">
                   {copy.currentCatsHeading(groups.length)}
                 </h3>
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   {groups.map((grp, idx) => {
                     const isEditing = editingGroupId === grp.id;
                     const groupIconMeta = resolvePackingGroupIconMeta(grp);
@@ -1982,13 +1982,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               type="text"
                               value={editCatTitle}
                               onChange={(e) => setEditCatTitle(e.target.value)}
-                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm font-bold tk-text-ink"
+                              className="font-serif rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm font-bold tk-text-ink"
                             />
                             <input
                               type="text"
                               value={editCatCube}
                               onChange={(e) => setEditCatCube(e.target.value)}
-                              className="rounded-xl border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink"
+                              className="rounded-[16px] border tk-bc-hair bg-white px-3 py-1.5 text-base sm:text-sm tk-text-ink"
                             />
                           </div>
                           <div className="flex items-center justify-between gap-2">
@@ -2011,14 +2011,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => setEditingGroupId(null)}
-                                className="text-xs font-semibold tk-text-ink2 cursor-pointer"
+                                className="text-[13px] font-semibold tk-text-ink2 cursor-pointer"
                               >
                                 {t('common.cancel')}
                               </button>
                               <button
                                 type="button"
                                 onClick={() => saveEditCategory(grp.id)}
-                                className="rounded-lg tk-bg-forest px-3 py-1 text-xs font-bold text-white cursor-pointer"
+                                className="rounded-lg tk-bg-forest px-3 py-1 text-[13px] font-bold text-white cursor-pointer"
                               >
                                 {t('common.save')}
                               </button>
@@ -2043,7 +2043,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             <div className="text-[15px] font-bold tk-text-ink truncate">
                               {translateGroupTitleLabel(grp.id, grp.title, activeLang)}
                             </div>
-                            <div className="font-num text-xs tk-text-ink2 leading-snug break-words tabular-nums">
+                            <div className="font-serif text-[13px] tk-text-ink2 leading-snug break-words tabular-nums">
                               {copy.itemsCount(grp.items.length)} ·{' '}
                               {translateGroupCubeLabel(grp.cubeLabel, activeLang)}
                             </div>
@@ -2058,7 +2058,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             title={t('common.moveUp')}
                             className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate disabled:opacity-30 flex items-center justify-center cursor-pointer"
                           >
-                            <ArrowUp className="h-3.5 w-3.5" />
+                            <ArrowUp className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
@@ -2067,7 +2067,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             title={t('common.moveDown')}
                             className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate disabled:opacity-30 flex items-center justify-center cursor-pointer"
                           >
-                            <ArrowDown className="h-3.5 w-3.5" />
+                            <ArrowDown className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
@@ -2075,7 +2075,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             title={copy.renameCatTitle}
                             className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-forest flex items-center justify-center cursor-pointer"
                           >
-                            <Pencil className="h-3.5 w-3.5" />
+                            <Pencil className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
@@ -2084,7 +2084,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             title={copy.deleteCatTitle}
                             className="h-8 w-8 rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger disabled:opacity-30 flex items-center justify-center cursor-pointer"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
@@ -2096,30 +2096,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* AI Learned Category Memory Dictionary */}
               <section>
                 <div className="px-1 mb-2 flex items-center justify-between">
-                  <h3 className="text-xs font-bold tk-text-ink2">
+                  <h3 className="text-[13px] font-bold tk-text-ink2">
                     {copy.memoryHeading(learnedEntries.length)}
                   </h3>
                   {learnedEntries.length > 0 && (
                     <button
                       type="button"
                       onClick={onClearLearnedCategories}
-                      className="text-xs font-semibold tk-text-danger hover:underline cursor-pointer"
+                      className="text-[13px] font-semibold tk-text-danger hover:underline cursor-pointer"
                     >
                       {copy.clearAllBtn}
                     </button>
                   )}
                 </div>
 
-                <div className="rounded-2xl border tk-bc-hair bg-white divide-y tk-divide-hair">
+                <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
                   {learnedEntries.length === 0 ? (
-                    <p className="p-4 text-xs tk-text-ink2 leading-relaxed">
+                    <p className="p-4 text-[13px] tk-text-ink2 leading-relaxed">
                       {copy.memoryIntro}
                     </p>
                   ) : (
                     learnedEntries.map(([itemName, catTitle]) => (
                       <div
                         key={itemName}
-                        className="px-4 py-2.5 flex items-center justify-between gap-3 text-xs"
+                        className="px-4 py-2.5 flex items-center justify-between gap-3 text-[13px]"
                       >
                         <div className="min-w-0 truncate">
                           <strong className="tk-text-ink">{itemName}</strong>
@@ -2132,7 +2132,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           className="tk-text-ink2 hover:tk-text-danger cursor-pointer"
                           title={copy.removeRuleTitle}
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     ))
@@ -2161,10 +2161,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   });
                   onToast(copy.affSavedToast);
                 }}
-                className="rounded-2xl border tk-bc-hair bg-white p-4 space-y-3.5"
+                className="rounded-[20px] border tk-bc-hair bg-white p-4 space-y-3.5"
               >
                 <div>
-                  <h3 className="text-sm font-extrabold tk-text-ink">
+                  <h3 className="font-serif text-sm font-extrabold tk-text-ink">
                     {copy.affHeading}
                   </h3>
                   <p className="mt-0.5 text-[13px] tk-text-ink2">
@@ -2172,7 +2172,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[13px]">
                   {(
                     [
                       {
@@ -2219,18 +2219,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           }))
                         }
                         placeholder={field.placeholder}
-                        className="w-full rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2 font-num text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                        className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper px-3 py-2 font-serif tabular-nums text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                       />
                     </label>
                   ))}
                 </div>
 
-                <label className="flex items-center justify-between gap-3 rounded-xl border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-xs cursor-pointer">
+                <label className="flex items-center justify-between gap-3 rounded-[16px] border tk-bc-hair tk-bg-paper px-3.5 py-2.5 text-[13px] cursor-pointer">
                   <div>
                     <div className="font-bold tk-text-ink">
                       {copy.affDisclosureTitle}
                     </div>
-                    <div className="text-xs tk-text-ink2">
+                    <div className="text-[13px] tk-text-ink2">
                       {copy.affDisclosureDesc}
                     </div>
                   </div>
@@ -2255,16 +2255,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onUpdatePreferences({ affiliatePartners: DEFAULT_AFFILIATE_PARTNERS });
                       onToast(copy.affResetToast);
                     }}
-                    className="inline-flex items-center gap-1 rounded-xl border tk-bc-hair bg-white px-3 py-2 text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-hair bg-white px-3 py-2 text-[13px] font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
                   >
-                    <RotateCcw className="h-3.5 w-3.5" />
+                    <RotateCcw className="h-4 w-4" />
                     {copy.affResetBtn}
                   </button>
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-1.5 rounded-xl tk-bg-forest px-4 py-2 text-xs font-bold text-white hover:tk-bg-press cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-4 py-2 text-[13px] font-bold text-white hover:tk-bg-press cursor-pointer"
                   >
-                    <Check className="h-3.5 w-3.5" />
+                    <Check className="h-4 w-4" />
                     {copy.affSaveBtn}
                   </button>
                 </div>
@@ -2275,17 +2275,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* SUB-VIEW: What's New */}
           {subView === 'whats_new' && (
             <div className="space-y-4">
-              <div className="rounded-2xl border tk-bc-hair bg-white p-5 space-y-4">
+              <div className="rounded-[20px] border tk-bc-hair bg-white p-5 space-y-4">
                 <div>
-                  <span className="font-num text-xs font-bold tk-text-forest">
+                  <span className="font-serif tabular-nums text-[13px] font-bold tk-text-forest">
                     {copy.wnBadge}
                   </span>
-                  <h3 className="mt-1 text-base font-extrabold tk-text-ink">
+                  <h3 className="font-serif mt-1 text-base font-extrabold tk-text-ink">
                     {copy.wnHeading}
                   </h3>
                 </div>
 
-                <div className="space-y-3 text-xs tk-text-ink2 leading-relaxed">
+                <div className="space-y-3 text-[13px] tk-text-ink2 leading-relaxed">
                   {copy.wnItems.map((item) => (
                     <div key={item.t}>
                       <strong className="tk-text-ink">{item.t}</strong>
@@ -2300,7 +2300,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClose();
                     onOpenExpertAudit();
                   }}
-                  className="w-full rounded-xl border tk-bc-hair tk-bg-forest-tint px-4 py-2.5 text-xs font-bold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
+                  className="w-full rounded-[16px] border tk-bc-hair tk-bg-forest-tint px-4 py-2.5 text-[13px] font-bold tk-text-forest hover:tk-bg-forest-tint cursor-pointer"
                 >
                   {copy.openAuditBtn}
                 </button>
@@ -2310,16 +2310,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* SUB-VIEW: Feedback */}
           {subView === 'feedback' && (
-            <div className="rounded-2xl border tk-bc-hair bg-white p-5 space-y-4">
+            <div className="rounded-[20px] border tk-bc-hair bg-white p-5 space-y-4">
               {feedbackSubmitted ? (
                 <div className="py-6 text-center space-y-2">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-full tk-bg-forest-tint tk-text-forest">
                     <Check className="h-5 w-5" />
                   </span>
-                  <h3 className="text-sm font-extrabold tk-text-ink">
+                  <h3 className="font-serif text-sm font-extrabold tk-text-ink">
                     {copy.fbThanksTitle}
                   </h3>
-                  <p className="text-xs tk-text-ink2">
+                  <p className="text-[13px] tk-text-ink2">
                     {copy.fbThanksDesc}
                   </p>
                 </div>
@@ -2348,9 +2348,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         key={opt.id}
                         type="button"
                         onClick={() => setFeedbackTopic(opt.id as typeof feedbackTopic)}
-                        className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold cursor-pointer ${
+                        className={`rounded-lg px-2.5 py-1.5 text-[13px] font-semibold cursor-pointer ${
  feedbackTopic === opt.id
- ? 'tk-bg-forest text-white'
+ ? 'tk-bg-forest-tint tk-text-forest border tk-bc-forest'
  : 'tk-bg-forest-plate tk-text-ink2'
  }`}
                       >
@@ -2363,12 +2363,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
                     placeholder={copy.fbPlaceholder}
-                    className="w-full rounded-xl border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
+                    className="w-full rounded-[16px] border tk-bc-hair tk-bg-paper p-3 text-base sm:text-sm tk-text-ink focus:bg-white focus:tk-bc-forest focus:outline-none"
                   />
                   <button
                     type="submit"
                     disabled={!feedbackText.trim()}
-                    className="w-full rounded-xl tk-bg-forest py-2.5 text-xs font-bold text-white hover:tk-bg-press disabled:opacity-40 cursor-pointer"
+                    className="w-full rounded-[16px] tk-bg-forest py-2.5 text-[13px] font-bold text-white hover:tk-bg-press disabled:opacity-40 cursor-pointer"
                   >
                     {copy.fbSubmitBtn}
                   </button>
@@ -2379,8 +2379,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* SUB-VIEW: Terms */}
           {subView === 'terms' && (
-            <div className="rounded-2xl border tk-bc-hair bg-white p-5 space-y-3 text-xs tk-text-ink2 leading-relaxed">
-              <h3 className="text-sm font-extrabold tk-text-ink">
+            <div className="rounded-[20px] border tk-bc-hair bg-white p-5 space-y-3 text-[13px] tk-text-ink2 leading-relaxed">
+              <h3 className="font-serif text-sm font-extrabold tk-text-ink">
                 {copy.termsHeading}
               </h3>
               {copy.termsParagraphs.map((p, idx) => (
@@ -2394,10 +2394,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* SUB-VIEW: Privacy & Security */}
           {subView === 'privacy' && (
-            <div className="rounded-2xl border tk-bc-hair bg-white p-5 space-y-3 text-xs tk-text-ink2 leading-relaxed">
+            <div className="rounded-[20px] border tk-bc-hair bg-white p-5 space-y-3 text-[13px] tk-text-ink2 leading-relaxed">
               <div className="flex items-center gap-2 tk-text-forest">
                 <Shield className="h-4 w-4" />
-                <h3 className="text-sm font-extrabold tk-text-ink">
+                <h3 className="font-serif text-sm font-extrabold tk-text-ink">
                   {copy.privacyHeading}
                 </h3>
               </div>

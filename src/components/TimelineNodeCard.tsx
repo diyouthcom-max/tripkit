@@ -464,41 +464,41 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
     return (
       <form
         onSubmit={handleSave}
-        className="rounded-2xl border tk-bc-forest tk-bg-paper p-4 sm:p-5 space-y-3"
+        className="rounded-[20px] border tk-bc-forest tk-bg-paper p-4 sm:p-5 space-y-3"
       >
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold tk-text-forest">
+          <span className="text-sm font-bold tk-text-forest">
             {nodeCopy.editStopTitle}
           </span>
           <button
             type="button"
             onClick={onCancelEdit}
-            className="inline-flex items-center gap-1 text-xs font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
+            className="font-serif inline-flex items-center gap-1 text-sm font-semibold tk-text-ink2 hover:tk-text-ink cursor-pointer"
           >
-            <X className="h-3.5 w-3.5" /> {nodeCopy.cancel}
+            <X className="h-4 w-4" /> {nodeCopy.cancel}
           </button>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
           <div>
-            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
+            <label className="block text-sm font-semibold tk-text-ink2 mb-1">
               {nodeCopy.arrivalLabel}
             </label>
             <input
               type="time"
               value={editTime}
               onChange={(e) => setEditTime(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-serif text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
+            <label className="block text-sm font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stayDurationLabel}
             </label>
             <select
               value={editDurationMinutes}
               onChange={(e) => setEditDurationMinutes(Number(e.target.value) || 60)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 font-num text-base sm:text-sm font-semibold tk-text-ink tabular-nums"
+              className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2 py-1.5 font-serif text-base sm:text-sm font-semibold tk-text-ink tabular-nums"
             >
               {[30, 45, 60, 90, 120, 180, 240].map((m) => (
                 <option key={m} value={m}>
@@ -508,24 +508,24 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
+            <label className="block text-sm font-semibold tk-text-ink2 mb-1">
               {nodeCopy.closesAtLabel}
             </label>
             <input
               type="time"
               value={editCloseTime}
               onChange={(e) => setEditCloseTime(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-serif text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
+            <label className="block text-sm font-semibold tk-text-ink2 mb-1">
               {nodeCopy.stopTypeLabel}
             </label>
             <select
               value={editStopType}
               onChange={(e) => setEditStopType(e.target.value as StopType)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-2 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
+              className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-card px-2 py-1.5 text-base sm:text-sm font-semibold tk-text-ink"
             >
               <option value="attraction">{getStopTypeLabel('attraction', activeLang)}</option>
               <option value="hotel">{getStopTypeLabel('hotel', activeLang)}</option>
@@ -535,7 +535,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-semibold tk-text-ink2 mb-1">
+            <label className="block text-sm font-semibold tk-text-ink2 mb-1">
               {nodeCopy.estSpendLabel(currencyCode)}
             </label>
             <input
@@ -544,7 +544,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               min="0"
               value={editEst}
               onChange={(e) => setEditEst(e.target.value)}
-              className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-1.5 font-num text-base sm:text-sm font-bold tk-text-ink tabular-nums"
+              className="w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-1.5 font-serif text-base sm:text-sm font-bold tk-text-ink tabular-nums"
             />
           </div>
         </div>
@@ -569,14 +569,14 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               }
             }}
             placeholder={nodeCopy.stopNamePlaceholder}
-            className="w-full rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="font-serif w-full rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm font-semibold tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <input
             type="text"
             value={editDistrict}
             onChange={(e) => setEditDistrict(e.target.value)}
             placeholder={nodeCopy.districtPlaceholder}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
         </div>
 
@@ -586,7 +586,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             value={editAddress}
             onChange={(e) => setEditAddress(e.target.value)}
             placeholder={nodeCopy.streetAddressPlaceholder}
-            className="rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+            className="rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
           />
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
@@ -595,7 +595,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 value={editTransit}
                 onChange={(e) => setEditTransit(e.target.value)}
                 placeholder={nodeCopy.transitNotePlaceholder}
-                className="flex-1 min-w-0 rounded-xl border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
+                className="flex-1 min-w-0 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-base sm:text-sm tk-text-ink focus:tk-bc-forest focus:outline-none"
               />
               <AiVoiceInputButton
                 compact
@@ -616,12 +616,12 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               />
             </div>
             {voiceNoteError && (
-              <p className="text-xs font-semibold tk-text-warning">{voiceNoteError}</p>
+              <p className="text-sm font-semibold tk-text-warning">{voiceNoteError}</p>
             )}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-xs">
+        <div className="flex flex-wrap items-center gap-4 text-sm">
           <label className="inline-flex items-center gap-1.5 font-semibold tk-text-ink2 cursor-pointer">
             <input
               type="checkbox"
@@ -649,21 +649,21 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               value={editRainTitle}
               onChange={(e) => setEditRainTitle(e.target.value)}
               placeholder={nodeCopy.rainTitlePlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
+              className="rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
             <input
               type="text"
               value={editRainDistrict}
               onChange={(e) => setEditRainDistrict(e.target.value)}
               placeholder={nodeCopy.rainDistrictPlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
+              className="rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
             <input
               type="text"
               value={editRainAddress}
               onChange={(e) => setEditRainAddress(e.target.value)}
               placeholder={nodeCopy.rainAddressPlaceholder}
-              className="rounded-xl border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
+              className="rounded-[16px] border tk-bc-hair tk-bg-card px-2.5 py-1.5 text-base sm:text-sm tk-text-ink"
             />
           </div>
         )}
@@ -672,15 +672,15 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
           <button
             type="button"
             onClick={onDelete}
-            className="inline-flex items-center gap-1 rounded-xl border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-xs font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-[16px] border tk-bc-danger-hair tk-bg-card px-3 py-1.5 text-sm font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
           >
-            <Trash2 className="h-3.5 w-3.5" /> {nodeCopy.deleteStop}
+            <Trash2 className="h-4 w-4" /> {nodeCopy.deleteStop}
           </button>
           <button
             type="submit"
-            className="inline-flex items-center gap-1 rounded-xl tk-bg-forest px-4 py-1.5 text-xs font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-[16px] tk-bg-forest px-4 py-1.5 text-sm font-semibold tk-text-card hover:tk-bg-press cursor-pointer"
           >
-            <Check className="h-3.5 w-3.5" /> {nodeCopy.saveChanges}
+            <Check className="h-4 w-4" /> {nodeCopy.saveChanges}
           </button>
         </div>
       </form>
@@ -703,7 +703,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
   );
 
   return (
-    <div data-timeline-index={index}>
+    <div data-timeline-index={index} className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif]">
       <motion.div
         initial={false}
         onPointerDown={() => {
@@ -739,7 +739,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
             ? { duration: 0.22, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }
             : { type: 'spring', stiffness: 520, damping: 32, mass: 0.6 }
         }
-        className={`relative rounded-2xl border tk-bg-card overflow-hidden select-none transition-[border-color,box-shadow,opacity,background-color] duration-200 ${
+        className={`relative rounded-[20px] border tk-bg-card overflow-hidden select-none transition-[border-color,box-shadow,opacity,background-color] duration-200 ${
  isDragOverlay
  ? 'tk-bc-forest tk-elev-card ring-2 tk-rc-forest cursor-grabbing'
  : isDragging
@@ -753,7 +753,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
       >
         {/* Left-side Swipe Reveal Cue (Right-Swipe = Toggle Visited) */}
         <div
-          className={`absolute inset-y-0 left-0 w-24 tk-bg-forest-tint tk-text-forest text-xs font-bold flex items-center justify-center gap-1 transition-opacity ${
+          className={`absolute inset-y-0 left-0 w-24 tk-bg-forest-tint tk-text-forest text-sm font-bold flex items-center justify-center gap-1 transition-opacity ${
  dragDeltaX !== null && dragDeltaX > 10 ? 'opacity-100' : 'opacity-0 pointer-events-none'
  }`}
           aria-hidden="true"
@@ -794,12 +794,12 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                     ? nodeCopy.unlockStop
                     : nodeCopy.lockStop
               }
-              className="w-[66px] tk-bg-press hover:tk-bg-forest tk-text-card text-[10px] font-semibold flex flex-col items-center justify-center gap-0.5 px-0.5 leading-tight text-center cursor-pointer"
+              className="w-[66px] tk-bg-press hover:tk-bg-forest tk-text-card text-[13px] font-semibold flex flex-col items-center justify-center gap-0.5 px-0.5 leading-tight text-center cursor-pointer"
             >
               {node.locked || isPassProtected ? (
-                <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                <Lock className="h-4 w-4 shrink-0" strokeWidth={1.5} />
               ) : (
-                <LockOpen className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                <LockOpen className="h-4 w-4 shrink-0" strokeWidth={1.5} />
               )}
               <span>
                 {isPassProtected
@@ -813,9 +813,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
           <button
             type="button"
             onClick={handleBeginEdit}
-            className="w-[66px] tk-bg-forest hover:tk-bg-press tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
+            className="w-[66px] tk-bg-forest hover:tk-bg-press tk-text-card text-sm font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
-            <Pencil className="h-3.5 w-3.5" />
+            <Pencil className="h-4 w-4" />
             <span>{nodeCopy.swipeEdit}</span>
           </button>
           <button
@@ -824,9 +824,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               onSwipeOpenChange(false);
               onDelete();
             }}
-            className="w-[66px] tk-bg-danger hover:tk-bg-paper tk-text-card text-xs font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
+            className="w-[66px] tk-bg-danger hover:tk-bg-paper tk-text-card text-sm font-semibold flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className="h-4 w-4" />
             <span>{nodeCopy.swipeDelete}</span>
           </button>
         </div>
@@ -876,7 +876,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
  } ${onOpenDetail ? 'cursor-pointer' : ''}`}
         >
           {/* Left Storefront Visual Thumbnail + Numbered Order Badge */}
-          <div className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0">
+          <div className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-[16px] overflow-hidden shrink-0">
             <button
               type="button"
               onClick={(e) => {
@@ -884,7 +884,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 onOpenDetail?.();
               }}
               title={nodeCopy.thumbTitle}
-              className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-xl overflow-hidden shrink-0 tk-bg-paper group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest"
+              className="relative w-24 h-28 sm:w-32 sm:h-34 rounded-[16px] overflow-hidden shrink-0 tk-bg-paper group text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:tk-rc-forest"
             >
               {showThumbImage ? (
                 <img
@@ -902,7 +902,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   ) : (
                     <StopCategoryIcon className="h-6 w-6 tk-text-card mb-1.5" />
                   )}
-                  <span className="text-[10px] font-semibold text-white/85 line-clamp-2 leading-tight">
+                  <span className="text-[13px] font-semibold text-white/85 line-clamp-2 leading-tight">
                     {getStopTypeLabel(node.stopType, activeLang) || displayDistrict}
                   </span>
                 </div>
@@ -913,7 +913,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
               {/* Top-left numbered order badge (Packy-inspired warm gold / visited teal) */}
               <span
-                className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-num text-xs font-extrabold tk-text-card ring-2 ring-white shadow-xs tabular-nums ${
+                className={`absolute top-2 left-2 h-6 min-w-[24px] px-1.5 rounded-full flex items-center justify-center font-serif text-sm font-extrabold tk-text-card ring-2 ring-white shadow-xs tabular-nums ${
  isVisited ? 'tk-bg-forest' : 'tk-bg-warning'
  }`}
               >
@@ -921,7 +921,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </span>
 
               {isVisited && (
-                <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[10px] font-bold tk-text-card text-center truncate">
+                <span className="absolute bottom-1.5 left-1.5 right-1.5 rounded-md tk-bg-forest px-1.5 py-0.5 text-[13px] font-bold tk-text-card text-center truncate">
                   {nodeCopy.visitedBadge}
                 </span>
               )}
@@ -1008,7 +1008,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   </motion.button>
 
                   <span
-                    className={`font-num text-xs sm:text-sm font-bold tabular-nums ${
+                    className={`font-serif text-sm sm:text-sm font-bold tabular-nums ${
  isVisited ? 'tk-text-ink2' : 'tk-text-ink2'
  }`}
                   >
@@ -1016,19 +1016,19 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   </span>
 
                   {previousOrderIndex !== undefined && previousOrderIndex !== index && (
-                    <span className="text-xs font-semibold tk-text-warning tabular-nums">
+                    <span className="text-sm font-semibold tk-text-warning tabular-nums">
                       {nodeCopy.wasOrder(previousOrderIndex + 1)}
                     </span>
                   )}
 
                   {isSwappedActive && (
-                    <span className="text-xs font-semibold tk-text-warning">
+                    <span className="text-sm font-semibold tk-text-warning">
                       {nodeCopy.rainBackupBadge}
                     </span>
                   )}
 
                   {!isVisited && Boolean(scheduledLeadMinutes) && (
-                    <span className="inline-flex items-center gap-0.5 text-xs font-semibold tk-text-forest tabular-nums">
+                    <span className="inline-flex items-center gap-0.5 text-sm font-semibold tk-text-forest tabular-nums">
                       <BellRing className="h-3 w-3 tk-text-forest" />
                       <span>-{scheduledLeadMinutes}m</span>
                     </span>
@@ -1045,7 +1045,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       title={nodeCopy.moveUp}
                       className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink disabled:opacity-30 flex items-center justify-center cursor-pointer"
                     >
-                      <ArrowUp className="h-3.5 w-3.5" />
+                      <ArrowUp className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
@@ -1054,7 +1054,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       title={nodeCopy.moveDown}
                       className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-plate hover:tk-text-ink disabled:opacity-30 flex items-center justify-center cursor-pointer"
                     >
-                      <ArrowDown className="h-3.5 w-3.5" />
+                      <ArrowDown className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
@@ -1062,7 +1062,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       title={nodeCopy.editStop}
                       className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-forest-tint hover:tk-text-forest flex items-center justify-center cursor-pointer"
                     >
-                      <Pencil className="h-3.5 w-3.5" />
+                      <Pencil className="h-4 w-4" />
                     </button>
                     {onToggleLock ? (
                       <button
@@ -1092,9 +1092,9 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                         }`}
                       >
                         {node.locked || isPassProtected ? (
-                          <Lock className="h-3.5 w-3.5" strokeWidth={1.5} />
+                          <Lock className="h-4 w-4" strokeWidth={1.5} />
                         ) : (
-                          <LockOpen className="h-3.5 w-3.5" strokeWidth={1.5} />
+                          <LockOpen className="h-4 w-4" strokeWidth={1.5} />
                         )}
                       </button>
                     ) : null}
@@ -1104,7 +1104,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                       title={nodeCopy.deleteStopTip}
                       className="h-7 w-7 rounded-lg tk-text-ink2 hover:tk-bg-danger-tint hover:tk-text-danger flex items-center justify-center cursor-pointer"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
 
@@ -1115,10 +1115,10 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                         e.stopPropagation();
                         onOpenDetail();
                       }}
-                      className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1 text-xs font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
+                      className="inline-flex items-center gap-0.5 rounded-lg px-2 py-1 text-sm font-semibold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap cursor-pointer"
                     >
                       <span>{nodeCopy.details}</span>
-                      <ChevronRight className="h-3.5 w-3.5" />
+                      <ChevronRight className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -1139,13 +1139,13 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   {localizedTitle}
                 </button>
                 {node.isAnchor && (
-                  <span className="text-xs font-semibold tk-text-forest">
+                  <span className="text-sm font-semibold tk-text-forest">
                     {nodeCopy.meetupAnchorBadge}
                   </span>
                 )}
                 {(node.locked || isPassProtected) && (
                   <span
-                    className="inline-flex items-center gap-0.5 text-xs font-semibold tk-text-forest"
+                    className="inline-flex items-center gap-0.5 text-sm font-semibold tk-text-forest"
                     title={isPassProtected ? nodeCopy.passLockedTip : nodeCopy.lockedBadge}
                   >
                     <Lock className="h-3 w-3 shrink-0" strokeWidth={1.5} />
@@ -1157,14 +1157,14 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </div>
 
               {/* Row 3: Packy-Style Clean Unboxed Metadata (Strictly Real Google Rating when Available) */}
-              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-[13px] tk-text-ink2">
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm sm:text-[13px] tk-text-ink2">
                 {hasRealGoogleRating ? (
                   <>
-                    <span className="inline-flex items-center gap-1 font-num font-bold tk-text-ink tabular-nums">
-                      <Star className="h-3.5 w-3.5 tk-fill-warning tk-text-warning shrink-0" />
+                    <span className="inline-flex items-center gap-1 font-serif font-bold tk-text-ink tabular-nums">
+                      <Star className="h-4 w-4 tk-fill-warning tk-text-warning shrink-0" />
                       {livePlace!.rating!.toFixed(1)}
                       {livePlace?.userRatingCount ? (
-                        <span className="font-normal tk-text-ink2 text-xs">
+                        <span className="font-normal tk-text-ink2 text-sm">
                           ({livePlace.userRatingCount.toLocaleString()})
                         </span>
                       ) : null}
@@ -1184,7 +1184,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                   </>
                 ) : null}
 
-                <span className="font-num font-medium tk-text-ink tabular-nums">
+                <span className="font-serif font-medium tk-text-ink tabular-nums">
                   {stayDurationLabel}
                 </span>
 
@@ -1193,7 +1193,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                 </span>
 
                 {node.logged ? (
-                  <span className="font-num font-semibold tk-text-forest tabular-nums">
+                  <span className="font-serif font-semibold tk-text-forest tabular-nums">
                     {nodeCopy.loggedAmount(sym, node.estLocal.toFixed(0))}
                   </span>
                 ) : node.estLocal === 0 ? (
@@ -1201,7 +1201,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
                     {nodeCopy.freeEntry}
                   </span>
                 ) : (
-                  <span className="font-num tabular-nums tk-text-ink2">
+                  <span className="font-serif tabular-nums tk-text-ink2">
                     {nodeCopy.estAmount(sym, node.estLocal.toFixed(0))}
                   </span>
                 )}
@@ -1238,8 +1238,8 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </div>
 
               {/* Row 4: Clean Opening Hours + One-Line Stop / Transit Summary (Zero Button Bloat) */}
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs tk-text-ink2">
-                <span className="inline-flex items-center gap-1 font-num tabular-nums">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm tk-text-ink2">
+                <span className="inline-flex items-center gap-1 font-serif tabular-nums">
                   <Clock className="h-3 w-3 tk-text-ink2 shrink-0" />
                   {todayHoursLine
                     ? todayHoursLine
@@ -1251,7 +1251,7 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
               </div>
 
               {(node.stopNote || localizedTransitNote) && (
-                <p className="mt-1 text-xs tk-text-ink2 leading-relaxed line-clamp-1">
+                <p className="mt-1 text-sm tk-text-ink2 leading-relaxed line-clamp-1">
                   {node.stopNote ? (
                     <span className="font-medium tk-text-ink">{node.stopNote}</span>
                   ) : (
@@ -1262,11 +1262,11 @@ export const TimelineNodeCard: React.FC<TimelineNodeCardProps> = ({
 
               {!isVisited && urgency.status !== 'ok' && (
                 <p
-                  className={`mt-1.5 inline-flex items-center gap-1 text-xs font-semibold ${
+                  className={`mt-1.5 inline-flex items-center gap-1 text-sm font-semibold ${
  urgency.status === 'conflict' ? 'tk-text-danger' : 'tk-text-warning'
  }`}
                 >
-                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                  <AlertTriangle className="h-4 w-4 shrink-0" />
                   <span>
                     {nodeCopy.urgencyAdvice(urgency.label)}
                   </span>

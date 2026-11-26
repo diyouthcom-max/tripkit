@@ -104,18 +104,18 @@ export const ExpertAuditModal: React.FC<ExpertAuditModalProps> = ({ open, onClos
   const items = AUDIT_ITEMS[activeLang] || AUDIT_ITEMS['en-US']!;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center tk-bg-ink-soft p-4">
-      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-white border tk-bc-hair shadow-2xl overflow-hidden">
+    <div className="[font-family:'Inter_Variable',Inter,system-ui,'PingFang_SC',sans-serif] [--font-serif:'Playfair_Display',Georgia,'Songti_SC',serif] fixed inset-0 z-50 flex items-center justify-center tk-bg-ink-soft p-4">
+      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-[20px] bg-white border tk-bc-hair tk-elev-soft overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b tk-bc-hair">
           <div>
-            <h2 className="text-base font-bold tk-text-ink">
+            <h2 className="font-serif text-base font-bold tk-text-ink">
               {activeLang === 'zh-CN'
                 ? '长期旅行专家 × AI 产品优化对照'
                 : activeLang === 'en-GB'
                 ? 'Long-Haul Travel Specialist × AI Architecture Notes'
                 : 'Long-Term Travel Specialist × AI Architecture Notes'}
             </h2>
-            <p className="text-xs tk-text-ink2 mt-0.5">
+            <p className="text-sm tk-text-ink2 mt-0.5">
               {activeLang === 'zh-CN'
                 ? '针对原 HTML 原型中 5 处真实业务漏洞与 AI 交互的落地升级'
                 : '5 core workflow fixes & live multimodal upgrades across packing, routing, and expense splitting'}
@@ -135,14 +135,14 @@ export const ExpertAuditModal: React.FC<ExpertAuditModalProps> = ({ open, onClos
           {items.map((item) => (
             <div key={item.title} className="pt-4 first:pt-0 space-y-1.5">
               <h3 className="text-sm font-bold tk-text-forest">{item.title}</h3>
-              <p className="text-xs tk-text-ink2">
+              <p className="text-sm tk-text-ink2">
                 <strong className="tk-text-danger">
                   {activeLang === 'zh-CN' ? '原版问题：' : 'Previous issue: '}
                 </strong>
                 {item.before}
               </p>
-              <p className="text-xs tk-text-ink flex items-start gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 tk-text-forest shrink-0 mt-0.5" />
+              <p className="text-sm tk-text-ink flex items-start gap-1.5">
+                <CheckCircle2 className="h-4 w-4 tk-text-forest shrink-0 mt-0.5" />
                 <span>
                   <strong>{activeLang === 'zh-CN' ? '已优化：' : 'Upgraded: '}</strong>
                   {item.after}
