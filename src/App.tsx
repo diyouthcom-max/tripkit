@@ -186,6 +186,7 @@ import {
   resolveActiveCoverVisual,
 } from './utils/tripCoverHelpers';
 import { PackingView } from './components/PackingView';
+import { GoogleCityCoverImage } from './components/GoogleCityCoverImage';
 import type { BudgetLimitsUpdatePayload } from './components/BudgetPlannerModal';
 import type {
   FullItineraryPlanOptions,
@@ -1979,6 +1980,10 @@ export default function App() {
     () => resolveActiveCoverVisual(trip, customCoverDataUrl),
     [trip.setup.cities, trip.setup.tripStyle, trip.coverConfig, customCoverDataUrl]
   );
+  /** Auto cover = Places city photo; preset/custom keep local/uploaded visuals. */
+  const isAutoCoverMode =
+    !trip.coverConfig || trip.coverConfig.mode === 'auto';
+  const coverCityName = String(trip.setup.cities?.[0] || '').trim();
 
   const headerSubtitlePreview = useMemo(() => {
     const daysText = t('header.daysCount', { count: trip.setup.days });
@@ -8519,15 +8524,31 @@ export default function App() {
                 className="inline-flex max-w-full items-center gap-2 rounded-xl py-1 pr-2 text-left cursor-pointer"
                 title={t('header.switchTripTitle')}
               >
-                <img
-                  src={activeCoverVisual.imageUrl}
-                  alt=""
-                  style={{
-                    objectPosition: `50% ${activeCoverVisual.focusY}%`,
-                    filter: activeCoverVisual.tone.filterCss,
-                  }}
-                  className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
-                />
+                {isAutoCoverMode && coverCityName ? (
+                  <GoogleCityCoverImage
+                    city={coverCityName}
+                    language={preferences.language}
+                    fallbackSrc={activeCoverVisual.imageUrl}
+                    alt=""
+                    showCredit={false}
+                    wrapperClassName="tk-shell-thumb-ring relative h-6 w-6 shrink-0 overflow-hidden rounded-lg"
+                    className="h-full w-full object-cover"
+                    style={{
+                      objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                      filter: activeCoverVisual.tone.filterCss,
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={activeCoverVisual.imageUrl}
+                    alt=""
+                    style={{
+                      objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                      filter: activeCoverVisual.tone.filterCss,
+                    }}
+                    className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
+                  />
+                )}
                 <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
                   {cleanDestinationTitle}
                 </span>
@@ -8602,23 +8623,47 @@ export default function App() {
             >
               {/* Clipped Scenic Cover Photo + Tone + Contrast Scrims (Separate from TripBookModal dropdown so menu never clips) */}
               <div className="tk-hero-stage absolute inset-0 overflow-hidden rounded-b-3xl md:rounded-3xl">
-                <img
-                  src={activeCoverVisual.imageUrl}
-                  alt={cleanDestinationTitle}
-                  style={{
-                    objectPosition: `50% ${activeCoverVisual.focusY}%`,
-                    filter: activeCoverVisual.tone.filterCss,
-                    transform:
-                      coverPullPx > 0
-                        ? `scale(${(1 + coverPullPx * 0.0022).toFixed(4)}) translateY(${(
-                            coverPullPx * 0.12
-                          ).toFixed(1)}px)`
-                        : 'scale(1) translateY(0px)',
-                  }}
-                  className={`h-full w-full object-cover will-change-transform ${
-                    coverPullPx === 0 ? 'transition-transform duration-300 ease-out' : ''
-                  }`}
-                />
+                {isAutoCoverMode && coverCityName ? (
+                  <GoogleCityCoverImage
+                    city={coverCityName}
+                    language={preferences.language}
+                    fallbackSrc={activeCoverVisual.imageUrl}
+                    alt={cleanDestinationTitle}
+                    showCredit
+                    wrapperClassName="absolute inset-0"
+                    style={{
+                      objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                      filter: activeCoverVisual.tone.filterCss,
+                      transform:
+                        coverPullPx > 0
+                          ? `scale(${(1 + coverPullPx * 0.0022).toFixed(4)}) translateY(${(
+                              coverPullPx * 0.12
+                            ).toFixed(1)}px)`
+                          : 'scale(1) translateY(0px)',
+                    }}
+                    className={`h-full w-full object-cover will-change-transform ${
+                      coverPullPx === 0 ? 'transition-transform duration-300 ease-out' : ''
+                    }`}
+                  />
+                ) : (
+                  <img
+                    src={activeCoverVisual.imageUrl}
+                    alt={cleanDestinationTitle}
+                    style={{
+                      objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                      filter: activeCoverVisual.tone.filterCss,
+                      transform:
+                        coverPullPx > 0
+                          ? `scale(${(1 + coverPullPx * 0.0022).toFixed(4)}) translateY(${(
+                              coverPullPx * 0.12
+                            ).toFixed(1)}px)`
+                          : 'scale(1) translateY(0px)',
+                    }}
+                    className={`h-full w-full object-cover will-change-transform ${
+                      coverPullPx === 0 ? 'transition-transform duration-300 ease-out' : ''
+                    }`}
+                  />
+                )}
                 {activeCoverVisual.tone.scrimExtraClass && (
                   <div
                     className={`absolute inset-0 pointer-events-none ${activeCoverVisual.tone.scrimExtraClass}`}
@@ -8780,15 +8825,31 @@ export default function App() {
                       className="tk-shell-hover-plate inline-flex items-center gap-2 rounded-xl px-2 py-1 -ml-2 transition-colors cursor-pointer max-w-[240px]"
                       title={t('header.switchTripTitle')}
                     >
-                      <img
-                        src={activeCoverVisual.imageUrl}
-                        alt=""
-                        style={{
-                          objectPosition: `50% ${activeCoverVisual.focusY}%`,
-                          filter: activeCoverVisual.tone.filterCss,
-                        }}
-                        className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
-                      />
+                      {isAutoCoverMode && coverCityName ? (
+                        <GoogleCityCoverImage
+                          city={coverCityName}
+                          language={preferences.language}
+                          fallbackSrc={activeCoverVisual.imageUrl}
+                          alt=""
+                          showCredit={false}
+                          wrapperClassName="tk-shell-thumb-ring relative h-6 w-6 shrink-0 overflow-hidden rounded-lg"
+                          className="h-full w-full object-cover"
+                          style={{
+                            objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                            filter: activeCoverVisual.tone.filterCss,
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={activeCoverVisual.imageUrl}
+                          alt=""
+                          style={{
+                            objectPosition: `50% ${activeCoverVisual.focusY}%`,
+                            filter: activeCoverVisual.tone.filterCss,
+                          }}
+                          className="tk-shell-thumb-ring h-6 w-6 rounded-lg object-cover shrink-0"
+                        />
+                      )}
                       <span className="tk-shell-ink truncate text-sm font-extrabold tracking-tight">
                         {cleanDestinationTitle}
                       </span>
@@ -9514,6 +9575,8 @@ export default function App() {
             language={activeLang}
             activeRoomId={activeRoomId}
             coverImageUrl={activeCoverVisual.imageUrl}
+            coverCity={isAutoCoverMode ? coverCityName || undefined : undefined}
+            useGoogleCityCover={Boolean(isAutoCoverMode && coverCityName)}
             onClose={() => {
               if (authModalState.mode === 'welcome') {
                 markWelcomeAuthSeen();

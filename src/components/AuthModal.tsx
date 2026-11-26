@@ -38,6 +38,7 @@ import {
 import { appleProvider, auth, formatAuthError, googleProvider } from '../firebase';
 import type { AppLanguage } from '../types';
 import { getAuthCopy } from '../i18n/packs/authAndKitPack';
+import { GoogleCityCoverImage } from './GoogleCityCoverImage';
 
 export type AuthModalMode = 'welcome' | 'signin' | 'account';
 
@@ -50,6 +51,9 @@ export interface AuthModalProps {
   language: AppLanguage;
   activeRoomId?: string | null;
   coverImageUrl?: string;
+  /** When set with useGoogleCityCover, auto-mode loads Places city photo (falls back to coverImageUrl). */
+  coverCity?: string;
+  useGoogleCityCover?: boolean;
   onClose: () => void;
   onSkipWelcome?: () => void;
   onSignedIn?: (user: User) => void;
@@ -102,6 +106,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   language,
   activeRoomId,
   coverImageUrl,
+  coverCity,
+  useGoogleCityCover = false,
   onClose,
   onSkipWelcome,
   onSignedIn,
@@ -503,7 +509,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       >
         {/* Editorial Destination Hero Banner */}
         <div className="relative h-40 sm:h-44 shrink-0 overflow-hidden tk-bg-forest">
-          {coverImageUrl ? (
+          {useGoogleCityCover && coverCity && coverImageUrl ? (
+            <GoogleCityCoverImage
+              city={coverCity}
+              language={language}
+              fallbackSrc={coverImageUrl}
+              alt=""
+              showCredit
+              wrapperClassName="absolute inset-0"
+              className="absolute inset-0 h-full w-full object-cover opacity-75 scale-105"
+            />
+          ) : coverImageUrl ? (
             <img
               src={coverImageUrl}
               alt=""

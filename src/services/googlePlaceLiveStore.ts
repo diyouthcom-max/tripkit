@@ -39,9 +39,134 @@ export interface LiveGooglePlaceInfo {
 const livePlaceMemoryCache: Record<string, LiveGooglePlaceInfo> = {};
 const inFlightLookups: Record<string, Promise<LiveGooglePlaceInfo | null>> = {};
 
+/** Session cache for city-cover lookups (null = known miss). Keys: gcover:{lang}:{city} */
+const cityCoverResultCache: Record<string, GoogleCityCoverResult | null> = {};
+const inFlightCityCoverLookups: Record<string, Promise<GoogleCityCoverResult | null>> = {};
+
+export const PLACES_LANG_MAP: Record<AppLanguage, string> = {
+  'zh-CN': 'zh-CN',
+  'en-US': 'en-US',
+  'en-GB': 'en-GB',
+  'es-MX': 'es-419',
+  'fr-FR': 'fr',
+  'de-DE': 'de',
+  'pt-BR': 'pt-BR',
+  'ja-JP': 'ja',
+};
+
+export interface GoogleCityCoverResult {
+  photoUri: string;
+  attribution: PlacePhotoAttribution;
+  placeDisplayName?: string;
+}
+
 export function getCachedLivePlace(key: string | undefined): LiveGooglePlaceInfo | null {
   if (!key) return null;
   return livePlaceMemoryCache[key] ?? null;
+}
+
+/**
+ * Places API (New) city landmark photo for trip header covers.
+ * Caches under `gcover:{lang}:{city}` in livePlaceMemoryCache (+ result cache).
+ * Returns null on failure / no photos (caller falls back to local preset).
+ */
+export async function resolveGoogleCityCoverPhoto(params: {
+  placesLib: google.maps.PlacesLibrary;
+  city: string;
+  language: AppLanguage;
+}): Promise<GoogleCityCoverResult | null> {
+  const city = String(params.city || '').trim();
+  if (!city || !params.placesLib?.Place) return null;
+
+  const placesLang = PLACES_LANG_MAP[params.language] || 'en-US';
+  const cityKey = city.toLowerCase();
+  const cacheKey = `gcover:${placesLang}:${cityKey}`;
+
+  if (Object.prototype.hasOwnProperty.call(cityCoverResultCache, cacheKey)) {
+    return cityCoverResultCache[cacheKey];
+  }
+  const cachedPlace = livePlaceMemoryCache[cacheKey];
+  if (cachedPlace?.heroPhotoUris?.[0] && cachedPlace.photoAttributions[0]) {
+    const hit: GoogleCityCoverResult = {
+      photoUri: cachedPlace.heroPhotoUris[0],
+      attribution: cachedPlace.photoAttributions[0],
+      placeDisplayName: cachedPlace.displayName,
+    };
+    cityCoverResultCache[cacheKey] = hit;
+    return hit;
+  }
+  if (inFlightCityCoverLookups[cacheKey] !== undefined) {
+    return inFlightCityCoverLookups[cacheKey];
+  }
+
+  const textQuery = `${city} city landmark skyline`;
+  const task = (async (): Promise<GoogleCityCoverResult | null> => {
+    try {
+      const { places } = await params.placesLib.Place.searchByText({
+        textQuery,
+        fields: ['id', 'displayName', 'photos'],
+        maxResultCount: 1,
+        language: placesLang,
+        internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio'],
+      });
+      const first = places?.[0];
+      if (!first) {
+        cityCoverResultCache[cacheKey] = null;
+        return null;
+      }
+
+      const photos = Array.isArray(first.photos) ? first.photos : [];
+      if (photos.length === 0) {
+        cityCoverResultCache[cacheKey] = null;
+        return null;
+      }
+
+      let photoUri: string | undefined;
+      try {
+        photoUri = photos[0].getURI({ maxWidth: 1200, maxHeight: 800 });
+      } catch {
+        photoUri = undefined;
+      }
+      if (!photoUri) {
+        cityCoverResultCache[cacheKey] = null;
+        return null;
+      }
+
+      const attributions = extractPhotoAttributionList(photos);
+      const attribution = attributions[0] || {
+        displayName: first.displayName || city,
+      };
+
+      const mapped = mapPlaceInstanceToLiveInfo(first, city, city);
+      if (mapped) {
+        // Prefer the cover-sized URI as hero[0] for this gcover cache entry.
+        livePlaceMemoryCache[cacheKey] = {
+          ...mapped,
+          heroPhotoUris: [photoUri, ...mapped.heroPhotoUris.filter((u) => u !== photoUri)],
+          thumbPhotoUri: mapped.thumbPhotoUri || photoUri,
+          photoAttributions:
+            attributions.length > 0 ? attributions : mapped.photoAttributions,
+        };
+      }
+
+      const result: GoogleCityCoverResult = {
+        photoUri,
+        attribution,
+        placeDisplayName: first.displayName || city,
+      };
+      cityCoverResultCache[cacheKey] = result;
+      return result;
+    } catch (err) {
+      console.warn('Google city cover lookup failed for:', city, err);
+      cityCoverResultCache[cacheKey] = null;
+      return null;
+    } finally {
+      delete inFlightCityCoverLookups[cacheKey];
+    }
+  })();
+
+  inFlightCityCoverLookups[cacheKey] = task;
+  return task;
 }
 
 function extractPhotoAttributionList(
@@ -303,16 +428,6 @@ function useConfiguredDayStopsPlaces(
   const callbackRef = useRef(onPlaceIdDiscovered);
   callbackRef.current = onPlaceIdDiscovered;
 
-  const PLACES_LANG_MAP: Record<AppLanguage, string> = {
-    'zh-CN': 'zh-CN',
-    'en-US': 'en-US',
-    'en-GB': 'en-GB',
-    'es-MX': 'es-419',
-    'fr-FR': 'fr',
-    'de-DE': 'de',
-    'pt-BR': 'pt-BR',
-    'ja-JP': 'ja',
-  };
   const placesLang = PLACES_LANG_MAP[lang] || 'en-US';
   const targetsSignature = targets
     .map((t) => `${t.nodeId}|${t.placeId || ''}|${t.title}|${t.address}|${t.cityHint}`)
