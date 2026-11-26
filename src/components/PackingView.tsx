@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Check,
   ChevronDown,
@@ -32,7 +32,6 @@ import {
   ExternalLink,
   RefreshCw,
   SlidersHorizontal,
-  Library,
 } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
@@ -110,19 +109,11 @@ import type {
   TripTaskCategory,
   UnitSystem,
 } from '../types';
-import type { PackingTemplate } from '../utils/packingTemplateLibrary';
 import {
   formatLocalDateTimeInputValue,
   formatScheduleBadgeLabel,
   type ResolvedScheduledAlert,
 } from '../utils/notificationScheduler';
-
-export type PackingSegmentOption = {
-  id: string;
-  label: string;
-  from: number;
-  to: number;
-};
 
 export interface PendingClassifiedPackPayload {
   item: Omit<PackingItem, 'id' | 'done'>;
@@ -268,19 +259,6 @@ interface PackingViewProps {
   onOpenPackingWizard?: () => void;
   onApplySmartParams?: (payload: PackingWizardSubmitPayload) => Promise<void> | void;
   onOpenItemInGoMode?: (item: PackingItem, groupId: string) => void;
-  packingTemplates?: PackingTemplate[];
-  onSavePackingTemplate?: (name: string) => void;
-  onApplyPackingTemplate?: (templateId: string) => void;
-  onDeletePackingTemplate?: (templateId: string) => void;
-  onRenamePackingTemplate?: (templateId: string, name: string) => void;
-  packingSegments?: PackingSegmentOption[];
-  activePackingSegmentId?: string;
-  onChangePackingSegment?: (id: string) => void;
-  onSetItemSegments?: (
-    groupId: string,
-    itemId: string,
-    segmentIds: string[]
-  ) => void;
 }
 
 type FilterMode = 'all' | 'todo' | 'done';
@@ -443,15 +421,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
   onCycleTaskOwner,
   onApplySmartParams,
   onOpenItemInGoMode,
-  packingTemplates = [],
-  onSavePackingTemplate,
-  onApplyPackingTemplate,
-  onDeletePackingTemplate,
-  onRenamePackingTemplate,
-  packingSegments = [],
-  activePackingSegmentId = 'all',
-  onChangePackingSegment,
-  onSetItemSegments,
   carryOnLimitKg = CARRY_ON_LIMIT_KG,
   checkedLimitKg = CHECKED_LIMIT_KG,
   unitSystem = 'metric',
@@ -481,30 +450,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
   const [toBuyModalOpen, setToBuyModalOpen] = useState(false);
   const [tasksModalOpen, setTasksModalOpen] = useState(false);
   const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const [templateLibraryOpen, setTemplateLibraryOpen] = useState(false);
-  const [templateNameDraft, setTemplateNameDraft] = useState('');
-  const [templateRenameId, setTemplateRenameId] = useState<string | null>(null);
-  const [templateRenameDraft, setTemplateRenameDraft] = useState('');
-  const [templatePendingDeleteId, setTemplatePendingDeleteId] = useState<
-    string | null
-  >(null);
-
-  const displayGroups = useMemo(() => {
-    if (!activePackingSegmentId || activePackingSegmentId === 'all') {
-      return groups;
-    }
-    return groups
-      .map((g) => ({
-        ...g,
-        items: g.items.filter(
-          (it) =>
-            !it.segmentIds ||
-            it.segmentIds.length === 0 ||
-            it.segmentIds.includes(activePackingSegmentId)
-        ),
-      }))
-      .filter((g) => g.items.length > 0);
-  }, [groups, activePackingSegmentId]);
 
   const openAddGearSheet = (
     tab: AddGearModeTab = 'for_you',
@@ -1130,42 +1075,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
                   </button>
                 </div>
 
-                {packingSegments.length > 0 && onChangePackingSegment ? (
-                  <div className="min-w-0 max-w-[9.5rem] sm:max-w-[18rem] md:max-w-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]">
-                    <div
-                      role="group"
-                      aria-label={copy.segmentSwitchAria}
-                      className="inline-flex w-max items-center gap-0.5 rounded-xl tk-bg-forest-plate p-0.5"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => onChangePackingSegment('all')}
-                        className={`h-7 inline-flex items-center rounded-lg px-2 text-xs font-bold whitespace-nowrap shrink-0 cursor-pointer ${
-                          activePackingSegmentId === 'all'
-                            ? 'tk-bg-card tk-text-ink shadow-xs'
-                            : 'tk-text-ink2 hover:tk-text-ink'
-                        }`}
-                      >
-                        {copy.segmentAll}
-                      </button>
-                      {packingSegments.map((seg) => (
-                        <button
-                          key={seg.id}
-                          type="button"
-                          onClick={() => onChangePackingSegment(seg.id)}
-                          className={`h-7 inline-flex items-center rounded-lg px-2 text-xs font-bold whitespace-nowrap shrink-0 cursor-pointer ${
-                            activePackingSegmentId === seg.id
-                              ? 'tk-bg-card tk-text-ink shadow-xs'
-                              : 'tk-text-ink2 hover:tk-text-ink'
-                          }`}
-                        >
-                          {seg.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-
                 {crew.length > 1 && (
                   <div ref={memberMenuRef} className="relative shrink-0">
                     <button
@@ -1312,26 +1221,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
                 </span>
               )}
             </button>
-
-            {(onSavePackingTemplate || onApplyPackingTemplate) && (
-              <button
-                type="button"
-                onClick={() => {
-                  setTemplateLibraryOpen(true);
-                  setTemplatePendingDeleteId(null);
-                  setTemplateRenameId(null);
-                }}
-                className="h-8 inline-flex items-center gap-1.5 rounded-xl border tk-bc-hair tk-bg-paper px-2.5 text-xs font-semibold tk-text-ink hover:tk-bc-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                <Library className="h-3.5 w-3.5 tk-text-forest shrink-0" />
-                <span>{copy.templateLibraryBtn}</span>
-                {packingTemplates.length > 0 && (
-                  <span className="inline-flex h-4 min-w-[16px] items-center justify-center rounded-full tk-bg-forest-tint px-1 font-num text-[10px] font-bold tk-text-forest tabular-nums">
-                    {packingTemplates.length}
-                  </span>
-                )}
-              </button>
-            )}
           </div>
 
           <AnimatePresence>
@@ -1394,7 +1283,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
             >
               <SmartPackingInlinePanel
-                groups={displayGroups}
+                groups={groups}
                 crew={crew}
                 intel={intel}
                 activeMemberId={activeMemberId}
@@ -1426,7 +1315,7 @@ export const PackingView: React.FC<PackingViewProps> = ({
               className="space-y-3"
             >
 
-          {displayGroups.map((grp) => {
+          {groups.map((grp) => {
             const perspectiveItems = grp.items.filter(matchesPerspective);
             const visibleItems = perspectiveItems.filter((item) => {
               if (filter === 'todo') return !item.done;
@@ -2605,191 +2494,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
         </section>
       </div>
 
-      {/* Packing template library sheet */}
-      {templateLibraryOpen && (
-        <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center">
-          <button
-            type="button"
-            aria-label={t('common.close')}
-            className="absolute inset-0 tk-bg-overlay cursor-pointer"
-            onClick={() => setTemplateLibraryOpen(false)}
-          />
-          <div className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-t-[24px] sm:rounded-[24px] tk-bg-card border tk-bc-hair shadow-xl mx-0 sm:mx-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-            <div className="sticky top-0 z-10 flex items-center justify-between gap-2 border-b tk-bc-hair tk-bg-card px-4 py-3">
-              <h3 className="text-sm font-bold tk-text-ink">{copy.templateLibraryBtn}</h3>
-              <button
-                type="button"
-                onClick={() => setTemplateLibraryOpen(false)}
-                className="rounded-lg p-1.5 tk-text-ink2 hover:tk-bg-forest-tint cursor-pointer"
-                aria-label={t('common.close')}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="px-4 py-3 space-y-3">
-              {onSavePackingTemplate ? (
-                <div className="space-y-2 rounded-xl border tk-bc-hair tk-bg-paper p-3">
-                  <input
-                    type="text"
-                    value={templateNameDraft}
-                    onChange={(e) => setTemplateNameDraft(e.target.value)}
-                    maxLength={40}
-                    placeholder={copy.templateNamePlaceholder}
-                    className="w-full h-10 rounded-xl border tk-bc-hair tk-bg-card px-3 text-sm tk-text-ink placeholder:tk-text-ink2 outline-none focus:tk-bc-forest"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const name = templateNameDraft.trim();
-                      if (!name) return;
-                      onSavePackingTemplate(name);
-                      setTemplateNameDraft('');
-                    }}
-                    className="w-full h-10 rounded-xl tk-bg-forest text-sm font-bold text-white hover:tk-bg-press cursor-pointer"
-                  >
-                    {copy.templateSaveBtn}
-                  </button>
-                  <p className="text-[11px] tk-text-ink2 leading-snug">
-                    {copy.templateMergedHint}
-                  </p>
-                </div>
-              ) : null}
-
-              {packingTemplates.length === 0 ? (
-                <p className="text-xs tk-text-ink2 leading-snug py-2">
-                  {copy.templateEmptyHint}
-                </p>
-              ) : (
-                <ul className="space-y-2">
-                  {packingTemplates.map((tpl) => {
-                    const itemCount = tpl.groups.reduce(
-                      (sum, g) => sum + (g.items?.length || 0),
-                      0
-                    );
-                    const createdLabel = new Date(tpl.createdAt).toLocaleDateString(
-                      activeLang
-                    );
-                    const isRenaming = templateRenameId === tpl.id;
-                    const pendingDelete = templatePendingDeleteId === tpl.id;
-                    return (
-                      <li
-                        key={tpl.id}
-                        className="rounded-xl border tk-bc-hair tk-bg-paper px-3 py-2.5 space-y-2 min-w-0"
-                      >
-                        {isRenaming ? (
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={templateRenameDraft}
-                              onChange={(e) =>
-                                setTemplateRenameDraft(e.target.value)
-                              }
-                              maxLength={40}
-                              className="min-w-0 flex-1 h-9 rounded-lg border tk-bc-hair tk-bg-card px-2 text-sm tk-text-ink outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const next = templateRenameDraft.trim();
-                                if (next && onRenamePackingTemplate) {
-                                  onRenamePackingTemplate(tpl.id, next);
-                                }
-                                setTemplateRenameId(null);
-                              }}
-                              className="shrink-0 rounded-lg tk-bg-forest px-2.5 py-1.5 text-[11px] font-bold text-white cursor-pointer"
-                            >
-                              {copy.templateRenameBtn}
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="min-w-0">
-                            <div className="text-sm font-semibold tk-text-ink leading-snug break-words">
-                              {tpl.name}
-                            </div>
-                            <div className="mt-0.5 text-[11px] tk-text-ink2 tabular-nums leading-snug">
-                              {itemCount}
-                              {copy.templateItemsUnit} · {createdLabel}
-                              {tpl.scenarioIds && tpl.scenarioIds.length > 0
-                                ? ` · ${tpl.scenarioIds.join(' · ')}`
-                                : ''}
-                            </div>
-                          </div>
-                        )}
-
-                        {pendingDelete ? (
-                          <div className="space-y-1.5">
-                            <p className="text-[11px] tk-text-warning leading-snug">
-                              {copy.templateConfirmDelete(tpl.name)}
-                            </p>
-                            <div className="flex flex-wrap gap-1.5">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  onDeletePackingTemplate?.(tpl.id);
-                                  setTemplatePendingDeleteId(null);
-                                }}
-                                className="rounded-lg tk-bg-danger px-2.5 py-1.5 text-[11px] font-bold text-white cursor-pointer"
-                              >
-                                {copy.templateDeleteBtn}
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setTemplatePendingDeleteId(null)}
-                                className="rounded-lg border tk-bc-hair px-2.5 py-1.5 text-[11px] font-semibold tk-text-ink2 cursor-pointer"
-                              >
-                                {t('common.cancel')}
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-wrap gap-1.5">
-                            {onApplyPackingTemplate ? (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  onApplyPackingTemplate(tpl.id);
-                                  setTemplateLibraryOpen(false);
-                                }}
-                                className="rounded-lg tk-bg-forest px-2.5 py-1.5 text-[11px] font-bold text-white hover:tk-bg-press cursor-pointer"
-                              >
-                                {copy.templateApplyBtn}
-                              </button>
-                            ) : null}
-                            {onRenamePackingTemplate ? (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setTemplateRenameId(tpl.id);
-                                  setTemplateRenameDraft(tpl.name);
-                                }}
-                                className="rounded-lg border tk-bc-hair px-2.5 py-1.5 text-[11px] font-semibold tk-text-ink hover:tk-bg-forest-tint cursor-pointer"
-                              >
-                                {copy.templateRenameBtn}
-                              </button>
-                            ) : null}
-                            {onDeletePackingTemplate ? (
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setTemplatePendingDeleteId(tpl.id)
-                                }
-                                className="rounded-lg border tk-bc-hair px-2.5 py-1.5 text-[11px] font-semibold tk-text-danger hover:tk-bg-danger-tint cursor-pointer"
-                              >
-                                {copy.templateDeleteBtn}
-                              </button>
-                            ) : null}
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Packy-Fusion Item Detail Bottom Sheet */}
       <PackingItemDetailSheet
         open={Boolean(activeSheetMatch)}
@@ -2827,23 +2531,6 @@ export const PackingView: React.FC<PackingViewProps> = ({
         onDeleteItem={onDeleteItem}
         onDontSuggestAgain={onDontSuggestItemAgain}
         onOpenInGoMode={onOpenItemInGoMode}
-        packingSegments={packingSegments}
-        itemSegmentIds={activeSheetMatch?.item.segmentIds}
-        onToggleItemSegment={
-          onSetItemSegments && activeSheetMatch
-            ? (segmentId, enabled) => {
-                const current = activeSheetMatch.item.segmentIds ?? [];
-                const next = enabled
-                  ? Array.from(new Set([...current, segmentId]))
-                  : current.filter((id) => id !== segmentId);
-                onSetItemSegments(
-                  activeSheetMatch.group.id,
-                  activeSheetMatch.item.id,
-                  next
-                );
-              }
-            : undefined
-        }
       />
 
       {/* Standalone Packy-Style Sheet Modals: Add Gear · Weight Analytics · To Buy · Pre-Trip To-Dos */}

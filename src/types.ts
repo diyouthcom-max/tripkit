@@ -148,11 +148,6 @@ export interface PackingItem {
   toBuy?: boolean;
   /** Saved in persistent Always Pack library across future trips */
   alwaysPack?: boolean;
-  /**
-   * Optional trip-segment ids this item applies to (e.g. ['D1-D2']).
-   * Omit / empty = trip-wide (visible under every segment filter).
-   */
-  segmentIds?: string[];
 }
 
 export interface PackingReminderSettings {

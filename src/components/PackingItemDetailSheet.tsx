@@ -89,9 +89,6 @@ export interface PackingItemDetailSheetProps {
   onDeleteItem: (groupId: string, itemId: string) => void;
   onDontSuggestAgain: (groupId: string, itemId: string) => void;
   onOpenInGoMode?: (item: PackingItem, groupId: string) => void;
-  packingSegments?: Array<{ id: string; label: string; from: number; to: number }>;
-  itemSegmentIds?: string[];
-  onToggleItemSegment?: (segmentId: string, enabled: boolean) => void;
 }
 
 export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
@@ -117,9 +114,6 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
   onDeleteItem,
   onDontSuggestAgain,
   onOpenInGoMode,
-  packingSegments = [],
-  itemSegmentIds,
-  onToggleItemSegment,
 }) => {
   const { i18n } = useTranslation();
   const activeLang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
@@ -750,45 +744,6 @@ export const PackingItemDetailSheet: React.FC<PackingItemDetailSheetProps> = ({
                   <Check className="h-3.5 w-3.5 stroke-[2.6]" />
                 </span>
               </button>
-
-              {/* Optional: trip-segment scope */}
-              {packingSegments.length > 0 && onToggleItemSegment ? (
-                <div className="px-4 py-3.5 space-y-2 border-t tk-bc-hair">
-                  <div className="min-w-0">
-                    <div className="text-[15px] font-semibold tk-text-ink">
-                      {copy.segmentItemScope}
-                    </div>
-                    <div className="text-xs tk-text-ink2 leading-snug">
-                      {copy.segmentAllTrips}
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {packingSegments.map((seg) => {
-                      const selected = Boolean(
-                        itemSegmentIds?.includes(seg.id)
-                      );
-                      return (
-                        <button
-                          key={seg.id}
-                          type="button"
-                          role="checkbox"
-                          aria-checked={selected}
-                          onClick={() =>
-                            onToggleItemSegment(seg.id, !selected)
-                          }
-                          className={`h-8 inline-flex items-center rounded-lg border px-2.5 text-xs font-semibold whitespace-nowrap cursor-pointer ${
-                            selected
-                              ? 'tk-bc-forest tk-bg-forest-tint tk-text-forest'
-                              : 'tk-bc-hair tk-bg-paper tk-text-ink2'
-                          }`}
-                        >
-                          {seg.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
 
               {/* Action 5: Rename */}
               <button

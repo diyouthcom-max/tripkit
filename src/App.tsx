@@ -73,14 +73,6 @@ import {
   pushTripSnapshot,
 } from './utils/snapshotStack';
 import {
-  deletePackingTemplate,
-  loadPackingTemplates,
-  renamePackingTemplate,
-  savePackingTemplate,
-  type PackingTemplate,
-} from './utils/packingTemplateLibrary';
-import { getPackingViewCopy } from './i18n/packs/packingViewPack';
-import {
   getBlockedDomainsForProposal,
   getTouchedDomainsForProposal,
   listDisabledAiWriteDomains,
@@ -1845,10 +1837,6 @@ export default function App() {
   const [alwaysPackLibrary, setAlwaysPackLibrary] = useState<AlwaysPackTemplateItem[]>(() =>
     loadAlwaysPackLibrary()
   );
-  const [packingTemplates, setPackingTemplates] = useState<PackingTemplate[]>(() =>
-    loadPackingTemplates()
-  );
-  const [activePackingSegmentId, setActivePackingSegmentId] = useState<string>('all');
   const [neverSuggestItems, setNeverSuggestItems] = useState<string[]>(() =>
     loadNeverSuggestList()
   );
@@ -2214,131 +2202,6 @@ export default function App() {
         saveAiWriteDomains(next);
         return next;
       });
-    },
-    []
-  );
-
-  const packingViewCopy = useMemo(
-    () => getPackingViewCopy(activeLang),
-    [activeLang]
-  );
-
-  const packingSegments = useMemo(() => {
-    const cities = (trip.setup.cities || [])
-      .map((c) => String(c || '').trim())
-      .filter(Boolean)
-      .slice(0, 8);
-    if (cities.length === 0) return [] as Array<{
-      id: string;
-      label: string;
-      from: number;
-      to: number;
-    }>;
-    const days = Math.max(1, Math.round(trip.setup.days) || 1);
-    const allocation = resolveCityDaysAllocation(
-      cities,
-      days,
-      trip.setup.cityDays
-    );
-    let cursor = 1;
-    return cities.map((city, idx) => {
-      const span = Math.max(1, allocation[idx] ?? 1);
-      const from = cursor;
-      const to = Math.min(days, from + span - 1);
-      cursor = to + 1;
-      const id = from === to ? `D${from}` : `D${from}-D${to}`;
-      const label =
-        from === to ? `D${from} · ${city}` : `D${from}-D${to} · ${city}`;
-      return { id, label, from, to };
-    }).filter((seg) => seg.from <= days);
-  }, [
-    trip.setup.cities,
-    trip.setup.cityDays,
-    trip.setup.days,
-    trip.setup.departureDate,
-  ]);
-
-  const handleSavePackingTemplate = useCallback(
-    (name: string) => {
-      const next = savePackingTemplate(
-        name,
-        trip.packing,
-        trip.setup?.specialScenarios
-      );
-      setPackingTemplates(next);
-      const trimmed = name.trim().slice(0, 40);
-      if (trimmed) showToast(packingViewCopy.templateSavedToast(trimmed));
-    },
-    [trip.packing, trip.setup?.specialScenarios, packingViewCopy, showToast]
-  );
-
-  const handleApplyPackingTemplate = useCallback(
-    (templateId: string) => {
-      const tpl = packingTemplates.find((t) => t.id === templateId);
-      if (!tpl) return;
-      pushBusinessSnapshot(appCopy.snapshotLabelPackingRegen, trip);
-      const clonedGroups = JSON.parse(JSON.stringify(tpl.groups)) as typeof trip.packing;
-      const merged = mergeRegeneratedPackingGroups(
-        trip.packing,
-        clonedGroups,
-        'smart_merge'
-      );
-      setTrip((prev) => ({
-        ...prev,
-        packing: merged.groups,
-        smartBagOverrides: {},
-      }));
-      showToast(packingViewCopy.templateAppliedToast(tpl.name));
-    },
-    [
-      packingTemplates,
-      trip,
-      appCopy.snapshotLabelPackingRegen,
-      packingViewCopy,
-      pushBusinessSnapshot,
-      showToast,
-    ]
-  );
-
-  const handleDeletePackingTemplate = useCallback(
-    (templateId: string) => {
-      const existing = packingTemplates.find((t) => t.id === templateId);
-      const next = deletePackingTemplate(templateId);
-      setPackingTemplates(next);
-      if (existing) showToast(packingViewCopy.templateDeletedToast(existing.name));
-    },
-    [packingTemplates, packingViewCopy, showToast]
-  );
-
-  const handleRenamePackingTemplate = useCallback(
-    (templateId: string, name: string) => {
-      const next = renamePackingTemplate(templateId, name);
-      setPackingTemplates(next);
-    },
-    []
-  );
-
-  const handleSetItemSegments = useCallback(
-    (groupId: string, itemId: string, segmentIds: string[]) => {
-      setTrip((prev) => ({
-        ...prev,
-        packing: prev.packing.map((g) =>
-          g.id !== groupId
-            ? g
-            : {
-                ...g,
-                items: g.items.map((it) =>
-                  it.id !== itemId
-                    ? it
-                    : {
-                        ...it,
-                        segmentIds:
-                          segmentIds.length > 0 ? segmentIds : undefined,
-                      }
-                ),
-              }
-        ),
-      }));
     },
     []
   );
@@ -9288,15 +9151,6 @@ export default function App() {
                 onCycleTaskOwner={handleCycleTaskOwner}
                 onApplySmartParams={handleGenerateCustomPackingList}
                 onOpenItemInGoMode={handleOpenItemInGoMode}
-                packingTemplates={packingTemplates}
-                onSavePackingTemplate={handleSavePackingTemplate}
-                onApplyPackingTemplate={handleApplyPackingTemplate}
-                onDeletePackingTemplate={handleDeletePackingTemplate}
-                onRenamePackingTemplate={handleRenamePackingTemplate}
-                packingSegments={packingSegments}
-                activePackingSegmentId={activePackingSegmentId}
-                onChangePackingSegment={setActivePackingSegmentId}
-                onSetItemSegments={handleSetItemSegments}
               />
             )}
             {tab === 'budget' && (
