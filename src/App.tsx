@@ -7101,27 +7101,6 @@ export default function App() {
     }
   };
 
-  const handleToggleRainSwap = () => {
-    const activeDay = Math.min(
-      Math.max(1, trip.setup.days),
-      Math.max(1, trip.activeFinanceDay ?? 1)
-    );
-    setTrip((prev) => {
-      const currentVal =
-        prev.rainSwappedDays?.[activeDay] ??
-        (activeDay === 2 ? prev.rainSwapped : false);
-      const nextVal = !currentVal;
-      return {
-        ...prev,
-        rainSwapped: nextVal,
-        rainSwappedDays: {
-          ...(prev.rainSwappedDays ?? {}),
-          [activeDay]: nextVal,
-        },
-      };
-    });
-  };
-
   const handleToggleVisitedNode = (nodeId: string) => {
     let feedback = '';
     setTrip((prev) => ({
@@ -9289,7 +9268,6 @@ export default function App() {
                     spatialClustered={dayClustered}
                     warningNote={itineraryWarning}
                     onSelectDay={handleSelectFinanceDay}
-                    onToggleRainSwap={handleToggleRainSwap}
                     onToggleVisitedNode={handleToggleVisitedNode}
                     onQuickLogNode={handleQuickLogNode}
                     onAddNode={handleAddTimelineNode}

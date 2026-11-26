@@ -20,7 +20,6 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { CSS } from '@dnd-kit/utilities';
 import {
   Sparkles,
-  CloudRain,
   Clock,
   Plus,
   Loader2,
@@ -76,7 +75,6 @@ import {
   translateDemoWishlistItem,
   translateMemberInitials,
   translateMemberName,
-  translateRainChanceLabel,
 } from '../i18n';
 import { formatTimeByPref, normalizeAppLanguage } from '../utils/preferencesHelpers';
 import {
@@ -223,7 +221,6 @@ interface ItineraryViewProps {
   spatialClustered: boolean;
   warningNote: string | null;
   onSelectDay: (day: number) => void;
-  onToggleRainSwap: () => void;
   onToggleVisitedNode: (nodeId: string) => void;
   onQuickLogNode: (nodeId: string, payload: QuickExpenseLogPayload) => void;
   onAddNode: (
@@ -316,7 +313,6 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
   spatialClustered,
   warningNote,
   onSelectDay,
-  onToggleRainSwap,
   onToggleVisitedNode,
   onQuickLogNode,
   onAddNode,
@@ -586,11 +582,6 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
       staySectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   }, [currentDayStay]);
-
-  const outdoorSwapNodes = useMemo(
-    () => dayNodes.filter((n) => n.isOutdoor && n.rainSwapTitle),
-    [dayNodes]
-  );
 
   const dayEstimatedTotal = useMemo(
     () => dayNodes.reduce((s, n) => s + (Number(n.estLocal) || 0), 0),
@@ -1469,47 +1460,6 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({
               </div>
             )}
           </section>
-
-          {/* Per-Day Rain Plan Banner — Stacks cleanly on mobile with Warm Amber squircle icon tile */}
-          {outdoorSwapNodes.length > 0 && (
-            <section className="rounded-2xl border tk-bc-warning-hair tk-bg-warning-tint p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
-              <div className="flex items-start gap-3 min-w-0 flex-1">
-                <AccentIconBadge accent="peach" icon={CloudRain} size="md" />
-                <div className="min-w-0">
-                  <div className="text-xs font-bold tk-text-warning">
-                    {copy.rainPlanHeading(
-                      currentDay,
-                      translateRainChanceLabel(intel.rainChance, activeLang)
-                    )}
-                  </div>
-                  <p className="mt-1 text-xs tk-text-ink2 leading-relaxed">
-                    {rainSwapped
-                      ? copy.rainSwitchedBackup(
-                          outdoorSwapNodes
-                            .map((n) => translateDemoStopTitle(n.rainSwapTitle || '', activeLang))
-                            .join(', ')
-                        )
-                      : copy.rainSwapPrompt(
-                          outdoorSwapNodes
-                            .map((n) => translateDemoStopTitle(n.title, activeLang))
-                            .join(', ')
-                        )}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={onToggleRainSwap}
-                className={`w-full sm:w-auto inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
- rainSwapped
- ? 'tk-bg-paper tk-text-card hover:tk-bg-paper'
- : 'border tk-bc-warning-hair tk-bg-card tk-text-warning hover:tk-bg-warning-tint'
- }`}
-              >
-                {rainSwapped ? t('itinerary.rainSwapActive') : t('itinerary.rainSwapToggle')}
-              </button>
-            </section>
-          )}
 
           {/* Day Route Map & Interactive Packy-Style Place Cards */}
           <DayRouteMapPanel
