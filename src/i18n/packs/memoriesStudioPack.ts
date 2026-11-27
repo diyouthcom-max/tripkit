@@ -526,6 +526,10 @@ export interface PhotobookStudioCopy {
   allSharpOk: string;
   prevBtn: string;
   nextBtn: string;
+  spreadUnit: string;
+  spreadBlankLabel: string;
+  gridLayoutLabel: string;
+  rotateHint: string;
   trimLineTitle: string;
   safeAreaTitle: string;
   photoCaptionFallback: string;
@@ -570,6 +574,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk 留白',
       editorial: '人文城市志',
       scrapbook: '胶片手账本',
+      collage: '多图拼贴',
     },
     step2Heading: '2. 实体开本尺寸',
     formats: {
@@ -587,6 +592,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: '全部入册照片均通过印前像素清晰度校验。',
     prevBtn: '上一页',
     nextBtn: '下一页',
+    spreadUnit: '跨页',
+    gridLayoutLabel: '每页照片数',
+    rotateHint: '横屏观看跨页效果更佳 · 请旋转手机',
+    spreadBlankLabel: '空白页',
     trimLineTitle: '3mm 裁切出血线 (Trim Line)',
     safeAreaTitle: '文字安全边距 (Safe Area)',
     photoCaptionFallback: '定格在旅途街角的一帧光影记忆。',
@@ -630,6 +639,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Editorial',
       scrapbook: 'Scrapbook',
+      collage: 'Collage',
     },
     step2Heading: '2. Print Trim Size',
     formats: {
@@ -648,6 +658,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'All curated photos pass 300 DPI print sharpness check.',
     prevBtn: 'Prev',
     nextBtn: 'Next',
+    spreadUnit: 'spread',
+    gridLayoutLabel: 'Photos per page',
+    rotateHint: 'Rotate your phone to landscape for the full spread',
+    spreadBlankLabel: 'Blank page',
     trimLineTitle: '3mm Bleed Trim Line',
     safeAreaTitle: 'Safe Text Margin',
     photoCaptionFallback: 'A quiet moment captured along the journey.',
@@ -691,6 +705,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Editorial',
       scrapbook: 'Scrapbook',
+      collage: 'Collage',
     },
     step2Heading: '2. Print Trim Size',
     formats: {
@@ -709,6 +724,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'All curated photos pass 300 DPI print sharpness check.',
     prevBtn: 'Prev',
     nextBtn: 'Next',
+    spreadUnit: 'spread',
+    gridLayoutLabel: 'Photos per page',
+    rotateHint: 'Rotate your phone to landscape for the full spread',
+    spreadBlankLabel: 'Blank page',
     trimLineTitle: '3mm Bleed Trim Line',
     safeAreaTitle: 'Safe Text Margin',
     photoCaptionFallback: 'A quiet moment captured along the journey.',
@@ -752,6 +771,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Editorial',
       scrapbook: 'Álbum retro',
+      collage: 'Collage',
     },
     step2Heading: '2. Tamaño de corte',
     formats: {
@@ -770,6 +790,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'Todas las fotos cumplen el estándar de nitidez de 300 DPI.',
     prevBtn: 'Ant.',
     nextBtn: 'Sig.',
+    spreadUnit: 'doble página',
+    gridLayoutLabel: 'Fotos por página',
+    rotateHint: 'Gira el móvil a horizontal para ver la doble página completa',
+    spreadBlankLabel: 'Página en blanco',
     trimLineTitle: 'Línea de corte (sangrado 3 mm)',
     safeAreaTitle: 'Margen seguro de texto',
     photoCaptionFallback: 'Un instante sereno capturado en el camino.',
@@ -813,6 +837,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Éditorial',
       scrapbook: 'Carnet film',
+      collage: 'Collage',
     },
     step2Heading: '2. Format d’impression',
     formats: {
@@ -831,6 +856,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'Toutes les photos validées à 300 DPI.',
     prevBtn: 'Préc.',
     nextBtn: 'Suiv.',
+    spreadUnit: 'double page',
+    gridLayoutLabel: 'Photos par page',
+    rotateHint: 'Tournez votre téléphone en paysage pour voir la double page',
+    spreadBlankLabel: 'Page blanche',
     trimLineTitle: 'Trait de coupe (fond perdu 3 mm)',
     safeAreaTitle: 'Zone de sécurité texte',
     photoCaptionFallback: 'Un instant calme saisi au fil du voyage.',
@@ -874,6 +903,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Editorial',
       scrapbook: 'Scrapbook',
+      collage: 'Collage',
     },
     step2Heading: '2. Druckformat',
     formats: {
@@ -892,6 +922,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'Alle Fotos bestehen die 300-DPI-Schärfeprüfung.',
     prevBtn: 'Zurück',
     nextBtn: 'Weiter',
+    spreadUnit: 'Doppelseite',
+    gridLayoutLabel: 'Fotos pro Seite',
+    rotateHint: 'Drehen Sie Ihr Telefon quer, um die Doppelseite zu sehen',
+    spreadBlankLabel: 'Leere Seite',
     trimLineTitle: '3-mm-Beschnittlinie',
     safeAreaTitle: 'Sicherer Textbereich',
     photoCaptionFallback: 'Ein ruhiger Moment unterwegs festgehalten.',
@@ -935,6 +969,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk',
       editorial: 'Editorial',
       scrapbook: 'Scrapbook',
+      collage: 'Colagem',
     },
     step2Heading: '2. Formato de corte',
     formats: {
@@ -953,6 +988,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'Todas as fotos passaram na checagem de nitidez 300 DPI.',
     prevBtn: 'Ant.',
     nextBtn: 'Próx.',
+    spreadUnit: 'dupla página',
+    gridLayoutLabel: 'Fotos por página',
+    rotateHint: 'Gire o celular para a horizontal e veja a página dupla',
+    spreadBlankLabel: 'Página em branco',
     trimLineTitle: 'Linha de corte (3 mm)',
     safeAreaTitle: 'Margem segura de texto',
     photoCaptionFallback: 'Um momento tranquilo registrado na viagem.',
@@ -995,6 +1034,7 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
       kinfolk: 'Kinfolk 余白',
       editorial: '人文紀行誌',
       scrapbook: 'フィルム手帳',
+      collage: 'コラージュ',
     },
     step2Heading: '2. 製本判型サイズ',
     formats: {
@@ -1013,6 +1053,10 @@ const PHOTOBOOK_STUDIO_PACK: LangMap8<PhotobookStudioCopy> = {
     allSharpOk: 'すべての収録写真が 300 DPI 印刷品質チェックを通過しました。',
     prevBtn: '前へ',
     nextBtn: '次へ',
+    spreadUnit: '見開き',
+    gridLayoutLabel: '1ページの写真数',
+    rotateHint: 'スマートフォンを横向きにすると見開き全体をご覧いただけます',
+    spreadBlankLabel: '空白ページ',
     trimLineTitle: '3mm 裁ち落とし境界線 (Trim Line)',
     safeAreaTitle: '文字安全領域 (Safe Area)',
     photoCaptionFallback: '旅の途中で切り取った静かなひとコマ。',

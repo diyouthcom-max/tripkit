@@ -42,6 +42,7 @@ import {
 import { PhotobookStudioModal } from './PhotobookStudioModal';
 import { PrintOrderCheckoutModal } from './PrintOrderCheckoutModal';
 import { getMemoriesViewCopy, type MemoriesViewCopy } from '../i18n/packs/memoriesStudioPack';
+import { countPhotobookPages } from '../utils/photobookPagePlan';
 
 export interface MemoriesViewProps {
   trips: SavedTripEntry[];
@@ -81,10 +82,7 @@ function createInitialBookDraft(
     highlightsLine: copy.stopsRecordedSuffix((tr.state.timeline || []).length),
   }));
 
-  const rawPages = 3 + Math.max(1, chapters.length) + favoritePhotoIds.length;
-  const pageCount = Math.max(20, Math.ceil(rawPages / 4) * 4);
-
-  return {
+  const draft: PhotobookDraft = {
     id: `book_${Date.now()}`,
     selectedTripIds: selectedTrips.map((t) => t.id),
     templateId: 'kinfolk',
@@ -97,10 +95,13 @@ function createInitialBookDraft(
     chapters,
     photoCaptions: {},
     includedPhotoIds: favoritePhotoIds,
-    pageCount,
+    pageCount: 20,
     generatedByAi: false,
     updatedAt: Date.now(),
   };
+  // Derive from the same page plan the studio preview and PDF export use.
+  draft.pageCount = countPhotobookPages({ draft, photos: [], trips: selectedTrips });
+  return draft;
 }
 
 export const MemoriesView: React.FC<MemoriesViewProps> = ({
@@ -223,20 +224,22 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
         };
       });
 
-      const rawPages = 3 + Math.max(1, syncedChapters.length) + favIds.length;
-      const nextPages = Math.max(20, Math.ceil(rawPages / 4) * 4);
-
       const next: PhotobookDraft = {
         ...prev,
         selectedTripIds,
         chapters: syncedChapters,
         includedPhotoIds: favIds,
-        pageCount: nextPages,
+        pageCount: 20,
       };
+      next.pageCount = countPhotobookPages({
+        draft: next,
+        photos: favoriteScopedPhotos,
+        trips,
+      });
       savePhotobookDraft(next);
       return next;
     });
-  }, [selectedTripIds, favoriteScopedPhotos, selectedTrips, copy]);
+  }, [selectedTripIds, favoriteScopedPhotos, selectedTrips, trips, copy]);
 
   const handleUpdateDraft = (next: PhotobookDraft) => {
     setBookDraft(next);

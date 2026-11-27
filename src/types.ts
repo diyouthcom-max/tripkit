@@ -676,7 +676,8 @@ export interface AppPreferences {
   affiliatePartners?: AffiliatePartnerConfig;
 }
 
-export type PhotobookTemplateId = 'kinfolk' | 'editorial' | 'scrapbook';
+export type PhotobookTemplateId = 'kinfolk' | 'editorial' | 'scrapbook' | 'collage';
+export type PhotobookGridCount = 4 | 6 | 9;
 export type PhotobookFormatId = 'square_210' | 'portrait_a5';
 export type PhotobookBindingId = 'hardcover_matte' | 'softcover_textured';
 export type PhotoPrintDpiGrade = 'optimal_300dpi' | 'good_200dpi' | 'low_res_grid_only';
@@ -733,6 +734,8 @@ export interface PhotobookDraft {
   chapters: PhotobookChapterStory[];
   photoCaptions: Record<string, PhotobookPhotoCaption>;
   includedPhotoIds: string[];
+  /** Photos per contact-sheet page when templateId === 'collage'. */
+  gridCount?: PhotobookGridCount;
   pageCount: number;
   generatedByAi: boolean;
   updatedAt: number;
