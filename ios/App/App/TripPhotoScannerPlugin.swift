@@ -38,7 +38,7 @@ public class TripPhotoScannerPlugin: CAPPlugin, CAPBridgedPlugin {
         isoFormatterBasic.string(from: date)
     }
 
-    @objc public func requestPermissions(_ call: CAPPluginCall) {
+    @objc public override func requestPermissions(_ call: CAPPluginCall) {
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {
         case .authorized:
