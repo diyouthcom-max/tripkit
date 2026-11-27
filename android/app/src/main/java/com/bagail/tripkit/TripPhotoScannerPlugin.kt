@@ -93,7 +93,7 @@ class TripPhotoScannerPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun requestPermissions(call: PluginCall) {
+    override fun requestPermissions(call: PluginCall) {
         if (hasPhotoAccess()) {
             call.resolve(JSObject().put("photos", "granted"))
             return
