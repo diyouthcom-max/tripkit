@@ -117,7 +117,9 @@ public class TripPhotoScannerPlugin: CAPPlugin, CAPBridgedPlugin {
                 }
             }
 
-            call.resolve(["assets": results])
+            DispatchQueue.main.async {
+                call.resolve(["assets": results])
+            }
         }
     }
 

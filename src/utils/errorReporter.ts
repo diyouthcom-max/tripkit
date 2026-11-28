@@ -1,3 +1,5 @@
+import { resolveApiUrl } from '../services/apiUrl';
+
 export type ClientErrorSource = 'boundary' | 'window' | 'rejection';
 
 export interface ClientErrorPayload {
@@ -52,7 +54,7 @@ export function reportClientError(payload: ClientErrorPayload): void {
       ts: Date.now(),
     };
 
-    void fetch('/api/client-error', {
+    void fetch(resolveApiUrl('/api/client-error'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

@@ -1,3 +1,4 @@
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import type { MemoryPhotoMeta, SavedTripEntry } from '../types';
 import {
   matchPhotoToTrips,
@@ -39,28 +40,20 @@ export interface TripPhotoScannerPlugin {
   }): Promise<{ dataUrl: string; width: number; height: number }>;
 }
 
-interface CapacitorGlobal {
-  isNativePlatform?: () => boolean;
-  getPlatform?: () => 'ios' | 'android' | 'web';
-  Plugins?: {
-    TripPhotoScanner?: TripPhotoScannerPlugin;
-  };
-}
-
-function getCapacitorGlobal(): CapacitorGlobal | null {
-  if (typeof window === 'undefined') return null;
-  const win = window as unknown as { Capacitor?: CapacitorGlobal };
-  return win.Capacitor ?? null;
-}
+/**
+ * Capacitor 8 only exposes custom plugins on the JS side after registerPlugin().
+ * Native iOS/Android still register the Swift/Kotlin implementation separately.
+ */
+const TripPhotoScanner = registerPlugin<TripPhotoScannerPlugin>('TripPhotoScanner');
 
 export function isCapacitorNativeApp(): boolean {
-  const cap = getCapacitorGlobal();
-  return Boolean(cap?.isNativePlatform?.());
+  return Capacitor.isNativePlatform();
 }
 
 export function hasNativeTripPhotoScanner(): boolean {
-  const cap = getCapacitorGlobal();
-  return Boolean(cap?.isNativePlatform?.() && cap?.Plugins?.TripPhotoScanner);
+  return (
+    Capacitor.isNativePlatform() && Capacitor.isPluginAvailable('TripPhotoScanner')
+  );
 }
 
 export function buildTripDateScanWindows(trips: SavedTripEntry[]): TripDateScanWindow[] {
@@ -87,19 +80,17 @@ export async function scanNativePhotosForTrips(
   selectedTrips: SavedTripEntry[],
   fallbackTripId: string
 ): Promise<MemoryPhotoMeta[]> {
-  const cap = getCapacitorGlobal();
-  const scanner = cap?.Plugins?.TripPhotoScanner;
-  if (!scanner) {
+  if (!hasNativeTripPhotoScanner()) {
     throw new Error('NATIVE_SCANNER_UNAVAILABLE');
   }
 
-  const perm = await scanner.requestPermissions();
+  const perm = await TripPhotoScanner.requestPermissions();
   if (perm.photos === 'denied') {
     throw new Error('PHOTO_PERMISSION_DENIED');
   }
 
   const ranges = buildTripDateScanWindows(selectedTrips);
-  const { assets } = await scanner.scanPhotosByDateRanges({
+  const { assets } = await TripPhotoScanner.scanPhotosByDateRanges({
     ranges,
     limitPerTrip: 60,
   });

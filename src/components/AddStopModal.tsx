@@ -834,7 +834,7 @@ const MapLocationPickerCanvas: React.FC<{
       }
     );
     return () => {
-      listener.remove();
+      listener?.remove();
     };
   }, [map, resolveNearestPlace]);
 
@@ -963,7 +963,7 @@ const LeafletFallbackLocationPicker: React.FC<{
 
     return () => {
       ro.disconnect();
-      map.remove();
+      map?.remove();
       mapRef.current = null;
       layerGroupRef.current = null;
     };

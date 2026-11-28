@@ -22,8 +22,9 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { signInWithPopup, type User } from 'firebase/auth';
-import { auth, formatCloudSyncError, googleProvider } from '../firebase';
+import type { User } from 'firebase/auth';
+import { formatCloudSyncError } from '../firebase';
+import { signInWithGoogleInteractive } from '../services/googleSignIn';
 import {
   fetchMyCloudEntitlement,
   isVerifiedAdminUser,
@@ -158,8 +159,13 @@ export const TripKitProModal: React.FC<TripKitProModalProps> = ({
   const ensureAuthenticatedUser = async (): Promise<User | null> => {
     if (authUser) return authUser;
     try {
-      const cred = await signInWithPopup(auth, googleProvider);
-      return cred.user;
+      const result = await signInWithGoogleInteractive();
+      if (result.status === 'redirecting') {
+        // Native / popup-blocked: WebView navigates to Google; retry redeem after return.
+        setRedeemError(copy.bindsHint);
+        return null;
+      }
+      return result.user;
     } catch (err) {
       const msg = formatCloudSyncError(err);
       setRedeemError(msg);

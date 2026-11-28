@@ -1,3 +1,7 @@
+import { Capacitor } from '@capacitor/core';
+
+let warnedMissingNativeApiBase = false;
+
 /**
  * Resolves backend API URLs seamlessly across both Web dev/prod and Capacitor iOS/Android builds.
  * In Cursor + Capacitor, set VITE_API_BASE_URL="https://your-cloud-run-domain.run.app" in .env.production.
@@ -5,6 +9,16 @@
 export function resolveApiUrl(apiPath: string): string {
   const base = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '');
   const cleanPath = apiPath.startsWith('/') ? apiPath : `/${apiPath}`;
+  if (
+    !base &&
+    Capacitor.isNativePlatform() &&
+    !warnedMissingNativeApiBase
+  ) {
+    warnedMissingNativeApiBase = true;
+    console.error(
+      '[TripKit] VITE_API_BASE_URL is empty in this native build. AI and /api/* calls will hit the WebView origin and fail. Set VITE_API_BASE_URL in .env.production before `npm run build` + `npx cap sync`.'
+    );
+  }
   return base ? `${base}${cleanPath}` : cleanPath;
 }
 

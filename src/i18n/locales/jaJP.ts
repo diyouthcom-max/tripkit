@@ -193,7 +193,7 @@ export const jaJP = {
     transcribing: '文字起こし中...',
     tooltipSpeech: 'ブラウザ音声認識（Web Speech API）',
     noSpeechError: '音声が検出されませんでした。もう一度お試しください',
-    micDeniedError: 'マイク権限が拒否されました。ブラウザ設定で許可してください',
+    micDeniedError: 'マイク権限が拒否されました。ブラウザまたは端末の設定で許可してください',
     unsupportedError: 'このブラウザは音声入力に対応していません',
     heardPrefix: '認識結果：',
   },

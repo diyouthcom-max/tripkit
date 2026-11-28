@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "322510449832",
+    "project_id": "gen-lang-client-0485600047",
+    "storage_bucket": "gen-lang-client-0485600047.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322510449832:android:69bcd528746bb3d7a7e69d",
+        "android_client_info": {
+          "package_name": "com.bagail.tripkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322510449832-s8acsbntuisod9bqjqq72ba93miu564t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn3bsfDBBkdGEpH6XVfYvRjw9SVT86c_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322510449832-s8acsbntuisod9bqjqq72ba93miu564t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "322510449832-cto91qhppfam16lr6lpf3m9frfg4o9c3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bagail.tripkit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

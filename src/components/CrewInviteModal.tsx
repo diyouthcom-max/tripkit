@@ -23,14 +23,14 @@ import {
   Trash2,
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import { signInWithPopup, signOut, type User } from 'firebase/auth';
+import { signOut, type User } from 'firebase/auth';
 import {
   auth,
-  googleProvider,
   formatCloudSyncError,
   FIREBASE_PROJECT_ID,
   FIRESTORE_REGION,
 } from '../firebase';
+import { signInWithGoogleInteractive } from '../services/googleSignIn';
 import {
   buildRoomInviteUrl,
   createCloudTripRoom,
@@ -279,7 +279,10 @@ export const CrewInviteModal: React.FC<CrewInviteModalProps> = ({
     setBusyAction('signin');
     setErrorMsg(null);
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithGoogleInteractive();
+      if (result.status === 'redirecting') {
+        return;
+      }
       onToast(copy.googleSignedInToast);
     } catch (err) {
       setErrorMsg(formatCloudSyncError(err));

@@ -2307,7 +2307,9 @@ export default function App() {
     setAuthModalState({ open: true, mode });
   }, []);
 
-  // Track Firebase Auth readiness
+  // Track Firebase Auth readiness. getRedirectResult() is a one-shot consume,
+  // so only AuthModal reads it; onAuthStateChanged already covers every
+  // successful sign-in (including redirect returns) for the rest of the app.
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setAuthUser(user);
@@ -6445,10 +6447,26 @@ export default function App() {
     if (rawDateChange) {
       const departureDate = String(rawDateChange.departureDate || '').trim();
       const returnDate = String(rawDateChange.returnDate || '').trim();
-      const days = Math.min(
-        30,
-        Math.max(1, Math.round(Number(rawDateChange.days) || 0))
-      );
+      const rawDaysNum = Number(rawDateChange.days);
+      const hasExplicitDays =
+        Number.isFinite(rawDaysNum) && rawDaysNum >= 1 && rawDaysNum <= 30;
+      let days = hasExplicitDays ? Math.round(rawDaysNum) : 0;
+      if (
+        !hasExplicitDays &&
+        dateRe.test(departureDate) &&
+        dateRe.test(returnDate) &&
+        returnDate >= departureDate
+      ) {
+        const depParts = departureDate.split('-').map(Number);
+        const retParts = returnDate.split('-').map(Number);
+        const depUtc = Date.UTC(depParts[0], depParts[1] - 1, depParts[2]);
+        const retUtc = Date.UTC(retParts[0], retParts[1] - 1, retParts[2]);
+        const derived = Math.round((retUtc - depUtc) / 86400000) + 1;
+        days = Math.min(30, Math.max(1, derived));
+      } else if (!hasExplicitDays) {
+        // Keep current trip length instead of collapsing to 1 day when model omits days.
+        days = Math.min(30, Math.max(1, totalDaysCap));
+      }
       if (
         dateRe.test(departureDate) &&
         dateRe.test(returnDate) &&

@@ -192,7 +192,7 @@ export const esMX = {
     transcribing: 'Transcribiendo...',
     tooltipSpeech: 'Reconocimiento de voz en vivo del navegador',
     noSpeechError: 'No se detectó voz clara — inténtalo de nuevo',
-    micDeniedError: 'Permiso de micrófono denegado — actívalo en tu navegador',
+    micDeniedError: 'Permiso de micrófono denegado — actívalo en tu navegador o en los ajustes del dispositivo',
     unsupportedError: 'El dictado por voz no es compatible con este navegador',
     heardPrefix: 'Escuchado: ',
   },

@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, OAuthProvider } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  OAuthProvider,
+  indexedDBLocalPersistence,
+  initializeAuth,
+} from 'firebase/auth';
+import { Capacitor } from '@capacitor/core';
 import {
   doc,
   getDocFromServer,
@@ -35,7 +42,13 @@ export const db = initializeFirestore(
   firebaseConfig.firestoreDatabaseId
 );
 
-export const auth = getAuth(app);
+// On native platforms the Firebase Auth JS SDK needs IndexedDB persistence so
+// that the web-layer session (used by Firestore and onAuthStateChanged) survives
+// app restarts after the native plugin signs the user in. On web, getAuth() is
+// the standard path. Both are exposed through the same `auth` export.
+export const auth = Capacitor.isNativePlatform()
+  ? initializeAuth(app, { persistence: indexedDBLocalPersistence })
+  : getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 

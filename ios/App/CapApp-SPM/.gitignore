@@ -1,6 +1,10 @@
 .DS_Store
 /.build
+/artifacts
+/checkouts
 /Packages
+/repositories
+/workspace-state.json
 /*.xcodeproj
 xcuserdata/
 DerivedData/

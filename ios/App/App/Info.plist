@@ -18,6 +18,17 @@
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.322510449832-cto91qhppfam16lr6lpf3m9frfg4o9c3</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
@@ -66,6 +77,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Trip Kit uses the microphone for voice input when you ask the AI to build a packing list or itinerary.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Trip Kit uses the camera when you choose to take a photo of your travel documents.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Trip Kit uses your location while the app is open to suggest nearby hotels and attractions.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Trip Kit indexes your travel photos locally by trip dates to build memories. Photos never leave your device during scanning.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -519,7 +519,7 @@ export const Real2DRouteMapCanvas: React.FC<Real2DRouteMapCanvasProps> = ({
       el.removeEventListener('pointerup', clearHold);
       el.removeEventListener('pointercancel', clearHold);
       ro.disconnect();
-      map.remove();
+      map?.remove();
       mapRef.current = null;
       routeLayersRef.current = null;
       midLegLayersRef.current = null;

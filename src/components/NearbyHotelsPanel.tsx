@@ -585,11 +585,17 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
         setErrorMsg(null);
       }
     } catch (err) {
+      // Distinguish the real cause instead of collapsing everything into the
+      // generic "could not load" text — a slow AI call is not a network outage.
       const msg =
         err instanceof AiRequestError
-          ? err.kind === 'timeout' || err.kind === 'network'
-            ? copy.errorWithRetry
-            : err.message || copy.errorWithRetry
+          ? err.kind === 'timeout'
+            ? copy.errorTimeout
+            : err.kind === 'network'
+              ? copy.errorNetwork
+              : err.kind === 'server'
+                ? copy.errorServer
+                : err.message || copy.errorWithRetry
           : copy.errorWithRetry;
       setErrorMsg(msg);
       setHotels([]);
@@ -610,6 +616,9 @@ export const NearbyHotelsPanel: React.FC<NearbyHotelsPanelProps> = ({
     anchors,
     anchorStopTitle,
     copy.errorWithRetry,
+    copy.errorTimeout,
+    copy.errorNetwork,
+    copy.errorServer,
   ]);
 
   const handleLiveResults = useCallback((cards: LiveHotelCard[]) => {

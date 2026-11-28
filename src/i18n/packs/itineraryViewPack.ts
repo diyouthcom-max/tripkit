@@ -648,6 +648,9 @@ export interface NearbyHotelsCopy {
   loading: string;
   empty: string;
   errorWithRetry: string;
+  errorTimeout: string;
+  errorNetwork: string;
+  errorServer: string;
   retry: string;
   setAsStay: string;
   checkRates: string;
@@ -669,6 +672,9 @@ const NEARBY_HOTELS_PACK = {
     loading: '正在查找附近酒店…',
     empty: '暂时没找到附近酒店，试试刷新',
     errorWithRetry: '酒店推荐加载失败，请重试',
+    errorTimeout: 'AI 生成耗时较长，请稍后重试',
+    errorNetwork: '网络连接中断，请检查网络后重试',
+    errorServer: 'AI 服务暂时不可用，请稍后重试',
     retry: '重试',
     setAsStay: '设为今日下榻',
     checkRates: '查房价预订',
@@ -688,6 +694,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Finding nearby hotels…',
     empty: 'No nearby hotels found. Try Refresh.',
     errorWithRetry: 'Could not load hotel picks. Please retry.',
+    errorTimeout: 'The AI is taking longer than usual. Please try again shortly.',
+    errorNetwork: 'Network interrupted — check your connection and retry.',
+    errorServer: 'The AI service is temporarily unavailable. Please retry shortly.',
     retry: 'Retry',
     setAsStay: 'Set as Stay',
     checkRates: 'Check Rates',
@@ -707,6 +716,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Finding nearby hotels…',
     empty: 'No nearby hotels found. Try Refresh.',
     errorWithRetry: 'Could not load hotel picks. Please retry.',
+    errorTimeout: 'The AI is taking longer than usual. Please try again shortly.',
+    errorNetwork: 'Network interrupted — check your connection and retry.',
+    errorServer: 'The AI service is temporarily unavailable. Please retry shortly.',
     retry: 'Retry',
     setAsStay: 'Set as Stay',
     checkRates: 'Check Rates',
@@ -726,6 +738,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Buscando hoteles cercanos…',
     empty: 'No se encontraron hoteles cercanos. Prueba Actualizar.',
     errorWithRetry: 'No se pudieron cargar las sugerencias. Intenta de nuevo.',
+    errorTimeout: 'La IA está tardando más de lo normal. Intenta de nuevo en un momento.',
+    errorNetwork: 'Conexión interrumpida: revisa tu red e inténtalo de nuevo.',
+    errorServer: 'El servicio de IA no está disponible temporalmente.',
     retry: 'Reintentar',
     setAsStay: 'Usar como hospedaje',
     checkRates: 'Ver tarifas',
@@ -745,6 +760,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Recherche d’hôtels à proximité…',
     empty: 'Aucun hôtel trouvé à proximité. Essayez Actualiser.',
     errorWithRetry: 'Échec du chargement des hôtels. Réessayez.',
+    errorTimeout: 'L’IA met plus de temps que d’habitude. Réessayez dans un instant.',
+    errorNetwork: 'Connexion interrompue — vérifiez votre réseau et réessayez.',
+    errorServer: 'Le service IA est temporairement indisponible.',
     retry: 'Réessayer',
     setAsStay: 'Définir comme hébergement',
     checkRates: 'Voir les tarifs',
@@ -764,6 +782,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Suche nach Hotels in der Nähe…',
     empty: 'Keine Hotels in der Nähe gefunden. Bitte aktualisieren.',
     errorWithRetry: 'Hotelvorschläge konnten nicht geladen werden. Bitte erneut versuchen.',
+    errorTimeout: 'Die KI braucht länger als gewohnt. Bitte versuchen Sie es in Kürze erneut.',
+    errorNetwork: 'Verbindung unterbrochen – prüfen Sie Ihr Netzwerk und versuchen Sie es erneut.',
+    errorServer: 'Der KI-Dienst ist vorübergehend nicht verfügbar.',
     retry: 'Erneut versuchen',
     setAsStay: 'Als Unterkunft festlegen',
     checkRates: 'Preise prüfen',
@@ -783,6 +804,9 @@ const NEARBY_HOTELS_PACK = {
     loading: 'Procurando hotéis próximos…',
     empty: 'Nenhum hotel próximo encontrado. Tente Atualizar.',
     errorWithRetry: 'Falha ao carregar sugestões de hotel. Tente de novo.',
+    errorTimeout: 'A IA está demorando mais que o normal. Tente novamente em instantes.',
+    errorNetwork: 'Conexão interrompida — verifique sua rede e tente de novo.',
+    errorServer: 'O serviço de IA está temporariamente indisponível.',
     retry: 'Tentar de novo',
     setAsStay: 'Definir como hospedagem',
     checkRates: 'Ver tarifas',
@@ -802,6 +826,9 @@ const NEARBY_HOTELS_PACK = {
     loading: '近くのホテルを検索中…',
     empty: '近くのホテルが見つかりません。更新してみてください',
     errorWithRetry: 'ホテル提案の読み込みに失敗しました。再試行してください',
+    errorTimeout: 'AI の生成に時間がかかっています。しばらくしてからもう一度お試しください',
+    errorNetwork: 'ネットワークが中断されました。接続を確認して再試行してください',
+    errorServer: 'AI サービスは一時的に利用できません',
     retry: '再試行',
     setAsStay: '今日の宿泊先に設定',
     checkRates: '料金を確認',

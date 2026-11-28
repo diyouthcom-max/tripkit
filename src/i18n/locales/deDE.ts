@@ -193,7 +193,7 @@ export const deDE = {
     transcribing: 'Transkribiere...',
     tooltipSpeech: 'Live-Spracherkennung im Browser',
     noSpeechError: 'Keine klare Sprache erkannt — bitte erneut versuchen',
-    micDeniedError: 'Mikrofonzugriff verweigert — bitte im Browser freigeben',
+    micDeniedError: 'Mikrofonzugriff verweigert — bitte im Browser oder in den Geräteeinstellungen freigeben',
     unsupportedError: 'Spracheingabe wird in diesem Browser nicht unterstützt',
     heardPrefix: 'Erkannt: ',
   },

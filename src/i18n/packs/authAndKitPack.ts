@@ -72,6 +72,7 @@ export interface AuthModalCopy {
   emailVerifiedNow: string;
   verificationSendFailed: string;
   redirectingToGoogle: string;
+  redirectingToApple: string;
   popupBlockedFallback: string;
 }
 
@@ -164,6 +165,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: '邮箱已验证，云端权益与协作功能现已可用。',
     verificationSendFailed: '账号已创建，但验证邮件发送失败。可稍后在账号页重试。',
     redirectingToGoogle: '正在跳转到 Google 登录…',
+    redirectingToApple: '正在跳转到 Apple 登录…',
     popupBlockedFallback: '弹窗被拦截，已改用页面跳转登录',
   },
   'en-US': {
@@ -254,6 +256,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'Email verified. Cloud benefits and collaboration are now available.',
     verificationSendFailed: 'Account created, but the verification email failed. Retry later in Account.',
     redirectingToGoogle: 'Redirecting to Google sign-in…',
+    redirectingToApple: 'Redirecting to Apple sign-in…',
     popupBlockedFallback: 'Popup was blocked — switching to a full-page sign-in',
   },
   'en-GB': {
@@ -344,6 +347,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'Email verified. Cloud benefits and collaboration are now available.',
     verificationSendFailed: 'Account created, but the verification email failed. Retry later in Account.',
     redirectingToGoogle: 'Redirecting to Google sign-in…',
+    redirectingToApple: 'Redirecting to Apple sign-in…',
     popupBlockedFallback: 'Popup was blocked — switching to a full-page sign-in',
   },
   'es-MX': {
@@ -434,6 +438,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'Correo verificado. Beneficios en la nube y colaboración ya disponibles.',
     verificationSendFailed: 'Cuenta creada, pero falló el correo de verificación. Reintenta en Cuenta.',
     redirectingToGoogle: 'Redirigiendo al inicio de sesión de Google…',
+    redirectingToApple: 'Redirigiendo al inicio de sesión de Apple…',
     popupBlockedFallback: 'Ventana emergente bloqueada — cambiando a inicio de sesión a página completa',
   },
   'fr-FR': {
@@ -524,6 +529,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'E-mail vérifié. Avantages cloud et collaboration disponibles.',
     verificationSendFailed: 'Compte créé, mais l’e-mail de vérification a échoué. Réessayez dans Compte.',
     redirectingToGoogle: 'Redirection vers la connexion Google…',
+    redirectingToApple: 'Redirection vers la connexion Apple…',
     popupBlockedFallback: 'Fenêtre pop-up bloquée — bascule vers une connexion en pleine page',
   },
   'de-DE': {
@@ -614,6 +620,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'E-Mail bestätigt. Cloud-Vorteile und Zusammenarbeit sind verfügbar.',
     verificationSendFailed: 'Konto erstellt, Bestätigungs-E-Mail fehlgeschlagen. Später unter Konto erneut versuchen.',
     redirectingToGoogle: 'Weiterleitung zur Google-Anmeldung…',
+    redirectingToApple: 'Weiterleitung zur Apple-Anmeldung…',
     popupBlockedFallback: 'Popup blockiert — wechsle zur ganzseitigen Anmeldung',
   },
   'pt-BR': {
@@ -704,6 +711,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'E-mail verificado. Benefícios na nuvem e colaboração já disponíveis.',
     verificationSendFailed: 'Conta criada, mas o e-mail de verificação falhou. Tente de novo em Conta.',
     redirectingToGoogle: 'Redirecionando para o login do Google…',
+    redirectingToApple: 'Redirecionando para o login da Apple…',
     popupBlockedFallback: 'Pop-up bloqueado — mudando para login em página inteira',
   },
   'ja-JP': {
@@ -794,6 +802,7 @@ const AUTH_COPY_MAP = {
     emailVerifiedNow: 'メール確認完了。クラウド特典と共同編集が利用できます。',
     verificationSendFailed: 'アカウントは作成済みですが確認メール送信に失敗しました。アカウント画面で再試行できます。',
     redirectingToGoogle: 'Google サインインへ移動しています…',
+    redirectingToApple: 'Apple サインインへ移動しています…',
     popupBlockedFallback: 'ポップアップがブロックされました — ページ遷移ログインに切り替えます',
   },
 } satisfies Record<AppLanguage, AuthModalCopy>;

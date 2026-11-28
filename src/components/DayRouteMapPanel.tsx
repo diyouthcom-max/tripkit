@@ -1494,7 +1494,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
       setSelectedStopId(null);
     });
     return () => {
-      clickListener.remove();
+      clickListener?.remove();
     };
   }, [map]);
 
@@ -1512,7 +1512,7 @@ const EmbeddedDayRouteCanvas: React.FC<{
       }
     );
     return () => {
-      listener.remove();
+      listener?.remove();
     };
   }, [map, onHoldMapAddPlace]);
 

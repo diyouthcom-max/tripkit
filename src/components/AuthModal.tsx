@@ -2,14 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   deleteUser,
-  getRedirectResult,
   reauthenticateWithPopup,
   reload,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  signInWithRedirect,
   signOut,
   updateProfile,
   type User,
@@ -38,11 +35,14 @@ import {
 import { appleProvider, auth, formatAuthError, googleProvider } from '../firebase';
 import type { AppLanguage } from '../types';
 import { getAuthCopy } from '../i18n/packs/authAndKitPack';
+import {
+  consumeAuthRedirectResult,
+  signInWithAppleInteractive,
+  signInWithGoogleInteractive,
+} from '../services/googleSignIn';
 import { GoogleCityCoverImage } from './GoogleCityCoverImage';
 
 export type AuthModalMode = 'welcome' | 'signin' | 'account';
-
-const GOOGLE_POPUP_TIMEOUT_MS = 20000;
 
 export interface AuthModalProps {
   open: boolean;
@@ -174,18 +174,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, legalDoc, mode, onSkipWelcome, onClose]);
 
-  // Google redirect return (popup fallback). Latch + cancelled guard StrictMode double-mount.
+  // Google / Apple redirect return (popup fallback + Capacitor native). Latch + cancelled guard.
   useEffect(() => {
     let cancelled = false;
     void (async () => {
       try {
-        const result = await getRedirectResult(auth);
+        const user = await consumeAuthRedirectResult();
         if (cancelled) return;
-        if (!result?.user) return;
+        if (!user) return;
         if (googleSignInSettledRef.current) return;
         googleSignInSettledRef.current = true;
-        onToast(getAuthCopy(language).toastGoogleSignedIn);
-        onSignedIn?.(result.user);
+        const authCopy = getAuthCopy(language);
+        const lastProviderId =
+          user.providerData[user.providerData.length - 1]?.providerId;
+        onToast(
+          lastProviderId === 'apple.com'
+            ? authCopy.toastAppleSignedIn
+            : authCopy.toastGoogleSignedIn
+        );
+        onSignedIn?.(user);
         onClose();
         setBusyProvider(null);
       } catch (err) {
@@ -216,13 +223,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setErrorMsg(null);
     setInfoMsg(null);
     try {
-      const cred = await signInWithPopup(auth, appleProvider);
+      const result = await signInWithAppleInteractive();
+      if (result.status === 'redirecting') {
+        setInfoMsg(copy.redirectingToApple);
+        // Keep busy while the browser / WebView navigates away (same as Google).
+        return;
+      }
       onToast(copy.toastAppleSignedIn);
-      onSignedIn?.(cred.user);
+      onSignedIn?.(result.user);
       onClose();
+      setBusyProvider(null);
     } catch (err) {
       setErrorMsg(formatAuthError(err, language));
-    } finally {
       setBusyProvider(null);
     }
   };
@@ -233,27 +245,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setInfoMsg(null);
     googleSignInSettledRef.current = false;
 
-    const authErrorCode = (err: unknown): string => {
-      if (typeof err === 'object' && err !== null && 'code' in err) {
-        return String((err as { code?: unknown }).code || '');
-      }
-      return '';
-    };
-
-    const isGooglePopupTimeout = (err: unknown): boolean =>
-      err instanceof Error && err.message === 'GOOGLE_POPUP_TIMEOUT';
-
-    const shouldFallbackToRedirect = (err: unknown): boolean => {
-      if (isGooglePopupTimeout(err)) return true;
-      const code = authErrorCode(err);
-      return (
-        code === 'auth/popup-blocked' ||
-        code === 'auth/popup-closed-by-user' ||
-        code === 'auth/network-request-failed' ||
-        code === 'auth/operation-not-supported-in-this-environment'
-      );
-    };
-
     const settleGoogleSuccess = (user: User) => {
       if (googleSignInSettledRef.current) return;
       googleSignInSettledRef.current = true;
@@ -263,39 +254,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setBusyProvider(null);
     };
 
-    const startRedirectFallback = async (err: unknown) => {
-      const code = authErrorCode(err);
-      setInfoMsg(
-        code === 'auth/popup-blocked' ? copy.popupBlockedFallback : copy.redirectingToGoogle
-      );
-      try {
-        await signInWithRedirect(auth, googleProvider);
-        // Keep busy while the browser navigates away for redirect sign-in.
-      } catch (redirectErr) {
-        setErrorMsg(formatAuthError(redirectErr, language));
-        setBusyProvider(null);
-      }
-    };
-
     try {
-      const popupPromise = signInWithPopup(auth, googleProvider);
-      // Keep listening so a late popup success still settles once via the latch.
-      void popupPromise.then((lateCred) => settleGoogleSuccess(lateCred.user)).catch(() => {
-        /* redirect / primary catch owns UX */
-      });
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        window.setTimeout(() => {
-          reject(new Error('GOOGLE_POPUP_TIMEOUT'));
-        }, GOOGLE_POPUP_TIMEOUT_MS);
-      });
-      const cred = await Promise.race([popupPromise, timeoutPromise]);
-      settleGoogleSuccess(cred.user);
-    } catch (err) {
-      if (googleSignInSettledRef.current) return;
-      if (shouldFallbackToRedirect(err)) {
-        await startRedirectFallback(err);
+      const result = await signInWithGoogleInteractive();
+      if (result.status === 'redirecting') {
+        setInfoMsg(copy.redirectingToGoogle);
+        // Keep busy while the browser / WebView navigates away.
         return;
       }
+      settleGoogleSuccess(result.user);
+    } catch (err) {
+      if (googleSignInSettledRef.current) return;
       setErrorMsg(formatAuthError(err, language));
       setBusyProvider(null);
     }

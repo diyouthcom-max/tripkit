@@ -29,9 +29,18 @@ export class AppErrorBoundary extends React.Component<
 
   override componentDidCatch(error: unknown, info: React.ErrorInfo): void {
     console.error('AppErrorBoundary caught error:', error, info);
+    // Keep BOTH stacks: error.stack pinpoints the throwing line, componentStack
+    // only names the React subtree. Previously only componentStack was sent,
+    // which made runtime crashes (e.g. map.remove on an unmounted map) untraceable.
+    const stacks = [
+      error instanceof Error ? error.stack : undefined,
+      info?.componentStack ?? undefined,
+    ]
+      .filter(Boolean)
+      .join('\n\n--- component stack ---\n\n');
     reportClientError({
       message: String(error),
-      stack: info?.componentStack ?? undefined,
+      stack: stacks || undefined,
       url: typeof location !== 'undefined' ? location.href : undefined,
       source: 'boundary',
     });
@@ -83,7 +92,7 @@ export class AppErrorBoundary extends React.Component<
               <h2 className="text-base font-serif font-extrabold">{copy.title}</h2>
             </div>
             <p className="text-sm tk-text-ink2 leading-relaxed break-all">
-              {this.state.errorMessage || copy.fallbackBody}
+              {copy.fallbackBody}
             </p>
             <div className="flex items-center gap-2.5 pt-1">
               <button

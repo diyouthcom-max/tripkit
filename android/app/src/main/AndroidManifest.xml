@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- OAuth callback scheme (reversed client ID) for sign-in flows. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.googleusercontent.apps.322510449832-cto91qhppfam16lr6lpf3m9frfg4o9c3" />
+            </intent-filter>
+
         </activity>
 
         <provider
@@ -38,6 +46,15 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Voice input: Capacitor's WebChromeClient maps WebView audio capture to
+         RECORD_AUDIO. Without this declaration Android silently denies and
+         shows no system permission dialog. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Taking photos of tickets / documents inside the app. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Nearby hotel / POI recommendations (foreground only). -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Photo library silent index (MediaStore). No cloud upload. -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission

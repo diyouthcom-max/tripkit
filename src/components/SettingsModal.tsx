@@ -42,8 +42,9 @@ import {
   formatScheduleBadgeLabel,
   type ResolvedScheduledAlert,
 } from '../utils/notificationScheduler';
-import { signInWithPopup, signOut, type User } from 'firebase/auth';
-import { auth, formatCloudSyncError, googleProvider } from '../firebase';
+import { signOut, type User } from 'firebase/auth';
+import { auth, formatCloudSyncError } from '../firebase';
+import { signInWithGoogleInteractive } from '../services/googleSignIn';
 import {
   deleteAdminRedeemCode,
   fetchAdminRedeemCodes,
@@ -412,7 +413,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const handleGoogleSignIn = async () => {
     setAuthBusy(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithGoogleInteractive();
+      if (result.status === 'redirecting') {
+        // Browser / WebView navigates away; onAuthStateChanged settles on return.
+        return;
+      }
       onToast(copy.signedInToast);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Sign-in cancelled';
@@ -456,7 +461,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       a.download = copy.backupFilename(today);
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      if (a.parentNode) document.body.removeChild(a);
       URL.revokeObjectURL(url);
       onToast(copy.exportedToast(tripBook.length));
     } catch {

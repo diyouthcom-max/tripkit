@@ -327,8 +327,66 @@ function allowClientErrorReport(ip: string): boolean {
   return true;
 }
 
+/**
+ * CORS allowlist. Capacitor WebViews use capacitor://localhost (iOS) and
+ * http://localhost (Android) as their origin, so /api/* calls are cross-origin
+ * and require explicit CORS headers. Never use '*': arbitrary sites must not
+ * be able to burn AI quota or post error reports.
+ */
+const CORS_ALLOWED_ORIGINS = new Set([
+  'http://localhost',
+  'https://localhost',
+  'capacitor://localhost',
+  'http://127.0.0.1',
+  'https://127.0.0.1',
+  'https://tripkit.bagail.com',
+  'https://bagail.com',
+  'https://www.bagail.com',
+]);
+
+function corsAllowedOrigin(origin: string): boolean {
+  if (!origin) return false;
+  const normalized = origin.replace(/\/$/, '');
+  if (CORS_ALLOWED_ORIGINS.has(normalized)) return true;
+  try {
+    const u = new URL(origin);
+    // Dev servers and native WebViews may use any localhost port.
+    if (
+      (u.hostname === 'localhost' || u.hostname === '127.0.0.1') &&
+      (u.protocol === 'http:' || u.protocol === 'https:')
+    ) {
+      return true;
+    }
+  } catch {
+    // Malformed Origin header — treat as disallowed.
+  }
+  return false;
+}
+
 async function startServer() {
   const app = express();
+
+  // CORS preflight + response headers, before every route (including static).
+  app.use((req, res, next) => {
+    const origin = String(req.headers.origin || '');
+    if (corsAllowedOrigin(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, X-Requested-With, X-Client-Lang'
+      );
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Max-Age', '600');
+    }
+    if (req.method === 'OPTIONS') {
+      res.status(origin && corsAllowedOrigin(origin) ? 204 : 403).end();
+      return;
+    }
+    next();
+  });
+
   // gzip/brotli for text assets & JSON — before static + API handlers.
   // Default filter already skips most binary image/font types; skip SSE if any.
   app.use(
