@@ -355,7 +355,7 @@ function normalizePassKey(text: string): string {
  */
 export function buildSmartSeededPassesFromTrip(
   trip: TripState,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): { mergedPasses: TravelPass[]; addedCount: number } {
   const walletCopy = getWalletModalPack(lang);
   const existing = trip.travelPasses || [];

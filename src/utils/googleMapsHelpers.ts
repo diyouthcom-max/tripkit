@@ -12,6 +12,25 @@ export function getConfiguredGoogleMapsApiKey(): string {
   return trimmed;
 }
 
+export function hasGoogleMapsApiKey(): boolean {
+  return getConfiguredGoogleMapsApiKey().length > 0;
+}
+
+/** Never log raw API keys — strip key=… and AIza… tokens from error text. */
+export function sanitizeMapsErrorMessage(err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err ?? '');
+  return raw
+    .replace(/key=[^&\s"'`]+/gi, 'key=REDACTED')
+    .replace(/AIza[0-9A-Za-z_-]{10,}/g, 'AIza***')
+    .slice(0, 400);
+}
+
+export function maskGoogleMapsApiKeyForLog(key: string): string {
+  const k = key.trim();
+  if (k.length < 8) return '***';
+  return `${k.slice(0, 4)}…${k.slice(-2)} (len=${k.length})`;
+}
+
 export function buildPlaceQueryString(
   title: string,
   address?: string,

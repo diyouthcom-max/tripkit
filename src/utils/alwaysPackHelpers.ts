@@ -46,7 +46,7 @@ export function upsertAlwaysPackItem(
   item: PackingItem,
   groupId: string,
   groupTitle: string,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): AlwaysPackTemplateItem[] {
   const current = loadAlwaysPackLibrary();
   const key = normalizeItemNameKey(item.name);

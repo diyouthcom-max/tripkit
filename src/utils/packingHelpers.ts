@@ -794,7 +794,7 @@ function classifyDayScaledClothingCategory(
   cleanName: string,
   isClothingGroup: boolean,
   prevQty: number,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): { category: ClothingScaleCategory; label: string } | null {
   const { clothingRules } = getPackingUtilsCopy(lang);
   // Exclude non-clothing equipment, electronics, toiletries, meds, documents
@@ -881,7 +881,7 @@ function syncDayScaledWhyText(
   effectiveCycleDays: number,
   nextQty: number,
   laundry: boolean,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): string {
   if (!why) return why;
   const { syncDayWhy } = getPackingUtilsCopy(lang);
@@ -914,7 +914,7 @@ export function computeClothingNormalizationPlan(
   groups: PackingGroup[],
   previousDays: number,
   targetSetup: Pick<TripSetup, 'days' | 'laundry' | 'laundryIntervalDays' | 'rewear'>,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): ClothingNormalizationPlan {
   const safePrevDays = Math.max(1, Math.min(60, Math.round(previousDays) || 1));
   const safeTargetDays = Math.max(1, Math.min(60, Math.round(targetSetup.days) || 1));
@@ -1300,7 +1300,7 @@ export const CHECKED_SHELL_SPECS: Record<
 
 export function getCarryOnShellLabel(
   preset: CarryOnShellPreset,
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   unitSystem: UnitSystem = 'metric'
 ): string {
   const grams = CARRY_ON_SHELL_SPECS[preset].grams;
@@ -1310,7 +1310,7 @@ export function getCarryOnShellLabel(
 
 export function getCheckedShellLabel(
   preset: CheckedShellPreset,
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   unitSystem: UnitSystem = 'metric'
 ): string {
   const grams = CHECKED_SHELL_SPECS[preset].grams;
@@ -1430,7 +1430,7 @@ export function computeLuggageWeightForecast(params: {
     includeTare,
     carryOnShell,
     checkedShell,
-    language = 'zh-CN',
+    language = 'en-US',
     unitSystem = 'metric',
   } = params;
 

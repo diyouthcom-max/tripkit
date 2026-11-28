@@ -581,7 +581,7 @@ export function formatCurrencyAmount(
 
 export function formatCurrencyFullLabel(
   code: HomeCurrencyCode,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): string {
   const spec = CURRENCY_CATALOG[code] ?? CURRENCY_CATALOG.CNY;
   if (lang === 'zh-CN') {

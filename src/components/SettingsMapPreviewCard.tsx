@@ -11,7 +11,12 @@ import { ExternalLink, Loader2, MapPin, Play } from 'lucide-react';
 import {
   buildGoogleMapsSearchUrl,
   getConfiguredGoogleMapsApiKey,
+  sanitizeMapsErrorMessage,
 } from '../utils/googleMapsHelpers';
+import {
+  isNativeMapOpenerAvailable,
+  openMapExternally,
+} from '../services/nativeMapOpener';
 import { tkColor } from '../utils/tkColor';
 import type { AppLanguage } from '../types';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
@@ -93,7 +98,10 @@ const ThumbnailMapProbe: React.FC<{
             }
           } catch (routeErr) {
             if (!cancelled) {
-              console.warn('Routes API probe warning in Settings preview:', routeErr);
+              console.warn(
+                'Routes API probe warning in Settings preview:',
+                sanitizeMapsErrorMessage(routeErr)
+              );
               onResultRef.current({
                 ok: true,
                 message: copy.mapPlacesRoutesFallback(firstPlace.displayName || query),
@@ -108,7 +116,10 @@ const ThumbnailMapProbe: React.FC<{
         }
       } catch (err) {
         if (!cancelled) {
-          console.warn('Places probe failed in Settings preview:', err);
+          console.warn(
+            'Places probe failed in Settings preview:',
+            sanitizeMapsErrorMessage(err)
+          );
           onResultRef.current({
             ok: false,
             message: copy.placesFailedMsg,
@@ -241,6 +252,16 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
                 href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  // Web: keep default <a> navigation (popup blockers still allow user-gesture links).
+                  // Native: preventDefault and hand off to system Maps.
+                  if (!isNativeMapOpenerAvailable()) return;
+                  e.preventDefault();
+                  void openMapExternally({
+                    url: buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' }),
+                    query: cityHint || 'Paris',
+                  });
+                }}
                 className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-sm font-semibold tk-text-swatch-3 hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
               >
                 <ExternalLink className="h-3 w-3" />
@@ -251,13 +272,32 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
 
           {probeResult && (
             <div
-              className={`border-t tk-bc-hair px-3.5 py-2 text-[13px] leading-relaxed ${
- probeResult.ok
- ? 'tk-bg-forest-tint tk-text-forest'
- : 'tk-bg-warning-tint tk-text-warning'
- }`}
+              className={`border-t tk-bc-hair px-3.5 py-2 text-[13px] leading-relaxed flex flex-wrap items-center justify-between gap-2 ${
+                probeResult.ok
+                  ? 'tk-bg-forest-tint tk-text-forest'
+                  : 'tk-bg-warning-tint tk-text-warning'
+              }`}
             >
-              {probeResult.message}
+              <span className="leading-snug flex-1 min-w-[10rem]">{probeResult.message}</span>
+              {!probeResult.ok && (
+                <a
+                  href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (!isNativeMapOpenerAvailable()) return;
+                    e.preventDefault();
+                    void openMapExternally({
+                      url: buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' }),
+                      query: cityHint || 'Paris',
+                    });
+                  }}
+                  className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1 text-[13px] font-semibold tk-text-forest cursor-pointer whitespace-nowrap"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  {copy.openMapsBtn}
+                </a>
+              )}
             </div>
           )}
         </div>

@@ -148,7 +148,7 @@ export function handleFirestoreError(
 import { pickLang } from './i18n/langHelper';
 
 export function formatCloudSyncError(err: unknown, langOverride?: AppLanguage): string {
-  const lang: AppLanguage = langOverride ?? loadAppPreferences().language ?? 'zh-CN';
+  const lang: AppLanguage = langOverride ?? loadAppPreferences().language ?? 'en-US';
   const rawMessage = err instanceof Error ? err.message : String(err);
   let innerError = rawMessage;
 
@@ -260,7 +260,7 @@ export function formatCloudSyncError(err: unknown, langOverride?: AppLanguage): 
 }
 
 export function formatAuthError(err: unknown, langOverride?: AppLanguage): string {
-  const lang: AppLanguage = langOverride ?? loadAppPreferences().language ?? 'zh-CN';
+  const lang: AppLanguage = langOverride ?? loadAppPreferences().language ?? 'en-US';
   const code =
     typeof err === 'object' && err !== null && 'code' in err
       ? String((err as { code?: unknown }).code || '')
@@ -291,14 +291,32 @@ export function formatAuthError(err: unknown, langOverride?: AppLanguage): strin
     });
   }
   if (combined.includes('operation-not-allowed') || combined.includes('configuration-not-found')) {
+    const codeLabel = code || 'unknown';
     return pickLang(lang, {
-      'zh-CN': '该登录方式尚未在 Firebase 控制台开启。请先使用 Google 一键登录，或在 Firebase Authentication 中开启 Apple / 邮箱登录开关。',
-      'en-US': 'This sign-in method is not yet enabled in Firebase Console. Please use Google Sign-In for now, or enable Apple / Email in Firebase Authentication.',
-      'es-MX': 'Este método de acceso aún no está habilitado en la consola. Usa Google por ahora.',
-      'fr-FR': 'Cette méthode de connexion n’est pas encore activée. Utilisez Google pour le moment.',
-      'de-DE': 'Diese Anmeldemethode ist noch nicht aktiviert. Bitte nutzen Sie vorerst Google.',
-      'pt-BR': 'Este método de login ainda não está ativado. Use o login com Google por enquanto.',
-      'ja-JP': 'このログイン方法はまだ有効化されていません。現在は Google ログインをご利用ください。',
+      'zh-CN': `Apple 登录失败。请检查原生 URL Scheme / Firebase Apple 提供商配置（含 Services ID、包名与签名）（code: ${codeLabel}）。`,
+      'en-US': `Apple sign-in failed. Check native URL scheme / Firebase Apple provider configuration (code: ${codeLabel}).`,
+      'en-GB': `Apple sign-in failed. Check native URL scheme / Firebase Apple provider configuration (code: ${codeLabel}).`,
+      'es-MX': `Falló el inicio con Apple. Revisa el esquema URL nativo / la configuración del proveedor Apple en Firebase (code: ${codeLabel}).`,
+      'fr-FR': `Échec de la connexion Apple. Vérifiez le schéma d’URL natif / la configuration du fournisseur Apple Firebase (code: ${codeLabel}).`,
+      'de-DE': `Apple-Anmeldung fehlgeschlagen. Prüfe natives URL-Schema / Firebase-Apple-Anbieterkonfiguration (code: ${codeLabel}).`,
+      'pt-BR': `Falha no login com a Apple. Verifique o URL scheme nativo / a configuração do provedor Apple no Firebase (code: ${codeLabel}).`,
+      'ja-JP': `Apple ログインに失敗しました。ネイティブ URL スキーム / Firebase の Apple プロバイダ設定を確認してください（code: ${codeLabel}）。`,
+    });
+  }
+  if (
+    combined.includes('NATIVE_AUTH_NO_ID_TOKEN') ||
+    combined.includes('NATIVE_AUTH_NO_CREDENTIAL')
+  ) {
+    const codeLabel = code || (combined.includes('ID_TOKEN') ? 'NATIVE_AUTH_NO_ID_TOKEN' : 'NATIVE_AUTH_NO_CREDENTIAL');
+    return pickLang(lang, {
+      'zh-CN': `原生登录未返回有效凭证，请重试或改用 Google 登录（code: ${codeLabel}）。`,
+      'en-US': `Native sign-in did not return a usable credential. Please retry or use Google (code: ${codeLabel}).`,
+      'en-GB': `Native sign-in did not return a usable credential. Please retry or use Google (code: ${codeLabel}).`,
+      'es-MX': `El inicio nativo no devolvió una credencial válida. Reintenta o usa Google (code: ${codeLabel}).`,
+      'fr-FR': `La connexion native n’a pas renvoyé d’identifiant utilisable. Réessayez ou utilisez Google (code: ${codeLabel}).`,
+      'de-DE': `Native Anmeldung lieferte kein gültiges Credential. Bitte erneut versuchen oder Google nutzen (code: ${codeLabel}).`,
+      'pt-BR': `O login nativo não retornou uma credencial válida. Tente de novo ou use o Google (code: ${codeLabel}).`,
+      'ja-JP': `ネイティブログインから有効な認証情報を取得できませんでした。再試行するか Google をご利用ください（code: ${codeLabel}）。`,
     });
   }
   if (combined.includes('invalid-email')) {

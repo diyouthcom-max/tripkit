@@ -50,9 +50,14 @@ import {
   getConfiguredGoogleMapsApiKey,
   resolveDayStopsForMap,
   resolveMultiDayStopsForMap,
+  sanitizeMapsErrorMessage,
   type MapsTravelMode,
   type ResolvedDayStop,
 } from '../utils/googleMapsHelpers';
+import {
+  isNativeMapOpenerAvailable,
+  openMapExternally,
+} from '../services/nativeMapOpener';
 import { getCityForDay, getPrimaryCityName } from '../utils/itineraryHelpers';
 import { AccentIconBadge } from '../utils/accentTheme';
 import {
@@ -136,7 +141,7 @@ interface RouteSummaryInfo {
   legDistancesKm?: number[];
 }
 
-function formatDuration(totalMinutes: number, lang: AppLanguage = 'zh-CN'): string {
+function formatDuration(totalMinutes: number, lang: AppLanguage = 'en-US'): string {
   const safe = Math.max(1, Math.round(totalMinutes));
   const panelCopy = getItineraryMapCopy(lang).panel;
   if (safe < 60) return panelCopy.formatMinsOnly(safe);
@@ -433,13 +438,18 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
           </div>
         </div>
 
-        {/* Primary Quick Navigation Buttons */}
+        {/* Primary Quick Navigation Buttons — native uses system Maps Intent / UIApplication.open */}
         <div className="flex flex-wrap items-center gap-2 shrink-0">
           {fullDayRouteUrl && stops.length >= 2 ? (
             <a
               href={fullDayRouteUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!isNativeMapOpenerAvailable()) return;
+                e.preventDefault();
+                void openMapExternally({ url: fullDayRouteUrl });
+              }}
               className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <Navigation className="h-4 w-4" />
@@ -454,6 +464,11 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
               href={activeStopDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!isNativeMapOpenerAvailable()) return;
+                e.preventDefault();
+                void openMapExternally({ url: activeStopDirectionsUrl });
+              }}
               className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
             >
               <Navigation className="h-4 w-4" />
@@ -467,6 +482,11 @@ const InteractiveStaticRouteFallbackCard: React.FC<{
             href={cityExploreUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => {
+              if (!isNativeMapOpenerAvailable()) return;
+              e.preventDefault();
+              void openMapExternally({ url: cityExploreUrl });
+            }}
             className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap shrink-0"
           >
             <ExternalLink className="h-4 w-4 tk-text-forest" />
@@ -1130,7 +1150,11 @@ const EmbeddedDayRouteCanvas: React.FC<{
           }
         } catch (err) {
           hadLookupFailure = true;
-          console.warn('Place.searchByText fallback for stop:', stop.query, err);
+          console.warn(
+            'Place.searchByText fallback for stop:',
+            stop.title,
+            sanitizeMapsErrorMessage(err)
+          );
         }
       }
 
@@ -1639,13 +1663,28 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   onHoldMapAddPlace,
   onRequestSetStay,
 }) => {
-  const { lang, copy } = usePanelLang();
+  const { copy } = usePanelLang();
   const apiLoadingStatus = useApiLoadingStatus();
   const [tilesReady, setTilesReady] = useState(false);
   const [isResolvingStops, setIsResolvingStops] = useState(stops.length > 0);
   const [resolvedStopsCount, setResolvedStopsCount] = useState(0);
   const [mapStyle, setMapStyle] = useState<'roadmap' | 'satellite'>('roadmap');
   const [holdHintDismissed, setHoldHintDismissed] = useState(false);
+  const [forceAuthFailure, setForceAuthFailure] = useState(false);
+
+  // Google Maps JS calls this global when the key is rejected (RefererNotAllowed / InvalidKey).
+  // Hide the default Chinese/English Google error tile and fall back to our static card.
+  useEffect(() => {
+    const previous = (window as unknown as { gm_authFailure?: () => void }).gm_authFailure;
+    (window as unknown as { gm_authFailure?: () => void }).gm_authFailure = () => {
+      console.warn('[TripKit] Google Maps auth failure — falling back to offline map card');
+      setForceAuthFailure(true);
+      if (typeof previous === 'function') previous();
+    };
+    return () => {
+      (window as unknown as { gm_authFailure?: () => void }).gm_authFailure = previous;
+    };
+  }, []);
 
   // Auto-fade hold/right-click hint after 3.2s so the canvas remains completely clean
   useEffect(() => {
@@ -1671,27 +1710,25 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   }, []);
 
   const sdkFailed =
+    forceAuthFailure ||
     apiLoadingStatus === APILoadingStatus.FAILED ||
     apiLoadingStatus === APILoadingStatus.AUTH_FAILURE;
 
   if (sdkFailed) {
     return (
-      <Real2DRouteMapCanvas
-        waypoints={fallbackWaypoints}
-        previousWaypoints={fallbackPrevWaypoints}
-        showComparison={showComparison}
+      <InteractiveStaticRouteFallbackCard
+        dayNumber={dayNumber}
         scopeLabel={scopeLabel}
         cityLabel={cityLabel}
+        primaryCity={primaryCity}
         multiDayMode={multiDayMode}
-        canMultiDayPreview={canMultiDayPreview}
-        onToggleMultiDayPreview={onToggleMultiDayPreview}
-        lang={lang}
-        dayStayAnchor={dayStayAnchor}
+        stops={stops}
+        previousStops={previousStops}
+        showComparison={showComparison}
+        travelMode={travelMode}
         fullDayRouteUrl={fullDayRouteUrl}
-        onOpenStopDetail={onOpenStopDetail}
-        onHoldMapAddPlace={onHoldMapAddPlace}
-        onRequestSetStay={onRequestSetStay}
-        hideInlineStopStrip
+        getDayCityHint={getDayCityHint}
+        fallbackReason="sdk_failed"
       />
     );
   }
@@ -1862,9 +1899,25 @@ const ConfiguredInteractiveMapViewport: React.FC<{
       </div>
 
       {routeNotice && (
-        <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[13px] tk-text-ink2 flex items-center gap-1.5">
+        <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[13px] tk-text-ink2 flex flex-wrap items-center gap-2">
           <AlertCircle className="h-4 w-4 tk-text-warning shrink-0" />
-          <span>{routeNotice}</span>
+          <span className="flex-1 min-w-[12rem] leading-snug">{routeNotice}</span>
+          {fullDayRouteUrl && (
+            <a
+              href={fullDayRouteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!isNativeMapOpenerAvailable()) return;
+                e.preventDefault();
+                void openMapExternally({ url: fullDayRouteUrl });
+              }}
+              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-[13px] font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              {copy.openInMaps}
+            </a>
+          )}
         </div>
       )}
     </div>

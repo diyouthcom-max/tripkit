@@ -193,8 +193,8 @@ export const ptBR = {
     transcribing: 'Transcrevendo...',
     tooltipSpeech: 'Reconhecimento de voz ao vivo do navegador',
     noSpeechError: 'Nenhuma voz detectada — tente falar mais perto',
-    micDeniedError: 'Permissão do microfone negada — libere nas configurações do navegador ou do dispositivo',
-    unsupportedError: 'O ditado por voz não é compatível com este navegador',
+    micDeniedError: 'Permissão do microfone negada — libere nas Configurações do Trip Kit',
+    unsupportedError: 'O ditado por voz não é compatível com este dispositivo',
     heardPrefix: 'Ouvido: ',
   },
   common: {

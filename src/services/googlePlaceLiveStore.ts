@@ -4,6 +4,7 @@ import type { AppLanguage, StopType, TimelineNode } from '../types';
 import {
   buildPlaceQueryString,
   getConfiguredGoogleMapsApiKey,
+  sanitizeMapsErrorMessage,
 } from '../utils/googleMapsHelpers';
 
 export interface PlacePhotoAttribution {
@@ -77,6 +78,7 @@ export async function resolveGoogleCityCoverPhoto(params: {
 }): Promise<GoogleCityCoverResult | null> {
   const city = String(params.city || '').trim();
   if (!city || !params.placesLib?.Place) return null;
+  if (!getConfiguredGoogleMapsApiKey()) return null;
 
   const placesLang = PLACES_LANG_MAP[params.language] || 'en-US';
   const cityKey = city.toLowerCase();
@@ -157,7 +159,11 @@ export async function resolveGoogleCityCoverPhoto(params: {
       cityCoverResultCache[cacheKey] = result;
       return result;
     } catch (err) {
-      console.warn('Google city cover lookup failed for:', city, err);
+      console.warn(
+        'Google city cover lookup failed for:',
+        city,
+        sanitizeMapsErrorMessage(err)
+      );
       cityCoverResultCache[cacheKey] = null;
       return null;
     } finally {
@@ -390,8 +396,12 @@ async function resolveRichGooglePlace(params: {
           }
           return mapped;
         }
-      } catch {
-        console.warn('Places API (New) enrichment unavailable for:', query, err);
+      } catch (err) {
+        console.warn(
+          'Places API (New) enrichment unavailable for:',
+          query,
+          sanitizeMapsErrorMessage(err)
+        );
       }
       return null;
     } finally {
@@ -550,7 +560,7 @@ export function resolveStopDurationMinutes(node: Pick<TimelineNode, 'durationMin
 
 export function formatStayDurationLabel(
   minutes: number,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): string {
   const safe = Math.max(15, Math.round(minutes));
   const hours = safe / 60;
@@ -576,7 +586,7 @@ export function resolveDayOpeningHoursLine(
   weekdayDescriptions: string[] | undefined,
   departureDateIso: string | undefined,
   dayNumber: number,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): string | null {
   if (!weekdayDescriptions || weekdayDescriptions.length === 0) return null;
 

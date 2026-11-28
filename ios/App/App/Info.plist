@@ -87,5 +87,10 @@
 	<string>Trip Kit indexes your travel photos locally by trip dates to build memories. Photos never leave your device during scanning.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Trip Kit may save exported travel memories to your photo library when you choose to export.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>comgooglemaps-x-callback</string>
+	</array>
 </dict>
 </plist>

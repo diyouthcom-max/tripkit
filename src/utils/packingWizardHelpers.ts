@@ -327,7 +327,7 @@ export function buildPerStopWeatherForecasts(
   departureDate: string,
   totalDays: number,
   overrides: PackingWeatherOverride[] = [],
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   cityDays?: number[]
 ): PerStopWeatherForecast[] {
   const uiCopy = getPackingWizardUiCopy(lang);
@@ -516,7 +516,7 @@ export function buildOfflineDeepPackingGroups(
   const {
     setup,
     intel,
-    lang = 'zh-CN',
+    lang = 'en-US',
     checkedLimitKg = 23,
     ownerId = 'm1',
     alwaysPackLibrary = loadAlwaysPackLibrary(),

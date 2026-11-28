@@ -90,7 +90,7 @@ const GoogleLogoSvg: React.FC<{ className?: string }> = ({ className = 'h-4 w-4'
 
 export function resolveAuthProviderLabel(user: User, langOrIsEn: AppLanguage | boolean): string {
   const resolvedLang: AppLanguage =
-    typeof langOrIsEn === 'boolean' ? (langOrIsEn ? 'en-US' : 'zh-CN') : langOrIsEn;
+    typeof langOrIsEn === 'boolean' ? 'en-US' : langOrIsEn;
   const copy = getAuthCopy(resolvedLang);
   const providerId = user.providerData?.[0]?.providerId || '';
   if (providerId === 'apple.com') return 'Apple ID';

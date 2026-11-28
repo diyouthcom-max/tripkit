@@ -193,8 +193,8 @@ export const frFR = {
     transcribing: 'Transcription...',
     tooltipSpeech: 'Reconnaissance vocale en direct du navigateur',
     noSpeechError: 'Aucune voix détectée — veuillez réessayer',
-    micDeniedError: 'Accès au micro refusé — autorisez-le dans votre navigateur ou les réglages de l’appareil',
-    unsupportedError: 'La dictée vocale n’est pas prise en charge par ce navigateur',
+    micDeniedError: 'Accès au micro refusé — autorisez-le dans Réglages pour Trip Kit',
+    unsupportedError: 'La dictée vocale n’est pas prise en charge sur cet appareil',
     heardPrefix: 'Reconnu : ',
   },
   common: {

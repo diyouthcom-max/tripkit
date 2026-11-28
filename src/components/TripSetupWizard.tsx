@@ -289,7 +289,7 @@ function formatReadableDateRange(
 function resizeDraftCrew(
   prev: CrewMember[],
   count: number,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): CrewMember[] {
   const fallbacks = getLocalizedCrewFallbacks(lang);
   const safeCount = Math.max(1, Math.min(4, Math.round(count) || 1));

@@ -115,7 +115,7 @@ function estimateMinimumStayMinutes(stopType?: StopType, title = ''): {
 export function getClosingUrgency(
   time: string,
   closeTime: string,
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   stopType?: StopType,
   title?: string
 ): ClosingUrgencyInfo {
@@ -361,7 +361,7 @@ export function getCityForDay(
   day: number,
   totalDays: number,
   dayNodes?: TimelineNode[],
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   cityDays?: number[]
 ): string {
   if (dayNodes && dayNodes.length > 0) {
@@ -487,7 +487,7 @@ export function buildInstantDriverFallback(
   city: string,
   title: string,
   address: string,
-  lang: AppLanguage = 'zh-CN'
+  lang: AppLanguage = 'en-US'
 ): LocalCardResult {
   const c = city.toLowerCase();
   const cleanAddr = address.trim() || title.trim();

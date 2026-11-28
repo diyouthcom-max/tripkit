@@ -19,7 +19,7 @@ export const VAT_STATUS_LABELS: Record<VatDocStatus, string> = {
   stamped: '海关已盖章',
 };
 
-export function getVatStatusLabel(status: VatDocStatus, lang: AppLanguage = 'zh-CN'): string {
+export function getVatStatusLabel(status: VatDocStatus, lang: AppLanguage = 'en-US'): string {
   const copy = getBudgetPackA(lang);
   if (status === 'form_ready') return copy.vatFormReady;
   if (status === 'stamped') return copy.vatStamped;
@@ -41,7 +41,7 @@ export function resolveExpenseSplitDetails(
   ex: Pick<ExpenseRecord, 'amountLocal' | 'split' | 'mySharePct' | 'paidBy'>,
   companionName = '同行伙伴',
   currencySymbol = '€',
-  lang: AppLanguage = 'zh-CN',
+  lang: AppLanguage = 'en-US',
   travelersCount = 2
 ): ResolvedSplitDetails {
   const amt = Math.max(0, Number(ex.amountLocal) || 0);

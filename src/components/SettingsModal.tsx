@@ -814,7 +814,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {t('settings.sectionRegional')}
                 </h3>
                 <div className="rounded-[20px] border tk-bc-hair bg-white divide-y tk-divide-hair">
-                  {/* Language & Regional Conventions (zh-CN / en-US North America / en-GB Europe) */}
+                  {/* Language & Regional Conventions (en-US / en-GB / es-MX / fr-FR / de-DE / pt-BR / ja-JP) */}
                   <div
                     ref={languageSectionRef}
                     className={`px-4 py-3.5 space-y-3 transition-colors duration-500 rounded-t-2xl ${

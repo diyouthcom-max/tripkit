@@ -30,6 +30,10 @@ import {
   resolveActiveCoverVisual,
 } from './tripCoverHelpers';
 import { getExportPdfCopy } from '../i18n/packs/exportPdfPack';
+import {
+  isNativePdfOpenerAvailable,
+  writeAndOpenPdfInNative,
+} from '../services/nativePdfOpener';
 
 // Exact A4 Portrait proportions (210mm x 297mm -> 794 x 1123 at 96dpi, rendered at 2.25x for crisp print)
 const PAGE_W = 794;
@@ -346,7 +350,7 @@ export async function exportTripPdf(
   trip: TripState,
   options?: ExportTripPdfOptions
 ): Promise<string> {
-  const lang: AppLanguage = options?.language ?? 'zh-CN';
+  const lang: AppLanguage = options?.language ?? 'en-US';
   const copy = getExportPdfCopy(lang);
   const unitSystem: UnitSystem = options?.unitSystem ?? 'metric';
   const carryOnLimit = options?.carryOnLimitKg ?? CARRY_ON_LIMIT_KG;
@@ -1780,6 +1784,15 @@ export async function exportTripPdf(
     .replace(/[^\u4e00-\u9fa5a-zA-Z0-9_-]+/g, '-')
     .replace(/^-|-$/g, '');
   const filename = `Trip-Kit-${safeTitle || 'Trip'}-A4-Handbook.pdf`;
-  doc.save(filename);
+
+  // Capacitor WebView: doc.save() only queues a download that never auto-opens.
+  // Write into the app cache directory and hand off to the system PDF viewer.
+  if (isNativePdfOpenerAvailable()) {
+    const dataUri = doc.output('datauristring');
+    const base64 = dataUri.includes(',') ? dataUri.split(',')[1] : dataUri;
+    await writeAndOpenPdfInNative(base64, filename);
+  } else {
+    doc.save(filename);
+  }
   return filename;
 }

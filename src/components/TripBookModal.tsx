@@ -36,7 +36,7 @@ export const TripBookModal: React.FC<TripBookModalProps> = ({
   anchorRef,
   trips,
   activeTripId,
-  language = 'zh-CN',
+  language = 'en-US',
   onSelectTrip,
   onOpenCreateNewWizard,
   onOpenEditCurrentSetup,

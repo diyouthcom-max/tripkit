@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic, Square, Loader2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Capacitor } from '@capacitor/core';
 import { resolveApiUrl } from '../services/apiUrl';
+import {
+  ensureMicrophonePermission,
+  isNativeMicPermissionAvailable,
+  openAppSettings,
+} from '../services/nativeMicPermission';
 import {
   getBrowserSpeechRecognitionConstructor,
   resolveSpeechRecognitionLang,
@@ -146,7 +152,18 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
     }, 1000);
   };
 
+  const ensureNativeMicOrExplain = async (): Promise<boolean> => {
+    if (!isNativeMicPermissionAvailable()) return true;
+    const granted = await ensureMicrophonePermission();
+    if (granted) return true;
+    reportError(t('voice.micDeniedError'));
+    void openAppSettings();
+    return false;
+  };
+
   const startMediaRecorderFallback = async () => {
+    if (!(await ensureNativeMicOrExplain())) return;
+
     if (
       typeof navigator === 'undefined' ||
       !navigator.mediaDevices ||
@@ -248,6 +265,9 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
         err instanceof DOMException &&
         (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError');
       reportError(isDenied ? t('voice.micDeniedError') : t('voice.unsupportedError'));
+      if (isDenied && isNativeMicPermissionAvailable()) {
+        void openAppSettings();
+      }
     }
   };
 
@@ -275,6 +295,14 @@ export const AiVoiceInputButton: React.FC<AiVoiceInputButtonProps> = ({
 
   const startRecording = async () => {
     if (disabled || status !== 'idle') return;
+
+    // Capacitor WebView: request OS mic permission, then record → /api/ai/transcribe-audio.
+    // Web Speech API is unreliable inside WKWebView / Android WebView.
+    if (Capacitor.isNativePlatform()) {
+      if (!(await ensureNativeMicOrExplain())) return;
+      await startMediaRecorderFallback();
+      return;
+    }
 
     const SpeechRecognitionCtor = getBrowserSpeechRecognitionConstructor();
     if (!SpeechRecognitionCtor) {

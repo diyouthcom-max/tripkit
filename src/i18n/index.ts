@@ -197,8 +197,8 @@ const zhCN = {
     transcribing: '识别中...',
     tooltipSpeech: '使用浏览器实时语音识别（Web Speech API）',
     noSpeechError: '未检测到清晰语音，请靠近麦克风重试',
-    micDeniedError: '麦克风权限被拒绝 — 请在浏览器或系统设置中允许麦克风访问',
-    unsupportedError: '当前浏览器不支持语音输入，请改用文字输入',
+    micDeniedError: '麦克风权限被拒绝 — 请在系统设置中允许 Trip Kit 使用麦克风',
+    unsupportedError: '当前设备不支持语音输入，请改用文字输入',
     heardPrefix: '语音识别：',
   },
   common: {
@@ -585,8 +585,8 @@ const enUS: typeof zhCN = {
     transcribing: 'Transcribing...',
     tooltipSpeech: 'Live browser speech recognition (Web Speech API)',
     noSpeechError: 'No speech detected — please speak closer to the mic',
-    micDeniedError: 'Microphone access denied — enable it in your browser or device Settings',
-    unsupportedError: 'Voice dictation is not supported in this browser',
+    micDeniedError: 'Microphone access denied — enable it in Settings for Trip Kit',
+    unsupportedError: 'Voice dictation is not supported on this device',
     heardPrefix: 'Heard: ',
   },
   common: {
@@ -973,8 +973,8 @@ const enGB: typeof zhCN = {
     transcribing: 'Transcribing...',
     tooltipSpeech: 'Live browser speech recognition (Web Speech API)',
     noSpeechError: 'No clear speech detected — please try again',
-    micDeniedError: 'Microphone access denied — enable it in your browser or device Settings',
-    unsupportedError: 'Voice dictation is not supported in this browser',
+    micDeniedError: 'Microphone access denied — enable it in Settings for Trip Kit',
+    unsupportedError: 'Voice dictation is not supported on this device',
     heardPrefix: 'Recognised: ',
   },
   common: {

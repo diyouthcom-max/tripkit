@@ -39,6 +39,47 @@ export function shouldFallbackToGoogleRedirect(err: unknown): boolean {
   );
 }
 
+function isAppleConfigAuthError(err: unknown): boolean {
+  const code = authErrorCode(err);
+  const msg = err instanceof Error ? err.message : String(err || '');
+  const combined = `${code} ${msg}`;
+  return (
+    combined.includes('configuration-not-found') ||
+    combined.includes('operation-not-allowed')
+  );
+}
+
+/** Log credential shape without leaking tokens. */
+function logSanitizedCredential(
+  provider: 'google' | 'apple',
+  cred: Record<string, unknown> | null | undefined
+): void {
+  if (!cred) {
+    console.warn(`[TripKit] nativeSignIn(${provider}): credential is null/undefined`);
+    return;
+  }
+  const keys = Object.keys(cred);
+  const flags = {
+    hasIdToken: Boolean(cred.idToken),
+    hasAccessToken: Boolean(cred.accessToken),
+    hasNonce: Boolean(cred.nonce),
+    hasRawNonce: Boolean(cred.rawNonce),
+    hasAuthorizationCode: Boolean(cred.authorizationCode),
+    hasServerAuthCode: Boolean(cred.serverAuthCode),
+    providerId: typeof cred.providerId === 'string' ? cred.providerId : undefined,
+  };
+  console.info(`[TripKit] nativeSignIn(${provider}) credential keys:`, keys, flags);
+}
+
+function attachAuthCode(err: unknown, fallbackCode: string): Error {
+  const code = authErrorCode(err) || fallbackCode;
+  const base = err instanceof Error ? err.message : String(err || 'unknown');
+  const wrapped = new Error(base);
+  (wrapped as Error & { code?: string }).code = code;
+  console.error(`[TripKit] auth error code=${code}`, base);
+  return wrapped;
+}
+
 /**
  * Native sign-in uses the OS-level OAuth flow via @capacitor-firebase/authentication,
  * which bypasses the WKWebView/WebView OAuth restrictions that make the Firebase
@@ -55,34 +96,152 @@ export function shouldFallbackToGoogleRedirect(err: unknown): boolean {
 async function nativeSignIn(
   provider: 'google' | 'apple'
 ): Promise<InteractiveSignInResult> {
-  const result =
-    provider === 'google'
-      ? await FirebaseAuthentication.signInWithGoogle({ skipNativeAuth: true })
-      : await FirebaseAuthentication.signInWithApple({ skipNativeAuth: true });
+  // Android Apple OAuth may leave a pending Custom-Tabs result if the process
+  // was killed mid-flow — finish it before starting a new request.
+  if (provider === 'apple' && Capacitor.getPlatform() === 'android') {
+    try {
+      const pending = await FirebaseAuthentication.getPendingAuthResult();
+      if (pending?.credential?.idToken) {
+        console.info('[TripKit] Consuming pending Android Apple auth result');
+        return completeAppleJsCredential(
+          pending.credential as unknown as Record<string, unknown>
+        );
+      }
+    } catch (pendingErr) {
+      console.warn(
+        '[TripKit] getPendingAuthResult skipped',
+        authErrorCode(pendingErr) || pendingErr
+      );
+    }
+  }
 
-  const cred = result.credential;
+  let result;
+  try {
+    result =
+      provider === 'google'
+        ? await FirebaseAuthentication.signInWithGoogle({ skipNativeAuth: true })
+        : await FirebaseAuthentication.signInWithApple({ skipNativeAuth: true });
+  } catch (pluginErr) {
+    console.error(
+      `[TripKit] FirebaseAuthentication.signInWith${provider === 'google' ? 'Google' : 'Apple'} failed`,
+      { code: authErrorCode(pluginErr), message: pluginErr instanceof Error ? pluginErr.message : String(pluginErr) }
+    );
+
+    // Android Apple uses a web OAuth sheet; config errors often mean Services ID /
+    // Auth domain issues. Fall back to JS popup inside the WebView.
+    if (
+      provider === 'apple' &&
+      Capacitor.getPlatform() === 'android' &&
+      isAppleConfigAuthError(pluginErr)
+    ) {
+      return appleAndroidWebViewFallback(pluginErr);
+    }
+    throw attachAuthCode(pluginErr, 'auth/native-plugin-failed');
+  }
+
+  const cred = (result.credential as unknown as Record<string, unknown> | null) ?? null;
+  logSanitizedCredential(provider, cred);
+
   if (!cred) {
-    throw new Error(`NATIVE_AUTH_NO_CREDENTIAL:${provider}`);
+    throw attachAuthCode(
+      { code: `NATIVE_AUTH_NO_CREDENTIAL:${provider}`, message: `No credential from native ${provider} sign-in` },
+      `NATIVE_AUTH_NO_CREDENTIAL:${provider}`
+    );
   }
 
-  let jsCredential;
-  if (provider === 'google') {
-    if (!cred.idToken) {
-      throw new Error('NATIVE_AUTH_NO_ID_TOKEN:google');
+  try {
+    if (provider === 'google') {
+      const idToken = typeof cred.idToken === 'string' ? cred.idToken : '';
+      if (!idToken) {
+        throw attachAuthCode(
+          { code: 'NATIVE_AUTH_NO_ID_TOKEN:google', message: 'Native Google sign-in returned no idToken' },
+          'NATIVE_AUTH_NO_ID_TOKEN:google'
+        );
+      }
+      const accessToken =
+        typeof cred.accessToken === 'string' ? cred.accessToken : undefined;
+      const jsCredential = GoogleAuthProvider.credential(idToken, accessToken);
+      const userCredential = await signInWithCredential(auth, jsCredential);
+      return { status: 'signed_in', user: userCredential.user };
     }
-    jsCredential = GoogleAuthProvider.credential(cred.idToken, cred.accessToken);
-  } else {
-    if (!cred.idToken) {
-      throw new Error('NATIVE_AUTH_NO_ID_TOKEN:apple');
+
+    return await completeAppleJsCredential(cred);
+  } catch (credErr) {
+    console.error(
+      `[TripKit] signInWithCredential(${provider}) failed`,
+      { code: authErrorCode(credErr), message: credErr instanceof Error ? credErr.message : String(credErr) }
+    );
+
+    if (
+      provider === 'apple' &&
+      Capacitor.getPlatform() === 'android' &&
+      isAppleConfigAuthError(credErr)
+    ) {
+      return appleAndroidWebViewFallback(credErr);
     }
-    jsCredential = new OAuthProvider('apple.com').credential({
-      idToken: cred.idToken,
-      rawNonce: cred.nonce,
-    });
+    throw attachAuthCode(credErr, `auth/${provider}-credential-failed`);
+  }
+}
+
+async function completeAppleJsCredential(
+  cred: Record<string, unknown>
+): Promise<InteractiveSignInResult> {
+  const idToken = typeof cred.idToken === 'string' ? cred.idToken.trim() : '';
+  if (!idToken) {
+    throw attachAuthCode(
+      {
+        code: 'NATIVE_AUTH_NO_ID_TOKEN:apple',
+        message: 'Native Apple sign-in returned no idToken',
+      },
+      'NATIVE_AUTH_NO_ID_TOKEN:apple'
+    );
   }
 
+  // Plugin types expose `nonce`; some builds / bridges may surface `rawNonce`.
+  const rawNonce =
+    (typeof cred.nonce === 'string' && cred.nonce) ||
+    (typeof cred.rawNonce === 'string' && cred.rawNonce) ||
+    undefined;
+
+  if (!rawNonce) {
+    console.warn(
+      '[TripKit] Apple credential missing nonce/rawNonce — Firebase may reject the credential'
+    );
+  }
+
+  const jsCredential = new OAuthProvider('apple.com').credential({
+    idToken,
+    rawNonce,
+  });
   const userCredential = await signInWithCredential(auth, jsCredential);
   return { status: 'signed_in', user: userCredential.user };
+}
+
+async function appleAndroidWebViewFallback(
+  originalErr: unknown
+): Promise<InteractiveSignInResult> {
+  const originalCode = authErrorCode(originalErr) || 'unknown';
+  console.warn(
+    `[TripKit] Android Apple native flow failed (${originalCode}); trying WebView signInWithPopup fallback`
+  );
+  try {
+    const cred = await signInWithPopup(auth, appleProvider);
+    return { status: 'signed_in', user: cred.user };
+  } catch (popupErr) {
+    const popupCode = authErrorCode(popupErr) || 'auth/popup-failed';
+    console.error('[TripKit] Android Apple WebView popup fallback failed', {
+      originalCode,
+      popupCode,
+      message: popupErr instanceof Error ? popupErr.message : String(popupErr),
+    });
+    throw attachAuthCode(
+      {
+        code: popupCode,
+        message: `Apple sign-in failed after native + popup fallback (native=${originalCode}, popup=${popupCode})`,
+      },
+      popupCode
+    );
+  }
 }
 
 /**

@@ -27,8 +27,8 @@ export const WHATSAPP_NUMBER_CLEAN = '8618934580778';
 export const FACEBOOK_PAGE_URL = 'https://www.facebook.com/BagailStore/';
 export const FACEBOOK_PAGE_HANDLE = '@BagailStore';
 
+/** Languages shown in Settings / switcher UI (zh-CN kept in AppLanguage + packs as type baseline only). */
 export const SUPPORTED_APP_LANGUAGES: readonly AppLanguage[] = [
-  'zh-CN',
   'en-US',
   'en-GB',
   'es-MX',
@@ -41,11 +41,12 @@ export const SUPPORTED_APP_LANGUAGES: readonly AppLanguage[] = [
 export function normalizeAppLanguage(raw: unknown, fallback: AppLanguage = 'en-US'): AppLanguage {
   if (typeof raw !== 'string') return fallback;
   const trimmed = raw.trim();
+  const lc = trimmed.toLowerCase();
+  // Legacy zh-CN prefs / system locales map to en-US — Simplified Chinese is no longer a UI option.
+  if (trimmed === 'zh-CN' || lc === 'zh' || lc.startsWith('zh-')) return 'en-US';
   if ((SUPPORTED_APP_LANGUAGES as readonly string[]).includes(trimmed)) {
     return trimmed as AppLanguage;
   }
-  const lc = trimmed.toLowerCase();
-  if (lc === 'zh' || lc.startsWith('zh-')) return 'zh-CN';
   if (lc === 'es' || lc.startsWith('es-')) return 'es-MX';
   if (lc === 'fr' || lc.startsWith('fr-')) return 'fr-FR';
   if (lc === 'de' || lc.startsWith('de-')) return 'de-DE';
@@ -197,7 +198,8 @@ export function detectSystemLanguage(): AppLanguage {
   for (const raw of rawList) {
     const lc = String(raw || '').trim().toLowerCase();
     if (!lc) continue;
-    if (lc === 'zh' || lc.startsWith('zh-')) return 'zh-CN';
+    // Chinese system locales fall through to en-US (zh-CN removed from UI).
+    if (lc === 'zh' || lc.startsWith('zh-')) return 'en-US';
     if (lc === 'es' || lc.startsWith('es-')) return 'es-MX';
     if (lc === 'fr' || lc.startsWith('fr-')) return 'fr-FR';
     if (lc === 'de' || lc.startsWith('de-')) return 'de-DE';
@@ -781,7 +783,8 @@ export function loadAppPreferences(): AppPreferences {
     }
     const parsed = JSON.parse(saved) as Partial<AppPreferences>;
     const normalized = sanitizePreferences(parsed);
-    if (!parsed.trialStartedAt) {
+    // Persist when migrating legacy zh-CN prefs (or first-run trial stamp) to en-US / selectable langs.
+    if (!parsed.trialStartedAt || parsed.language !== normalized.language) {
       localStorage.setItem(PREFERENCES_STORAGE_KEY, JSON.stringify(normalized));
     }
     return normalized;

@@ -27,6 +27,7 @@ import {
   resolveTaskCategoryIconMeta,
 } from '../utils/accentTheme';
 import type { AppLanguage, CrewMember, TripTask, TripTaskCategory } from '../types';
+import { normalizeAppLanguage } from '../utils/preferencesHelpers';
 
 export const TASK_CATEGORIES: TripTaskCategory[] = [
   '门票预约',
@@ -43,35 +44,36 @@ export function getLocalizedTaskQuickPresets(lang: AppLanguage): Array<{
   timing: string;
   note: string;
 }> {
-  if (lang === 'en-US') {
+  // zh-CN pack kept as type/baseline branch only (UI no longer selects zh-CN).
+  if (lang === 'zh-CN') {
     return [
       {
-        label: 'Book Tickets',
-        title: 'Book timed-entry museum & landmark tickets',
+        label: '购买景点门票',
+        title: '购买热门景点分时预约门票',
         category: '门票预约',
-        timing: '7 days before',
-        note: 'Lock in morning entry slots & save offline QR tickets',
+        timing: '出发前 7 天',
+        note: '锁定入场时段并离线保存电子票二维码',
       },
       {
-        label: 'Airport Transfer',
-        title: 'Reserve airport / hotel private transfer',
+        label: '预订接送服务',
+        title: '预订机场 / 酒店专车接送服务',
         category: '交通接送',
-        timing: '48h before',
-        note: 'Confirm flight number and checked luggage capacity',
+        timing: '出发前 48h',
+        note: '核对航班车次与大件行李数量',
       },
       {
-        label: 'Activate eSIM',
-        title: 'Buy & install international eSIM data plan',
+        label: '激活境外流量',
+        title: '购买并激活境外 eSIM 数据流量包',
         category: '通讯金融',
-        timing: '1 day before',
-        note: 'Enable data upon arrival while keeping home SIM for 2FA SMS',
+        timing: '出发前 1 天',
+        note: '落地自动连网，保留原卡接收短信验证码',
       },
       {
-        label: 'Confirm Dining',
-        title: 'Confirm dinner reservations & seating',
+        label: '确认餐厅留位',
+        title: '确认热门餐厅晚餐预约留位',
         category: '住宿餐饮',
-        timing: 'Morning of dining day',
-        note: 'Avoid auto-cancellation fees on popular tables',
+        timing: '用餐当日中午前',
+        note: '避免超时自动释放座位',
       },
     ];
   }
@@ -107,34 +109,35 @@ export function getLocalizedTaskQuickPresets(lang: AppLanguage): Array<{
       },
     ];
   }
+  // en-US + all other selectable UI langs (es/fr/de/pt/ja) — never fall back to Chinese chips.
   return [
     {
-      label: '购买景点门票',
-      title: '购买热门景点分时预约门票',
+      label: 'Book Tickets',
+      title: 'Book timed-entry museum & landmark tickets',
       category: '门票预约',
-      timing: '出发前 7 天',
-      note: '锁定入场时段并离线保存电子票二维码',
+      timing: '7 days before',
+      note: 'Lock in morning entry slots & save offline QR tickets',
     },
     {
-      label: '预订接送服务',
-      title: '预订机场 / 酒店专车接送服务',
+      label: 'Airport Transfer',
+      title: 'Reserve airport / hotel private transfer',
       category: '交通接送',
-      timing: '出发前 48h',
-      note: '核对航班车次与大件行李数量',
+      timing: '48h before',
+      note: 'Confirm flight number and checked luggage capacity',
     },
     {
-      label: '激活境外流量',
-      title: '购买并激活境外 eSIM 数据流量包',
+      label: 'Activate eSIM',
+      title: 'Buy & install international eSIM data plan',
       category: '通讯金融',
-      timing: '出发前 1 天',
-      note: '落地自动连网，保留原卡接收短信验证码',
+      timing: '1 day before',
+      note: 'Enable data upon arrival while keeping home SIM for 2FA SMS',
     },
     {
-      label: '确认餐厅留位',
-      title: '确认热门餐厅晚餐预约留位',
+      label: 'Confirm Dining',
+      title: 'Confirm dinner reservations & seating',
       category: '住宿餐饮',
-      timing: '用餐当日中午前',
-      note: '避免超时自动释放座位',
+      timing: 'Morning of dining day',
+      note: 'Avoid auto-cancellation fees on popular tables',
     },
   ];
 }
@@ -183,7 +186,7 @@ export const TripTasksWorkspace: React.FC<TripTasksWorkspaceProps> = ({
   onCycleTaskOwner,
 }) => {
   const { t, i18n } = useTranslation();
-  const activeLang = (i18n.language as AppLanguage) || 'zh-CN';
+  const activeLang = normalizeAppLanguage(i18n.language, 'en-US');
   const shouldReduceMotion = useReducedMotion();
   const taskQuickPresets = React.useMemo(
     () => getLocalizedTaskQuickPresets(activeLang),
