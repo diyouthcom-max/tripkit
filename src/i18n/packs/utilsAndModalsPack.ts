@@ -16,7 +16,6 @@ export interface MapPreviewCopy {
   hidePreviewBtn: string;
   refreshPreviewBtn: string;
   previewMapBtn: string;
-  externalMapsHint: string;
   openMapsBtn: string;
 }
 
@@ -38,7 +37,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: '收起预览',
     refreshPreviewBtn: '刷新预览',
     previewMapBtn: '预览地图',
-    externalMapsHint: '可直接点击右侧按钮测试唤起外部 Google 地图定位当前目的地。',
     openMapsBtn: '打开 Google 地图',
   },
   'en-US': {
@@ -58,7 +56,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'Hide Preview',
     refreshPreviewBtn: 'Refresh Preview',
     previewMapBtn: 'Preview Map',
-    externalMapsHint: 'Tap below to open the current destination directly in Google Maps.',
     openMapsBtn: 'Open in Google Maps',
   },
   'es-MX': {
@@ -78,7 +75,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'Ocultar vista',
     refreshPreviewBtn: 'Actualizar vista',
     previewMapBtn: 'Previsualizar mapa',
-    externalMapsHint: 'Toca abajo para abrir el destino actual directamente en Google Maps.',
     openMapsBtn: 'Abrir en Google Maps',
   },
   'fr-FR': {
@@ -98,7 +94,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'Masquer l’aperçu',
     refreshPreviewBtn: 'Actualiser',
     previewMapBtn: 'Aperçu carte',
-    externalMapsHint: 'Appuyez ci-dessous pour ouvrir la destination dans Google Maps.',
     openMapsBtn: 'Ouvrir dans Google Maps',
   },
   'de-DE': {
@@ -118,7 +113,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'Ausblenden',
     refreshPreviewBtn: 'Aktualisieren',
     previewMapBtn: 'Kartenvorschau',
-    externalMapsHint: 'Tippe unten, um das aktuelle Ziel direkt in Google Maps zu öffnen.',
     openMapsBtn: 'In Google Maps öffnen',
   },
   'pt-BR': {
@@ -138,7 +132,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'Ocultar prévia',
     refreshPreviewBtn: 'Atualizar prévia',
     previewMapBtn: 'Visualizar mapa',
-    externalMapsHint: 'Toque abaixo para abrir o destino atual diretamente no Google Maps.',
     openMapsBtn: 'Abrir no Google Maps',
   },
   'ja-JP': {
@@ -158,7 +151,6 @@ const MAP_PREVIEW_PACK: LangMap8<MapPreviewCopy> = {
     hidePreviewBtn: 'プレビューを閉じる',
     refreshPreviewBtn: '再読み込み',
     previewMapBtn: '地図プレビュー',
-    externalMapsHint: '右のボタンから現在の目的地を Google マップで開いて確認できます。',
     openMapsBtn: 'Google マップを開く',
   },
 };

@@ -34,12 +34,13 @@ export interface ItineraryMapCopy {
     destinationCity: string;
     stopsAndMode: (count: number, mode: string) => string;
     noStopsToday: string;
+    mapLoadError: string;
+    mapRetry: string;
     sdkFailedDesc: string;
     unconfiguredDesc: string;
     multiDayRouteBtn: (count: number) => string;
     cityFullRouteBtn: (city: string, count: number) => string;
     directionsToBtn: (title: string) => string;
-    exploreCityOnMaps: (city: string) => string;
     copiedRoute: string;
     copyRoute: string;
     emptyOverviewTitle: (day: number, city: string) => string;
@@ -79,7 +80,6 @@ export interface ItineraryMapCopy {
     cityMapInline: string;
     summaryDistDur: (km: string, dur: string) => string;
     rainPlanInline: string;
-    openInMaps: string;
     exploreShort: (city: string) => string;
     collapsePanelAria: string;
     expandPanelAria: string;
@@ -131,6 +131,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: '目的地城市',
         stopsAndMode: (n, mode) => `串联 ${n} 个站点 · ${mode}`,
         noStopsToday: '暂未添加当日站点',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           '在线地图底图暂未就绪，已自动切换为交互式静态路线卡；点击下方节点可查看门牌并一键唤起导航。',
         unconfiguredDesc:
@@ -138,7 +140,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `多日串联导航 (${n} 站)`,
         cityFullRouteBtn: (c, n) => `${c} 全程快捷导航 (${n} 站)`,
         directionsToBtn: (t) => `导航前往首站 · ${t}`,
-        exploreCityOnMaps: (c) => `在 Google 地图查看 ${c}`,
         copiedRoute: '已复制路线',
         copyRoute: '复制路线单',
         emptyOverviewTitle: (d, c) => `Day ${d} · ${c} 城市概览就绪`,
@@ -182,7 +183,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· 城市地图',
         summaryDistDur: (km, dur) => ` · 约 ${km} km / ${dur}`,
         rainPlanInline: ' · 已同步防雨点',
-        openInMaps: '地图导航',
         exploreShort: (c) => `查看 ${c}`,
         collapsePanelAria: '收起地图路线面板',
         expandPanelAria: '展开地图路线面板',
@@ -231,6 +231,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: 'Destination City',
         stopsAndMode: (n, mode) => `${n} stop${n === 1 ? '' : 's'} · ${mode}`,
         noStopsToday: 'No stops added today',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'Live map tiles unavailable — switched to interactive route card. Tap any stop below to inspect its address or launch directions.',
         unconfiguredDesc:
@@ -238,7 +240,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `Multi-Day Route (${n} stops)`,
         cityFullRouteBtn: (c, n) => `${c} Full Route (${n} stops)`,
         directionsToBtn: (t) => `Directions to ${t}`,
-        exploreCityOnMaps: (c) => `Explore ${c} on Maps`,
         copiedRoute: 'Copied Route',
         copyRoute: 'Copy Route',
         emptyOverviewTitle: (d, c) => `Day ${d} · ${c} Overview Ready`,
@@ -284,7 +285,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· City Map',
         summaryDistDur: (km, dur) => ` · ~${km} km / ${dur}`,
         rainPlanInline: ' · Rain plan',
-        openInMaps: 'Open in Maps',
         exploreShort: (c) => `Explore ${c}`,
         collapsePanelAria: 'Collapse route map panel',
         expandPanelAria: 'Expand route map panel',
@@ -333,6 +333,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: 'Ciudad destino',
         stopsAndMode: (n, mode) => `${n} parada${n === 1 ? '' : 's'} · ${mode}`,
         noStopsToday: 'Sin paradas hoy',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'Los mapas en vivo no están disponibles; se activó la tarjeta interactiva. Toca cualquier parada abajo para ver su dirección o abrir navegación.',
         unconfiguredDesc:
@@ -340,7 +342,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `Ruta multidía (${n} paradas)`,
         cityFullRouteBtn: (c, n) => `Ruta en ${c} (${n} paradas)`,
         directionsToBtn: (t) => `Cómo llegar a ${t}`,
-        exploreCityOnMaps: (c) => `Explorar ${c} en Maps`,
         copiedRoute: 'Ruta copiada',
         copyRoute: 'Copiar ruta',
         emptyOverviewTitle: (d, c) => `Día ${d} · Vista de ${c} lista`,
@@ -386,7 +387,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· Mapa de ciudad',
         summaryDistDur: (km, dur) => ` · ~${km} km / ${dur}`,
         rainPlanInline: ' · Plan lluvia',
-        openInMaps: 'Abrir en Maps',
         exploreShort: (c) => `Explorar ${c}`,
         collapsePanelAria: 'Contraer panel del mapa',
         expandPanelAria: 'Expandir panel del mapa',
@@ -435,6 +435,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: 'Ville de destination',
         stopsAndMode: (n, mode) => `${n} étape${n === 1 ? '' : 's'} · ${mode}`,
         noStopsToday: 'Aucune étape aujourd’hui',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'Fond de carte en direct indisponible — bascule vers la fiche interactive. Touchez une étape ci-dessous pour voir l’adresse ou lancer le GPS.',
         unconfiguredDesc:
@@ -442,7 +444,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `Itinéraire multi-jours (${n})`,
         cityFullRouteBtn: (c, n) => `Parcours ${c} (${n} étapes)`,
         directionsToBtn: (t) => `Itinéraire vers ${t}`,
-        exploreCityOnMaps: (c) => `Explorer ${c} sur Maps`,
         copiedRoute: 'Parcours copié',
         copyRoute: 'Copier l’itinéraire',
         emptyOverviewTitle: (d, c) => `Jour ${d} · Aperçu de ${c} prêt`,
@@ -488,7 +489,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· Carte ville',
         summaryDistDur: (km, dur) => ` · ~${km} km / ${dur}`,
         rainPlanInline: ' · Plan pluie',
-        openInMaps: 'Ouvrir Maps',
         exploreShort: (c) => `Explorer ${c}`,
         collapsePanelAria: 'Réduire le panneau carte',
         expandPanelAria: 'Développer le panneau carte',
@@ -537,6 +537,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: 'Zielstadt',
         stopsAndMode: (n, mode) => `${n} Stopp${n === 1 ? '' : 's'} · ${mode}`,
         noStopsToday: 'Heute noch keine Stopps',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'Live-Kartenkacheln nicht verfügbar — interaktive Routenkarte aktiv. Tippe unten auf einen Stopp für Adresse & Navigation.',
         unconfiguredDesc:
@@ -544,7 +546,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `Mehrtagesroute (${n} Stopps)`,
         cityFullRouteBtn: (c, n) => `${c} Gesamtroute (${n} Stopps)`,
         directionsToBtn: (t) => `Route zu ${t}`,
-        exploreCityOnMaps: (c) => `${c} auf Maps ansehen`,
         copiedRoute: 'Route kopiert',
         copyRoute: 'Route kopieren',
         emptyOverviewTitle: (d, c) => `Tag ${d} · ${c} Übersicht bereit`,
@@ -590,7 +591,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· Stadtkarte',
         summaryDistDur: (km, dur) => ` · ~${km} km / ${dur}`,
         rainPlanInline: ' · Regenplan',
-        openInMaps: 'In Maps öffnen',
         exploreShort: (c) => `${c} ansehen`,
         collapsePanelAria: 'Kartenfeld einklappen',
         expandPanelAria: 'Kartenfeld ausklappen',
@@ -639,6 +639,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: 'Cidade de destino',
         stopsAndMode: (n, mode) => `${n} parada${n === 1 ? '' : 's'} · ${mode}`,
         noStopsToday: 'Nenhuma parada hoje',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'Mapa ao vivo indisponível — alternado para o cartão interativo. Toque em uma parada abaixo para ver o endereço ou abrir rotas.',
         unconfiguredDesc:
@@ -646,7 +648,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `Rota vários dias (${n} paradas)`,
         cityFullRouteBtn: (c, n) => `Rota em ${c} (${n} paradas)`,
         directionsToBtn: (t) => `Rotas para ${t}`,
-        exploreCityOnMaps: (c) => `Explorar ${c} no Maps`,
         copiedRoute: 'Rota copiada',
         copyRoute: 'Copiar rota',
         emptyOverviewTitle: (d, c) => `Dia ${d} · Visão de ${c} pronta`,
@@ -692,7 +693,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· Mapa da cidade',
         summaryDistDur: (km, dur) => ` · ~${km} km / ${dur}`,
         rainPlanInline: ' · Plano chuva',
-        openInMaps: 'Abrir no Maps',
         exploreShort: (c) => `Explorar ${c}`,
         collapsePanelAria: 'Recolher painel do mapa',
         expandPanelAria: 'Expandir painel do mapa',
@@ -741,6 +741,8 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         destinationCity: '目的地',
         stopsAndMode: (n, mode) => `${n} ヶ所 · ${mode}`,
         noStopsToday: '本日のスポットは未登録',
+        mapLoadError: 'The map could not load.',
+        mapRetry: 'Retry',
         sdkFailedDesc:
           'オンライン地図を利用できないため、インタラクティブルートカードに切り替えました。下の各スポットをタップして住所確認やナビを起動できます。',
         unconfiguredDesc:
@@ -748,7 +750,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         multiDayRouteBtn: (n) => `複数日ルート (${n}ヶ所)`,
         cityFullRouteBtn: (c, n) => `${c} 全行程ナビ (${n}ヶ所)`,
         directionsToBtn: (t) => `${t} への経路`,
-        exploreCityOnMaps: (c) => `Google マップで ${c} を見る`,
         copiedRoute: 'コピー済',
         copyRoute: 'ルートをコピー',
         emptyOverviewTitle: (d, c) => `Day ${d} · ${c} 概要マップ`,
@@ -793,7 +794,6 @@ export function getItineraryMapCopy(lang: AppLanguage | string): ItineraryMapCop
         cityMapInline: '· 都市マップ',
         summaryDistDur: (km, dur) => ` · 約 ${km} km / ${dur}`,
         rainPlanInline: ' · 雨天対策済',
-        openInMaps: 'マップで開く',
         exploreShort: (c) => `${c} を見る`,
         collapsePanelAria: '地図パネルを閉じる',
         expandPanelAria: '地図パネルを開く',

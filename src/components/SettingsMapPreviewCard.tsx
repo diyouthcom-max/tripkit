@@ -7,16 +7,8 @@ import {
   useMap,
   useMapsLibrary,
 } from '@vis.gl/react-google-maps';
-import { ExternalLink, Loader2, MapPin, Play } from 'lucide-react';
-import {
-  buildGoogleMapsSearchUrl,
-  getConfiguredGoogleMapsApiKey,
-  sanitizeMapsErrorMessage,
-} from '../utils/googleMapsHelpers';
-import {
-  isNativeMapOpenerAvailable,
-  openMapExternally,
-} from '../services/nativeMapOpener';
+import { Loader2, MapPin, Play } from 'lucide-react';
+import { sanitizeMapsErrorMessage } from '../utils/googleMapsHelpers';
 import { tkColor } from '../utils/tkColor';
 import type { AppLanguage } from '../types';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
@@ -148,7 +140,6 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
   const activeLang: AppLanguage = normalizeAppLanguage(i18n.language, 'en-US');
   const copy = getMapPreviewCopy(activeLang);
 
-  const apiKey = getConfiguredGoogleMapsApiKey();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [probeRunId, setProbeRunId] = useState(0);
   const [testing, setTesting] = useState(false);
@@ -160,16 +151,8 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
   const handleRunTest = () => {
     setPreviewOpen(true);
     setProbeRunId((n) => n + 1);
-    if (apiKey) {
-      setTesting(true);
-      setProbeResult(null);
-    } else {
-      setTesting(false);
-      setProbeResult({
-        ok: false,
-        message: copy.standardModeNotice,
-      });
-    }
+    setTesting(true);
+    setProbeResult(null);
   };
 
   return (
@@ -184,7 +167,7 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
               {copy.cardTitle}
             </div>
             <div className="mt-0.5 text-sm tk-text-ink2">
-              {apiKey ? copy.connectedSub : copy.standardSub}
+              {copy.connectedSub}
             </div>
           </div>
         </div>
@@ -217,58 +200,30 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
 
       {previewOpen && (
         <div className="rounded-[16px] border tk-bc-hair bg-white overflow-hidden">
-          {apiKey ? (
-            /* h-44(176) → h-52(208): +32px attribution safety for .gm-style-cc + logo */
-            <div
-              className="h-52 w-full tk-bg-forest-plate"
-              data-tk-map-attribution="google"
+          <div
+            className="h-52 w-full tk-bg-forest-plate"
+            data-tk-map-attribution="google"
+          >
+            <GoogleMap
+              mapId="DEMO_MAP_ID"
+              defaultCenter={DEFAULT_PREVIEW_COORDS}
+              defaultZoom={12}
+              disableDefaultUI
+              gestureHandling="cooperative"
+              internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
+              className="h-full w-full"
             >
-              <GoogleMap
-                mapId="DEMO_MAP_ID"
-                defaultCenter={DEFAULT_PREVIEW_COORDS}
-                defaultZoom={12}
-                disableDefaultUI
-                gestureHandling="cooperative"
-                internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
-                className="h-full w-full"
-              >
-                <ThumbnailMapProbe
-                  cityHint={cityHint}
-                  probeRunId={probeRunId}
-                  activeLang={activeLang}
-                  onResult={(res) => {
-                    setTesting(false);
-                    setProbeResult(res);
-                  }}
-                />
-              </GoogleMap>
-            </div>
-          ) : (
-            <div className="px-4 py-3.5 tk-bg-card flex flex-wrap items-center justify-between gap-3">
-              <div className="text-sm tk-text-ink2 leading-relaxed">
-                {copy.externalMapsHint}
-              </div>
-              <a
-                href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  // Web: keep default <a> navigation (popup blockers still allow user-gesture links).
-                  // Native: preventDefault and hand off to system Maps.
-                  if (!isNativeMapOpenerAvailable()) return;
-                  e.preventDefault();
-                  void openMapExternally({
-                    url: buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' }),
-                    query: cityHint || 'Paris',
-                  });
+              <ThumbnailMapProbe
+                cityHint={cityHint}
+                probeRunId={probeRunId}
+                activeLang={activeLang}
+                onResult={(res) => {
+                  setTesting(false);
+                  setProbeResult(res);
                 }}
-                className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1.5 text-sm font-semibold tk-text-swatch-3 hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
-              >
-                <ExternalLink className="h-3 w-3" />
-                {copy.openMapsBtn}
-              </a>
-            </div>
-          )}
+              />
+            </GoogleMap>
+          </div>
 
           {probeResult && (
             <div
@@ -279,25 +234,6 @@ export const SettingsMapPreviewCard: React.FC<SettingsMapPreviewCardProps> = ({
               }`}
             >
               <span className="leading-snug flex-1 min-w-[10rem]">{probeResult.message}</span>
-              {!probeResult.ok && (
-                <a
-                  href={buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    if (!isNativeMapOpenerAvailable()) return;
-                    e.preventDefault();
-                    void openMapExternally({
-                      url: buildGoogleMapsSearchUrl({ title: cityHint || 'Paris' }),
-                      query: cityHint || 'Paris',
-                    });
-                  }}
-                  className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair bg-white px-2.5 py-1 text-[13px] font-semibold tk-text-forest cursor-pointer whitespace-nowrap"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  {copy.openMapsBtn}
-                </a>
-              )}
             </div>
           )}
         </div>

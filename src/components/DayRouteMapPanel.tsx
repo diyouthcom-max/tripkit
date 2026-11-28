@@ -8,24 +8,17 @@ import {
   useMapsLibrary,
 } from '@vis.gl/react-google-maps';
 import {
-  ExternalLink,
   Footprints,
   TrainFront,
   CarTaxiFront,
-  MapPin,
   ChevronDown,
   ChevronRight,
-  ChevronLeft,
   Route as RouteIcon,
   AlertCircle,
   RotateCcw,
   Eye,
   EyeOff,
   Loader2,
-  Compass,
-  Navigation,
-  Copy,
-  Check,
   Layers,
   Satellite,
   Crosshair,
@@ -39,25 +32,17 @@ import {
   X,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { translateCityName, translateDemoStopTitle, translateRouteTitle } from '../i18n';
+import { translateDemoStopTitle, translateRouteTitle } from '../i18n';
 import type { AppLanguage, DayStayAnchor, StopType, TimelineNode } from '../types';
 import { normalizeAppLanguage } from '../utils/preferencesHelpers';
 import type { LiveGooglePlaceInfo } from '../services/googlePlaceLiveStore';
 import {
-  buildFullDayGoogleMapsRouteUrl,
-  buildGoogleMapsDirectionsUrl,
-  buildGoogleMapsSearchUrl,
-  getConfiguredGoogleMapsApiKey,
   resolveDayStopsForMap,
   resolveMultiDayStopsForMap,
   sanitizeMapsErrorMessage,
   type MapsTravelMode,
   type ResolvedDayStop,
 } from '../utils/googleMapsHelpers';
-import {
-  isNativeMapOpenerAvailable,
-  openMapExternally,
-} from '../services/nativeMapOpener';
 import { getCityForDay, getPrimaryCityName } from '../utils/itineraryHelpers';
 import { AccentIconBadge } from '../utils/accentTheme';
 import {
@@ -65,7 +50,6 @@ import {
   resolveNodeGeoCoords,
 } from '../utils/geoRouteHelpers';
 import {
-  Real2DRouteMapCanvas,
   type Real2DHotelStayAnchor,
   type Real2DStopWaypoint,
 } from './Real2DRouteMapCanvas';
@@ -264,520 +248,6 @@ const MapRouteSkeleton: React.FC<{
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-/**
- * Interactive Static Fallback Card displayed when Google Maps API key is not configured
- * (or if Maps JS SDK cannot load), featuring current city identity, interactive schematic
- * stop inspector, and one-tap cross-platform Google Maps navigation buttons.
- */
-const InteractiveStaticRouteFallbackCard: React.FC<{
-  dayNumber: number;
-  scopeLabel: string;
-  cityLabel: string;
-  primaryCity: string;
-  multiDayMode: boolean;
-  stops: ResolvedDayStop[];
-  previousStops: ResolvedDayStop[];
-  showComparison: boolean;
-  travelMode: MapsTravelMode;
-  fullDayRouteUrl: string | null;
-  getDayCityHint: (day: number) => string;
-  fallbackReason?: 'unconfigured' | 'sdk_failed';
-}> = ({
-  dayNumber,
-  scopeLabel,
-  cityLabel,
-  primaryCity,
-  multiDayMode,
-  stops,
-  previousStops,
-  showComparison,
-  travelMode,
-  fullDayRouteUrl,
-  getDayCityHint,
-  fallbackReason = 'unconfigured',
-}) => {
-  const { copy } = usePanelLang();
-  const [selectedStopIndex, setSelectedStopIndex] = useState(0);
-  const [copiedKey, setCopiedKey] = useState<'route' | 'stop' | null>(null);
-
-  useEffect(() => {
-    setSelectedStopIndex(0);
-  }, [scopeLabel, stops.length]);
-
-  const safeIndex =
-    stops.length > 0 ? Math.min(stops.length - 1, Math.max(0, selectedStopIndex)) : 0;
-  const activeStop = stops[safeIndex] || null;
-  const prevStopInSequence = safeIndex > 0 ? stops[safeIndex - 1] : null;
-
-  const activeModeLabel = copy.travelModes[travelMode] || copy.travelModes.transit;
-
-  const cityExploreUrl = useMemo(
-    () => buildGoogleMapsSearchUrl({ title: primaryCity || cityLabel }),
-    [primaryCity, cityLabel]
-  );
-
-  const activeStopCityHint = useMemo(() => {
-    if (activeStop && multiDayMode && activeStop.dayNumber) {
-      return getDayCityHint(activeStop.dayNumber);
-    }
-    return primaryCity;
-  }, [activeStop, multiDayMode, getDayCityHint, primaryCity]);
-
-  const activeStopDirectionsUrl = useMemo(() => {
-    if (!activeStop) return cityExploreUrl;
-    return buildGoogleMapsDirectionsUrl({
-      origin: prevStopInSequence?.query,
-      destination: activeStop.query,
-      travelMode,
-    });
-  }, [activeStop, prevStopInSequence, travelMode, cityExploreUrl]);
-
-  const activeStopSearchUrl = useMemo(() => {
-    if (!activeStop) return cityExploreUrl;
-    return buildGoogleMapsSearchUrl({
-      title: activeStop.title,
-      address: activeStop.address,
-      cityHint: activeStopCityHint,
-    });
-  }, [activeStop, activeStopCityHint, cityExploreUrl]);
-
-  const handleCopyRouteText = async () => {
-    if (stops.length === 0) return;
-    const header = `${scopeLabel} · ${cityLabel}（${activeModeLabel}）`;
-    const lines = stops.map((s) => {
-      const dayPrefix = multiDayMode && s.dayNumber ? `[D${s.dayNumber}] ` : '';
-      return `${s.orderNumber}. ${dayPrefix}${s.time} ${s.title} — ${s.address}`;
-    });
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText([header, ...lines].join('\n'));
-      }
-      setCopiedKey('route');
-      setTimeout(() => setCopiedKey((prev) => (prev === 'route' ? null : prev)), 1800);
-    } catch {
-      setCopiedKey('route');
-      setTimeout(() => setCopiedKey((prev) => (prev === 'route' ? null : prev)), 1800);
-    }
-  };
-
-  const handleCopyActiveStopAddress = async () => {
-    if (!activeStop) return;
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(`${activeStop.title} · ${activeStop.address}`);
-      }
-      setCopiedKey('stop');
-      setTimeout(() => setCopiedKey((prev) => (prev === 'stop' ? null : prev)), 1800);
-    } catch {
-      setCopiedKey('stop');
-      setTimeout(() => setCopiedKey((prev) => (prev === 'stop' ? null : prev)), 1800);
-    }
-  };
-
-  const svgWidth = Math.max(560, stops.length * 105);
-  const svgHeight = 168;
-
-  const stopPoints = useMemo(
-    () =>
-      stops.map((stop, idx) => ({
-        stop,
-        idx,
-        ...computeSchematicPoint(idx, stops.length, svgWidth, svgHeight),
-      })),
-    [stops, svgWidth]
-  );
-
-  const prevStopPoints = useMemo(() => {
-    if (!showComparison || previousStops.length < 2 || stops.length < 2) return [];
-    const currentPosById: Record<string, { x: number; y: number }> = {};
-    stopPoints.forEach((sp) => {
-      currentPosById[sp.stop.id] = { x: sp.x, y: sp.y - 14 };
-    });
-    return previousStops
-      .map((ps) => currentPosById[ps.id])
-      .filter((pt): pt is { x: number; y: number } => Boolean(pt));
-  }, [showComparison, previousStops, stops.length, stopPoints]);
-
-  return (
-    <div className="tk-bg-paper divide-y tk-divide-hair">
-      {/* Top City Identity + Quick Navigation Action Bar */}
-      <div className="px-4 sm:px-5 py-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-start gap-3 min-w-0">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[20px] tk-bg-card border tk-bc-hair tk-text-forest">
-            <Compass className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-              <span className="text-sm font-bold tk-text-forest">
-                {copy.scopeCity(scopeLabel)}
-              </span>
-              <span aria-hidden="true" className="tk-text-ink2">
-                ·
-              </span>
-              <h4 className="font-serif text-base font-extrabold tracking-tight tk-text-ink truncate">
-                {cityLabel || primaryCity || copy.destinationCity}
-              </h4>
-              <span aria-hidden="true" className="tk-text-ink2">
-                ·
-              </span>
-              <span className="font-serif text-sm tk-text-ink2 tabular-nums">
-                {stops.length > 0
-                  ? copy.stopsAndMode(stops.length, activeModeLabel)
-                  : copy.noStopsToday}
-              </span>
-            </div>
-            <p className="mt-0.5 text-sm tk-text-ink2">
-              {fallbackReason === 'sdk_failed'
-                ? copy.sdkFailedDesc
-                : copy.unconfiguredDesc}
-            </p>
-          </div>
-        </div>
-
-        {/* Primary Quick Navigation Buttons — native uses system Maps Intent / UIApplication.open */}
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          {fullDayRouteUrl && stops.length >= 2 ? (
-            <a
-              href={fullDayRouteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!isNativeMapOpenerAvailable()) return;
-                e.preventDefault();
-                void openMapExternally({ url: fullDayRouteUrl });
-              }}
-              className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
-            >
-              <Navigation className="h-4 w-4" />
-              <span>
-                {multiDayMode
-                  ? copy.multiDayRouteBtn(stops.length)
-                  : copy.cityFullRouteBtn(primaryCity, stops.length)}
-              </span>
-            </a>
-          ) : activeStop ? (
-            <a
-              href={activeStopDirectionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!isNativeMapOpenerAvailable()) return;
-                e.preventDefault();
-                void openMapExternally({ url: activeStopDirectionsUrl });
-              }}
-              className="inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3.5 py-2 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
-            >
-              <Navigation className="h-4 w-4" />
-              <span>
-                {copy.directionsToBtn(activeStop.title)}
-              </span>
-            </a>
-          ) : null}
-
-          <a
-            href={cityExploreUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              if (!isNativeMapOpenerAvailable()) return;
-              e.preventDefault();
-              void openMapExternally({ url: cityExploreUrl });
-            }}
-            className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-bold tk-text-forest hover:tk-bc-forest hover:tk-bg-forest-tint transition-colors whitespace-nowrap shrink-0"
-          >
-            <ExternalLink className="h-4 w-4 tk-text-forest" />
-            <span>
-              {copy.exploreCityOnMaps(primaryCity || cityLabel)}
-            </span>
-          </a>
-
-          {stops.length > 0 && (
-            <button
-              type="button"
-              onClick={handleCopyRouteText}
-              className="inline-flex items-center gap-1.5 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-sm font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              {copiedKey === 'route' ? (
-                <>
-                  <Check className="h-4 w-4 tk-text-forest" />
-                  <span>{copy.copiedRoute}</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4 tk-text-forest" />
-                  <span>{copy.copyRoute}</span>
-                </>
-              )}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Interactive Schematic Route Canvas */}
-      <div className="relative tk-bg-paper overflow-x-auto">
-        {stops.length === 0 ? (
-          <div className="h-44 px-4 flex flex-col items-center justify-center text-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full tk-bg-card border tk-bc-hair tk-text-forest">
-              <MapPin className="h-5 w-5" />
-            </div>
-            <div className="font-serif text-sm font-bold tk-text-ink">
-              {copy.emptyOverviewTitle(dayNumber, cityLabel)}
-            </div>
-            <p className="text-sm tk-text-ink2 max-w-md">
-              {copy.emptyOverviewDesc}
-            </p>
-          </div>
-        ) : (
-          <svg
-            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-            className="w-full min-w-[480px] h-44 block"
-            role="img"
-            aria-label={copy.schematicAria(cityLabel)}
-          >
-            <defs>
-              <pattern
-                id="static-fallback-grid"
-                width="40"
-                height="40"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 40 0 L 0 0 0 40"
-                  fill="none"
-                  stroke="var(--tk-ink-2)"
-                  strokeWidth="1"
-                />
-              </pattern>
-            </defs>
-            <rect width={svgWidth} height={svgHeight} fill="url(#static-fallback-grid)" />
-
-            {/* Subtle city backdrop contour */}
-            <path
-              d={`M 0 ${svgHeight - 28} Q ${svgWidth * 0.3} ${svgHeight - 62}, ${svgWidth * 0.62} ${svgHeight - 30} T ${svgWidth} ${svgHeight - 52}`}
-              fill="none"
-              stroke="var(--tk-hair-c)"
-              strokeWidth="14"
-              strokeLinecap="round"
-            />
-
-            {/* Optional pre-optimization dashed comparison curve */}
-            {prevStopPoints.length >= 2 && (
-              <polyline
-                points={prevStopPoints.map((p) => `${p.x},${p.y}`).join(' ')}
-                fill="none"
-                stroke="var(--tk-route-2)"
-                strokeWidth="2.2"
-                strokeDasharray="5 4"
-                opacity="0.82"
-              />
-            )}
-
-            {/* Active stop-to-stop route segments */}
-            {stopPoints.map((pt, i) => {
-              if (i === 0) return null;
-              const prev = stopPoints[i - 1];
-              const segColor = multiDayMode
-                ? getDayRouteColor(pt.stop.dayNumber)
-                : 'var(--tk-forest)';
-              return (
-                <line
-                  key={`seg_${pt.stop.id}`}
-                  x1={prev.x}
-                  y1={prev.y}
-                  x2={pt.x}
-                  y2={pt.y}
-                  stroke={segColor}
-                  strokeWidth="3.2"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-
-            {/* Clickable Stop Pins */}
-            {stopPoints.map(({ stop, idx, x, y }) => {
-              const isSelected = idx === safeIndex;
-              const pinColor = multiDayMode
-                ? getDayRouteColor(stop.dayNumber)
-                : stop.isVisited
-                ? 'var(--tk-ink-2)'
-                : stop.isAnchor
-                ? 'var(--tk-route-2)'
-                : 'var(--tk-forest)';
-              const shortTitle =
-                stop.title.length > 9 ? `${stop.title.slice(0, 9)}…` : stop.title;
-              const labelAbove = idx % 2 === 0;
-
-              return (
-                <g
-                  key={stop.id}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={copy.inspectStopAria(stop.orderNumber, stop.title)}
-                  onClick={() => setSelectedStopIndex(idx)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedStopIndex(idx);
-                    }
-                  }}
-                  className="cursor-pointer focus:outline-none"
-                >
-                  {isSelected && (
-                    <circle
-                      cx={x}
-                      cy={y}
-                      r={20}
-                      fill={pinColor}
-                      opacity={0.18}
-                    />
-                  )}
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r={isSelected ? 14 : 11.5}
-                    fill={pinColor}
-                    stroke="var(--tk-card)"
-                    strokeWidth={isSelected ? 3 : 2.2}
-                  />
-                  <text
-                    x={x}
-                    y={y + 4}
-                    textAnchor="middle"
-                    fontSize={isSelected ? '11.5' : '10.5'}
-                    fontWeight="800"
-                    fill="var(--tk-card)"
-                  >
-                    {stop.orderNumber}
-                  </text>
-
-                  {/* Unboxed clean caption */}
-                  <text
-                    x={x}
-                    y={labelAbove ? y - 22 : y + 29}
-                    textAnchor="middle"
-                    fontSize="11"
-                    fontWeight={isSelected ? '800' : '600'}
-                    fill={isSelected ? 'var(--tk-forest)' : 'var(--tk-ink-2)'}
-                  >
-                    {multiDayMode && stop.dayNumber ? `D${stop.dayNumber} ` : ''}
-                    {shortTitle}
-                  </text>
-                  <text
-                    x={x}
-                    y={labelAbove ? y - 35 : y + 42}
-                    textAnchor="middle"
-                    fontSize="10"
-                    fontWeight="600"
-                    fill="var(--tk-ink-2)"
-                  >
-                    {stop.time}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        )}
-      </div>
-
-      {/* Interactive Selected Stop Detail & Per-Stop Quick Navigation Bar */}
-      {activeStop && (
-        <div className="px-4 sm:px-5 py-3 tk-bg-card flex flex-wrap items-center justify-between gap-3 text-sm">
-          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="inline-flex items-center gap-1 shrink-0">
-              <button
-                type="button"
-                disabled={safeIndex <= 0}
-                onClick={() => setSelectedStopIndex((i) => Math.max(0, i - 1))}
-                aria-label={copy.previousStopAria}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                disabled={safeIndex >= stops.length - 1}
-                onClick={() =>
-                  setSelectedStopIndex((i) => Math.min(stops.length - 1, i + 1))
-                }
-                aria-label={copy.nextStopAria}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border tk-bc-hair tk-bg-paper tk-text-ink2 hover:tk-bc-forest disabled:opacity-35 cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <span className="font-serif font-bold tk-text-forest tabular-nums">
-                  {copy.stopFraction(activeStop.orderNumber, stops.length)}
-                  {multiDayMode && activeStop.dayNumber ? ` · D${activeStop.dayNumber}` : ''} ·{' '}
-                  {activeStop.time}
-                </span>
-                <strong className="font-serif text-sm font-bold tk-text-ink truncate">
-                  {activeStop.title}
-                </strong>
-                {activeStop.isSwappedIndoor && (
-                  <span className="tk-text-warning font-semibold">
-                    · {copy.indoorRainBackup}
-                  </span>
-                )}
-              </div>
-              <div className="mt-0.5 tk-text-ink2 truncate">
-                {activeStop.district ? `${activeStop.district} · ` : ''}
-                {activeStop.address}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <a
-              href={activeStopDirectionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-lg tk-bg-forest-tint border tk-bc-hair px-2.5 py-1.5 font-bold tk-text-forest hover:tk-bg-forest-tint whitespace-nowrap shrink-0"
-            >
-              <Navigation className="h-3 w-3 tk-text-forest" />
-              <span>
-                {prevStopInSequence
-                  ? copy.fromStopDirections(prevStopInSequence.orderNumber)
-                  : copy.directionsShort}
-              </span>
-            </a>
-
-            <a
-              href={activeStopSearchUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-semibold tk-text-ink hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0"
-            >
-              <MapPin className="h-3 w-3 tk-text-forest" />
-              <span>{copy.findPin}</span>
-            </a>
-
-            <button
-              type="button"
-              onClick={handleCopyActiveStopAddress}
-              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1.5 font-semibold tk-text-ink2 hover:tk-bc-forest hover:tk-text-forest whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              {copiedKey === 'stop' ? (
-                <>
-                  <Check className="h-3 w-3 tk-text-forest" />
-                  <span>{copy.copiedShort}</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3 w-3 tk-text-forest" />
-                  <span>{copy.copyAddress}</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -1589,16 +1059,14 @@ const EmbeddedDayRouteCanvas: React.FC<{
 };
 
 /**
- * Mounted ONLY when Google Maps API key is configured (inside <APIProvider>).
- * Manages `loading` state via `useApiLoadingStatus()`, map tile readiness, and Places stop geocoding,
- * displaying `MapRouteSkeleton` while loading and automatically degrading to `Real2DRouteMapCanvas`
- * if the SDK fails to authenticate or load.
+ * Real Google Map viewport (must sit inside <APIProvider>).
+ * Shows a skeleton while tiles load. Auth/SDK failure keeps the map mounted
+ * and surfaces a small retry strip — never a schematic fallback card.
  */
 const ConfiguredInteractiveMapViewport: React.FC<{
   dayNumber: number;
   scopeLabel: string;
   cityLabel: string;
-  primaryCity: string;
   viewKey: string;
   multiDayMode: boolean;
   canMultiDayPreview: boolean;
@@ -1608,8 +1076,6 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   fitTrigger: number;
   travelMode: MapsTravelMode;
   routeNotice: string | null;
-  fullDayRouteUrl: string | null;
-  getDayCityHint: (day: number) => string;
   onTriggerFit: () => void;
   onToggleMultiDayPreview: () => void;
   onRouteSummaryChange: (summary: RouteSummaryInfo | null) => void;
@@ -1618,8 +1084,6 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   ) => void;
   onRouteNoticeChange: (notice: string | null) => void;
   onLiveCoordsResolved?: (coords: Record<string, { lat: number; lng: number }>) => void;
-  fallbackWaypoints: Real2DStopWaypoint[];
-  fallbackPrevWaypoints: Real2DStopWaypoint[];
   stopMetaById: Record<
     string,
     {
@@ -1637,7 +1101,6 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   dayNumber,
   scopeLabel,
   cityLabel,
-  primaryCity,
   viewKey,
   multiDayMode,
   canMultiDayPreview,
@@ -1647,16 +1110,12 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   fitTrigger,
   travelMode,
   routeNotice,
-  fullDayRouteUrl,
-  getDayCityHint,
   onTriggerFit,
   onToggleMultiDayPreview,
   onRouteSummaryChange,
   onComparisonMetricsChange,
   onRouteNoticeChange,
   onLiveCoordsResolved,
-  fallbackWaypoints,
-  fallbackPrevWaypoints,
   stopMetaById,
   dayStayAnchor = null,
   onOpenStopDetail,
@@ -1670,21 +1129,6 @@ const ConfiguredInteractiveMapViewport: React.FC<{
   const [resolvedStopsCount, setResolvedStopsCount] = useState(0);
   const [mapStyle, setMapStyle] = useState<'roadmap' | 'satellite'>('roadmap');
   const [holdHintDismissed, setHoldHintDismissed] = useState(false);
-  const [forceAuthFailure, setForceAuthFailure] = useState(false);
-
-  // Google Maps JS calls this global when the key is rejected (RefererNotAllowed / InvalidKey).
-  // Hide the default Chinese/English Google error tile and fall back to our static card.
-  useEffect(() => {
-    const previous = (window as unknown as { gm_authFailure?: () => void }).gm_authFailure;
-    (window as unknown as { gm_authFailure?: () => void }).gm_authFailure = () => {
-      console.warn('[TripKit] Google Maps auth failure — falling back to offline map card');
-      setForceAuthFailure(true);
-      if (typeof previous === 'function') previous();
-    };
-    return () => {
-      (window as unknown as { gm_authFailure?: () => void }).gm_authFailure = previous;
-    };
-  }, []);
 
   // Auto-fade hold/right-click hint after 3.2s so the canvas remains completely clean
   useEffect(() => {
@@ -1709,53 +1153,15 @@ const ConfiguredInteractiveMapViewport: React.FC<{
     setResolvedStopsCount(count);
   }, []);
 
-  const sdkFailed =
-    forceAuthFailure ||
+  const mapAuthFailed =
     apiLoadingStatus === APILoadingStatus.FAILED ||
     apiLoadingStatus === APILoadingStatus.AUTH_FAILURE;
 
-  if (sdkFailed) {
-    return (
-      <InteractiveStaticRouteFallbackCard
-        dayNumber={dayNumber}
-        scopeLabel={scopeLabel}
-        cityLabel={cityLabel}
-        primaryCity={primaryCity}
-        multiDayMode={multiDayMode}
-        stops={stops}
-        previousStops={previousStops}
-        showComparison={showComparison}
-        travelMode={travelMode}
-        fullDayRouteUrl={fullDayRouteUrl}
-        getDayCityHint={getDayCityHint}
-        fallbackReason="sdk_failed"
-      />
-    );
-  }
-
-  if (stops.length === 0) {
-    return (
-      <InteractiveStaticRouteFallbackCard
-        dayNumber={dayNumber}
-        scopeLabel={scopeLabel}
-        cityLabel={cityLabel}
-        primaryCity={primaryCity}
-        multiDayMode={multiDayMode}
-        stops={stops}
-        previousStops={previousStops}
-        showComparison={showComparison}
-        travelMode={travelMode}
-        fullDayRouteUrl={fullDayRouteUrl}
-        getDayCityHint={getDayCityHint}
-        fallbackReason="unconfigured"
-      />
-    );
-  }
-
   const isSdkOrTilesLoading =
-    apiLoadingStatus === APILoadingStatus.LOADING ||
-    apiLoadingStatus === APILoadingStatus.NOT_LOADED ||
-    !tilesReady;
+    !mapAuthFailed &&
+    (apiLoadingStatus === APILoadingStatus.LOADING ||
+      apiLoadingStatus === APILoadingStatus.NOT_LOADED ||
+      !tilesReady);
   const loading = isSdkOrTilesLoading || (isResolvingStops && resolvedStopsCount === 0);
 
   const loadingStageLabel = isSdkOrTilesLoading
@@ -1813,6 +1219,30 @@ const ConfiguredInteractiveMapViewport: React.FC<{
             onRequestSetStay={onRequestSetStay}
           />
         </GoogleMap>
+
+        {mapAuthFailed && (
+          <div className="absolute top-3 left-1/2 z-20 w-[min(100%-1.5rem,22rem)] -translate-x-1/2">
+            <div className="flex items-center gap-2 rounded-[16px] border tk-bc-hair tk-bg-card px-3 py-2 text-[13px] tk-text-ink tk-elev-card">
+              <AlertCircle className="h-4 w-4 shrink-0 tk-text-warning" />
+              <span className="min-w-0 flex-1 leading-snug">{copy.mapLoadError}</span>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="shrink-0 rounded-[14px] tk-bg-forest px-2.5 py-1 text-[13px] font-bold tk-text-card cursor-pointer"
+              >
+                {copy.mapRetry}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!mapAuthFailed && stops.length === 0 && !loading && (
+          <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2">
+            <p className="rounded-full border tk-bc-hair tk-bg-card px-3 py-1 text-[13px] tk-text-ink2">
+              {`Day ${dayNumber} · ${copy.noStopsToday}`}
+            </p>
+          </div>
+        )}
 
         {/* Top-Left Auto-Fading Right-Click Hint (vanishes after 3.2s) */}
         {!loading && onHoldMapAddPlace && !holdHintDismissed && (
@@ -1902,22 +1332,6 @@ const ConfiguredInteractiveMapViewport: React.FC<{
         <div className="border-t tk-bc-hair tk-bg-paper px-4 py-2 text-[13px] tk-text-ink2 flex flex-wrap items-center gap-2">
           <AlertCircle className="h-4 w-4 tk-text-warning shrink-0" />
           <span className="flex-1 min-w-[12rem] leading-snug">{routeNotice}</span>
-          {fullDayRouteUrl && (
-            <a
-              href={fullDayRouteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!isNativeMapOpenerAvailable()) return;
-                e.preventDefault();
-                void openMapExternally({ url: fullDayRouteUrl });
-              }}
-              className="inline-flex items-center gap-1 rounded-lg border tk-bc-hair tk-bg-card px-2.5 py-1 text-[13px] font-semibold tk-text-forest hover:tk-bg-forest-tint cursor-pointer whitespace-nowrap"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              {copy.openInMaps}
-            </a>
-          )}
         </div>
       )}
     </div>
@@ -1945,7 +1359,6 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
   onDayRouteLegsChange,
 }) => {
   const { lang, copy } = usePanelLang();
-  const apiKey = getConfiguredGoogleMapsApiKey();
   const [expanded, setExpanded] = useState(true);
   const [liveCoordsByQuery, setLiveCoordsByQuery] = useState<
     Record<string, { lat: number; lng: number }>
@@ -2326,21 +1739,6 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
     });
   }, [onDayRouteLegsChange, isMultiDayActive, stops, routeSummary, real2DWaypoints, travelMode]);
 
-  const previousReal2DWaypoints = useMemo(
-    () => toReal2DWaypoints(previousStops),
-    [toReal2DWaypoints, previousStops]
-  );
-
-  const fullDayRouteUrl = useMemo(
-    () => buildFullDayGoogleMapsRouteUrl(stops, travelMode),
-    [stops, travelMode]
-  );
-
-  const cityQuickSearchUrl = useMemo(
-    () => buildGoogleMapsSearchUrl({ title: primaryCity || cityLabel }),
-    [primaryCity, cityLabel]
-  );
-
   const savedKm =
     comparisonMetrics && comparisonMetrics.beforeKm > comparisonMetrics.afterKm
       ? comparisonMetrics.beforeKm - comparisonMetrics.afterKm
@@ -2385,8 +1783,6 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
     ? `${activeMultiDays.map((d) => `D${d}`).join(' + ')}`
     : `Day ${dayNumber}`;
   const displayCityLabel = translateRouteTitle(cityLabel, lang);
-  const displayEffectiveCityLabel = translateRouteTitle(effectiveCityLabel, lang);
-  const displayPrimaryCity = translateCityName(primaryCity || cityLabel, lang);
 
   return (
     <section
@@ -2423,28 +1819,6 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
         </button>
 
         <div className="flex items-center gap-1.5 shrink-0">
-          {fullDayRouteUrl ? (
-            <a
-              href={fullDayRouteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
-            >
-              <ExternalLink className="h-4 w-4" />
-              {copy.openInMaps}
-            </a>
-          ) : (
-            <a
-              href={cityQuickSearchUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-9 inline-flex items-center gap-1.5 rounded-[16px] tk-bg-forest px-3 text-sm font-bold tk-text-card hover:tk-bg-press transition-colors whitespace-nowrap shrink-0"
-            >
-              <ExternalLink className="h-4 w-4" />
-              {copy.exploreShort(displayPrimaryCity)}
-            </a>
-          )}
-
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
@@ -2576,56 +1950,31 @@ export const DayRouteMapPanel: React.FC<DayRouteMapPanelProps> = ({
           )}
 
           {/* Pure, Borderless Map Canvas */}
-          {apiKey ? (
-            <ConfiguredInteractiveMapViewport
-              dayNumber={dayNumber}
-              scopeLabel={scopeLabel}
-              cityLabel={effectiveCityLabel}
-              primaryCity={primaryCity}
-              viewKey={viewKey}
-              multiDayMode={isMultiDayActive}
-              canMultiDayPreview={canMultiDayPreview}
-              stops={stops}
-              previousStops={previousStops}
-              showComparison={showComparison && hasOrderChanged}
-              fitTrigger={fitTrigger}
-              travelMode={travelMode}
-              routeNotice={routeNotice}
-              fullDayRouteUrl={fullDayRouteUrl}
-              getDayCityHint={getDayCityHint}
-              onTriggerFit={() => setFitTrigger((n) => n + 1)}
-              onToggleMultiDayPreview={handleToggleMultiDayPreview}
-              onRouteSummaryChange={setRouteSummary}
-              onComparisonMetricsChange={setComparisonMetrics}
-              onRouteNoticeChange={setRouteNotice}
-              onLiveCoordsResolved={handleLiveCoordsResolved}
-              fallbackWaypoints={real2DWaypoints}
-              fallbackPrevWaypoints={previousReal2DWaypoints}
-              stopMetaById={stopMetaById}
-              dayStayAnchor={resolvedDayStayAnchor}
-              onOpenStopDetail={onOpenStopDetail}
-              onHoldMapAddPlace={onHoldMapAddPlace}
-              onRequestSetStay={onRequestSetStay}
-            />
-          ) : (
-            <Real2DRouteMapCanvas
-              waypoints={real2DWaypoints}
-              previousWaypoints={previousReal2DWaypoints}
-              showComparison={showComparison && hasOrderChanged}
-              scopeLabel={scopeLabel}
-              cityLabel={displayEffectiveCityLabel}
-              multiDayMode={isMultiDayActive}
-              canMultiDayPreview={canMultiDayPreview}
-              onToggleMultiDayPreview={handleToggleMultiDayPreview}
-              lang={lang}
-              dayStayAnchor={resolvedDayStayAnchor}
-              fullDayRouteUrl={fullDayRouteUrl}
-              onOpenStopDetail={onOpenStopDetail}
-              onHoldMapAddPlace={onHoldMapAddPlace}
-              onRequestSetStay={onRequestSetStay}
-              hideInlineStopStrip
-            />
-          )}
+          <ConfiguredInteractiveMapViewport
+            dayNumber={dayNumber}
+            scopeLabel={scopeLabel}
+            cityLabel={effectiveCityLabel}
+            viewKey={viewKey}
+            multiDayMode={isMultiDayActive}
+            canMultiDayPreview={canMultiDayPreview}
+            stops={stops}
+            previousStops={previousStops}
+            showComparison={showComparison && hasOrderChanged}
+            fitTrigger={fitTrigger}
+            travelMode={travelMode}
+            routeNotice={routeNotice}
+            onTriggerFit={() => setFitTrigger((n) => n + 1)}
+            onToggleMultiDayPreview={handleToggleMultiDayPreview}
+            onRouteSummaryChange={setRouteSummary}
+            onComparisonMetricsChange={setComparisonMetrics}
+            onRouteNoticeChange={setRouteNotice}
+            onLiveCoordsResolved={handleLiveCoordsResolved}
+            stopMetaById={stopMetaById}
+            dayStayAnchor={resolvedDayStayAnchor}
+            onOpenStopDetail={onOpenStopDetail}
+            onHoldMapAddPlace={onHoldMapAddPlace}
+            onRequestSetStay={onRequestSetStay}
+          />
         </div>
       )}
     </section>
